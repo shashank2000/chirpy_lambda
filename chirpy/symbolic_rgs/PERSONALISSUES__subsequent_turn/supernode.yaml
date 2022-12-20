@@ -1,5 +1,5 @@
 entry_state_conditions:
-  - is_true: flags.PERSONALISSUE_supernode_is_responding
+  - is_true: flags.PERSONALISSUE__supernode_is_responding
 
 # THESE ARE EVALUATED AT THE PROMPT PHASE
 prompts:
@@ -26,16 +26,16 @@ locals:
   can_enter_subsequent_turn:
     - bool:
       - or :
-        - is_true: flags.PERSONALISSUE_is_continued_sharing
-        - is_true: flags.PERSONALISSUE_personal_sharing_negative
+        - is_true: flags.PERSONALISSUE__is_continued_sharing
+        - is_true: flags.PERSONALISSUE__personal_sharing_negative
         - and:
           - is_none: state.PERSONALISSUE__PreviousSubnode
-          - is_true: flags.PERSONALISSUE_short_response
+          - is_true: flags.PERSONALISSUE__short_response
         - and:
           - is_value: 
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_true: flags.PERSONALISSUE_responded_with_question
+          - is_true: flags.PERSONALISSUE__responded_with_question
           - or:
             - is_true: flags.GlobalFlag__YES
             - is_true: flags.GlobalFlag__NO
@@ -43,8 +43,8 @@ locals:
           - is_value: 
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_false: flags.PERSONALISSUE_responded_with_question
-          - is_true: flags.PERSONALISSUE_short_response
+          - is_false: flags.PERSONALISSUE__responded_with_question
+          - is_true: flags.PERSONALISSUE__short_response
   
     
 set_state:
@@ -58,7 +58,7 @@ subnodes:
   - node_name: subsequent_turn_after_short_response
     entry_state_conditions:
       - is_true: locals.can_enter_subsequent_turn
-      - is_true: flags.PERSONALISSUE_short_response
+      - is_true: flags.PERSONALISSUE__short_response
     response:
       - one of:
         - Okay, I'm listening.
@@ -71,7 +71,7 @@ subnodes:
   - node_name: subsequent_turn_after_question_response
     entry_state_conditions:
       - is_true: locals.can_enter_subsequent_turn
-      - is_true: flags.PERSONALISSUE_responded_with_question
+      - is_true: flags.PERSONALISSUE__responded_with_question
     response:
       - nlg_helper:
           name: sample_validation_statement
@@ -122,13 +122,13 @@ subnodes:
               value: possible_continue_accepted
           - or:
             - is_true: flags.GlobalFlag__YES
-            - is_true: flags.PERSONALISSUE_noncommittal
+            - is_true: flags.PERSONALISSUE__noncommittal
         - and:
           - is_value:
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_true: flags.PERSONALISSUE_responded_with_question
-          - is_true: flags.PERSONALISSUE_short_response
+          - is_true: flags.PERSONALISSUE__responded_with_question
+          - is_true: flags.PERSONALISSUE__short_response
         - is_value:
             name: state.PERSONALISSUE__PreviousSubnode
             value: subsequent_turn
@@ -147,7 +147,7 @@ subnodes:
           - is_value:
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_false: flags.PERSONALISSUE_responded_with_question
+          - is_false: flags.PERSONALISSUE__responded_with_question
           - is_true: flags.GlobalFlag__YES
         - and:
           - is_value:
@@ -166,7 +166,7 @@ subnodes:
     entry_state_conditions:
       - or :
         - is_true: flags.GlobalFlag__DISINTERESTED
-        - is_true: flags.PERSONALISSUE_gratitude
+        - is_true: flags.PERSONALISSUE__gratitude
         - and:
             - is_one_of:
                 name: state.PERSONALISSUE__PreviousSubnode
@@ -179,24 +179,24 @@ subnodes:
           - is_value:
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_false: flags.PERSONALISSUE_responded_with_question
+          - is_false: flags.PERSONALISSUE__responded_with_question
           - or:
-            - is_true: flags.PERSONALISSUE_gratitude
+            - is_true: flags.PERSONALISSUE__gratitude
             - is_true: flags.GlobalFlag__NO
         - and:
           - is_value:
               name: state.PERSONALISSUE__PreviousSubnode
               value: possible_continue
           - or:
-            - is_true: flags.PERSONALISSUE_short_response
-            - is_true: flags.PERSONALISSUE_noncommittal
+            - is_true: flags.PERSONALISSUE__short_response
+            - is_true: flags.PERSONALISSUE__noncommittal
     response:
       - nlg_helper:
           name: sample_ending_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
-      flags.PERSONALISSUE_supernode_is_responding:
+      flags.PERSONALISSUE__supernode_is_responding:
         constant: False
       state.PERSONALISSUE__PreviousSubnode:
         constant: ending
@@ -204,7 +204,7 @@ subnodes:
 set_state_after:
   flags.PERSONALISSUEINTRO_personal_issue_responded:
     constant: True
-  flags.PERSONALISSUE_responded_with_question:
+  flags.PERSONALISSUE__responded_with_question:
     - nlg_helper:
         name: response_contains_question
         args:

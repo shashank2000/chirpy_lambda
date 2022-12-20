@@ -18,10 +18,10 @@
 - GlobalFlag__LastTurnUsedNeuralGeneration
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
-- PERSONALISSUE_supernode_is_responding
-- PERSONALISSUE_personal_sharing_negative
-- PERSONALISSUE_gratitude
-- PERSONALISSUE_is_continued_sharing
-- PERSONALISSUE_noncommittal
-- PERSONALISSUE_short_response
-- PERSONALISSUE_responded_with_question
+- PERSONALISSUE__supernode_is_responding
+- PERSONALISSUE__personal_sharing_negative
+- PERSONALISSUE__gratitude
+- PERSONALISSUE__is_continued_sharing
+- PERSONALISSUE__noncommittal
+- PERSONALISSUE__short_response
+- PERSONALISSUE__responded_with_question
