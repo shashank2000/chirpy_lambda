@@ -172,10 +172,10 @@ class SymbolicResponseGenerator(ResponseGenerator):
     def construct_contexts(self, flags, state, utilities):
         """Constructs contexts dictionary."""
         return {
-            'flags': flags,
-            'state': state,
-            'utilities': utilities,
-            'supernode_turns': state.turns_history,
+            "flags": flags,
+            "state": state,
+            "utilities": utilities,
+            "supernode_turns": state.turns_history,
         }
 
     def init_state(self):

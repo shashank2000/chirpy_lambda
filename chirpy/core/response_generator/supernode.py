@@ -352,7 +352,7 @@ class Supernode:
 			return False
 		
 		result = is_valid(self.entry_conditions_takeover, python_context, contexts)
-		logger.warning(f"Can_takeover for {self.name} logged {result}")
+		logger.info(f"Can_takeover for {self.name} logged {result}")
 		if return_specificity:
 			return len(self.entry_conditions_takeover) if result else 0
 		else:
