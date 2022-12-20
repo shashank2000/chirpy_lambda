@@ -1,12 +1,12 @@
 entry_state_conditions:
   - is_true: flags.PERSONALISSUE_supernode_is_responding
 
-# THESE ARE EVALUATED AT THE PROMPT STAGE
+# THESE ARE EVALUATED AT THE PROMPT PHASE
 prompts:
   - prompt_name: personal_issue_subsequent_turn
     prompt_text: ""
 
-# THESE ARE EVALUATED AT THE GENERATION STAGE
+# THESE ARE EVALUATED AT THE FOLLOWUP PHASE
 entry_conditions_takeover:
   # None. This supernode should not takeover
 

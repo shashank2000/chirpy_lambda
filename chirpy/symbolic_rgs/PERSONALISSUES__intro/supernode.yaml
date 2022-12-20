@@ -2,13 +2,13 @@ entry_state_conditions:
   # The personal issues intro should never be prompting or being entered into. It should just
   # takeover whenever it sees a personal issue.
 
-# THESE ARE EVALUATED AT THE PROMPT STAGE
+# THESE ARE EVALUATED AT THE PROMPT PHASE
 prompts:
   # A blank prompt (personal issues intro supernode does not prompt)
   - prompt_name: personal_issue_intro
     prompt_text: ""
 
-# THESE ARE EVALUATED AT THE GENERATION STAGE
+# THESE ARE EVALUATED AT THE FOLLOWUP PHASE
 entry_conditions_takeover:
   # disallow entry into personal_issues supernode from the below supernodes
   - is_not_one_of:
