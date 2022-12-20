@@ -5,7 +5,7 @@ from chirpy.response_generators.personal_issues import personal_issues_helpers
 def get_flags(rg, state, utterance):
     if personal_issues_helpers.is_gratitude_response(rg, utterance):
         ADD_NLU_FLAG('PERSONALISSUE__gratitude')
-    if personal_issues_helpers.is_personal_issue(rg, utterance):
+    if personal_issues_helpers.is_personal_issue(utterance):
         ADD_NLU_FLAG('PERSONALISSUE__personal_sharing_negative')
     if personal_issues_helpers.is_continued_sharing(rg, utterance):
         ADD_NLU_FLAG('PERSONALISSUE__is_continued_sharing')
