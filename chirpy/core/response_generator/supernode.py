@@ -201,15 +201,21 @@ def is_valid(entry_conditions, python_context, contexts):
 
 	return True
 
+def get_none_replace(data, key, replace):
+	value = data.get(key, replace)
+	if value == None:
+		return replace
+	return value
+
 class Prompt:
 	def __init__(self, data):
 		logger.warning(f"Prompt data is: {data}")
 		self.data = data
-		self.entry_flag_conditions = data.get('entry_flag_conditions', [])
-		self.entry_state_conditions = data.get('entry_state_conditions', [])
+		self.entry_flag_conditions = get_none_replace(data, 'entry_flag_conditions', [])
+		self.entry_state_conditions = get_none_replace(data, 'entry_state_conditions', [])
 		self.prompt_text = data.get('prompt_text')
 		self.name = data['prompt_name']
-		self.updates = data.get('set_state', {})
+		self.updates = get_none_replace(data, 'set_state', {})
 
 	def is_valid(self, python_context, contexts):
 		return is_valid(self.entry_flag_conditions + self.entry_state_conditions,
@@ -234,11 +240,11 @@ class Subnode:
 	def __init__(self, data):
 		logger.warning(f"Subnode data is, {data}")
 		self.data = data
-		self.entry_flag_conditions = data.get('entry_flag_conditions', [])
-		self.entry_state_conditions = data.get('entry_state_conditions', [])
+		self.entry_flag_conditions = get_none_replace(data, 'entry_flag_conditions', [])
+		self.entry_state_conditions = get_none_replace(data, 'entry_state_conditions', [])
 		self.response = data.get('response')
 		self.name = data['node_name']
-		self.updates = data.get('set_state', {})
+		self.updates = get_none_replace(data, 'set_state', {})
 		
 	def is_valid(self, python_context, contexts):
 		return is_valid(self.entry_flag_conditions + self.entry_state_conditions,
@@ -281,14 +287,14 @@ class Supernode:
 		invalid_keys = set(self.content.keys()) - set(ALLOWED_KEYS)
 		assert len(invalid_keys) == 0, f"Invalid key: {invalid_keys}"
 			
-		self.entry_flag_conditions = self.content.get('entry_flag_conditions', [])
-		self.entry_state_conditions = self.content.get('entry_state_conditions', [])
-		self.entry_conditions_takeover = self.content.get('entry_conditions_takeover', 'disallow')
-		self.continue_conditions = self.content.get('continue_conditions', [])
+		self.entry_flag_conditions = get_none_replace(self.content, 'entry_flag_conditions', [])
+		self.entry_state_conditions = get_none_replace(self.content, 'entry_state_conditions', [])
+		self.entry_conditions_takeover = get_none_replace(self.content, 'entry_conditions_takeover', 'disallow')
+		self.continue_conditions = get_none_replace(self.content, 'continue_conditions', [])
 		self.locals = self.content['locals']
 		self.subnodes = self.load_subnodes(self.content['subnodes'])
-		self.updates = self.content.get('set_state', {})
-		self.updates_after = self.content.get('set_state_after', {})
+		self.updates = get_none_replace(self.content, 'set_state', {})
+		self.updates_after = get_none_replace(self.content, 'set_state_after', {})
 		self.prompts = self.load_prompts(self.content['prompts'])
 		self.name = name
 		
@@ -341,7 +347,7 @@ class Supernode:
 			return result
 
 	def can_takeover(self, python_context, contexts, return_specificity=False):
-		if self.entry_conditions_takeover == None:
+		if self.entry_conditions_takeover == 'disallow':
 			# Supernode with no entry conditions cannot takeover
 			return False
 		
