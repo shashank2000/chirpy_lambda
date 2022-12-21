@@ -55,6 +55,12 @@ subnodes:
   # See above template in locals for how this response will be structured
   # Note: We set the state.PERSONALISSUE__PreviousSubnode to a general subsequent_turn
   # string instead of the specific subnode name b/c the specific name does not matter
+  # Note for future development: Avoid storing the previous subnode as a state variable.
+  # We are trying to move away from the response generator/treelet format. Instead of storing
+  # the previous subnode, unpack the subnode name into multiple state variables. For example,
+  # unpack PERSONALISSUE__PreviousSubnode into multiple booleans that we can use
+  # to decide which subnode to go with next. This change will probably differ from the existing
+  # implementations of our response generators, but it is ok to have this difference.
   - node_name: subsequent_turn_after_short_response
     entry_state_conditions:
       - is_true: locals.can_enter_subsequent_turn
