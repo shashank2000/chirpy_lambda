@@ -209,9 +209,9 @@ class SymbolicResponseGenerator(ResponseGenerator):
         logger.warning("Begin response for SymbolicResponseGenerator.")
         
         # Legacy response types
-        
+
         self.state = state
-        
+
         state, utterance, _ = self.get_state_utterance_response_types()
 
         logger.warning(f"Turn history for supernodes: {state.turns_history}.")
