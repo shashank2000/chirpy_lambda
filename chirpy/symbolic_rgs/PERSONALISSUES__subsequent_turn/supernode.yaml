@@ -1,5 +1,5 @@
 entry_flag_conditions:
-  - is_true: flags.PERSONALISSUE__supernode_is_responding
+  - is_true: state.PERSONALISSUE__supernode_is_responding
 
 # THESE ARE EVALUATED AT THE PROMPT PHASE
 prompts:
@@ -35,7 +35,7 @@ locals:
           - is_value: 
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_true: flags.PERSONALISSUE__responded_with_question
+          - is_true: state.PERSONALISSUE__responded_with_question
           - or:
             - is_true: flags.GlobalFlag__YES
             - is_true: flags.GlobalFlag__NO
@@ -43,7 +43,7 @@ locals:
           - is_value: 
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_false: flags.PERSONALISSUE__responded_with_question
+          - is_false: state.PERSONALISSUE__responded_with_question
           - is_true: flags.PERSONALISSUE__short_response
   
     
@@ -71,7 +71,7 @@ subnodes:
   - node_name: subsequent_turn_after_question_response
     entry_state_conditions:
       - is_true: locals.can_enter_subsequent_turn
-      - is_true: flags.PERSONALISSUE__responded_with_question
+      - is_true: state.PERSONALISSUE__responded_with_question
     response:
       - nlg_helper:
           name: sample_validation_statement
@@ -127,7 +127,7 @@ subnodes:
           - is_value:
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_true: flags.PERSONALISSUE__responded_with_question
+          - is_true: state.PERSONALISSUE__responded_with_question
           - is_true: flags.PERSONALISSUE__short_response
         - is_value:
             name: state.PERSONALISSUE__PreviousSubnode
@@ -147,7 +147,7 @@ subnodes:
           - is_value:
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_false: flags.PERSONALISSUE__responded_with_question
+          - is_false: state.PERSONALISSUE__responded_with_question
           - is_true: flags.GlobalFlag__YES
         - and:
           - is_value:
@@ -179,7 +179,7 @@ subnodes:
           - is_value:
               name: state.PERSONALISSUE__PreviousSubnode
               value: subsequent_turn
-          - is_false: flags.PERSONALISSUE__responded_with_question
+          - is_false: state.PERSONALISSUE__responded_with_question
           - or:
             - is_true: flags.PERSONALISSUE__gratitude
             - is_true: flags.GlobalFlag__NO
@@ -196,15 +196,16 @@ subnodes:
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
-      flags.PERSONALISSUE__supernode_is_responding:
+      state.PERSONALISSUE__supernode_is_responding:
         constant: False
       state.PERSONALISSUE__PreviousSubnode:
         constant: ending
 
 set_state_after:
-  flags.PERSONALISSUEINTRO_personal_issue_responded:
-    constant: True
-  flags.PERSONALISSUE__responded_with_question:
+  # The ending subnode will override this flag setting
+  # state.PERSONALISSUE__supernode_is_responding:
+  #   constant: True
+  state.PERSONALISSUE__responded_with_question:
     - nlg_helper:
         name: response_contains_question
         args:
