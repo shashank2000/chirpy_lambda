@@ -98,14 +98,14 @@ subnodes:
       - is_false: flags.GlobalFlag__LastTurnUsedNeuralGeneration
     response:
       - neural_generation:
-        prefix: 
-          - one of:
-            - That sounds frustrating.
-            - How awful, I'm sorry.
-            - That's tough and really unfortunate.
-          - one of:
-            - hopefully
-            - I hope
+          prefix: 
+            - one of:
+              - That sounds frustrating.
+              - How awful, I'm sorry.
+              - That's tough and really unfortunate.
+            - one of:
+              - hopefully
+              - I hope
       - nlg_helper:
           name: sample_partial_subsequent_turn_statement
     set_state:
