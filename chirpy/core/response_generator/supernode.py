@@ -13,7 +13,7 @@ from chirpy.core.response_generator_datatypes import ResponseGeneratorResult, Pr
 	emptyResult_with_conditional_state, emptyPrompt, UpdateEntity, AnswerType
 from chirpy.core.response_generator.helpers import *
 from chirpy.core.response_priority import ResponsePriority
-from chirpy.core.util import load_text_file, infl
+from chirpy.core.util import load_text_file, infl, get_none_replace
 from typing import Set, Optional, List, Dict
 import logging
 import os
@@ -205,12 +205,6 @@ def is_valid(entry_conditions, python_context, contexts):
 
 	return True
 
-def get_none_replace(data, key, replace):
-	value = data.get(key, replace)
-	if value == None:
-		return replace
-	return value
-
 class Prompt:
 	def __init__(self, data):
 		logger.warning(f"Prompt data is: {data}")
@@ -354,7 +348,7 @@ class Supernode:
 		if self.entry_conditions_takeover == 'disallow':
 			# Supernode with no entry conditions cannot takeover
 			return False
-		
+
 		result = is_valid(self.entry_conditions_takeover, python_context, contexts)
 		logger.info(f"Can_takeover for {self.name} logged {result}")
 		if return_specificity:
