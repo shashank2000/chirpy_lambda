@@ -8,7 +8,7 @@ prompts:
   - prompt_name: personal_issue_intro
     prompt_text: ""
 
-# THESE ARE EVALUATED AT THE FOLLOWUP PHASE
+# THESE ARE EVALUATED AT THE FOLLOW-UP PHASE
 entry_conditions_takeover:
   # disallow entry into personal_issues supernode from the below supernodes
   - is_not_one_of:

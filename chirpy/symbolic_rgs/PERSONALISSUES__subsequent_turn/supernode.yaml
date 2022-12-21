@@ -6,7 +6,7 @@ prompts:
   - prompt_name: personal_issue_subsequent_turn
     prompt_text: ""
 
-# THESE ARE EVALUATED AT THE FOLLOWUP PHASE
+# THESE ARE EVALUATED AT THE FOLLOW-UP PHASE
 entry_conditions_takeover:
   # None. This supernode should not takeover
 

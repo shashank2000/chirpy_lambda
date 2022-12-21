@@ -62,7 +62,7 @@ prompts:
               inflect_token: it\'s
               inflect_entity: state.User__FavoriteFood
 
-# THESE ARE EVALUATED AT THE FOLLOWUP PHASE
+# THESE ARE EVALUATED AT THE FOLLOW-UP PHASE
 entry_conditions_takeover:
   # - is_true: GLOBAL__user_has_navigational_intent
   # - is_true: FOOD__cur_entity_known_food

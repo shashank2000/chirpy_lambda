@@ -1,7 +1,10 @@
 entry_flag_conditions: []
 entry_conditions_takeover:
 
-prompts: []
+prompts:
+  # A fallback prompt
+  - prompt_name: what_to_talk_about
+    prompt_text: "What do you want to talk about?"
 
 locals: {}
 

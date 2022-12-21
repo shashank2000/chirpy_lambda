@@ -6,7 +6,7 @@ prompts:
 - prompt_name: favorite_food
   prompt_text: "What's your favorite food?"
 
-# THESE ARE EVALUATED AT THE FOLLOWUP PHASE
+# THESE ARE EVALUATED AT THE FOLLOW-UP PHASE
 entry_conditions_takeover:
   # - is_true: GLOBAL__user_has_navigational_intent
   # - is_true: FOOD__cur_entity_known_food
