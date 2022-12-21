@@ -1,6 +1,6 @@
 entry_state_conditions:
-  # The personal issues intro should never be prompting or being entered into. It should just
-  # takeover whenever it sees a personal issue.
+  # This supernode should never start. It should just take over when it detects a personal issue.
+  - disabled: True
 
 # THESE ARE EVALUATED AT THE PROMPT PHASE
 prompts:

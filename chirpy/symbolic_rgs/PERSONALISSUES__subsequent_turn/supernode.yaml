@@ -1,4 +1,4 @@
-entry_state_conditions:
+entry_flag_conditions:
   - is_true: flags.PERSONALISSUE__supernode_is_responding
 
 # THESE ARE EVALUATED AT THE PROMPT PHASE
@@ -25,7 +25,7 @@ locals:
         name: sample_ending_statement
   can_enter_subsequent_turn:
     - bool:
-      - or :
+      - or:
         - is_true: flags.PERSONALISSUE__is_continued_sharing
         - is_true: flags.PERSONALISSUE__personal_sharing_negative
         - and:
