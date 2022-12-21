@@ -14,13 +14,13 @@ continue_conditions:
   # None. If we are in this supernode, we should at least give a closing message
 
 locals:
-  possible_continue_statement: # Ah yes, potatoes are one of my favorite things to eat up here...
+  possible_continue_statement:
     - nlg_helper:
         name: sample_possible_continue_statement
-  possible_continue_accepted_statement: # Ah yes, potatoes are one of my favorite things to eat up here...
+  possible_continue_accepted_statement:
     - nlg_helper:
         name: sample_possible_continue_accepted_statement
-  ending_statement: # Ah yes, potatoes are one of my favorite things to eat up here...
+  ending_statement:
     - nlg_helper:
         name: sample_ending_statement
   can_enter_subsequent_turn:
