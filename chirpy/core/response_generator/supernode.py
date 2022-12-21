@@ -60,6 +60,8 @@ def evaluate_nlg_call(data, python_context, contexts):
 		return evaluate_nlg_calls(data, python_context, contexts)
 	if isinstance(data, str): # plain text
 		return data
+	if isinstance(data, int): # number
+		return data
 	
 	assert isinstance(data, dict) and len(data) == 1, f"Failure: data is {data}"
 	type = next(iter(data))
@@ -155,6 +157,8 @@ def compute_entry_condition(entry_condition, python_context, contexts):
 		return all(compute_entry_condition(ent, python_context, contexts) for ent in var_data)
 	elif condition_style == 'or':
 		return any(compute_entry_condition(ent, python_context, contexts) for ent in var_data)
+	elif condition_style == 'disabled':
+		return not var_data
 	elif condition_style == 'is_one_of':
 		var_value = lookup_value(var_data['name'], contexts)
 		return CONDITION_STYLE_TO_BEHAVIOR[condition_style](var_value, var_data['values'])
@@ -195,7 +199,7 @@ def compute_entry_condition(entry_condition, python_context, contexts):
 
 def is_valid(entry_conditions, python_context, contexts):
 	for entry_condition_dict in entry_conditions:
-		logger.warning(f"Entry conditions are: {entry_conditions}")
+		logger.warning(f"Entry condition is: {entry_condition_dict}")
 		if not compute_entry_condition(entry_condition_dict, python_context, contexts):
 			return False
 
