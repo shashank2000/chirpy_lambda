@@ -250,7 +250,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
                 
             locals = supernode.evaluate_locals(python_context, contexts)
             contexts['locals'] = locals
-            logger.warning(f"Finished evaluating locals: {'; '.join((k + ': ' + v) for (k, v) in locals.items())}")
+            logger.warning(f"Finished evaluating locals: {'; '.join((k + ': ' + str(v)) for (k, v) in locals.items())}")
             locals['cur_entity'] = self.get_current_entity()
             break
 
