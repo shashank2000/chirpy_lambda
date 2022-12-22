@@ -52,8 +52,6 @@ locals:
       - I'd be willing to listen if you're willing to continue sharing.
     
 set_state:
-  state.PERSONALISSUE__supernode_is_responding:
-    constant: True
 
 subnodes:
   # See above template in locals for how this response will be structured
@@ -63,3 +61,14 @@ subnodes:
       - val: locals.intro_statement
 
 set_state_after:
+  # Once we start discussing the personal issue, the subsequent turn supernode
+  # is responding, but the main conversation will not have began yet. Also,
+  # we will not need confirmation for further discussion until the person expresses hesitation.
+  state.PERSONALISSUE__supernode_is_responding:
+    constant: True
+  state.PERSONALISSUE__main_convo_began:
+    constant: False
+  state.PERSONALISSUE__need_confirmation_for_further_discussion:
+    constant: False
+  state.PERSONALISSUE__confirming_further_discussion:
+    constant: False

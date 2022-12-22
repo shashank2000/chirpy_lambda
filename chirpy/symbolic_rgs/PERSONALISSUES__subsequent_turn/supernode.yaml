@@ -138,20 +138,20 @@ locals:
         - is_true: flags.PERSONALISSUE__is_continued_sharing
         - is_true: flags.PERSONALISSUE__personal_sharing_negative
         - and:
-          - is_none: state.PERSONALISSUE__PreviousSubnode
+          - is_false: state.PERSONALISSUE__main_convo_began
           - is_true: flags.PERSONALISSUE__short_response
         - and:
-          - is_value: 
-              name: state.PERSONALISSUE__PreviousSubnode
-              value: subsequent_turn
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_true: state.PERSONALISSUE__responded_with_question
           - or:
             - is_true: flags.GlobalFlag__YES
             - is_true: flags.GlobalFlag__NO
         - and:
-          - is_value: 
-              name: state.PERSONALISSUE__PreviousSubnode
-              value: subsequent_turn
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_false: state.PERSONALISSUE__responded_with_question
           - is_true: flags.PERSONALISSUE__short_response
   
@@ -162,14 +162,12 @@ set_state:
 
 subnodes:
   # See above template in locals for how this response will be structured
-  # Note: We set the state.PERSONALISSUE__PreviousSubnode to a general subsequent_turn
-  # string instead of the specific subnode name b/c the specific name does not matter
-  # Note for future development: Avoid storing the previous subnode as a state variable.
+  # Note for future development: Avoid storing the previous subnode's name as a state variable.
   # We are trying to move away from the response generator/treelet format. Instead of storing
   # the previous subnode, unpack the subnode name into multiple state variables. For example,
-  # unpack PERSONALISSUE__PreviousSubnode into multiple booleans that we can use
-  # to decide which subnode to go with next. This change will probably differ from the existing
-  # implementations of our response generators, but it is ok to have this difference.
+  # we use multiple booleans to indicate which subnodes we previously used. These booleans
+  # help us be more flexible with conversation flows. This change will probably differ from the 
+  # existing implementations of our response generators, but it is ok to have this difference.
   - node_name: subsequent_turn_after_short_response
     entry_state_conditions:
       - is_true: locals.can_enter_subsequent_turn
@@ -181,8 +179,10 @@ subnodes:
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
-      state.PERSONALISSUE__PreviousSubnode:
-        constant: subsequent_turn
+      state.PERSONALISSUE__need_confirmation_for_further_discussion:
+        constant: False
+      state.PERSONALISSUE__confirming_further_discussion:
+        constant: False
   - node_name: subsequent_turn_after_question_response
     entry_state_conditions:
       - is_true: locals.can_enter_subsequent_turn
@@ -192,8 +192,10 @@ subnodes:
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
-      state.PERSONALISSUE__PreviousSubnode:
-        constant: subsequent_turn
+      state.PERSONALISSUE__need_confirmation_for_further_discussion:
+        constant: False
+      state.PERSONALISSUE__confirming_further_discussion:
+        constant: False
   - node_name: subsequent_turn_templated
     entry_state_conditions:
       - is_true: locals.can_enter_subsequent_turn
@@ -203,8 +205,10 @@ subnodes:
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
-      state.PERSONALISSUE__PreviousSubnode:
-        constant: subsequent_turn
+      state.PERSONALISSUE__need_confirmation_for_further_discussion:
+        constant: False
+      state.PERSONALISSUE__confirming_further_discussion:
+        constant: False
   - node_name: subsequent_turn_neural
     entry_state_conditions:
       - is_true: locals.can_enter_subsequent_turn
@@ -223,80 +227,85 @@ subnodes:
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: True
-      state.PERSONALISSUE__PreviousSubnode:
-        constant: subsequent_turn
+      state.PERSONALISSUE__need_confirmation_for_further_discussion:
+        constant: False
+      state.PERSONALISSUE__confirming_further_discussion:
+        constant: False
   - node_name: possible_continue
     entry_state_conditions:
       - or :
         - and:
-          - is_value:
-              name: state.PERSONALISSUE__PreviousSubnode
-              value: possible_continue_accepted
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_true: state.PERSONALISSUE__confirming_further_discussion
           - or:
             - is_true: flags.GlobalFlag__YES
             - is_true: flags.PERSONALISSUE__noncommittal
         - and:
-          - is_value:
-              name: state.PERSONALISSUE__PreviousSubnode
-              value: subsequent_turn
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_true: state.PERSONALISSUE__responded_with_question
           - is_true: flags.PERSONALISSUE__short_response
-        - is_value:
-            name: state.PERSONALISSUE__PreviousSubnode
-            value: subsequent_turn
+        - and:
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_false: state.PERSONALISSUE__confirming_further_discussion
     response:
       - val: locals.possible_continue_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
-      state.PERSONALISSUE__PreviousSubnode:
-        constant: possible_continue
+      state.PERSONALISSUE__need_confirmation_for_further_discussion:
+        constant: True
+      state.PERSONALISSUE__confirming_further_discussion:
+        constant: False
   - node_name: possible_continue_accepted
     entry_state_conditions:
       - or:
         - and:
-          - is_value:
-              name: state.PERSONALISSUE__PreviousSubnode
-              value: subsequent_turn
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_false: state.PERSONALISSUE__responded_with_question
           - is_true: flags.GlobalFlag__YES
         - and:
-          - is_value:
-              name: state.PERSONALISSUE__PreviousSubnode
-              value: possible_continue
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_true: flags.GlobalFlag__YES
     response:
       - val: locals.possible_continue_accepted_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
-      state.PERSONALISSUE__PreviousSubnode:
-        constant: possible_continue_accepted
+      state.PERSONALISSUE__need_confirmation_for_further_discussion:
+        constant: False
+      state.PERSONALISSUE__confirming_further_discussion:
+        constant: True
   - node_name: ending
     entry_state_conditions:
       - or :
         - is_true: flags.GlobalFlag__DISINTERESTED
         - is_true: flags.PERSONALISSUE__gratitude
         - and:
-            - is_one_of:
-                name: state.PERSONALISSUE__PreviousSubnode
-                values:
-                  - null
-                  - possible_continue
-                  - possible_continue_accepted
+            - or:
+              - is_false: state.PERSONALISSUE__main_convo_began
+              - is_true: state.PERSONALISSUE__need_confirmation_for_further_discussion
+              - is_true: state.PERSONALISSUE__confirming_further_discussion
             - is_true: flags.GlobalFlag__NO
         - and:
-          - is_value:
-              name: state.PERSONALISSUE__PreviousSubnode
-              value: subsequent_turn
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_false: state.PERSONALISSUE__responded_with_question
           - or:
             - is_true: flags.PERSONALISSUE__gratitude
             - is_true: flags.GlobalFlag__NO
         - and:
-          - is_value:
-              name: state.PERSONALISSUE__PreviousSubnode
-              value: possible_continue
+          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__need_confirmation_for_further_discussion
+          - is_false: state.PERSONALISSUE__confirming_further_discussion
           - or:
             - is_true: flags.PERSONALISSUE__short_response
             - is_true: flags.PERSONALISSUE__noncommittal
@@ -307,13 +316,17 @@ subnodes:
         constant: False
       state.PERSONALISSUE__supernode_is_responding:
         constant: False
-      state.PERSONALISSUE__PreviousSubnode:
-        constant: null
+      state.PERSONALISSUE__main_convo_began:
+        constant: False
+      state.PERSONALISSUE__need_confirmation_for_further_discussion:
+        constant: False
+      state.PERSONALISSUE__confirming_further_discussion:
+        constant: False
 
 set_state_after:
-  # The ending subnode will override this flag setting
-  # state.PERSONALISSUE__supernode_is_responding:
-  #   constant: True
+  # The ending subnode will override this state setting
+  state.PERSONALISSUE__main_convo_began:
+    constant: True
   state.PERSONALISSUE__responded_with_question:
     - nlg_helper:
         name: response_contains_question
