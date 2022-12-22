@@ -20,6 +20,8 @@ locals:
 set_state:
   state.User__FavoriteCelebrity:
     - val: utilities.cur_entity
+  state.User__FavoriteCelebrityName:
+    - val: utilities.cur_entity_name
 
 subnodes:
   - node_name: default
