@@ -14,15 +14,124 @@ continue_conditions:
   # None. If we are in this supernode, we should at least give a closing message
 
 locals:
+  validation_statement:
+    - one of:
+      - Mhm, I see.
+      - Right, I see.
+      - Ah, okay then.
+      - I see.
+      - Mm, I see.
+      - Alright, I see.
+      - Mhm, I hear you.
+    - one of:
+      - That sounds frustrating.
+      - How awful, I'm sorry.
+      - That's tough and really unfortunate.
+  subsequent_turn_statement:
+    - one of:
+      - I'm sorry to hear that.
+      - That sounds difficult.
+      - That's really unfortunate.
+      - That sounds frustrating.
+      - How awful, I'm sorry.
+      - That's tough and really unfortunate.
+    - one of:
+      - one of: # question
+        - How long have you been feeling this way?
+        - Is there anything you've been doing to help cope with this?
+        - Do you think the situation might improve soon?
+        - Is there anyone who might be able to help you get through this?
+      - one of: # sharing
+        - I'm here to listen if you would like to tell me more.
+        - I would be interested to hear more if you don't mind sharing.
+        - Feel free to continue telling me more.
+        - Please continue telling me more if you would like to.
+        - I'm willing to hear more if you'd like to tell me about it.
+        - I'd be willing to listen if you're willing to continue sharing.
+  partial_subsequent_turn_statement:
+    - one of:
+      - one of: # question
+        - How long have you been feeling this way?
+        - Is there anything you've been doing to help cope with this?
+        - Do you think the situation might improve soon?
+        - Is there anyone who might be able to help you get through this?
+      - one of: # sharing
+        - I'm here to listen if you would like to tell me more.
+        - I would be interested to hear more if you don't mind sharing.
+        - Feel free to continue telling me more.
+        - Please continue telling me more if you would like to.
+        - I'm willing to hear more if you'd like to tell me about it.
+        - I'd be willing to listen if you're willing to continue sharing.
   possible_continue_statement:
-    - nlg_helper:
-        name: sample_possible_continue_statement
+    - one of: 
+      - Mhm, I see.
+      - Right, I see.
+      - Ah, okay then.
+      - I see.
+      - Mm, I see.
+      - Alright, I see.
+      - Mhm, I hear you.
+    - one of:
+      - Would you like to tell me more about this?
+      - Is there anything else you would like to tell me about this?
+      - Was there something else you would like to talk about regarding this?
+      - Is there anything else you would like to bring up?
+      - Would you like to tell me more about that?
+      - Would you like to talk more about that?
+      - Do you want to talk about this more?
+      - Do you want to talk more about what happened?
+      - Would you like to tell me more about what happened?
+      - Are there any other things that happened that you would like me to know about?
+      - Is there anything else you want to tell me?
+      - Do you want to talk some more about this?
   possible_continue_accepted_statement:
-    - nlg_helper:
-        name: sample_possible_continue_accepted_statement
+    - one of:
+      - Okay.
+      - Sure thing.
+      - That's fine.
+      - That's alright.
+    - one of:
+      - I'm here to listen if you would like to tell me more.
+      - I would be interested to hear more if you don't mind sharing.
+      - Feel free to continue telling me more.
+      - Please continue telling me more if you would like to.
+      - I'm willing to hear more if you'd like to tell me about it.
+      - I'd be willing to listen if you're willing to continue sharing.
   ending_statement:
-    - nlg_helper:
-        name: sample_ending_statement
+    - one of: # thank
+      - Thank you for talking to me about this today.
+      - Thanks for sharing this with me.
+    - one of:
+      - combine:
+        - one of: # express opinion
+          - I'm glad that we talked about this, 
+          - I'm happy that we got to talk about this, 
+        - and
+        - one of: # reassure
+          - I hope things will turn out alright.
+          - I hope you'll be fine.
+          - I hope you will be kind to yourself even when things are difficult.
+          - As with all things, we can only take it one step at a time.
+          - I hope that you'll be able to find a way to make the best of this situation, even if it's not what you wanted.
+          - I hope things will turn out alright in the end, no matter how difficult they may seem now.
+      - combine:
+        - one of: # express opinion
+          - I'm glad that we talked about this.
+          - I'm happy that we got to talk about this.
+      - combine:
+        - one of: # reassure
+          - I hope things will turn out alright, 
+          - I hope you'll be fine, 
+          - I hope you will be kind to yourself even when things are difficult, 
+          - As with all things, we can only take it one step at a time, 
+          - I hope that you'll be able to find a way to make the best of this situation, even if it's not what you wanted, 
+          - I hope things will turn out alright in the end, no matter how difficult they may seem now, 
+        - and
+        - one of: # offer
+          - I'm always here to listen if you need it.
+          - I'm always happy to listen if you'd like to talk about this again.
+          - I'll be here with a listening ear if you'd like to talk about this again.
+    - Let's talk about something else then.
   can_enter_subsequent_turn:
     - bool:
       - or:
@@ -79,8 +188,7 @@ subnodes:
       - is_true: locals.can_enter_subsequent_turn
       - is_true: state.PERSONALISSUE__responded_with_question
     response:
-      - nlg_helper:
-          name: sample_validation_statement
+      - val: locals.validation_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
@@ -91,8 +199,7 @@ subnodes:
       - is_true: locals.can_enter_subsequent_turn
       - is_true: flags.GlobalFlag__LastTurnUsedNeuralGeneration
     response:
-      - nlg_helper:
-          name: sample_subsequent_turn_statement
+      - val: locals.subsequent_turn_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
@@ -112,8 +219,7 @@ subnodes:
             - one of:
               - hopefully
               - I hope
-      - nlg_helper:
-          name: sample_partial_subsequent_turn_statement
+      - val: locals.partial_subsequent_turn_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: True
@@ -139,8 +245,7 @@ subnodes:
             name: state.PERSONALISSUE__PreviousSubnode
             value: subsequent_turn
     response:
-      - nlg_helper:
-          name: sample_possible_continue_statement
+      - val: locals.possible_continue_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
@@ -161,8 +266,7 @@ subnodes:
               value: possible_continue
           - is_true: flags.GlobalFlag__YES
     response:
-      - nlg_helper:
-          name: sample_possible_continue_accepted_statement
+      - val: locals.possible_continue_accepted_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
@@ -197,8 +301,7 @@ subnodes:
             - is_true: flags.PERSONALISSUE__short_response
             - is_true: flags.PERSONALISSUE__noncommittal
     response:
-      - nlg_helper:
-          name: sample_ending_statement
+      - val: locals.ending_statement
     set_state:
       flags.GlobalFlag__LastTurnUsedNeuralGeneration:
         constant: False
