@@ -99,6 +99,10 @@ def evaluate_nlg_call(data, python_context, contexts):
 		assert isinstance(nlg_params, dict)
 		prefix = evaluate_nlg_calls(nlg_params['prefix'], python_context, contexts)
 		return python_context['rg'].get_neural_response(prefix=prefix)
+	elif type == 'combine':
+		# allows you to chain nlg calls together in order to create one output
+		assert isinstance(nlg_params, list)
+		return evaluate_nlg_calls(nlg_params, python_context, contexts)
 	elif type == 'one of':
 		return evaluate_nlg_call(random.choice(nlg_params), python_context, contexts)
 	elif type == 'constant':
