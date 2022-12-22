@@ -308,7 +308,7 @@ subnodes:
       state.PERSONALISSUE__supernode_is_responding:
         constant: False
       state.PERSONALISSUE__PreviousSubnode:
-        constant: ending
+        constant: null
 
 set_state_after:
   # The ending subnode will override this flag setting
