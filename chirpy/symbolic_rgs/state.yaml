@@ -11,7 +11,7 @@ User__FavoriteFoodTexture: null
 User__FavoriteSport: null
 User__FavoritePlace: null
 PERSONALISSUE__supernode_is_responding: False
-PERSONALISSUE__main_convo_began: False
+PERSONALISSUE__user_has_personal_issue: False
 PERSONALISSUE__need_confirmation_for_further_discussion: False
 PERSONALISSUE__confirming_further_discussion: False
 PERSONALISSUE__responded_with_question: False

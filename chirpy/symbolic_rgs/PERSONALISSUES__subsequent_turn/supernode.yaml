@@ -141,10 +141,10 @@ locals:
         - is_true: flags.PERSONALISSUE__is_continued_sharing
         - is_true: flags.PERSONALISSUE__personal_sharing_negative
         - and:
-          - is_false: state.PERSONALISSUE__main_convo_began
+          - is_false: state.PERSONALISSUE__user_has_personal_issue
           - is_true: flags.PERSONALISSUE__short_response
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_true: state.PERSONALISSUE__responded_with_question
@@ -152,7 +152,7 @@ locals:
             - is_true: flags.GlobalFlag__YES
             - is_true: flags.GlobalFlag__NO
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_false: state.PERSONALISSUE__responded_with_question
@@ -238,20 +238,20 @@ subnodes:
     entry_state_conditions:
       - or :
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_true: state.PERSONALISSUE__confirming_further_discussion
           - or:
             - is_true: flags.GlobalFlag__YES
             - is_true: flags.PERSONALISSUE__noncommittal
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_true: state.PERSONALISSUE__responded_with_question
           - is_true: flags.PERSONALISSUE__short_response
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_false: state.PERSONALISSUE__confirming_further_discussion
     response:
@@ -267,13 +267,13 @@ subnodes:
     entry_state_conditions:
       - or:
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_false: state.PERSONALISSUE__responded_with_question
           - is_true: flags.GlobalFlag__YES
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_true: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_true: flags.GlobalFlag__YES
@@ -293,12 +293,12 @@ subnodes:
         - is_true: flags.PERSONALISSUE__gratitude
         - and:
             - or:
-              - is_false: state.PERSONALISSUE__main_convo_began
+              - is_false: state.PERSONALISSUE__user_has_personal_issue
               - is_true: state.PERSONALISSUE__need_confirmation_for_further_discussion
               - is_true: state.PERSONALISSUE__confirming_further_discussion
             - is_true: flags.GlobalFlag__NO
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_false: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_false: state.PERSONALISSUE__confirming_further_discussion
           - is_false: state.PERSONALISSUE__responded_with_question
@@ -306,7 +306,7 @@ subnodes:
             - is_true: flags.PERSONALISSUE__gratitude
             - is_true: flags.GlobalFlag__NO
         - and:
-          - is_true: state.PERSONALISSUE__main_convo_began
+          - is_true: state.PERSONALISSUE__user_has_personal_issue
           - is_true: state.PERSONALISSUE__need_confirmation_for_further_discussion
           - is_false: state.PERSONALISSUE__confirming_further_discussion
           - or:
@@ -319,7 +319,7 @@ subnodes:
         constant: False
       state.PERSONALISSUE__supernode_is_responding:
         constant: False
-      state.PERSONALISSUE__main_convo_began:
+      state.PERSONALISSUE__user_has_personal_issue:
         constant: False
       state.PERSONALISSUE__need_confirmation_for_further_discussion:
         constant: False
@@ -328,7 +328,7 @@ subnodes:
 
 set_state_after:
   # The ending subnode will override this state setting
-  state.PERSONALISSUE__main_convo_began:
+  state.PERSONALISSUE__user_has_personal_issue:
     constant: True
   state.PERSONALISSUE__responded_with_question:
     - nlg_helper:
