@@ -10,3 +10,8 @@ User__FavoriteFoodTalkable: null
 User__FavoriteFoodTexture: null
 User__FavoriteSport: null
 User__FavoritePlace: null
+User__FavoritePlaceAttribute: null
+User__FavoritePlaceHasFactoid: false
+User__FavoritePlaceClimate: null
+User__FavoritePlaceCountry: null
+User__FavoritePlaceHasVisited: false
