@@ -1,67 +1,70 @@
 entry_state_conditions:
-  - is_not_none: state.User__FavoriteFood
+  - is_not_none: state.User__FavoritePlace
   - or:
-    - is_not_none: state.User__FavoriteFoodFactoidYear
-    - is_not_none: state.User__FavoriteFoodFactoidOrigin
+    - and:
+      - is_not_false: state.User__FavoritePlaceIsCityCountry
+      - is_not_none: state.User__FavoritePlacePopulation
+    - and:
+      - is_not_false: state.User__FavoritePlaceIsCityCountry
+      - is_not_none: state.User__FavoritePlaceLanguagesSpoken
 
 # THESE ARE EVALUATED AT THE PROMPT STAGE
 prompts:
-  - prompt_name: origin_year_factoid_prompt
+  - prompt_name: place_city_population_and_language_prompt
     entry_state_conditions:
-      - is_not_none: state.User__FavoriteFoodFactoidYear
-      - is_not_none: state.User__FavoriteFoodFactoidOrigin
+      - is_not_false: state.User__FavoritePlaceIsCity
+      - is_not_none: state.User__FavoritePlacePopulation
+      - is_not_none: state.User__FavoritePlaceLanguagesSpoken
     prompt_text:
       - Did you know that
-      - val: state.User__FavoriteFoodTalkable
-      - inflect:
-          inflect_token: was
-          inflect_entity: state.User__FavoriteFoodTalkable
-      - first made in
-      - val: state.User__FavoriteFoodFactoidOrigin
-      - around
-      - val: state.User__FavoriteFoodFactoidYear
-      - "?"
-      - I can't believe people have been eating
-      - val: state.User__FavoriteFoodTalkable
-      - for so long!
-  # if only origin
-  - prompt_name: origin_factoid_prompt
-    entry_state_conditions:
-      - is_not_none: state.User__FavoriteFoodFactoidOrigin
-    prompt_text:
-      - Did you know that
-      - val: state.User__FavoriteFoodTalkable
-      - inflect:
-          inflect_token: is
-          inflect_entity: state.User__FavoriteFood
-      - originally from
-      - val: state.User__FavoriteFoodFactoidOrigin
-      - "?"
-  # if only year
-  - prompt_name: make_year_factoid_comment
-    entry_state_conditions:
-      - is_not_none: state.User__FavoriteFoodFactoidYear
-    prompt_text:
-      - Did you know that
+      - val: state.User__FavoritePlaceTalkable
       - inflect:
           inflect_token: has
-          inflect_entity: state.User__FavoriteFood
-      - been made since
-      - val: state.User__FavoriteFoodFactoidYear
+          inflect_entity: state.User__FavoritePlaceTalkable
+      - a population of around
+      - val: state.User__FavoritePlacePopulation
+      - people?
+      - What a great place to practice speaking
+      - val: state.User__FavoritePlaceLanguagesSpoken
+      - "!"
+
+  # Place is a city or country, know population, don't know language
+  - prompt_name: place_city_population_only_prompt
+    entry_state_conditions:
+      - is_not_false: state.User__FavoritePlaceIsCity
+      - is_not_none: state.User__FavoritePlacePopulation
+    prompt_text:
+      - Did you know that
+      - val: state.User__FavoritePlaceTalkable
+      - inflect:
+          inflect_token: has
+          inflect_entity: state.User__FavoritePlaceTalkable
+      - a population of around
+      - val: state.User__FavoritePlacePopulation
+      - people? Sounds like a fun place to go visit!
+
+ # Place is a city or country, know population, don't know language
+  - prompt_name: place_city_language_only_prompt
+    entry_state_conditions:
+      - is_not_false: state.User__FavoritePlaceIsCity
+      - is_not_none: state.User__FavoritePlaceLanguagesSpoken
+    prompt_text:
+      - Did you know that
+      - val: state.User__FavoritePlaceLanguagesSpoken
+      - is a commonly spoken language in
+      - val: state.User__FavoritePlaceTalkable
       - "?"
-      - I can't believe people have been eating
-      - val: state.User__FavoriteFoodTalkable
-      - for so long!
+      - Do you know how to speak
+      - val: state.User__FavoritePlaceLanguagesSpoken
+      - "?"
+
   # I especially love how it's [NEURAL_GEN]...
   - prompt_name: default
     prompt_text:
     - neural_generation:
         prefix:
-          - I especially love how
-          - inflect:
-              inflect_token: it\'s
-              inflect_entity: state.User__FavoriteFood
-
+          - I especially love
+          
 # THESE ARE EVALUATED AT THE GENERATION STAGE
 entry_conditions_takeover:
   - is_true: GLOBAL__user_has_navigational_intent
@@ -80,7 +83,7 @@ subnodes:
           prefix: ""
 
 set_state_after:
-  state.User__FavoriteFood: 
+  User__FavoritePlace: 
     - val: utilities.lowercased_cur_entity
   
   flags.GlobalFlag__LastBotTurnWasOpenEnded:
