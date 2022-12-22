@@ -115,6 +115,12 @@ def nlg_helper(func):
         raise KeyError(f'Duplicate function name {func.__name__} found in cache for {supernode_name}')
     global_nlg_helpers_cache[supernode_name][func.__name__] = func
     return func
+
+global_templates_cache = defaultdict(lambda: {})
+def add_template(template):
+    '''Pass in a template object. This function will instantiate the template for you'''
+    global_templates_cache[template.__name__] = template()
+    return template
     
 def nlg_helper_augmented(func):
     supernode_path = inspect.getfile(func)# get path to current rg+supernode, i.e. "MUSIC/music_ask_song"

@@ -14,6 +14,9 @@ continue_conditions:
   # None. If we are in this supernode, we should at least give a closing message
 
 locals:
+  # test_statement:
+  # Must call add_template in nlg_helpers first
+  #   - sample_template: PartialSubsequentTurnResponseTemplate
   validation_statement:
     - one of:
       - Mhm, I see.

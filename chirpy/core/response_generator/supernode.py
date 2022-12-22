@@ -99,6 +99,11 @@ def evaluate_nlg_call(data, python_context, contexts):
 		assert isinstance(nlg_params, dict)
 		prefix = evaluate_nlg_calls(nlg_params['prefix'], python_context, contexts)
 		return python_context['rg'].get_neural_response(prefix=prefix)
+	elif type == "sample_template":
+		assert isinstance(nlg_params, str)
+		if nlg_params not in global_templates_cache:
+				raise KeyError(f'{nlg_params} template not found!')
+		return global_templates_cache[nlg_params].sample()
 	elif type == 'combine':
 		# allows you to chain nlg calls together in order to create one output
 		assert isinstance(nlg_params, list)
