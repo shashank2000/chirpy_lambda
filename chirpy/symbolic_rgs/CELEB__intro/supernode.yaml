@@ -1,0 +1,35 @@
+entry_state_conditions:
+  - is_none: state.User__FavoriteCelebrity
+
+prompts:
+  - prompt_name: favorite_celeb
+    prompt_text: "Who’s a celebrity you like to follow?"
+
+continue_conditions:
+  - is_true: flags.CELEB__user_mentioned_celeb
+
+locals:
+  intro_statement:
+    - one of:
+        - Wow, same!
+        - Me too!
+    - I like
+    - val: utilities.cur_entity_name
+    - a lot as well!
+
+set_state:
+  state.User__FavoriteCelebrity:
+    - val: utilities.cur_entity
+
+subnodes:
+  - node_name: default
+    response:
+      - neural_generation:
+          prefix:
+            - val: locals.intro_statement
+            - I think
+
+
+set_state_after:
+  flags.GlobalFlag__LastBotTurnWasOpenEnded:
+    constant: True

@@ -47,3 +47,5 @@ alexa.zip
 convpara/*
 
 chirpy/core/es_config.json
+env.list
+portforward.sh
