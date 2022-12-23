@@ -13,7 +13,7 @@ from chirpy.core.response_generator_datatypes import ResponseGeneratorResult, Pr
 	emptyResult_with_conditional_state, emptyPrompt, UpdateEntity, AnswerType
 from chirpy.core.response_generator.helpers import *
 from chirpy.core.response_priority import ResponsePriority
-from chirpy.core.util import load_text_file, infl
+from chirpy.core.util import load_text_file, infl, get_none_replace
 from typing import Set, Optional, List, Dict
 import logging
 import os
@@ -60,6 +60,8 @@ def evaluate_nlg_call(data, python_context, contexts):
 		return evaluate_nlg_calls(data, python_context, contexts)
 	if isinstance(data, str): # plain text
 		return data
+	if isinstance(data, int): # number
+		return data
 	
 	assert isinstance(data, dict) and len(data) == 1, f"Failure: data is {data}"
 	type = next(iter(data))
@@ -67,6 +69,9 @@ def evaluate_nlg_call(data, python_context, contexts):
 	if type == 'eval':
 		assert isinstance(nlg_params, str)
 		return effify(nlg_params, global_context=python_context)
+	elif type == 'bool':
+		assert isinstance(nlg_params, list)
+		return is_valid(nlg_params, python_context, contexts)
 	elif type == 'val':
 		assert isinstance(nlg_params, str)
 		return lookup_value(nlg_params, contexts)
@@ -94,6 +99,15 @@ def evaluate_nlg_call(data, python_context, contexts):
 		assert isinstance(nlg_params, dict)
 		prefix = evaluate_nlg_calls(nlg_params['prefix'], python_context, contexts)
 		return python_context['rg'].get_neural_response(prefix=prefix)
+	elif type == "sample_template":
+		assert isinstance(nlg_params, str)
+		if nlg_params not in global_templates_cache:
+				raise KeyError(f'{nlg_params} template not found!')
+		return global_templates_cache[nlg_params].sample()
+	elif type == 'combine':
+		# allows you to chain nlg calls together in order to create one output
+		assert isinstance(nlg_params, list)
+		return evaluate_nlg_calls(nlg_params, python_context, contexts)
 	elif type == 'one of':
 		return evaluate_nlg_call(random.choice(nlg_params), python_context, contexts)
 	elif type == 'constant':
@@ -140,13 +154,37 @@ CONDITION_STYLE_TO_BEHAVIOR = {
 	'is_true': (lambda val: (val is True)),
 	'is_false': (lambda val: (val is False)),
 	'is_value': (lambda val, target: (val == target)),
+	'is_one_of': (lambda val, target: (val in target)),
+	'is_not_one_of': (lambda val, target: (val not in target)),
+	'is_greater_than': (lambda val, target: (val > target)),
 }
 	
 def compute_entry_condition(entry_condition, python_context, contexts):
 	assert len(entry_condition) == 1
 	condition_style, var_data = list(entry_condition.items())[0]
-	if condition_style == 'or':
+	if condition_style == 'and':
+		return all(compute_entry_condition(ent, python_context, contexts) for ent in var_data)
+	elif condition_style == 'or':
 		return any(compute_entry_condition(ent, python_context, contexts) for ent in var_data)
+	elif condition_style == 'disabled':
+		return not var_data
+	elif condition_style == 'is_one_of':
+		var_value = lookup_value(var_data['name'], contexts)
+		return CONDITION_STYLE_TO_BEHAVIOR[condition_style](var_value, var_data['values'])
+	elif condition_style == 'is_not_one_of':
+		var_value = lookup_value(var_data['name'], contexts)
+		logger.warning(f"Calculated value: {var_value} versus {var_data['values']}.")
+		return CONDITION_STYLE_TO_BEHAVIOR[condition_style](var_value, var_data['values'])
+	elif condition_style == 'is_greater_than':
+		# is_greater_than (returns true if variable associated with name > value + additional_target)
+		#   name: variable to look up
+		#   value: an integer value
+		#   additional_target: variable to look up (can be omitted). additional_target set to 0 if omitted
+		var_value = lookup_value(var_data['name'], contexts)
+		additional_target = 0
+		if 'additional_target' in var_data:
+			additional_target = lookup_value(var_data['additional_target'], contexts)
+		return CONDITION_STYLE_TO_BEHAVIOR[condition_style](var_value, var_data['value'] + additional_target)
 
 	if condition_style == 'is_value':
 		var_name = var_data['name']
@@ -170,7 +208,7 @@ def compute_entry_condition(entry_condition, python_context, contexts):
 
 def is_valid(entry_conditions, python_context, contexts):
 	for entry_condition_dict in entry_conditions:
-		logger.warning(f"Entry conditions are: {entry_conditions}")
+		logger.warning(f"Entry condition is: {entry_condition_dict}")
 		if not compute_entry_condition(entry_condition_dict, python_context, contexts):
 			return False
 
@@ -180,11 +218,11 @@ class Prompt:
 	def __init__(self, data):
 		logger.warning(f"Prompt data is: {data}")
 		self.data = data
-		self.entry_flag_conditions = data.get('entry_flag_conditions', [])
-		self.entry_state_conditions = data.get('entry_state_conditions', [])
+		self.entry_flag_conditions = get_none_replace(data, 'entry_flag_conditions', [])
+		self.entry_state_conditions = get_none_replace(data, 'entry_state_conditions', [])
 		self.prompt_text = data.get('prompt_text')
 		self.name = data['prompt_name']
-		self.updates = data.get('set_state', {})
+		self.updates = get_none_replace(data, 'set_state', {})
 
 	def is_valid(self, python_context, contexts):
 		return is_valid(self.entry_flag_conditions + self.entry_state_conditions,
@@ -209,11 +247,11 @@ class Subnode:
 	def __init__(self, data):
 		logger.warning(f"Subnode data is, {data}")
 		self.data = data
-		self.entry_flag_conditions = data.get('entry_flag_conditions', [])
-		self.entry_state_conditions = data.get('entry_state_conditions', [])
+		self.entry_flag_conditions = get_none_replace(data, 'entry_flag_conditions', [])
+		self.entry_state_conditions = get_none_replace(data, 'entry_state_conditions', [])
 		self.response = data.get('response')
 		self.name = data['node_name']
-		self.updates = data.get('set_state', {})
+		self.updates = get_none_replace(data, 'set_state', {})
 		
 	def is_valid(self, python_context, contexts):
 		return is_valid(self.entry_flag_conditions + self.entry_state_conditions,
@@ -256,14 +294,14 @@ class Supernode:
 		invalid_keys = set(self.content.keys()) - set(ALLOWED_KEYS)
 		assert len(invalid_keys) == 0, f"Invalid key: {invalid_keys}"
 			
-		self.entry_flag_conditions = self.content.get('entry_flag_conditions', [])
-		self.entry_state_conditions = self.content.get('entry_state_conditions', [])
-		self.entry_conditions_takeover = self.content.get('entry_conditions_takeover', 'disallow')
-		self.continue_conditions = self.content.get('continue_conditions', [])
+		self.entry_flag_conditions = get_none_replace(self.content, 'entry_flag_conditions', [])
+		self.entry_state_conditions = get_none_replace(self.content, 'entry_state_conditions', [])
+		self.entry_conditions_takeover = get_none_replace(self.content, 'entry_conditions_takeover', 'disallow')
+		self.continue_conditions = get_none_replace(self.content, 'continue_conditions', [])
 		self.locals = self.content['locals']
 		self.subnodes = self.load_subnodes(self.content['subnodes'])
-		self.updates = self.content.get('set_state', {})
-		self.updates_after = self.content.get('set_state_after', {})
+		self.updates = get_none_replace(self.content, 'set_state', {})
+		self.updates_after = get_none_replace(self.content, 'set_state_after', {})
 		self.prompts = self.load_prompts(self.content['prompts'])
 		self.name = name
 		
@@ -314,6 +352,18 @@ class Supernode:
 			return (len(self.entry_flag_conditions), len(self.entry_state_conditions) + 1) if result else (0, 0)
 		else:
 			return result
+
+	def can_takeover(self, python_context, contexts, return_specificity=False):
+		if self.entry_conditions_takeover == 'disallow':
+			# Supernode with no entry conditions cannot takeover
+			return False
+
+		result = is_valid(self.entry_conditions_takeover, python_context, contexts)
+		logger.info(f"Can_takeover for {self.name} logged {result}")
+		if return_specificity:
+			return len(self.entry_conditions_takeover) if result else 0
+		else:
+			return result
 		
 	def can_continue(self, python_context, contexts):
 		result = is_valid(self.continue_conditions, python_context, contexts)
@@ -324,6 +374,11 @@ class Supernode:
 		#logger.warning(f"{dir(self.nlu)}")
 		flags = self.nlu.get_flags(rg, state, utterance)
 		logger.warning(f"Added the following flags: {flags}")
+		return flags
+
+	def get_background_flags(self, rg, utterance):
+		# background_flags: flags to update even if this supernode was not chosen
+		flags = self.nlu.get_background_flags(rg, utterance)
 		return flags
 
 	def get_state_updates(self, python_context, contexts):
