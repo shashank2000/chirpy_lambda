@@ -55,7 +55,6 @@ def lookup_value(value_name, contexts):
 		assert False, f"Need a namespace for value name {value_name}."
 
 def evaluate_nlg_call(data, python_context, contexts):
-	logger.warning(f"Eval data: {data}")
 	if isinstance(data, list):
 		return evaluate_nlg_calls(data, python_context, contexts)
 	if isinstance(data, str): # plain text
@@ -78,12 +77,11 @@ def evaluate_nlg_call(data, python_context, contexts):
 	elif type == 'nlg_helper':
 		assert isinstance(nlg_params, dict)
 		function_name = nlg_params['name']
-		logger.warning(f"NLG helpers dir: {dir(python_context['supernode'].nlg_helpers)}")
+		# logger.warning(f"NLG helpers dir: {dir(python_context['supernode'].nlg_helpers)}")
 		assert hasattr(python_context['supernode'].nlg_helpers, function_name), f"Function name {function_name} not found"
 		args = nlg_params.get('args', [])
 		args = [evaluate_nlg_call(arg, python_context, contexts) for arg in args]
 		args = [python_context['rg']] + args  # Add RG as first argument
-		logger.warning(f"Args are: {args}")
 		return getattr(python_context['supernode'].nlg_helpers, function_name)(*args)
 	elif type == 'inflect':
 		assert isinstance(nlg_params, dict)
@@ -129,14 +127,12 @@ def spacingaware_join(x):
 
 def evaluate_nlg_calls(datas, python_context, contexts):
 	output = []
-	logger.warning(f"datas is {datas}")
 	if isinstance(datas, str) or isinstance(datas, dict):
 		return evaluate_nlg_call(datas, python_context, contexts)
 	if len(datas) == 1:
 		return evaluate_nlg_call(datas[0], python_context, contexts)
 	for elem in datas:
 		out = evaluate_nlg_call(elem, python_context, contexts)
-		logger.warning(f"nlg_generation {datas} {out}")
 		output.append(out)
 
 	return spacingaware_join(output)
@@ -145,7 +141,6 @@ def evaluate_nlg_calls_or_constant(datas, python_context, contexts):
 	if isinstance(datas, dict):
 		assert len(datas) == 1, "should be a dict with key constant"
 		return datas['constant']
-	logger.warning(f"Datas is: {datas}")
 	return evaluate_nlg_calls(datas, python_context, contexts)
 	
 CONDITION_STYLE_TO_BEHAVIOR = {
@@ -173,7 +168,6 @@ def compute_entry_condition(entry_condition, python_context, contexts):
 		return CONDITION_STYLE_TO_BEHAVIOR[condition_style](var_value, var_data['values'])
 	elif condition_style == 'is_not_one_of':
 		var_value = lookup_value(var_data['name'], contexts)
-		logger.warning(f"Calculated value: {var_value} versus {var_data['values']}.")
 		return CONDITION_STYLE_TO_BEHAVIOR[condition_style](var_value, var_data['values'])
 	elif condition_style == 'is_greater_than':
 		# is_greater_than (returns true if variable associated with name > value + additional_target)
@@ -200,15 +194,12 @@ def compute_entry_condition(entry_condition, python_context, contexts):
 	if condition_style == 'is_value':
 		result = validity_func(evaluated_value, var_expected_value)
 	else:	
-		logger.warning(f"Evaluated value is {evaluated_value}")
 		result = validity_func(evaluated_value)
-		logger.warning(f"Result is {result}")
 		
 	return result
 
 def is_valid(entry_conditions, python_context, contexts):
 	for entry_condition_dict in entry_conditions:
-		logger.warning(f"Entry condition is: {entry_condition_dict}")
 		if not compute_entry_condition(entry_condition_dict, python_context, contexts):
 			return False
 
@@ -216,7 +207,6 @@ def is_valid(entry_conditions, python_context, contexts):
 
 class Prompt:
 	def __init__(self, data):
-		logger.warning(f"Prompt data is: {data}")
 		self.data = data
 		self.entry_flag_conditions = get_none_replace(data, 'entry_flag_conditions', [])
 		self.entry_state_conditions = get_none_replace(data, 'entry_state_conditions', [])
@@ -245,7 +235,6 @@ class Prompt:
 
 class Subnode:
 	def __init__(self, data):
-		logger.warning(f"Subnode data is, {data}")
 		self.data = data
 		self.entry_flag_conditions = get_none_replace(data, 'entry_flag_conditions', [])
 		self.entry_state_conditions = get_none_replace(data, 'entry_state_conditions', [])
@@ -258,7 +247,6 @@ class Subnode:
 						python_context, contexts)
 		
 	def get_response(self, python_context, contexts):
-		logger.warning(f"Subnode response is: {self.response}")
 		return evaluate_nlg_calls(self.response, python_context, contexts)
 		
 	def get_state_updates(self, python_context, contexts):
@@ -320,8 +308,6 @@ class Supernode:
 	def get_optimal_subnode(self, python_context, contexts):
 		possible_subnodes = [subnode for subnode in self.subnodes + self.get_global_subnodes() if subnode.is_valid(python_context, contexts)]
 		assert len(possible_subnodes), "No subnode found!"
-
-		logger.warning(f"POSSIBLE SUBNODES ARE: {possible_subnodes}")
 		
 		# for now, just return the first possible subnode
 		return possible_subnodes[0]
@@ -347,7 +333,6 @@ class Supernode:
 	def can_start(self, python_context, contexts, return_specificity=False):
 		result = is_valid(self.entry_flag_conditions + self.entry_state_conditions,
 						  python_context, contexts)
-		logger.warning(f"Can_start for {self.name} logged {result}")
 		if return_specificity:
 			return (len(self.entry_flag_conditions), len(self.entry_state_conditions) + 1) if result else (0, 0)
 		else:
@@ -367,13 +352,10 @@ class Supernode:
 		
 	def can_continue(self, python_context, contexts):
 		result = is_valid(self.continue_conditions, python_context, contexts)
-		logger.warning(f"Can_continue logged {result}")
 		return result
 		
 	def get_flags(self, rg, state, utterance):
-		#logger.warning(f"{dir(self.nlu)}")
 		flags = self.nlu.get_flags(rg, state, utterance)
-		logger.warning(f"Added the following flags: {flags}")
 		return flags
 
 	def get_background_flags(self, rg, utterance):

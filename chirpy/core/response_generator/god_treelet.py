@@ -114,7 +114,7 @@ class SymbolicTreelet(Treelet):
                 if not passes_condition:
                     break
             else:
-                logger.warning(f"Found NLG node: {nlg_node_name}.")
+                # logger.warning(f"Found NLG node: {nlg_node_name}.")
                 return nlg
 
         return None
@@ -200,7 +200,7 @@ class SymbolicTreelet(Treelet):
         context = get_context_for_supernode(cur_supernode)
 
         nlg_data = self.nlg_yamls[cur_supernode]
-        logger.warning(f"NLG data keys: {nlg_data}")
+        # logger.warning(f"NLG data keys: {nlg_data}")
 
         # Process locals        
         locals = {}
@@ -212,7 +212,7 @@ class SymbolicTreelet(Treelet):
         for local_key, local_values in nlg_data['locals'].items():
             locals[local_key] = self.evaluate_nlg_calls(local_values, context, contexts)
             
-        logger.warning(f"Finished evaluating locals: {'; '.join((k + ': ' + v) for (k, v) in locals.items())}")
+        # logger.warning(f"Finished evaluating locals: {'; '.join((k + ': ' + v) for (k, v) in locals.items())}")
         # Select subnode
         #def select_subnode(self, subnodes, flags, locals, state)
 
@@ -224,7 +224,7 @@ class SymbolicTreelet(Treelet):
         structured_response = subnode_data['response']
         response = self.evaluate_nlg_calls(structured_response, context, contexts)
         
-        logger.warning(f'Received {response} from symbolic treelet.')
+        # logger.warning(f'Received {response} from symbolic treelet.')
 
         # post-subnode state updates
         expose_vars = self.get_exposed_subnode_vars(cur_supernode, subnode_name)

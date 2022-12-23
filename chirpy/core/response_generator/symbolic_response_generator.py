@@ -55,9 +55,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
         if supernode_paths is None:
             supernode_paths = get_supernode_paths()
         
-        logger.warning(f"Starting load process with supernodes {supernode_paths}.")
         self.paths_to_supernodes = self.load_supernodes_from_paths(supernode_paths)
-        logger.warning(f"Supernodes are: {', '.join(str(x) for x in self.paths_to_supernodes.keys())}")
                 
     def load_supernodes_from_paths(self, supernode_paths):
         return {path: Supernode(path) for path in supernode_paths}
@@ -85,12 +83,8 @@ class SymbolicResponseGenerator(ResponseGenerator):
         }
 
         global_flags.update({f"GlobalFlag__Initiative__{k}": bool(v.execute(utterance)) for k, v in abrupt_initiative_templates.items()})
-        logger.warning(f"GLOBAL FLAGS: {global_flags}")
-        
         global_flags.update(global_nlu.get_flags(self, state, utterance))
-        
-        logger.warning(f"GlobalFlags are: {global_flags}")
-        
+                
         return global_flags
         
     def get_supernodes(self):
@@ -100,7 +94,6 @@ class SymbolicResponseGenerator(ResponseGenerator):
         can_start_supernodes = {supernode: supernode.can_start(python_context, contexts, return_specificity=True)
                                 for supernode in self.get_supernodes()}
         can_start_supernodes = sorted(can_start_supernodes.items(), key=lambda kv: (kv[1][0], kv[1][1]), reverse=True)
-        logger.warning(f"Supernodes that can start (in order): {can_start_supernodes}")
         return can_start_supernodes[0][0]
 
     def get_any_takeover_supernode(self, python_context, contexts, cancelled_supernodes):
@@ -221,9 +214,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
         
         # Figure out what supernode we're in
         supernode = self.get_takeover_or_current_supernode(state, python_context, contexts)
-        
-        logger.warning(f"Currently, we are in supernode {supernode}.")
-        
+                
         # Re-update python context and utilities with new supernode
         # We can keep the global flags as what we had before because their values are not dependent
         # on the selected supernode
@@ -282,8 +273,6 @@ class SymbolicResponseGenerator(ResponseGenerator):
                             conditional_state_updates)
         
         state.update(conditional_state_updates)
-        
-        logger.warning(f"Conditional state updates are {conditional_state_updates}, state is {state}")
         
         # get next prompt
         next_supernode = self.get_next_supernode(python_context, contexts)
