@@ -133,9 +133,10 @@ def evaluate_nlg_calls(datas, python_context, contexts):
 		return evaluate_nlg_call(datas[0], python_context, contexts)
 	for elem in datas:
 		out = evaluate_nlg_call(elem, python_context, contexts)
-		if not isinstance(out, str):
-			logger.error(f"Warning: {out} is not a string. This is not ok unless you are debugging.")
-		output.append(str(out))
+		if not isinstance(out, str):	
+			logger.error(f"{out} is not a string. This is not ok unless you are debugging.")	
+			out = str(out)
+		output.append(out)
 
 	return spacingaware_join(output)
 	
