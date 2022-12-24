@@ -211,15 +211,13 @@ def is_valid(entry_conditions, python_context, contexts):
 class Prompt:
 	def __init__(self, data):
 		self.data = data
-		self.entry_flag_conditions = get_none_replace(data, 'entry_flag_conditions', [])
-		self.entry_state_conditions = get_none_replace(data, 'entry_state_conditions', [])
+		self.entry_conditions = get_none_replace(data, 'entry_conditions', [])
 		self.prompt_text = data.get('prompt_text')
 		self.name = data['prompt_name']
 		self.updates = get_none_replace(data, 'set_state', {})
 
 	def is_valid(self, python_context, contexts):
-		return is_valid(self.entry_flag_conditions + self.entry_state_conditions,
-						python_context, contexts)
+		return is_valid(self.entry_conditions, python_context, contexts)
 
 	def get_prompt_text(self, python_context, contexts):
 		return evaluate_nlg_calls(self.prompt_text, python_context, contexts)
@@ -239,15 +237,13 @@ class Prompt:
 class Subnode:
 	def __init__(self, data):
 		self.data = data
-		self.entry_flag_conditions = get_none_replace(data, 'entry_flag_conditions', [])
-		self.entry_state_conditions = get_none_replace(data, 'entry_state_conditions', [])
+		self.entry_conditions = get_none_replace(data, 'entry_conditions', [])
 		self.response = data.get('response')
 		self.name = data['node_name']
 		self.updates = get_none_replace(data, 'set_state', {})
 		
 	def is_valid(self, python_context, contexts):
-		return is_valid(self.entry_flag_conditions + self.entry_state_conditions,
-						python_context, contexts)
+		return is_valid(self.entry_conditions, python_context, contexts)
 		
 	def get_response(self, python_context, contexts):
 		return evaluate_nlg_calls(self.response, python_context, contexts)
@@ -264,6 +260,14 @@ class Subnode:
 	def __repr__(self):
 		return str(self)
 
+from abc import ABC, abstractmethod
+
+class Condition(ABC):
+	@abstractmethod
+	def get_priority(self):
+		pass
+
+
 class Supernode:
 	def __init__(self, name):
 		self.yaml_path = os.path.join(BASE_PATH, name)
@@ -271,8 +275,7 @@ class Supernode:
 			self.content = yaml.safe_load(f)
 			
 		ALLOWED_KEYS = [
-			'entry_flag_conditions',
-			'entry_state_conditions',
+			'entry_conditions',
 			'entry_conditions_takeover',
 			'continue_conditions',
 			'prompts',
@@ -285,8 +288,7 @@ class Supernode:
 		invalid_keys = set(self.content.keys()) - set(ALLOWED_KEYS)
 		assert len(invalid_keys) == 0, f"Invalid key: {invalid_keys}"
 			
-		self.entry_flag_conditions = get_none_replace(self.content, 'entry_flag_conditions', [])
-		self.entry_state_conditions = get_none_replace(self.content, 'entry_state_conditions', [])
+		self.entry_conditions = get_none_replace(self.content, 'entry_conditions', [])
 		self.entry_conditions_takeover = get_none_replace(self.content, 'entry_conditions_takeover', 'disallow')
 		self.continue_conditions = get_none_replace(self.content, 'continue_conditions', [])
 		self.locals = self.content['locals']
@@ -334,12 +336,16 @@ class Supernode:
 		return output
 	
 	def can_start(self, python_context, contexts, return_specificity=False):
-		result = is_valid(self.entry_flag_conditions + self.entry_state_conditions,
-						  python_context, contexts)
+		result = is_valid(self.entry_conditions, python_context, contexts)
 		if return_specificity:
 			return (len(self.entry_flag_conditions), len(self.entry_state_conditions) + 1) if result else (0, 0)
 		else:
 			return result
+
+	def compute_priority(self, entry_conditions):
+		"""TODO: In the future, we would like to dynamically learn this (perhaps via RL)."""
+
+
 
 	def can_takeover(self, python_context, contexts, return_specificity=False):
 		if self.entry_conditions_takeover == 'disallow':
