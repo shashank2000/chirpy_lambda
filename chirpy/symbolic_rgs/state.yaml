@@ -15,3 +15,7 @@ PERSONALISSUE__user_has_personal_issue: False
 PERSONALISSUE__need_confirmation_for_further_discussion: False
 PERSONALISSUE__confirming_further_discussion: False
 PERSONALISSUE__responded_with_question: False
+User__CurrentOpinionTopic: _get_random_opinion
+User__CurrentOpinionFollowUp: False
+User__OpinionYes: False
+User__OpinionNo: False

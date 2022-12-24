@@ -81,7 +81,7 @@ def evaluate_nlg_call(data, python_context, contexts):
 		assert hasattr(python_context['supernode'].nlg_helpers, function_name), f"Function name {function_name} not found"
 		args = nlg_params.get('args', [])
 		args = [evaluate_nlg_call(arg, python_context, contexts) for arg in args]
-		args = [python_context['rg']] + args  # Add RG as first argument
+		# args = [python_context['rg']] + args  # Add RG as first argument
 		return getattr(python_context['supernode'].nlg_helpers, function_name)(*args)
 	elif type == 'inflect':
 		assert isinstance(nlg_params, dict)
@@ -133,14 +133,16 @@ def evaluate_nlg_calls(datas, python_context, contexts):
 		return evaluate_nlg_call(datas[0], python_context, contexts)
 	for elem in datas:
 		out = evaluate_nlg_call(elem, python_context, contexts)
-		output.append(out)
+		if not isinstance(out, str):
+			logger.error(f"Warning: {out} is not a string. This is not ok unless you are debugging.")
+		output.append(str(out))
 
 	return spacingaware_join(output)
 	
 def evaluate_nlg_calls_or_constant(datas, python_context, contexts):
-	if isinstance(datas, dict):
-		assert len(datas) == 1, "should be a dict with key constant"
-		return datas['constant']
+	# if isinstance(datas, dict):
+	# 	assert len(datas) == 1, "should be a dict with key constant"
+	# 	return datas['constant']
 	return evaluate_nlg_calls(datas, python_context, contexts)
 	
 CONDITION_STYLE_TO_BEHAVIOR = {
@@ -303,7 +305,8 @@ class Supernode:
 		return []
 		
 	def load_subnodes(self, subnode_data):
-		return [Subnode(data) for data in subnode_data]
+		to_return = [Subnode(data) for data in subnode_data]
+		return to_return
 
 	def get_optimal_subnode(self, python_context, contexts):
 		possible_subnodes = [subnode for subnode in self.subnodes + self.get_global_subnodes() if subnode.is_valid(python_context, contexts)]

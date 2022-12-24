@@ -1,0 +1,37 @@
+entry_state_conditions:
+  - is_true: state.User__CurrentOpinionFollowUp
+
+locals: {}
+
+prompts:
+  - prompt_name: do_you_like_prompt
+    prompt_text:
+      - ""
+
+subnodes:
+  - node_name: positive_response
+    entry_state_conditions:
+      - is_true: state.User__OpinionYes
+    response:
+      - nlg_helper:
+          name: get_opinion_response
+          args:
+            - "positive"
+            - val: state.User__CurrentOpinionTopic
+  - node_name: negative_response
+    entry_state_conditions:
+      - is_true: state.User__OpinionNo
+    response:
+      - nlg_helper:
+          name: get_opinion_response
+          args:
+            - "negative"
+            - val: state.User__CurrentOpinionTopic
+
+set_state_after:
+  state.User__CurrentOpinionFollowUp:
+    constant: False
+  state.User__CurrentOpinionTopic:
+    - nlg_helper:
+        name: get_random_opinion
+        args: []
