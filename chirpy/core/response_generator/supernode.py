@@ -26,23 +26,7 @@ from concurrent import futures
 import inflect
 engine = inflect.engine()
 
-
 logger = logging.getLogger('chirpylogger')
-
-
-# 		for cases in self.nlg_yamls[supernode]['unconditional_prompt']:
-# 	requirements = cases['entry_conditions']
-# 	matches_entry_criteria = True
-# 	for key in requirements:
-# 		if flags[key] != requirements[key]:
-# 			matches_entry_criteria = False
-# 			break
-# 	if matches_entry_criteria:
-# 		return cases['case_name'], cases['prompt']
-# return None
-
-
-
 BASE_PATH = os.path.join(os.path.dirname(__file__), '../../symbolic_rgs')
 
 def lookup_value(value_name, contexts):
