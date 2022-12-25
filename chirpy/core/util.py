@@ -567,3 +567,7 @@ def infl(word, is_plural):
         return word #
 
     return plur_form if is_plural else sing_form
+
+def get_none_replace(data, key, replace):
+    '''Gets key in dictionary and replaces with replace if key doesn't exist'''
+    return data.get(key, replace) or replace

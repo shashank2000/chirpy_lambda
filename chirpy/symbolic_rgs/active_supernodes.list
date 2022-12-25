@@ -1,6 +1,8 @@
 # comments start with
 
 CELEB__intro
+PERSONALISSUES__intro
+PERSONALISSUES__subsequent_turn
 FOOD__factoid
 FOOD__intro
 GLOBAL__openended
