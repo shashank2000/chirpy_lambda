@@ -74,7 +74,7 @@ class GetSongTreelet(Treelet):
                         next_treelet_str = self.name
             elif cur_singer_ent:
                 # We end up here if we detect a singer but no song e.g. user says "Any song by Katy Perry"
-                logger.warning('Redirecting to get_singer_treelet')
+                logger.primary_info('Redirecting to get_singer_treelet')
                 return self.rg.get_singer_treelet.get_response()
             elif ResponseType.DONT_KNOW in response_types:
                 response = 'I understand. I like different songs depending on how I\'m feeling and I don\'t really have a favorite either.'
