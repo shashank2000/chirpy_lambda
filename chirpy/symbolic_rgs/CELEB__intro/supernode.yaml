@@ -24,7 +24,31 @@ set_state:
     - val: utilities.cur_entity_name
 
 subnodes:
-  - node_name: default
+#  - node_name: make_celeb_movie_comment
+#    entry_state_conditions:
+#      - is_not_none: state.User__FavoriteCelebrityMovie
+#    response:
+#      - I particularly like
+#      - inflect:
+#          inflect_token: him
+#          inflect_entity: utilities.cur_entity
+#      - in
+#      - val: state.User__FavoriteCelebrityMovie
+#      - !
+#  - node_name: make_celeb_album_comment
+#    entry_state_conditions:
+#      - is_not_none: state.User__FavoriteCelebrityAlbum
+#    response:
+#      - one of:
+#          - I really love
+#          - I absolutely enjoy listening to
+#      - inflect:
+#          inflect_token: his
+#          inflect_entity: utilities.cur_entity
+#      - album,
+#      - val: state.User__FavoriteCelebrityAlbum
+#      - .
+  - node_name: neural_fallback
     response:
       - neural_generation:
           prefix:
