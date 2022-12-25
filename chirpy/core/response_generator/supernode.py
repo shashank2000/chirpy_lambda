@@ -266,6 +266,7 @@ class Condition(ABC):
 	@abstractmethod
 	def get_priority(self):
 		pass
+	pass
 
 
 class Supernode:
@@ -292,7 +293,7 @@ class Supernode:
 		self.entry_conditions_takeover = get_none_replace(self.content, 'entry_conditions_takeover', 'disallow')
 		self.continue_conditions = get_none_replace(self.content, 'continue_conditions', [])
 		self.locals = self.content['locals']
-		self.subnodes = self.load_subnodes(self.content['subnodes'])
+		self.subnodes = self.load_subnodes(self.content['subnodes'])ß
 		self.updates = get_none_replace(self.content, 'set_state', {})
 		self.updates_after = get_none_replace(self.content, 'set_state_after', {})
 		self.prompts = self.load_prompts(self.content['prompts'])
@@ -388,5 +389,120 @@ class Supernode:
 	def __str__(self):
 		return f"Supernode({self.yaml_path})"
 		
+	def __repr__(self):
+		return str(self)
+
+
+class CamelSupernode:
+	def __init__(self, name):
+		self.camel_path = os.path.join(BASE_PATH, name)
+		self.load_from_camel(self.camel_path)
+
+	def load_from_camel(self, camel_path):
+		with open(os.path.join(self.camel_path, 'supernode.camel'), 'r') as f:
+			json_parser = Lark(grammar, start='document')
+			tree = json_parser.parse(text)
+
+
+
+		self.entry_conditions = get_none_replace(self.content, 'entry_conditions', [])
+		self.entry_conditions_takeover = get_none_replace(self.content, 'entry_conditions_takeover', 'disallow')
+		self.continue_conditions = get_none_replace(self.content, 'continue_conditions', [])
+		self.locals = self.content['locals']
+		self.subnodes = self.load_subnodes(self.content['subnodes'])
+		ß
+		self.updates = get_none_replace(self.content, 'set_state', {})
+		self.updates_after = get_none_replace(self.content, 'set_state_after', {})
+		self.prompts = self.load_prompts(self.content['prompts'])
+		self.name = name
+
+		self.nlu = import_module(f'chirpy.symbolic_rgs.{name}.nlu')
+		self.nlg_helpers = import_module(f'chirpy.symbolic_rgs.{name}.nlg_helpers')
+
+	def is_eligible(self, python_context, contexts):
+		return is_valid(self.requirements, python_context, contexts)
+
+	def get_global_subnodes(self):
+		return []
+
+	def load_subnodes(self, subnode_data):
+		return [Subnode(data) for data in subnode_data]
+
+	def get_optimal_subnode(self, python_context, contexts):
+		possible_subnodes = [subnode for subnode in self.subnodes + self.get_global_subnodes() if
+							 subnode.is_valid(python_context, contexts)]
+		assert len(possible_subnodes), "No subnode found!"
+
+		# for now, just return the first possible subnode
+		return possible_subnodes[0]
+
+	def load_prompts(self, prompt_data):
+		return [Prompt(data) for data in prompt_data]
+
+	def get_optimal_prompt(self, python_context, contexts):
+		possible_prompts = [prompt.get_prompt_text(python_context, contexts) for prompt in self.prompts if
+							prompt.is_valid(python_context, contexts)]
+		assert len(possible_prompts), "No prompt found!"
+
+		# for now, just return the first possible subnode
+		return possible_prompts[0]
+
+	def evaluate_locals(self, python_context, contexts):
+		output = {}
+		contexts['locals'] = output
+		for local_key, local_values in self.locals.items():
+			output[local_key] = evaluate_nlg_calls(local_values, python_context, contexts)
+		return output
+
+	def can_start(self, python_context, contexts, return_specificity=False):
+		result = is_valid(self.entry_conditions, python_context, contexts)
+		if return_specificity:
+			return (len(self.entry_flag_conditions), len(self.entry_state_conditions) + 1) if result else (0, 0)
+		else:
+			return result
+
+	def compute_priority(self, entry_conditions):
+		"""TODO: In the future, we would like to dynamically learn this (perhaps via RL)."""
+
+	def can_takeover(self, python_context, contexts, return_specificity=False):
+		if self.entry_conditions_takeover == 'disallow':
+			# Supernode with no entry conditions cannot takeover
+			return False
+
+		result = is_valid(self.entry_conditions_takeover, python_context, contexts)
+		logger.info(f"Can_takeover for {self.name} logged {result}")
+		if return_specificity:
+			return len(self.entry_conditions_takeover) if result else 0
+		else:
+			return result
+
+	def can_continue(self, python_context, contexts):
+		result = is_valid(self.continue_conditions, python_context, contexts)
+		return result
+
+	def get_flags(self, rg, state, utterance):
+		flags = self.nlu.get_flags(rg, state, utterance)
+		return flags
+
+	def get_background_flags(self, rg, utterance):
+		# background_flags: flags to update even if this supernode was not chosen
+		flags = self.nlu.get_background_flags(rg, utterance)
+		return flags
+
+	def get_state_updates(self, python_context, contexts):
+		return {
+			value_name: evaluate_nlg_calls_or_constant(value_data, python_context, contexts)
+			for value_name, value_data in self.updates.items()
+		}
+
+	def get_state_updates_after(self, python_context, contexts):
+		return {
+			value_name: evaluate_nlg_calls_or_constant(value_data, python_context, contexts)
+			for value_name, value_data in self.updates_after.items()
+		}
+
+	def __str__(self):
+		return f"Supernode({self.yaml_path})"
+
 	def __repr__(self):
 		return str(self)
