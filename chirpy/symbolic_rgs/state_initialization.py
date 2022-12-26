@@ -1,1 +1,1 @@
-from chirpy.symbolic_rgs.OPINION__subsequent_turn.nlg_helpers import get_random_opinion
+from chirpy.symbolic_rgs.OPINION__third_turn.nlg_helpers import get_opinion

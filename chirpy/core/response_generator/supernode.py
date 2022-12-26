@@ -78,7 +78,7 @@ def evaluate_nlg_call(data, python_context, contexts):
 		assert isinstance(nlg_params, dict)
 		function_name = nlg_params['name']
 		# logger.warning(f"NLG helpers dir: {dir(python_context['supernode'].nlg_helpers)}")
-		assert hasattr(python_context['supernode'].nlg_helpers, function_name), f"Function name {function_name} not found"
+		assert hasattr(python_context['supernode'].nlg_helpers, function_name), f"Function name {function_name} not found. Possible functions: {[x for x in dir(python_context['supernode'].nlg_helpers) if not x.startswith('_')]}"
 		args = nlg_params.get('args', [])
 		args = [evaluate_nlg_call(arg, python_context, contexts) for arg in args]
 		# args = [python_context['rg']] + args  # Add RG as first argument

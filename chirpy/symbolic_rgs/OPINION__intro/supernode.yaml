@@ -19,7 +19,7 @@ subnodes:
     entry_state_conditions:
     response:
       - one of:
-        - "Why is that?"
+        - "That's interesting, why is that?"
         - "That's interesting, could you tell me a bit more?"
         - "Oh, that's understandable! What makes you feel that way?"
         - "Ah, makes sense! Why is that?"

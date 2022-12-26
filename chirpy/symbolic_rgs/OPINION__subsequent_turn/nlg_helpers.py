@@ -8,9 +8,9 @@ f = open('chirpy/symbolic_data/opinions/opinions_final.json')
 data = json.load(f)
 f.close()
 
-def get_random_opinion():
-    topics = list(data.keys())
-    return random.choice(topics)
+# def get_random_opinion():
+#     topics = list(data.keys())
+#     return random.choice(topics)
 
 
 response_tones = ['disagree', 'strong_disagree', 'agree']
