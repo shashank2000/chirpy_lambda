@@ -13,14 +13,14 @@ INTRO_STATEMENTS = [
 ]
 
 @nlg_helper 
-def sample_food_containing_ingredient(rg, food: str):
+def sample_food_containing_ingredient(food: str):
     food = food.lower()
     logger.warning(f"Food is: {food}")
     logger.warning(f"{[item for item, item_data in food_helpers.FOODS.items() if ('ingredients' in item_data and food in item_data['ingredients'])]}")
     return random.choice([item for item, item_data in food_helpers.FOODS.items() if ('ingredients' in item_data and food in item_data['ingredients'])])
 
 @nlg_helper
-def get_food_origin(rg, food): 
+def get_food_origin(food):
     if not food_helpers.is_known_food(food):
         return None
     food_data = food_helpers.get_food_data(food)
@@ -32,7 +32,7 @@ def get_food_origin(rg, food):
 YEAR_ENDINGS = ['st', 'th', 'nd', 'rd', ' century', 'BC']
 
 @nlg_helper
-def get_food_year(rg, food):
+def get_food_year(food):
     if not food_helpers.is_known_food(food):
         return None
     food_data = food_helpers.get_food_data(food)
@@ -58,15 +58,15 @@ def get_food_year(rg, food):
     return year
 
 @nlg_helper
-def get_food_ingredient(rg, food: str):
+def get_food_ingredient(food: str):
     return food_helpers.sample_ingredient(food)
 
 @nlg_helper
-def get_food_texture(rg, food: str):
+def get_food_texture(food: str):
     return food_helpers.get_texture(food)
 
 @nlg_helper
-def get_food_ingredient_of(rg, food: str):
+def get_food_ingredient_of(food: str):
     return food_helpers.sample_food_containing_ingredient(food)
 
 
@@ -75,6 +75,6 @@ CUSTOM_STATEMENTS = {
 }
 
 @nlg_helper
-def get_custom_comment(rg, cur_food):
+def get_custom_comment(cur_food):
     return CUSTOM_STATEMENTS.get(cur_food, None)
 

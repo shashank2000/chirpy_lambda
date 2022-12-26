@@ -258,7 +258,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
         subnode = supernode.get_optimal_subnode(python_context, contexts)
         response = subnode.get_response(python_context, contexts)
         logger.primary_info(f'Received {response} from subnode {subnode}.')
-        assert response is not None, "Received a None response."
+        assert response is not None, f"Received a None response from subnode {subnode}."
 
         # Making response available to yaml supernode
         contexts['response_data'] = { 'response': response }
@@ -276,6 +276,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
         
         # get next prompt
         next_supernode = self.get_next_supernode(python_context, contexts)
+        python_context = self.get_python_context(next_supernode, state)
         prompt = next_supernode.get_optimal_prompt(python_context, contexts) # TODO fix contexts
 
         print(f"OPTIMAL PROMPT: {prompt}")
