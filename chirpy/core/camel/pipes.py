@@ -11,6 +11,10 @@ def talkable(ent : "WikiEntity"):
 	return ent.talkable_name
 	
 @pipe
+def name(ent : "WikiEntity"):
+	return ent.name
+	
+@pipe
 def lower(s : str):
 	return s.lower()	
 	

@@ -1,19 +1,19 @@
 <ENTRY_CONDITIONS>
-IS_NOT_NONE(State.User__FavoriteFood) and (
-   IS_NOT_NONE(State.User__FavoriteFoodFactoidYear) or
-   IS_NOT_NONE(State.User__FavoriteFoodFactoidOrigin)
+(not IS_NONE(State.User__FavoriteFood)) and (
+   not IS_NONE(State.User__FavoriteFoodFactoidYear) or
+   not IS_NONE(State.User__FavoriteFoodFactoidOrigin)
 )
 
 <PROMPTS>
 Prompt origin_year_factoid_prompt [
-   IS_NOT_NONE(State.User__FavoriteFoodFactoidYear) and
-   IS_NOT_NONE(State.User__FavoriteFoodFactoidOrigin)
+   not IS_NONE(State.User__FavoriteFoodFactoidYear) and
+   not IS_NONE(State.User__FavoriteFoodFactoidOrigin)
 ] {
    - "Did you know that"
    - @val(State.User__FavoriteFoodTalkable)
    - @inflect(
      inflect_token="was",
-     inflect_entity=State.User__FavoriteFoodTalkable
+     inflect_entity=State.User__FavoriteFood
     )
    - "first made in"
    - @val(State.User__FavoriteFoodFactoidOrigin)
@@ -26,7 +26,7 @@ Prompt origin_year_factoid_prompt [
 }
 
 Prompt origin_year_factoid_prompt [
-   IS_NOT_NONE(State.User__FavoriteFoodFactoidOrigin)
+   not IS_NONE(State.User__FavoriteFoodFactoidOrigin)
 ] {
    - "Did you know that"
    - @val(State.User__FavoriteFoodTalkable)
@@ -40,9 +40,10 @@ Prompt origin_year_factoid_prompt [
 }
 
 Prompt make_year_factoid_comment [
-   IS_NOT_NONE(State.User__FavoriteFoodFactoidYear)
+   not IS_NONE(State.User__FavoriteFoodFactoidYear)
 ] {
    - "Did you know that"
+   - @val(State.User__FavoriteFoodTalkable)
    - @inflect(
        inflect_token="has",
        inflect_entity=State.User__FavoriteFood
@@ -59,18 +60,17 @@ Prompt default [
 ] {
    @neural_generation(prefix={
        - "I especially love how"
-       - @inflect(inflect="it's", inflect_entity=State.User__FavoriteFood)
+       - @inflect(inflect_token="it's", inflect_entity=State.User__FavoriteFood)
    })
 }
 
 <SUBNODES>
-Subnode open_ended_neural_fallback [ ] {
+Subnode food_open_ended_neural_fallback [ ] {
    - @neural_generation(prefix="")
 }
+
 <SET_STATE_AFTER>
-State.User__FavoriteFood = {
-   @val(Utilities.lowercased_cur_entity)
-}
+
 Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
    @constant(True)
 }

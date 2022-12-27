@@ -15,7 +15,8 @@ Locals.intro_statement = {
         {"Ah yes"},
         {"Oh yeah"}
     )
-    - @val(Utilities.cur_entity_talkable_lower)
+    - ,
+    - @val(Utilities.cur_entity | talkable | lower)
     - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
     - @one_of(
         "one of my favorite things to eat up here in the cloud.",
@@ -25,16 +26,16 @@ Locals.intro_statement = {
 
 <SET_STATE>
 State.User__FavoriteFood = @val(Utilities.cur_entity)
-State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity_talkable_lower)
-State.User__FavoriteFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity_name))
-State.User__FavoriteFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity_name))
-State.User__FavoriteFactoidIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity_name))
-State.User__FavoriteFactoidIngredientOf = @helper.get_food_ingredient_of(@val(Utilities.cur_entity_name))
-State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity_name))
+State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity | talkable | lower)
+State.User__FavoriteFoodFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodIngredientOf = @helper.get_food_ingredient_of(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity | name))
 
 <SUBNODES>
 Subnode make_ingredient_attribute_comment [
-  IS_NOT_NONE(State.User__FavoriteFoodIngredient)
+  not IS_NONE(State.User__FavoriteFoodIngredient)
 ] {
   - @val(Locals.intro_statement)
   - "Personally, I especially like the"
@@ -46,20 +47,20 @@ Subnode make_ingredient_attribute_comment [
 }
 
 Subnode make_texture_attribute_comment [
-   IS_NOT_NONE(State.User__FavoriteFoodTexture)
+   not IS_NONE(State.User__FavoriteFoodTexture)
 ] {
    - @val(Locals.intro_statement)
    - "Personally, I especially like the"
    - @inflect(inflect_token="its", inflect_entity=Utilities.cur_entity)
    - "texture, especially how"
    - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
-   - so
+   - "so"
    - @val(State.User__FavoriteFoodTexture)
    - .
 }
 
 Subnode make_food_is_an_ingredient_comment [
-   IS_NOT_NONE(State.User__FavoriteFoodIngredientOf)
+   not IS_NONE(State.User__FavoriteFoodIngredientOf)
 ] {
    - @val(Locals.intro_statement)
    - "In my opinion, I think"

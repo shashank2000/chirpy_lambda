@@ -50,7 +50,9 @@ set_state_section : "<SET_STATE>" assignment*
 
 // Section: Subnodes
 subnodes_section : "<SUBNODES>" subnode+
-subnode: SUBNODE_NAME _OB condition? _CB nlg ("<" assignment* ">")?
+subnode: "Subnode" SUBNODE_NAME _OB condition? _CB nlg ("<" assignment* ">")?
+SUBNODE_NAME: /[a-zA-Z_1-9]+/
+
 
 // Section: Set State After
 set_state_after_section : "<SET_STATE_AFTER>" assignment*

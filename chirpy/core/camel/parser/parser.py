@@ -3,6 +3,8 @@ import os
 from lark import Lark, Transformer, Token, Tree
 from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode
 
+import sys
+
 BASE_PATH = os.path.dirname(__file__)
 
 with open(os.path.join(BASE_PATH, 'grammar.lark'), 'r') as f:
@@ -19,7 +21,6 @@ class SupernodeMaker(Transformer):
 	
 	def condition__predicate(self, tok):
 		if str(tok[0]) == 'IS_EQUAL':
-			print("VariableIsPredicate", tok[2])
 			return predicate.VariableIsPredicate(variable=tok[1], val=tok[2])
 		elif str(tok[0]) == 'IS_IN': 
 			return predicate.VariableInPredicate(variable=tok[1], vals=tok[2])
@@ -35,14 +36,17 @@ class SupernodeMaker(Transformer):
 			if len(tok) == 1: return tok[0]
 			if isinstance(tok[0], Token) and tok[0].type == 'condition__OP':
 				return tok[1]
-			if isinstance(tok[0], Token) and tok[0].type == 'condition__NOT':
-				return predicate.NotPredicate(tok[1])
 			# condition "and" condition
 			if isinstance(tok[1], Token) and tok[1] == 'and':
 				return predicate.AndPredicate(tok[0], tok[2])
 			if isinstance(tok[1], Token) and tok[1] == 'or':
 				return predicate.OrPredicate(tok[0], tok[2])
 		return tok
+		
+	def unary(self, tok):
+		if isinstance(tok[0], Token) and tok[0].type == 'condition__NOT':
+			return predicate.NotPredicate(tok[1])
+		assert False
 	
 	def entry_conditions_section(self, tok):
 		if len(tok):
@@ -60,7 +64,7 @@ class SupernodeMaker(Transformer):
 	def nlg__constant(self, tok): return nlg.Constant(tok[0].value)
 	
 	def nlg__inflect(self, tok): return nlg.Inflect(tok[0], tok[1])
-	def nlg__inflect_engine(self, tok): return nlg.Inflect(tok[0], tok[1])
+	def nlg__inflect_engine(self, tok): return nlg.InflectEngine(tok[0], tok[1])
 	def nlg__STRING(self, tok): return tok
 	def nlg__helper(self, tok):
 		func_name = tok[0].value
@@ -134,7 +138,7 @@ class SupernodeMaker(Transformer):
 		
 	### SET STATE AFTER
 	def set_state_after_section(self, tok):
-		return "set_state_after", tok
+		return "set_state_after", assignment.AssignmentList(tok)
 	
 	def document(self, tok):
 		return tok
@@ -145,6 +149,10 @@ class SupernodeMaker(Transformer):
 		return super().__getattr__(self, attr)
 		
 
+def nice_error(e):
+	sys.tracebacklimit = 1
+	raise e
+
 parser = Lark(grammar, start='document', parser='lalr', transformer=SupernodeMaker(), import_paths=[BASE_PATH])
 def parse(text):
-	return parser.parse(text)
+	return parser.parse(text, on_error=nice_error)

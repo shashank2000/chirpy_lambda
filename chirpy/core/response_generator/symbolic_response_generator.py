@@ -10,10 +10,9 @@ from chirpy.core.response_generator_datatypes import ResponseGeneratorResult, Pr
     emptyResult_with_conditional_state, emptyPrompt, UpdateEntity, AnswerType
 from chirpy.core.response_generator.helpers import *
 from chirpy.core.response_generator.response_generator import ResponseGenerator
-from chirpy.core.response_generator.supernode import Supernode, Subnode
 
 from chirpy.core.camel.context import Context
-from chirpy.core.camel.supernode import Supernode as CamelSupernode
+from chirpy.core.camel.supernode import Supernode
 
 from chirpy.core.response_priority import ResponsePriority
 
@@ -58,7 +57,7 @@ class SymbolicResponseGenerator:
     def load_supernodes_from_paths(self, supernode_paths):
         output = {}
         for path in supernode_paths:
-            output[path] = CamelSupernode.load_from_path(path)
+            output[path] = Supernode.load_from_path(path)
         return output
         
     def get_supernodes(self):
@@ -66,7 +65,8 @@ class SymbolicResponseGenerator:
         
     def get_next_supernode(self, context):
         possible_supernodes = [supernode for supernode in self.get_supernodes() if supernode.entry_conditions.evaluate(context)]
-        possible_supernodes = sorted(possible_supernodes, key=lambda x: x.entry_conditions.get_score())
+        logger.primary_info(f"Possible supernodes are: " + "; ".join(f"{supernode} (score={supernode.entry_conditions.get_score()})" for supernode in possible_supernodes))
+        possible_supernodes = sorted(possible_supernodes, key=lambda x: x.entry_conditions.get_score(), reverse=True)
         return possible_supernodes[0]
 
     def get_any_takeover_supernode(self, context, cancelled_supernodes):

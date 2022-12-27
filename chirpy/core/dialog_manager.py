@@ -60,7 +60,6 @@ class DialogManager:
         
         state = self.state_manager.current_state.rg_state
         response = self.response_generator.get_response(state, self.state_manager.current_state.text)
-        logger.warning(f"updated state is {response.state}")
         state.response = response.text
 
         # # Log final RG states

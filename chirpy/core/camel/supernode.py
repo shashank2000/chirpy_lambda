@@ -25,9 +25,7 @@ class Supernode:
 	@classmethod
 	def load(cls, camel_tree, name):
 		initialization = {}
-		print(camel_tree)
 		for elem in camel_tree:
-			print(elem)
 			key, item = elem
 			assert any(field.name == key for field in fields(cls)), f"Section {key} not found, options are {[x.name for x in fields(cls)]}"
 			initialization[key] = item
@@ -57,6 +55,9 @@ class Supernode:
 		return flags		
 		
 	def __str__(self):
+		return f"<{self.name}>"
+
+	def __repr__(self):
 		return f"<{self.name}>"
 		
 def __main__():

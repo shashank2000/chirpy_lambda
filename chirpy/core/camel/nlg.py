@@ -4,9 +4,14 @@ from typing import List, Any, Optional
 from concurrent import futures
 import random 
 
+
+import inflect
+engine = inflect.engine()
+
+from chirpy.core.entity_linker.entity_linker_classes import WikiEntity
 from chirpy.core.camel.variable import Variable
 from chirpy.core.camel.pipes import get_pipe
-
+from chirpy.core.util import infl 
 from chirpy.annotators.blenderbot import BlenderBot
 from chirpy.core.response_generator.neural_helpers import get_neural_fallback_handoff, neural_response_filtering
 from chirpy.core.response_generator.neural_helpers import is_two_part, NEURAL_DECODE_CONFIG, get_random_fallback_neural_response
@@ -131,9 +136,9 @@ class NLGHelper:
     name : str
     args : List[NLGNode]
     def generate(self, context):
-        assert hasattr(context.supernode.nlg_helpers, self.name), f"Function not found: {function_name} (available: {dir(context.supernode.nlg_helpers).filter(lambda x: not x.startswith('_'))})"
-        args = [evaluate_nlg_call(arg, context) for arg in self.args]
-        return getattr(context.supernode.nlg_helpers, function_name)(*args)
+        assert hasattr(context.supernode.nlg_helpers, self.name), f"Function not found: {self.name} (available: {dir(context.supernode.nlg_helpers).filter(lambda x: not x.startswith('_'))})"
+        args = [arg.generate(context) for arg in self.args]
+        return getattr(context.supernode.nlg_helpers, self.name)(*args)
 
 @dataclass
 class Inflect:
@@ -142,16 +147,16 @@ class Inflect:
     def generate(self, context):
         input = self.inflect_token.generate(context)
         val = self.inflect_entity.generate(context)
-        assert isinstance(val, WikiEntity)
-        return infl(input, val)
+        assert isinstance(val, WikiEntity), f"@inflect: Val {val} is not a WikiEntity"
+        return infl(input, val.is_plural)
 
 @dataclass
 class InflectEngine(NLGNode):
-    type : str
+    type : NLGNode
     string : NLGNode
-    def generate(self, *args):
-        input = self.string.generate(*args)
-        return getattr(engine, self.type)(input)
+    def generate(self, context):
+        input = self.string.generate(context)
+        return getattr(engine, self.type.generate(context))(input)
 
 @dataclass
 class OneOf(NLGNode):

@@ -2,11 +2,13 @@
 %import .nlg (nlg)
 // conditions
 
-condition : predicate
-		   | _OP condition _CP
-		   | condition AND condition
+?condition : condition AND condition
 		   | condition OR condition
-		   | NOT condition
+		   | _OP condition _CP
+ 		   | unary
+		   
+?unary : NOT unary
+       | predicate
 
 predicate: PREDICATE _OP variable _CP
 		 | PREDICATE_TWO _OP variable _COMMA nlg _CP

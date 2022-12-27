@@ -98,13 +98,8 @@ def get_name_from_utterance(context, remove_no=False) -> Optional[str]:
 @nlu_processing
 def get_flags(context):
 	no_slots = DoesNotWantToSayNameTemplate().execute(context.utterance)
-	logger.warning(f"Context: {context}")
 	if no_slots or context.state_manager.current_state.corenlp['sentiment'] in (Sentiment.NEGATIVE, Sentiment.STRONG_NEGATIVE):
 		ADD_NLU_FLAG("LAUNCH__NoDiscloseName")
 	
 	proposed_name = get_name_from_utterance(context)
 	ADD_NLU_FLAG("LAUNCH__ProposedName", proposed_name)
-
-@nlu_processing
-def get_background_flags(context):
-	pass
