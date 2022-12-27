@@ -1,9 +1,9 @@
 <ENTRY_CONDITIONS>
-IS_NONE(State.User__FavoriteFood) and IS_NONE(State.User__FavoriteFood)
+IS_NONE(State.User__FavoriteFood)
 
 <PROMPTS>
 Prompt favorite_food [ ] {
-	"What's your favorite food?"
+  "What's your favorite food?"
 }
 
 <CONTINUE_CONDITIONS>
@@ -11,16 +11,16 @@ IS_TRUE(Flags.FOOD__user_mentioned_food)
 
 <LOCALS>
 Locals.intro_statement = {
-	- @one_of(
-		{"Ah yes"},
-		{"Oh yeah"},
-	)
-	- @val(Utilities.cur_entity_talkable_lower)
-	- @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
-	- @one_of (
-		"one of my favorite things to eat up here in the cloud.",
-		"such an amazing choice. It's one of my favorite foods up here in the cloud."
-	)
+  - @one_of(
+     {"Ah yes"},
+     {"Oh yeah"},
+  )
+  - @val(Utilities.cur_entity_talkable_lower)
+  - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
+  - @one_of (
+     "one of my favorite things to eat up here in the cloud.",
+     "such an amazing choice. It's one of my favorite foods up here in the cloud."
+  )
 }
 
 <SET_STATE>
@@ -34,51 +34,52 @@ State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_en
 
 <SUBNODES>
 Subnode make_ingredient_attribute_comment [
-	IS_NOT_NONE(State.User__FavoriteFoodIngredient)
+  IS_NOT_NONE(State.User__FavoriteFoodIngredient)
 ] {
-	- @val(Locals.intro_statement)
-	- "Personally, I especially like the"
-	- @val(State.User__FavoriteFoodIngredient)
-	- ,
-	- "I think it gives"
-	- @inflect(inflect_token="them", inflect_entity=Utilities.cur_entity)
-	- "a really nice flavor."
+  - @val(Locals.intro_statement)
+  - "Personally, I especially like the"
+  - @val(State.User__FavoriteFoodIngredient)
+  - ,
+  - "I think it gives"
+  - @inflect(inflect_token="them", inflect_entity=Utilities.cur_entity)
+  - "a really nice flavor."
 }
 
 Subnode make_texture_attribute_comment [
-    IS_NOT_NONE(State.User__FavoriteFoodTexture)
+   IS_NOT_NONE(State.User__FavoriteFoodTexture)
 ] {
-    - @val(Locals.intro_statement)
-    - "Personally, I especially like the"
-    - @inflect(inflect_token="its", inflect_entity=Utilities.cur_entity)
-    - "texture, especially how"
-    - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
-    - so
-    - @val(State.User__FavoriteFoodTexture)
-    - .
+   - @val(Locals.intro_statement)
+   - "Personally, I especially like the"
+   - @inflect(inflect_token="its", inflect_entity=Utilities.cur_entity)
+   - "texture, especially how"
+   - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
+   - so
+   - @val(State.User__FavoriteFoodTexture)
+   - .
 }
 
 Subnode make_food_is_an_ingredient_comment [
-    IS_NOT_NONE(State.User__FavoriteFoodIngredientOf)
+   IS_NOT_NONE(State.User__FavoriteFoodIngredientOf)
 ] {
-    - @val(Locals.intro_statement)
-    - "In my opinion, I think"
-    - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
-    - "especially good as part of"
-    - @inflect_engine(type="a", str=@val(State.User__FavoriteFoodIngredientOf))
-    - .
+   - @val(Locals.intro_statement)
+   - "In my opinion, I think"
+   - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
+   - "especially good as part of"
+   - @inflect_engine(type="a", str=@val(State.User__FavoriteFoodIngredientOf))
+   - .
 }
 
 Subnode default [
 ] {
-	- @val(Locals.intro_statement)
-	- @neural_generation(prefix={
-		- "I especially love how"
-		- @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
-	})
+  - @val(Locals.intro_statement)
+  - @neural_generation(prefix={
+     - "I especially love how"
+     - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
+  })
 }
 
 <SET_STATE_AFTER>
 Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
-	@constant(True)
+  @constant(True)
 }
+
