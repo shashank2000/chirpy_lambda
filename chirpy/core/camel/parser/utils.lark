@@ -1,0 +1,22 @@
+STRING: /[a-zA-Z\s'"?.,;!0-9]+/
+PARAM_ARG_NAME: /[a-zA-Z_]+/
+PARAM_ARG_VALUE: /[a-zA-Z_]+/
+SUBNODE_NAME: /Subnode [a-zA-Z_1-9]+/
+// AND_OPEN: 
+OR_OPEN: "Or["
+
+NAMESPACE: /[A-Z][a-z]*/
+variable : NAMESPACE "." PARAM_ARG_VALUE
+
+_OP : "("
+_CP : ")"
+_OB : "["
+_CB : "]"
+_EQ : "="
+_PERIOD : "."
+_COMMA : ","
+
+IS_NONE: "is_none"
+IS_TRUE: "is_true"
+IS_FALSE: "is_false"
+

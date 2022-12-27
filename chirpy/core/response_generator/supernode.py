@@ -29,17 +29,9 @@ engine = inflect.engine()
 
 logger = logging.getLogger('chirpylogger')
 
+with open('/Users/ethanchi/Documents/camel/grammar.lark'):
+	parser = Lark(grammar, start='document')
 
-# 		for cases in self.nlg_yamls[supernode]['unconditional_prompt']:
-# 	requirements = cases['entry_conditions']
-# 	matches_entry_criteria = True
-# 	for key in requirements:
-# 		if flags[key] != requirements[key]:
-# 			matches_entry_criteria = False
-# 			break
-# 	if matches_entry_criteria:
-# 		return cases['case_name'], cases['prompt']
-# return None
 
 
 
@@ -54,64 +46,6 @@ def lookup_value(value_name, contexts):
 	else:
 		assert False, f"Need a namespace for value name {value_name}."
 
-def evaluate_nlg_call(data, python_context, contexts):
-	if isinstance(data, list):
-		return evaluate_nlg_calls(data, python_context, contexts)
-	if isinstance(data, str): # plain text
-		return data
-	if isinstance(data, int): # number
-		return data
-	
-	assert isinstance(data, dict) and len(data) == 1, f"Failure: data is {data}"
-	type = next(iter(data))
-	nlg_params = data[type]
-	if type == 'eval':
-		assert isinstance(nlg_params, str)
-		return effify(nlg_params, global_context=python_context)
-	elif type == 'bool':
-		assert isinstance(nlg_params, list)
-		return is_valid(nlg_params, python_context, contexts)
-	elif type == 'val':
-		assert isinstance(nlg_params, str)
-		return lookup_value(nlg_params, contexts)
-	elif type == 'nlg_helper':
-		assert isinstance(nlg_params, dict)
-		function_name = nlg_params['name']
-		# logger.warning(f"NLG helpers dir: {dir(python_context['supernode'].nlg_helpers)}")
-		assert hasattr(python_context['supernode'].nlg_helpers, function_name), f"Function name {function_name} not found"
-		args = nlg_params.get('args', [])
-		args = [evaluate_nlg_call(arg, python_context, contexts) for arg in args]
-		args = [python_context['rg']] + args  # Add RG as first argument
-		return getattr(python_context['supernode'].nlg_helpers, function_name)(*args)
-	elif type == 'inflect':
-		assert isinstance(nlg_params, dict)
-		inflect_token = nlg_params['inflect_token']
-		inflect_val = lookup_value(nlg_params['inflect_entity'], contexts)
-		return infl(inflect_token, inflect_val.is_plural)
-	elif type == 'inflect_engine':
-		assert isinstance(nlg_params, dict)
-		inflect_function = nlg_params['type']
-		inflect_input = evaluate_nlg_call(nlg_params['str'], python_context, contexts)
-		return getattr(engine, inflect_function)(inflect_input)
-	elif type == "neural_generation":
-		assert isinstance(nlg_params, dict)
-		prefix = evaluate_nlg_calls(nlg_params['prefix'], python_context, contexts)
-		return python_context['rg'].get_neural_response(prefix=prefix)
-	elif type == "sample_template":
-		assert isinstance(nlg_params, str)
-		if nlg_params not in global_templates_cache:
-				raise KeyError(f'{nlg_params} template not found!')
-		return global_templates_cache[nlg_params].sample()
-	elif type == 'combine':
-		# allows you to chain nlg calls together in order to create one output
-		assert isinstance(nlg_params, list)
-		return evaluate_nlg_calls(nlg_params, python_context, contexts)
-	elif type == 'one of':
-		return evaluate_nlg_call(random.choice(nlg_params), python_context, contexts)
-	elif type == 'constant':
-		return nlg_params
-	else:
-		assert False, f"Generation type {type} not found!"
 
 
 		
@@ -392,25 +326,24 @@ class Supernode:
 	def __repr__(self):
 		return str(self)
 
-
 class CamelSupernode:
 	def __init__(self, name):
-		self.camel_path = os.path.join(BASE_PATH, name)
-		self.load_from_camel(self.camel_path)
+		self.load_from_camel(os.path.join(BASE_PATH, name))
 
-	def load_from_camel(self, camel_path):
-		with open(os.path.join(self.camel_path, 'supernode.camel'), 'r') as f:
-			json_parser = Lark(grammar, start='document')
-			tree = json_parser.parse(text)
+	def load_from_camel(self, path):
+		with open(os.path.join(self.path, 'supernode.camel'), 'r') as f:
+			tree = parse_camel(text)
 
+		for item in tree:
+			if 
+		assert False
 
-
+		
 		self.entry_conditions = get_none_replace(self.content, 'entry_conditions', [])
 		self.entry_conditions_takeover = get_none_replace(self.content, 'entry_conditions_takeover', 'disallow')
 		self.continue_conditions = get_none_replace(self.content, 'continue_conditions', [])
 		self.locals = self.content['locals']
 		self.subnodes = self.load_subnodes(self.content['subnodes'])
-		ß
 		self.updates = get_none_replace(self.content, 'set_state', {})
 		self.updates_after = get_none_replace(self.content, 'set_state_after', {})
 		self.prompts = self.load_prompts(self.content['prompts'])

@@ -1,0 +1,12 @@
+%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, _OP, _CP, _OB, _CB, _COMMA, variable)
+// conditions
+
+condition : predicate
+			   | _OP condition _CP
+			   | condition AND condition
+			   | condition OR condition
+
+predicate: PREDICATE _OP variable _CP
+PREDICATE: "IS_NONE" | "IS_NOT_NONE" | "IS_TRUE" | "IS_FALSE"
+AND: "and" | "AND"
+OR: "or" | "OR"

@@ -67,7 +67,6 @@ class SymbolicResponseGenerator(ResponseGenerator):
         # map from string to None / template
         abrupt_initiative_templates = {
             "weather": WeatherTemplate(),   # problems
-            # "time": 
             "repeat": SayThatAgainTemplate(),
             # "correct_name":
             "request_name": RequestNameTemplate(),
@@ -200,24 +199,13 @@ class SymbolicResponseGenerator(ResponseGenerator):
                 
     def get_response(self, state) -> ResponseGeneratorResult:
         logger.warning("Begin response for SymbolicResponseGenerator.")
-        
-        # Legacy response types
-
         self.state = state
 
         state, utterance, _ = self.get_state_utterance_response_types()
-
         logger.warning(f"Turn history for supernodes: {state.turns_history}.")
-
-        # get initial python context, utilities, and contexts in order to determine the takeover supernode
-        python_context, utilities, contexts = self.get_initial_contexts(state, utterance)
         
-        # Figure out what supernode we're in
+        python_context, utilities, contexts = self.get_initial_contexts(state, utterance)
         supernode = self.get_takeover_or_current_supernode(state, python_context, contexts)
-                
-        # Re-update python context and utilities with new supernode
-        # We can keep the global flags as what we had before because their values are not dependent
-        # on the selected supernode
         python_context = self.get_python_context(supernode, state)
         utilities = self.get_utilities(supernode)
         global_flags = contexts['flags']
@@ -258,7 +246,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
         subnode = supernode.get_optimal_subnode(python_context, contexts)
         response = subnode.get_response(python_context, contexts)
         logger.warning(f'Received {response} from subnode {subnode}.')
-        assert response is not None, "Received a None response."
+        assert response is not None, f"Received a None response."
 
         # Making response available to yaml supernode
         contexts['response_data'] = { 'response': response }
