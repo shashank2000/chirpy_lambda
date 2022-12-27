@@ -8,19 +8,35 @@ BASE_PATH = os.path.dirname(__file__)
 with open(os.path.join(BASE_PATH, 'grammar.lark'), 'r') as f:
 	grammar = f.read()
 	
+import logging
+logger = logging.getLogger('chirpylogger')
+	
 class SupernodeMaker(Transformer):
 	def variable(self, tok): return variable.Variable(str(tok[0]), str(tok[1]))
 	
 	def nlg__variable(self, tok): return self.variable(tok)
 	def condition__variable(self, tok): return self.variable(tok)
 	
-	def condition__predicate(self, tok): return predicate.VariablePredicate(verb=str(tok[0]), variable=tok[1])
+	def condition__predicate(self, tok):
+		if str(tok[0]) == 'IS_EQUAL':
+			print("VariableIsPredicate", tok[2])
+			return predicate.VariableIsPredicate(variable=tok[1], val=tok[2])
+		elif str(tok[0]) == 'IS_IN': 
+			return predicate.VariableInPredicate(variable=tok[1], vals=tok[2])
+		elif str(tok[0]) == 'IS_GREATER_THAN': 
+			return predicate.VariableGTPredicate(variable=tok[1], val=tok[2])
+		elif str(tok[0]) == 'IS_LESS_THAN': 
+			return predicate.VariableLTPredicate(variable=tok[1], val=tok[2])
+		else:
+			return predicate.VariablePredicate(verb=str(tok[0]), variable=tok[1])
 	
 	def condition(self, tok):
 		if isinstance(tok, list):
 			if len(tok) == 1: return tok[0]
 			if isinstance(tok[0], Token) and tok[0].type == 'condition__OP':
 				return tok[1]
+			if isinstance(tok[0], Token) and tok[0].type == 'condition__NOT':
+				return predicate.NotPredicate(tok[1])
 			# condition "and" condition
 			if isinstance(tok[1], Token) and tok[1] == 'and':
 				return predicate.AndPredicate(tok[0], tok[2])
@@ -35,12 +51,14 @@ class SupernodeMaker(Transformer):
 		
 	## NLG
 	
-	def nlg__ESCAPED_STRING(self, tok): return str(tok.value)[1:-1]
-	def nlg__PUNCTUATION(self, tok): return str(tok.value)
-	def nlg__val(self, tok): return tok[0]
+	def nlg__ESCAPED_STRING(self, tok): return nlg.String(str(tok.value)[1:-1])
+	def nlg__PUNCTUATION(self, tok): return nlg.String(str(tok.value))
+	def nlg__val(self, tok): return nlg.Val(tok[0], tok[1:])
 	def nlg__neural_generation(self, tok): return nlg.NeuralGeneration(tok[0])
-	def nlg__one_of(self, tok): return nlg.OneOf(tok[1])
+	def nlg__one_of(self, tok): 
+		return nlg.OneOf(tok)
 	def nlg__constant(self, tok): return nlg.Constant(tok[0].value)
+	
 	def nlg__inflect(self, tok): return nlg.Inflect(tok[0], tok[1])
 	def nlg__inflect_engine(self, tok): return nlg.Inflect(tok[0], tok[1])
 	def nlg__STRING(self, tok): return tok
@@ -53,6 +71,7 @@ class SupernodeMaker(Transformer):
 			if len(tok) == 1: return tok[0]
 			return nlg.NLGList(tok)
 		return tok
+	def condition__nlg(self, tok): return self.nlg(tok)
 	
 	def prompt(self, tok):
 		if len(tok) == 3:
@@ -63,12 +82,23 @@ class SupernodeMaker(Transformer):
 		return prompt.Prompt(prompt_name.value, condition, nlg)
 		
 	def subnode(self, tok):
-		if len(tok) == 3:
-			subnode_name, condition, nlg = tok
-		else:
-			subnode_name, nlg = tok
-			condition = predicate.TruePredicate()
-		return subnode.Subnode(subnode_name.value, condition, nlg)
+		subnode_name = tok[0].value
+		condition = predicate.TruePredicate()
+		assignment_list = []
+		response = None
+		for token in tok[1:]:
+			if isinstance(token, predicate.Predicate):
+				condition = token
+			elif isinstance(token, nlg.NLGNode):
+				response = token
+			elif isinstance(token, assignment.Assignment):
+				assignment_list.append(token)
+		return subnode.Subnode(
+			name=subnode_name,
+			entry_conditions=condition,
+			response=response,
+			set_state=assignment.AssignmentList(assignment_list)
+		)
 	
 	def continue_conditions_section(self, tok):
 		return tok
@@ -107,9 +137,13 @@ class SupernodeMaker(Transformer):
 		return "set_state_after", tok
 	
 	def document(self, tok):
-		for x in tok:
-			print(x)
 		return tok
+		
+	def __getattr__(self, attr):
+		if attr.startswith('condition__') and hasattr(self, attr.replace('condition__', '')):
+			return getattr(self, attr.replace('condition__', ''))
+		return super().__getattr__(self, attr)
+		
 
 parser = Lark(grammar, start='document', parser='lalr', transformer=SupernodeMaker(), import_paths=[BASE_PATH])
 def parse(text):

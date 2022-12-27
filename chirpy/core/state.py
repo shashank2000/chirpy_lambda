@@ -1,9 +1,12 @@
+from dataclasses import dataclass, field
+
 import pytz
 from typing import *
 from datetime import datetime
 import copy
 
 from chirpy.core.entity_tracker.entity_tracker import EntityTrackerState
+from chirpy.core.response_generator_datatypes import ResponseGeneratorResult
 from chirpy.core.experiment import Experiments
 from chirpy.core.flags import SIZE_THRESHOLD
 from chirpy.core.util import print_dict_linebyline, get_ngrams
@@ -25,15 +28,55 @@ logger = logging.getLogger('chirpylogger')
 jsonpickle.set_encoder_options('simplejson', sort_keys=True)
 jsonpickle.set_encoder_options('json', sort_keys=True)
 
-'''
-@amelia: agent-side writing new code + new abstractions for classes & objects
-- copy from state, state_manager, handler w/o touching
-- agent calls handler.execute()
-- entry point changing from baseline_bot -> alexa_agent
-- alexa agent will have a lot of code from baseline_bot
-- look at how IT's work (may need to re-write)
-- look at changing interactive mode script
-'''
+import os
+import yaml
+BASE_PATH = os.path.join(os.path.dirname(__file__), '../symbolic_rgs')
+with open(os.path.join(BASE_PATH, 'state.yaml')) as f:
+    ALL_STATE_KEYS = yaml.safe_load(f)
+
+
+@dataclass
+class BaseSymbolicState:
+    prev_treelet_str: str = ''
+    next_treelet_str: Optional[str] = ''
+    response_types: Tuple[str] = ()
+    num_turns_in_rg: int = 0
+    cur_supernode: str = ''
+    data: Dict[str, Any] = field(default_factory=dict)
+    turns_history: Dict[str, int] = field(default_factory=dict)
+    last_response : ResponseGeneratorResult = field(default_factory=lambda: None)
+    
+    def check(self, key):
+        assert key in ALL_STATE_KEYS, f"Key not found: {key}"
+        
+    def __getitem__(self, key):
+        self.check(key)
+        if key not in self.data:
+            default_val = ALL_STATE_KEYS[key]
+            if isinstance(default_val, str) and default_val.startswith('_'):
+                func_name = default_val[1:]
+                assert hasattr(state_initialization, func_name), f"{func_name} not found in state_initialization"
+                func = getattr(state_initialization, func_name)
+                default_val = func()
+            self.data[key] = default_val
+        return self.data[key]
+        
+    def __setitem__(self, key, new_value):
+        self.check(key)
+        self.data[key] = new_value
+        
+    def update(self, data):
+        for key in data:
+            self.check(key)
+        self.data.update(data)
+        
+# @dataclass
+# class BaseSymbolicConditionalState:
+#     prev_treelet_str: str = ''
+#     next_treelet_str: Optional[str] = ''
+#     cur_supernode: str = NO_UPDATE
+#     response_types: Tuple[str] = NO_UPDATE
+#     data: Dict[str, Any] = NO_UPDATE
 
 class State(object):
     """
@@ -68,15 +111,18 @@ class State(object):
         self.history = []
         self.entity_tracker = EntityTrackerState()
         self.entity_tracker.init_for_new_turn()
+        self.rg_state = BaseSymbolicState()
         self.turn_num = 0
         self.experiments = Experiments()
         self.cache = {}     # for caching data
+        self.utterance = ""
 
     def update_from_last_state(self, last_state):
         self.history = last_state.history + [last_state.text, last_state.response]
         self.entity_tracker = copy.copy(last_state.entity_tracker)
         self.entity_tracker.init_for_new_turn()
         self.experiments = last_state.experiments
+        self.rg_state = last_state.rg_state
         self.turn_num = last_state.turn_num + 1
         try:
             self.turns_since_last_active = last_state.turns_since_last_active
@@ -149,7 +195,6 @@ class State(object):
     @classmethod
     def deserialize(cls, mapping: dict):
         decoded_items = {}
-        # logger.debug(mapping.items())
         for k, v in mapping.items():
             try:
                 decoded_items[k] = jsonpickle.decode(v)
@@ -218,48 +263,48 @@ class State(object):
         # The reduce_size function is supposed to be in place, and hence we don't need to
         # set to explicitly put the purged objects back into lists and dicts
 
-    def rank_by_overlap(self, choices: List[str], n_gram_size=2, n_past_bot_utterances=10) -> List[Tuple[str, float]]:
-
-        """
-        Rank given choices by n-gram overlap with n_past_bot_utterances
-        This is a drop in replacement for random.shuffle except that it doesn't do it in place (shuffle does)
-        Args:
-            choices: List of choices to rank
-            n_gram_size: length of n-grams to compute overlap with. 2 is a good number
-            history_length: Number of past bot utterances to use, 10 seems like a good default
-
-        Returns:
-            Ranked list of the choices, ranked by increasing overlap
-
-        """
-
-        bot_utterances_to_consider = self.history[::-2][:n_past_bot_utterances]
-        if len(bot_utterances_to_consider) == 0:
-            return choices
-        # NB: If the utterance has only 1 token, then get_ngrams doesn't return anything, hence the if condition
-        bot_utterance_ngrams = [set(get_ngrams(r.lower(), n_gram_size)) if set(get_ngrams(r.lower(), n_gram_size)) else {r.lower()} for r in bot_utterances_to_consider]
-        choices_ngrams = [set(get_ngrams(c.lower(), n_gram_size)) if set(get_ngrams(c.lower(), n_gram_size)) else {c.lower()} for c in choices]
-        choice_overlap = [max(len(cn & bn)/len(cn) for bn in bot_utterance_ngrams) for cn in choices_ngrams]
-        sorted_choices = sorted(zip(choices, choice_overlap), key=lambda tup: tup[1])
-        logger.info(f"Choices sorted by {n_gram_size}-gram overlap with past {n_past_bot_utterances} bot utterances\n"+
-                    '\n'.join(f"{overlap:.2f}\t{choice}" for choice, overlap in sorted_choices))
-        return sorted_choices
-
-    def choose_least_repetitive(self, choices: List[str], n_gram_size=2, n_past_bot_utterances=10)-> str:
-        """Wrapper around rank_by_overlap
-        This is a drop in replacement for random.choice
-        """
-        try:
-            if len(choices) == 0:
-                raise IndexError("Cannot choose from an empty sequence")
-            sorted_choices = self.rank_by_overlap(choices, n_gram_size, n_past_bot_utterances)
-            sorted_choice_strings = [choice for choice, overlap in sorted_choices]
-            weights = [1-overlap for choice, overlap in sorted_choices]
-            chosen_string = random.choices(sorted_choice_strings, weights=weights, k=1)[0]
-            logger.info(f"Chose {chosen_string} based on a weighted sample of choices")
-            return chosen_string
-        except:
-            return random.choice(choices)
+#     def rank_by_overlap(self, choices: List[str], n_gram_size=2, n_past_bot_utterances=10) -> List[Tuple[str, float]]:
+# 
+#         """
+#         Rank given choices by n-gram overlap with n_past_bot_utterances
+#         This is a drop in replacement for random.shuffle except that it doesn't do it in place (shuffle does)
+#         Args:
+#             choices: List of choices to rank
+#             n_gram_size: length of n-grams to compute overlap with. 2 is a good number
+#             history_length: Number of past bot utterances to use, 10 seems like a good default
+# 
+#         Returns:
+#             Ranked list of the choices, ranked by increasing overlap
+# 
+#         """
+# 
+#         bot_utterances_to_consider = self.history[::-2][:n_past_bot_utterances]
+#         if len(bot_utterances_to_consider) == 0:
+#             return choices
+#         # NB: If the utterance has only 1 token, then get_ngrams doesn't return anything, hence the if condition
+#         bot_utterance_ngrams = [set(get_ngrams(r.lower(), n_gram_size)) if set(get_ngrams(r.lower(), n_gram_size)) else {r.lower()} for r in bot_utterances_to_consider]
+#         choices_ngrams = [set(get_ngrams(c.lower(), n_gram_size)) if set(get_ngrams(c.lower(), n_gram_size)) else {c.lower()} for c in choices]
+#         choice_overlap = [max(len(cn & bn)/len(cn) for bn in bot_utterance_ngrams) for cn in choices_ngrams]
+#         sorted_choices = sorted(zip(choices, choice_overlap), key=lambda tup: tup[1])
+#         logger.info(f"Choices sorted by {n_gram_size}-gram overlap with past {n_past_bot_utterances} bot utterances\n"+
+#                     '\n'.join(f"{overlap:.2f}\t{choice}" for choice, overlap in sorted_choices))
+#         return sorted_choices
+# 
+#     def choose_least_repetitive(self, choices: List[str], n_gram_size=2, n_past_bot_utterances=10)-> str:
+#         """Wrapper around rank_by_overlap
+#         This is a drop in replacement for random.choice
+#         """
+#         try:
+#             if len(choices) == 0:
+#                 raise IndexError("Cannot choose from an empty sequence")
+#             sorted_choices = self.rank_by_overlap(choices, n_gram_size, n_past_bot_utterances)
+#             sorted_choice_strings = [choice for choice, overlap in sorted_choices]
+#             weights = [1-overlap for choice, overlap in sorted_choices]
+#             chosen_string = random.choices(sorted_choice_strings, weights=weights, k=1)[0]
+#             logger.info(f"Chose {chosen_string} based on a weighted sample of choices")
+#             return chosen_string
+#         except:
+#             return random.choice(choices)
 
     def __str__(self):
         """
@@ -268,9 +313,9 @@ class State(object):
         """
         return str(self.serialize())
 
-    def __repr__(self):
-        """
-        Override the default string behavior
-        :return: string representation
-        """
-        return self.__str__()
+    # def __repr__(self):
+    #     """
+    #     Override the default string behavior
+    #     :return: string representation
+    #     """
+    #     return self.__str__()

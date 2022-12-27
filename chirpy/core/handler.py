@@ -37,12 +37,14 @@ class TurnResult:
 
 class Handler():
     @measure
-    def __init__(self, annotator_classes: List[Type[Annotator]], response_generator_classes: List[Type[ResponseGenerator]],
-                 annotator_timeout = 3):
+    def __init__(
+        self,
+        annotator_classes: List[Type[Annotator]],
+        annotator_timeout = 3
+    ):
         """
         """
         self.annotator_classes = annotator_classes
-        self.response_generator_classes = response_generator_classes
         self.annotator_timeout = annotator_timeout
 
 
@@ -60,17 +62,17 @@ class Handler():
         user_attributes = UserAttributes.deserialize(user_attributes)
         if last_state:
             last_state = State.deserialize(last_state)
+            logger.warning(f"Last state is {last_state.rg_state}")
             current_state.update_from_last_state(last_state)
         state_manager = StateManager(current_state, user_attributes, last_state)
 
         if self.should_end_conversation(current_state.text):
             response, should_end_session = None, True
         else:
-            response_generators = ResponseGenerators(state_manager, self.response_generator_classes)
             annotator_objects = [c(state_manager) for c in self.annotator_classes]
             annotation_dag = AnnotationDAG(state_manager, annotator_objects, self.annotator_timeout)
             ranking_strategy = PriorityRankingStrategy(state_manager)
-            dialog_manager = DialogManager(state_manager, ranking_strategy, response_generators)
+            dialog_manager = DialogManager(state_manager, ranking_strategy)
 
             if test_args:
                 state_manager.current_state.test_args = test_args

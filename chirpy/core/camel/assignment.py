@@ -1,5 +1,5 @@
 from typing import List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from chirpy.core.camel.variable import Variable
 from chirpy.core.camel.nlg import NLGNode
@@ -11,5 +11,9 @@ class Assignment:
 
 @dataclass
 class AssignmentList:
-	assignments : List[Assignment]
-
+	assignments : List[Assignment] = field(default_factory=list)
+	
+	def evaluate(self, context):
+		for assignment in self.assignments:
+			context.set(assignment.variable, assignment.value.generate(context))
+		

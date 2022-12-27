@@ -1,0 +1,24 @@
+<PROMPTS>
+
+Prompt what_to_talk_about [ ] {
+	"What do you want to talk about?"
+}
+
+<SUBNODES>
+
+Subnode weather [ 
+	IS_TRUE(Flags.GlobalFlag__Initiative__weather)
+] {
+	"I live in the cloud so I'm not sure what the weather is like on earth!"
+	"On another note,"
+} < 
+	State.no_entity = @constant(True)
+>
+
+Subnode fallback_neural [ ] {
+	@neural_generation(prefix="")
+}
+
+Subnode fallback [ ] {
+	"Sorry, I don't know what you're talking about."
+}

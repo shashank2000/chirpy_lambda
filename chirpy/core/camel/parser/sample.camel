@@ -12,10 +12,10 @@ Prompt origin_year_factoid_prompt [
     IS_NOT_NONE(State.User__FavoriteFoodFactoidOrigin)
 ] {
     - "Did you know that"
-    - @val(State.User__FavoriteFoodTalkable)
+    - @val(State.User__FavoriteFood | talkable
     - @inflect(
         inflect_token="was", 
-        inflect_entity=State.User__FavoriteFoodTalkable
+        inflect_entity=State.User__FavoriteFood | talkable | lower
       )
     - "first made in"
     - @val(State.User__FavoriteFoodFactoidOrigin)
@@ -23,7 +23,7 @@ Prompt origin_year_factoid_prompt [
     - @val(State.User__FavoriteFoodFactoidYear)
     - "?"
     - "I can't believe people have been eating"
-    - @val(State.User__FavoriteFoodTalkable)
+    - @val(State.User__FavoriteFood | talkable)
     - "for so long!"
 }
 
@@ -34,7 +34,7 @@ Subnode open_ended_neural_fallback [ ] {
 
 <SET_STATE_AFTER>
 State.User__FavoriteFood = {
-    @val(Utilities.lowercased_cur_entity)
+    @val(Utilities.cur_entity | lower)
 }
 
 Flags.GlobalFlag__LastBotTurnWasOpenEnded = {

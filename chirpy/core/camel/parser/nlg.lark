@@ -18,7 +18,7 @@ nlg : "{" ("-"? nlg)* "}"
 LIST : _OB _CB
 	 | _OB
 
-val : "@val" _OP variable _CP
+val : "@val" _OP variable ("|" PARAM_ARG_NAME)* _CP
 
 neural_generation : "@neural_generation" _OP "prefix" _EQ nlg _CP
 

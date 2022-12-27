@@ -1,156 +1,147 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from typing import List, Any, Optional
+from concurrent import futures
+import random 
 
 from chirpy.core.camel.variable import Variable
+from chirpy.core.camel.pipes import get_pipe
+
+from chirpy.annotators.blenderbot import BlenderBot
+from chirpy.core.response_generator.neural_helpers import get_neural_fallback_handoff, neural_response_filtering
+from chirpy.core.response_generator.neural_helpers import is_two_part, NEURAL_DECODE_CONFIG, get_random_fallback_neural_response
 
 import os
 
 BASE_PATH = os.path.join(os.path.dirname(__file__), '../../symbolic_rgs')
 
 
-def lookup_value(value_name, contexts):
-    if '.' in value_name:
-        assert len(value_name.split('.')) == 2, "Only one namespace allowed."
-        namespace_name, value_name = value_name.split('.')
-        namespace = contexts[namespace_name]
-        return namespace[value_name]
-    else:
-        assert False, f"Need a namespace for value name {value_name}."
+import logging
+logger = logging.getLogger('chirpylogger')
 
-
-PUNCTUATION = ['.', ',', '?', '!', ':', ';']
-
-
-def spacingaware_join(x):
-    result = ""
-    for idx, item in enumerate(x):
-        assert isinstance(item, str), f"Item {item} (from {x}) is not a string"
-        if idx != 0 and not any(item.startswith(punct) for punct in PUNCTUATION):
-            result += " "
-        result += item
-    return result
-
-
-def evaluate_nlg_calls(datas, python_context, contexts):
-    output = []
-    if isinstance(datas, str) or isinstance(datas, dict):
-        return evaluate_nlg_call(datas, python_context, contexts)
-    if len(datas) == 1:
-        return evaluate_nlg_call(datas[0], python_context, contexts)
-    for elem in datas:
-        out = evaluate_nlg_call(elem, python_context, contexts)
-        if not isinstance(out, str):
-            logger.error(f"{out} is not a string. This is not ok unless you are debugging.")
-            out = str(out)
-        output.append(out)
-
-    return spacingaware_join(output)
-
-
-def evaluate_nlg_calls_or_constant(datas, python_context, contexts):
-    if isinstance(datas, dict):
-        assert len(datas) == 1, "should be a dict with key constant"
-        return datas['constant']
-    return evaluate_nlg_calls(datas, python_context, contexts)
-
-
-CONDITION_STYLE_TO_BEHAVIOR = {
-    'is_none': (lambda val: (val is None)),
-    'is_not_none': (lambda val: (val is not None)),
-    'is_true': (lambda val: (val is True)),
-    'is_false': (lambda val: (val is False)),
-    'is_value': (lambda val, target: (val == target)),
-    'is_one_of': (lambda val, target: (val in target)),
-    'is_not_one_of': (lambda val, target: (val not in target)),
-    'is_greater_than': (lambda val, target: (val > target)),
-}
-
-
-
-def is_valid(entry_conditions, python_context, contexts):
-    for entry_condition_dict in entry_conditions:
-        if not compute_entry_condition(entry_condition_dict, python_context, contexts):
-            return False
-
-    return True
-
-def evaluate_nlg_call(data, python_context, contexts):
-    if isinstance(data, list):
-        return evaluate_nlg_calls(data, python_context, contexts)
-    if isinstance(data, str):  # plain text
-        return data
-    if isinstance(data, int):  # number
-        return data
-
-    assert isinstance(data, dict) and len(data) == 1, f"Failure: data is {data}"
-    type = next(iter(data))
-    nlg_params = data[type]
-    if type == 'eval':
-        assert isinstance(nlg_params, str)
-        return effify(nlg_params, global_context=python_context)
-    elif type == 'bool':
-        assert isinstance(nlg_params, list)
-        return is_valid(nlg_params, python_context, contexts)
-    
-    elif type == 'inflect':
-        assert isinstance(nlg_params, dict)
-        inflect_token = nlg_params['inflect_token']
-        inflect_val = lookup_value(nlg_params['inflect_entity'], contexts)
-        return infl(inflect_token, inflect_val.is_plural)
-    elif type == 'inflect_engine':
-        assert isinstance(nlg_params, dict)
-        inflect_function = nlg_params['type']
-        inflect_input = evaluate_nlg_call(nlg_params['str'], python_context, contexts)
-        return getattr(engine, inflect_function)(inflect_input)
-    elif type == "sample_template":
-        assert isinstance(nlg_params, str)
-        if nlg_params not in global_templates_cache:
-            raise KeyError(f'{nlg_params} template not found!')
-        return global_templates_cache[nlg_params].sample()
-   
-    elif type == 'one of':
-        return evaluate_nlg_call(random.choice(nlg_params), python_context, contexts)
-    elif type == 'constant':
-        return nlg_params
-    else:
-        assert False, f"Generation type {type} not found!"
-        
 class NLGNode(ABC):
     @abstractmethod
-    def generate(self, python_context, contexts):
+    def generate(self, context):
         pass
 
+def get_all_neural_responses(context, history, prefix=None):
+    """
+    Sends history to BlenderBot and returns response.
+    
+    Args:
+        history: history of utterances in the conversation thus far
+        prefix: utterance prefix that the generated utterance should begin with
+    
+    Returns:
+         response: str, or None in case of error or nothing suitable. Guaranteed to end in a sentence-ending token.
+    """
+    if prefix:
+        # If there's a prefix, we aren't retrieving the prefetched and cached response.
+        # We have to run a generation call again.
+        bbot = BlenderBot(context.state_manager)
+        return bbot.execute(input_data={'history': history}, prefix=prefix)
+    if isinstance(context.state_manager.current_state.blenderbot, futures.Future):
+        # Sometimes the call to BlenderBot has not yet finished, in which case we store the future
+        # in self.state_manager.current_state.blenderbot and retrieve the result here.
+        future_result = context.state_manager.current_state.blenderbot.result()
+        # Replace the future with the future's result
+        setattr(context.state_manager.current_state, 'blenderbot', future_result)
+    return context.state_manager.current_state.blenderbot # (responses, scores)
+
+
+def transform_questions_into_statements(responses, scores):
+    out = []
+    for response, score in zip(responses, scores):
+        if '?' in response:
+            sentences = [x.strip() for x in response.split('.')]
+            first_question_index = min([i for i in range(len(sentences)) if '?' in sentences[i]])
+            if first_question_index == 0: continue
+            response = '. '.join(sentences[:first_question_index])
+        out.append((response, score))
+    if len(out) == 0: return [], []
+    return zip(*out)
+    
+def get_best_neural_response(responses, scores, history, conditions):
+    """
+    
+    @param responses: list of strings. responses from neural module. Can assume all end in sentence-ending tokens.
+    @param history: list of strings. the neural conversation so far (up to and including the most recent user utterance).
+    @return: best_response: string, or None if there was nothing suitable.
+    
+    """
+    num_questions = len([response for response in responses if '?' in response])
+    is_majority_questions = num_questions >= len(responses) / 2
+    responses, _ = neural_response_filtering(responses, scores)
+    responses = [r for r in responses if 'thanks' not in responses]
+    
+    for cond in conditions:
+        responses = [r for r in responses if cond(r)]
+    
+    if len(responses) == 0:
+        logger.warning('There are 0 suitable neural responses')
+        return None
+    responses = sorted(responses,
+                       key=lambda response: (  # all these keys should be things where higher is good
+                           ('?' in response) if is_majority_questions or len(history)==1 else ('?' not in response),
+                            is_two_part(response),
+                            len(response),
+                       ),
+                       reverse=True)
+    return responses[0]
+
+def get_neural_response(context, prefix=None, allow_questions=False, conditions=None) -> Optional[str]:
+    """
+    Get neurally generated response started with specific prefix
+    :param prefix: Prefix
+    :param allow_questions: whether to allow questions in the response
+    :param conditions: list of funcs that filter for desired response
+    :return:
+    """
+    if conditions is None: conditions = []
+    history = context.state_manager.current_state.history + [context.utterance]
+    responses, scores = get_all_neural_responses(context, history, prefix=prefix)
+    if not allow_questions:
+        responses, scores = transform_questions_into_statements(responses, scores)
+        responses_scores = [(response, score) for response, score in zip(responses, scores) if '?' not in response]
+        if len(responses_scores) == 0:
+            logger.info("There are 0 suitable neural responses.")
+            return None
+        responses, scores = zip(*responses_scores)
+    best_response = get_best_neural_response(responses, scores, history, conditions=conditions)
+    return best_response
 
 @dataclass
 class NeuralGeneration(NLGNode):
     prefix : NLGNode
-    def generate(self, python_context, contexts):
-        return python_context['rg'].get_neural_response(prefix=self.prefix.generate())
+    def generate(self, context):
+        return get_neural_response(context, prefix=self.prefix.generate(context))
 
-    
 @dataclass
 class Val:
     variable : Variable
-    def generate(self, *args):
-        return self.variable.generate(*args)
+    pipes : List[str]
+    def generate(self, context):
+        value = self.variable.generate(context)
+        for pipe_name in self.pipes:
+            value = get_pipe(pipe_name)(value)
+        return value
         
 @dataclass
 class NLGHelper:
     name : str
     args : List[NLGNode]
-    def generate(self, python_context, contexts):
-        assert hasattr(python_context['supernode'].nlg_helpers, self.name), f"Function not found: {function_name} (available: {dir(python_context['supernode'].nlg_helpers).filter(lambda x: not x.startswith('_'))})"
-        args = [evaluate_nlg_call(arg, python_context, contexts) for arg in self.args]
-        return getattr(python_context['supernode'].nlg_helpers, function_name)(*args)
+    def generate(self, context):
+        assert hasattr(context.supernode.nlg_helpers, self.name), f"Function not found: {function_name} (available: {dir(context.supernode.nlg_helpers).filter(lambda x: not x.startswith('_'))})"
+        args = [evaluate_nlg_call(arg, context) for arg in self.args]
+        return getattr(context.supernode.nlg_helpers, function_name)(*args)
 
 @dataclass
 class Inflect:
     inflect_token : NLGNode
     inflect_entity : Variable
-    def generate(self, python_context, contexts):
-        input = self.inflect_token.generate(python_context, contexts)
-        val = self.inflect_entity.generate(python_context, contexts)
+    def generate(self, context):
+        input = self.inflect_token.generate(context)
+        val = self.inflect_entity.generate(context)
         assert isinstance(val, WikiEntity)
         return infl(input, val)
 
@@ -165,18 +156,37 @@ class InflectEngine(NLGNode):
 @dataclass
 class OneOf(NLGNode):
     options : List[NLGNode]
-    def generate(self, python_context, contexts):
-        return random.choice(options).generate(python_context, contexts)
+    def generate(self, context):
+        return random.choice(self.options).generate(context)
         
 @dataclass
 class Constant(NLGNode):
     val : Any
-    def generate(self, python_context, contexts):
-        return val
+    def generate(self, context):
+        return eval(self.val) # haha
         
+@dataclass
+class String(NLGNode):
+    string : str
+    def generate(self, context):
+        return self.string
+    def __repr__(self):
+        return '"' + self.string + '"'
+        
+PUNCTUATION = ['.', ',', '?', '!', ':', ';']
+        
+
+def spacingaware_join(x):
+    result = ""
+    for idx, item in enumerate(x):
+        assert isinstance(item, str), f"Item {item} (from {x}) is not a string"
+        if idx != 0 and not any(item.startswith(punct) for punct in PUNCTUATION):
+            result += " "
+        result += item
+    return result
 
 @dataclass
 class NLGList(NLGNode):
     items : List[NLGNode]
-    def generate(self, python_context, contexts):
-        return spacingaware_join([x.generate(python_context, contexts) for x in items])
+    def generate(self, context):
+        return spacingaware_join([x.generate(context) for x in self.items])

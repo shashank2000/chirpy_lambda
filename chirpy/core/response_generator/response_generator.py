@@ -1,4 +1,4 @@
-from chirpy.core.callables import NamedCallable
+#from chirpy.core.callables import NamedCallable
 from chirpy.core.state_manager import StateManager
 from chirpy.core.regex import response_lists
 from chirpy.core.response_generator.response_type import *
@@ -31,7 +31,7 @@ import os
 STOPWORDS_FILEPATH = os.path.join(os.path.dirname(__file__), '../../data/long_stopwords.txt')
 STOPWORDS = load_text_file(STOPWORDS_FILEPATH)
 
-class ResponseGenerator(NamedCallable):
+class ResponseGenerator:
     def __init__(self,
                  state_manager: StateManager,
                  treelets: Dict[str, Treelet]=None,

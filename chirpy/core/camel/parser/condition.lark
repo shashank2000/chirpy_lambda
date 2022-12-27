@@ -1,12 +1,20 @@
 %import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, _OP, _CP, _OB, _CB, _COMMA, variable)
+%import .nlg (nlg)
 // conditions
 
 condition : predicate
-			   | _OP condition _CP
-			   | condition AND condition
-			   | condition OR condition
+		   | _OP condition _CP
+		   | condition AND condition
+		   | condition OR condition
+		   | NOT condition
 
 predicate: PREDICATE _OP variable _CP
-PREDICATE: "IS_NONE" | "IS_NOT_NONE" | "IS_TRUE" | "IS_FALSE"
+		 | PREDICATE_TWO _OP variable _COMMA nlg _CP
+		 | PREDICATE_LIST _OP variable _COMMA _OB nlg (_COMMA nlg)* (_COMMA)? _OB _CP
+		 
+PREDICATE: "IS_NONE" | "IS_NOT_NONE" | "IS_TRUE" | "IS_FALSE" 
+PREDICATE_TWO : "IS_EQUAL" | "IS_GREATER_THAN" | "IS_LESS_THAN"
+PREDICATE_LIST : "IS_IN" 
 AND: "and" | "AND"
 OR: "or" | "OR"
+NOT : "not" | "NOT"

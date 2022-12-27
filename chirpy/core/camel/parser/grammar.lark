@@ -33,7 +33,7 @@ entry_conditions_section : "<ENTRY_CONDITIONS>" condition?
 
 // Section: Prompt
 prompt_section : "<PROMPTS>" prompt*
-prompt : "Prompt" PROMPT_NAME _OB condition? _CB nlg
+prompt : "Prompt" PROMPT_NAME _OB condition? _CB nlg ("<" assignment* ">")?
 PROMPT_NAME: /[a-zA-Z_1-9]+/
 
 // Section: Continue Conditions
@@ -50,7 +50,7 @@ set_state_section : "<SET_STATE>" assignment*
 
 // Section: Subnodes
 subnodes_section : "<SUBNODES>" subnode+
-subnode: SUBNODE_NAME _OB condition? _CB nlg
+subnode: SUBNODE_NAME _OB condition? _CB nlg ("<" assignment* ">")?
 
 // Section: Set State After
 set_state_after_section : "<SET_STATE_AFTER>" assignment*

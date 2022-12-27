@@ -8,26 +8,6 @@ import uuid
 import time
 from typing import Dict
 
-from chirpy.core.response_generator.symbolic_response_generator import SymbolicResponseGenerator
-
-from chirpy.response_generators.launch.launch_response_generator import LaunchResponseGenerator
-from chirpy.response_generators.fallback.fallback_response_generator import FallbackResponseGenerator
-#from chirpy.response_generators.red_question.red_question_response_generator import RedQuestionResponseGenerator
-from chirpy.response_generators.offensive_user.offensive_user_response_generator import OffensiveUserResponseGenerator
-from chirpy.response_generators.wiki2.wiki_response_generator import WikiResponseGenerator
-from chirpy.response_generators.food.food_response_generator import FoodResponseGenerator
-#from chirpy.response_generators.opinion2.opinion_response_generator import OpinionResponseGenerator2
-from chirpy.response_generators.neural_chat.neural_chat_response_generator import NeuralChatResponseGenerator
-from chirpy.response_generators.categories.categories_response_generator import CategoriesResponseGenerator
-from chirpy.response_generators.neural_fallback.neural_fallback_response_generator import NeuralFallbackResponseGenerator
-from chirpy.response_generators.closing_confirmation.closing_confirmation_response_generator import ClosingConfirmationResponseGenerator
-
-## TODO: fix the PSQL endpoint
-# from chirpy.response_generators.music.music_response_generator import MusicResponseGenerator
-from chirpy.response_generators.acknowledgment.acknowledgment_response_generator import AcknowledgmentResponseGenerator
-from chirpy.response_generators.personal_issues.personal_issues_response_generator import PersonalIssuesResponseGenerator
-from chirpy.response_generators.aliens.aliens_response_generator import AliensResponseGenerator
-from chirpy.response_generators.transition.transition_response_generator import TransitionResponseGenerator
 
 from chirpy.annotators.corenlp import CorenlpModule
 from chirpy.annotators.navigational_intent.navigational_intent import NavigationalIntentModule
@@ -204,26 +184,15 @@ class LocalAgent():
 
     def create_handler(self):
         return Handler(
-                response_generator_classes=[LaunchResponseGenerator, 
-                                            FallbackResponseGenerator,
-                                            NeuralFallbackResponseGenerator,
-                                            # NeuralChatResponseGenerator,
-                                            # OffensiveUserResponseGenerator,
-                                            # CategoriesResponseGenerator,
-                                            # ClosingConfirmationResponseGenerator,
-                                            # AcknowledgmentResponseGenerator,
-                                            # PersonalIssuesResponseGenerator,
-                                            # OpinionResponseGenerator2,
-                                            # AliensResponseGenerator,
-                                            # TransitionResponseGenerator,
-                                            # FoodResponseGenerator,
-                                            SymbolicResponseGenerator,
-                                            # WikiResponseGenerator,
-                                            # MusicResponseGenerator,
-
-                                            ],
-            annotator_classes = [QuestionAnnotator, DialogActAnnotator, NavigationalIntentModule, StanfordnlpModule, CorenlpModule,
-                                 EntityLinkerModule, BlenderBot],
+            annotator_classes = [
+                QuestionAnnotator,
+                DialogActAnnotator,
+                NavigationalIntentModule,
+                StanfordnlpModule,
+                CorenlpModule,
+                EntityLinkerModule,
+                BlenderBot
+            ],
             annotator_timeout = NLP_PIPELINE_TIMEOUT
         )
 
