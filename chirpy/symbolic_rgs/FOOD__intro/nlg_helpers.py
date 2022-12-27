@@ -19,22 +19,6 @@ def sample_food_containing_ingredient(food: str):
     logger.warning(f"{[item for item, item_data in food_helpers.FOODS.items() if ('ingredients' in item_data and food in item_data['ingredients'])]}")
     return random.choice([item for item, item_data in food_helpers.FOODS.items() if ('ingredients' in item_data and food in item_data['ingredients'])])
 
-# def get_factoid_kind(rg, cur_entity):
-#     talkable_food = cur_entity.talkable_name
-#     food_data = food_helpers.get_food_data(food)
-
-#     if 'year' in food_data and food_helpers.get_time_comment(food_data['year'], talkable_food) is not None:
-#         if 'origin' in food_data:
-#             logger.warning("FACTOID KIND is now origin_and_year")
-#             return 'origin_and_year'
-#         else:
-#             logger.warning("FACTOID KIND is now year")
-#             return 'year'
-#     elif 'origin' in food_data:
-#         logger.warning("FACTOID KIND is now origin")
-#         return 'origin'
-#     return None
-
 @nlg_helper
 def get_food_origin(food):
     if not food_helpers.is_known_food(food):
