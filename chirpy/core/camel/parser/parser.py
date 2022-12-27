@@ -111,6 +111,6 @@ class SupernodeMaker(Transformer):
 			print(x)
 		return tok
 
-json_parser = Lark(grammar, start='document', parser='lalr', transformer=SupernodeMaker(), import_paths=[BASE_PATH])
+parser = Lark(grammar, start='document', parser='lalr', transformer=SupernodeMaker(), import_paths=[BASE_PATH])
 def parse(text):
-	return json_parser.parse(text)
+	return parser.parse(text)
