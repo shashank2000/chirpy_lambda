@@ -26,15 +26,7 @@ from concurrent import futures
 import inflect
 engine = inflect.engine()
 
-
 logger = logging.getLogger('chirpylogger')
-
-with open('/Users/ethanchi/Documents/camel/grammar.lark'):
-	parser = Lark(grammar, start='document')
-
-
-
-
 BASE_PATH = os.path.join(os.path.dirname(__file__), '../../symbolic_rgs')
 
 def lookup_value(value_name, contexts):
@@ -46,6 +38,64 @@ def lookup_value(value_name, contexts):
 	else:
 		assert False, f"Need a namespace for value name {value_name}."
 
+def evaluate_nlg_call(data, python_context, contexts):
+	if isinstance(data, list):
+		return evaluate_nlg_calls(data, python_context, contexts)
+	if isinstance(data, str): # plain text
+		return data
+	if isinstance(data, int): # number
+		return data
+	
+	assert isinstance(data, dict) and len(data) == 1, f"Failure: data is {data}"
+	type = next(iter(data))
+	nlg_params = data[type]
+	if type == 'eval':
+		assert isinstance(nlg_params, str)
+		return effify(nlg_params, global_context=python_context)
+	elif type == 'bool':
+		assert isinstance(nlg_params, list)
+		return is_valid(nlg_params, python_context, contexts)
+	elif type == 'val':
+		assert isinstance(nlg_params, str)
+		return lookup_value(nlg_params, contexts)
+	elif type == 'nlg_helper':
+		assert isinstance(nlg_params, dict)
+		function_name = nlg_params['name']
+		# logger.warning(f"NLG helpers dir: {dir(python_context['supernode'].nlg_helpers)}")
+		assert hasattr(python_context['supernode'].nlg_helpers, function_name), f"Function name {function_name} not found. Possible functions: {[x for x in dir(python_context['supernode'].nlg_helpers) if not x.startswith('_')]}"
+		args = nlg_params.get('args', [])
+		args = [evaluate_nlg_call(arg, python_context, contexts) for arg in args]
+		# args = [python_context['rg']] + args  # Add RG as first argument
+		return getattr(python_context['supernode'].nlg_helpers, function_name)(*args)
+	elif type == 'inflect':
+		assert isinstance(nlg_params, dict)
+		inflect_token = nlg_params['inflect_token']
+		inflect_val = lookup_value(nlg_params['inflect_entity'], contexts)
+		return infl(inflect_token, inflect_val.is_plural)
+	elif type == 'inflect_engine':
+		assert isinstance(nlg_params, dict)
+		inflect_function = nlg_params['type']
+		inflect_input = evaluate_nlg_call(nlg_params['str'], python_context, contexts)
+		return getattr(engine, inflect_function)(inflect_input)
+	elif type == "neural_generation":
+		assert isinstance(nlg_params, dict)
+		prefix = evaluate_nlg_calls(nlg_params['prefix'], python_context, contexts)
+		return python_context['rg'].get_neural_response(prefix=prefix)
+	elif type == "sample_template":
+		assert isinstance(nlg_params, str)
+		if nlg_params not in global_templates_cache:
+				raise KeyError(f'{nlg_params} template not found!')
+		return global_templates_cache[nlg_params].sample()
+	elif type == 'combine':
+		# allows you to chain nlg calls together in order to create one output
+		assert isinstance(nlg_params, list)
+		return evaluate_nlg_calls(nlg_params, python_context, contexts)
+	elif type == 'one of':
+		return evaluate_nlg_call(random.choice(nlg_params), python_context, contexts)
+	elif type == 'constant':
+		return nlg_params
+	else:
+		assert False, f"Generation type {type} not found!"
 
 
 		
@@ -75,9 +125,6 @@ def evaluate_nlg_calls(datas, python_context, contexts):
 	return spacingaware_join(output)
 	
 def evaluate_nlg_calls_or_constant(datas, python_context, contexts):
-	if isinstance(datas, dict):
-		assert len(datas) == 1, "should be a dict with key constant"
-		return datas['constant']
 	return evaluate_nlg_calls(datas, python_context, contexts)
 	
 CONDITION_STYLE_TO_BEHAVIOR = {

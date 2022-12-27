@@ -1,3 +1,5 @@
+import os
+
 from chirpy.core.camel.parser import parse
 from chirpy.core.camel.predicate import Predicate, TruePredicate, FalsePredicate
 from chirpy.core.camel.prompt import PromptList
@@ -5,9 +7,6 @@ from chirpy.core.camel.subnode import SubnodeList
 from chirpy.core.camel.assignment import AssignmentList
 from dataclasses import dataclass, field, fields
 from typing import List, Any
-
-
-import os
 
 @dataclass
 class Supernode:
