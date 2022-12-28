@@ -74,8 +74,6 @@ def get_wiki_sentences(rg: SymbolicResponseGenerator, cur_entity):
                                                                 first_turn=rg.active_last_turn())
     return sentences
 
-logger.disabled = True
-
 def get_infilling_ack_components(rg: SymbolicResponseGenerator, top_da):
     """
 
@@ -298,8 +296,7 @@ def get_infilling_statement(rg: SymbolicResponseGenerator, entity: Optional[Wiki
 
 @nlg_helper
 def get_factoid(rg: SymbolicResponseGenerator, entity: Optional[WikiEntity] = None):
-    print(rg.state)
-    print("entity", entity)
+    print("entity12421", entity)
     print("entity2", get_recommended_entity(rg))
     print(1)
     top_res, top_ack = get_infilling_statement(rg, entity)
