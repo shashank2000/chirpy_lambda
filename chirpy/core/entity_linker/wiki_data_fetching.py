@@ -83,10 +83,10 @@ def result2entity(result: dict) -> Optional[WikiEntity]:
     bad_categories = [c for c in categories if c in UNTALKABLE_CATEGORIES]
     bad_taxa = [c for c in categories if c.startswith('Taxa named')] if len(source['doc_title'].split()) > 1 else [] # hack to avoid things like Horse — Ethan
     if (any([bad_wikidata_categories, bad_categories, bad_taxa]) and source['doc_title'] not in WHITELIST_IN_UNTALKABLE_CLASSES):
-        logger.warning(f"Wasn't able to load data for {source['doc_title']} because it was banned due to: {bad_wikidata_categories} {bad_categories} {bad_taxa}")
+        logger.primary_info(f"Wasn't able to load data for {source['doc_title']} because it was banned due to: {bad_wikidata_categories} {bad_categories} {bad_taxa}")
         return None
     if (source['doc_title'] in BLACKLIST_ENTITIES):
-        logger.warning(f"Wasn't able to load data for {source['doc_title']} because it is a blacklisted entity")
+        logger.primary_info(f"Wasn't able to load data for {source['doc_title']} because it is a blacklisted entity")
         return None
 
     # Filter wikidata_categories
@@ -98,7 +98,6 @@ def result2entity(result: dict) -> Optional[WikiEntity]:
     #         anchortext_counts[anchortext] += count
     #     else:
     #         anchortext_counts[anchortext] = count
-    logger.warning(f"Source is {source}.")
     plural = source.get('plural', source['doc_title'])
     if plural.strip() == "":
         plural = source['doc_title']
