@@ -19,6 +19,11 @@ class SupernodeMaker(Transformer):
 	def nlg__variable(self, tok): return self.variable(tok)
 	def condition__variable(self, tok): return self.variable(tok)
 	
+	def condition__bool(self, tok):
+		if str(tok[0]) == 'True':
+			return predicate.TruePredicate()
+		return predicate.FalsePredicate()
+	
 	def condition__predicate(self, tok):
 		if str(tok[0]) == 'IS_EQUAL':
 			return predicate.VariableIsPredicate(variable=tok[1], val=tok[2])
