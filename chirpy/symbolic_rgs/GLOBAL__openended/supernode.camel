@@ -1,0 +1,24 @@
+<ENTRY_CONDITIONS>
+
+IS_TRUE(Flags.GlobalFlag__LastBotTurnWasOpenEnded)
+
+<PROMPTS>
+
+Prompt what_say_you [ ] {
+	@one_of (
+		{"What do you think?"},
+		{"What are your thoughts?"}
+	)
+}
+
+<SUBNODES>
+
+Subnode open_ended_thats [ 
+	IS_TRUE(Flags.GlobalFlag__THATS)
+] {
+	"I know, right?"
+}
+
+Subnode open_ended_neural_fallback [ ] {
+	@neural_generation(prefix="")
+}

@@ -1,4 +1,4 @@
-from chirpy.core.callables import NamedCallable
+#from chirpy.core.callables import NamedCallable
 from chirpy.core.state_manager import StateManager
 from chirpy.core.regex import response_lists
 from chirpy.core.response_generator.response_type import *
@@ -31,7 +31,7 @@ import os
 STOPWORDS_FILEPATH = os.path.join(os.path.dirname(__file__), '../../data/long_stopwords.txt')
 STOPWORDS = load_text_file(STOPWORDS_FILEPATH)
 
-class ResponseGenerator(NamedCallable):
+class ResponseGenerator:
     def __init__(self,
                  state_manager: StateManager,
                  treelets: Dict[str, Treelet]=None,
@@ -208,7 +208,7 @@ class ResponseGenerator(NamedCallable):
         """
         if conditions is None: conditions = []
         history = self.get_conversation_history() + [self.utterance]
-        responses, scores = self.get_all_neural_responses(history, prefix=prefix)
+        responses, scores = self.get_neural_response_given_history(history, prefix=prefix)
         if not allow_questions:
             responses, scores = self.transform_questions_into_statements(responses, scores)
             responses_scores = [(response, score) for response, score in zip(responses, scores) if '?' not in response]
@@ -219,7 +219,7 @@ class ResponseGenerator(NamedCallable):
         best_response = self.get_best_neural_response(responses, scores, history, conditions=conditions)
         return best_response
 
-    def get_all_neural_responses(self, history, prefix=None):
+    def get_neural_response_given_history(self, history, prefix=None):
         """
         Sends history to BlenderBot and returns response.
 

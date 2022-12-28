@@ -20,3 +20,6 @@ User__CurrentOpinionFollowUp: False
 User__CurrentOpinionThird: False
 User__OpinionYes: False
 User__OpinionNo: False
+User__Name : null
+User__NameGivenUp : False
+LAUNCH__NumTimesAskedName : 0

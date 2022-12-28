@@ -49,7 +49,7 @@ class BaseSymbolicState:
     turns_history: Dict[str, int] = field(default_factory=dict)
     
     def __getitem__(self, key):
-        assert key in ALL_STATE_KEYS
+        assert key in ALL_STATE_KEYS, f"Key not found: {key}"
         if key not in self.data:
             default_val = ALL_STATE_KEYS[key]
             if isinstance(default_val, str) and default_val.startswith('_'):
@@ -63,6 +63,9 @@ class BaseSymbolicState:
     def __setitem__(self, key, new_value):
         assert key in ALL_STATE_KEYS, f"Key not found: {key}"
         self.data[key] = new_value
+
+    def __contains__(self, key, new_value):
+        return key in ALL_STATE_KEYS
         
     def update(self, data):
         for key in data:

@@ -1,5 +1,6 @@
 from chirpy.core.response_generator.regex_templates import *
 from chirpy.core.regex.templates import *
+from chirpy.core.response_generator.nlu import nlu_processing
 from enum import IntEnum, auto
 from typing import Set, List
 import logging
@@ -83,59 +84,47 @@ def global_response_type_dict(rg, utterance):
     vals = identify_base_response_types(rg, utterance)
     return {v : (v in vals) for v in ResponseType.__members__.values()}
 
-def is_disinterested(rg, utterance):
-    """
-    Classifies whether the user sounds disinterested
-    """
-    return rg.state_manager.current_state.navigational_intent.neg_intent or \
-           DisinterestedTemplate().execute(utterance) is not None
 
-
-def is_no(rg, utterance):
-    return NoTemplate().execute(utterance) is not None or rg.state_manager.current_state.dialogact['is_no_answer']
-
-
-def is_question(rg, utterance):
-    return rg.state_manager.current_state.question['is_question']
-
-
-def is_yes(rg, utterance):
-    return (YesTemplate().execute(utterance) is not None and NotYesTemplate().execute(utterance) is None) \
-           or rg.state_manager.current_state.dialogact['is_yes_answer']
-
-
-def is_complaint(rg, utterance):
-    return rg.state_manager.current_state.dialogact['top_1'] == 'complaint'
-
-
-def is_change_topic(rg, utterance):
-    return ChangeTopicTemplate().execute(utterance) is not None
-
-
-def is_request_repeat(rg, utterance):
-    return RequestRepeatTemplate().execute(utterance) is not None or SayThatAgainTemplate().execute(
-        utterance) is not None
-
-
-def is_dont_know_response(rg, utterance):
+@nlu_processing
+def get_intent_flags(state_manager, utterance):
+    if (
+        state_manager.current_state.navigational_intent.neg_intent or
+        DisinterestedTemplate().execute(utterance) is not None
+    ):
+        ADD_NLU_FLAG("GlobalFlag__DISINTERESTED")
+    if (
+        NoTemplate().execute(utterance) is not None or 
+        state_manager.current_state.dialogact['is_no_answer']
+    ):
+        ADD_NLU_FLAG("GlobalFlag__NO")
+    if (
+        YesTemplate().execute(utterance) is not None or 
+        state_manager.current_state.dialogact['is_yes_answer']
+    ):
+        ADD_NLU_FLAG("GlobalFlag__YES")
+    if state_manager.current_state.question['is_question']:
+        ADD_NLU_FLAG("GlobalFlag__QUESTION")
+    if state_manager.current_state.dialogact['top_1'] == 'complaint':
+        ADD_NLU_FLAG("GlobalFlag__COMPLAINT")
+    if ChangeTopicTemplate().execute(utterance) is not None:
+        ADD_NLU_FLAG("GlobalFlag__CHANGE_TOPIC")
+    if RequestRepeatTemplate().execute(utterance) is not None or SayThatAgainTemplate().execute(utterance) is not None:
+        ADD_NLU_FLAG("GlobalFlag__REQUEST_REPEAT")
+    
     template_match = DontKnowTemplate().execute(utterance) is not None
-    is_difficult = any([x in utterance for x in ['tough', 'tricky', 'difficult']]) and rg.get_current_entity(
-        initiated_this_turn=True) is None
-    return template_match or is_difficult
-
-
-def is_thats_response(rg, utterance):
-    return ThatsTemplate().execute(utterance) is not None
-
-
-def is_didnt_know_response(rg, utterance):
-    return DidntKnowTemplate().execute(utterance) is not None or \
-           (SurprisedReallyTemplate().execute(utterance) is not None and len(utterance) <= 15)
-
-
-def is_nothing_response(rg, utterance):
-    return NotThingTemplate().execute(utterance) is not None
-
-
-def is_backchannel(rg, utterance):
-    return BackChannelingTemplate().execute(utterance) is not None
+    is_difficult = any(
+        [x in utterance for x in ['tough', 'tricky', 'difficult']]
+    ) #and rg.get_current_entity(initiated_this_turn=True) is None TODO fix
+    if template_match or is_difficult:
+        ADD_NLU_FLAG("GlobalFlag__DONT_KNOW")
+    if ThatsTemplate().execute(utterance) is not None:
+        ADD_NLU_FLAG("GlobalFlag__THATS")
+    if (
+        DidntKnowTemplate().execute(utterance) is not None or 
+        (SurprisedReallyTemplate().execute(utterance) is not None and len(utterance) <= 15)
+    ):
+        ADD_NLU_FLAG("GlobalFlag__DIDNT_KNOW")
+    if NotThingTemplate().execute(utterance) is not None:
+        ADD_NLU_FLAG("GlobalFlag__NOTHING")
+    if BackChannelingTemplate().execute(utterance) is not None:
+        ADD_NLU_FLAG("GlobalFlag__BACKCHANNEL")

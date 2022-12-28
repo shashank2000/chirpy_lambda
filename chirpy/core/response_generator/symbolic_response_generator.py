@@ -10,9 +10,12 @@ from chirpy.core.response_generator_datatypes import ResponseGeneratorResult, Pr
     emptyResult_with_conditional_state, emptyPrompt, UpdateEntity, AnswerType
 from chirpy.core.response_generator.helpers import *
 from chirpy.core.response_generator.response_generator import ResponseGenerator
-from chirpy.core.response_generator.supernode import Supernode, Subnode
+
+from chirpy.core.camel.context import Context
+from chirpy.core.camel.supernode import Supernode
+
 from chirpy.core.response_priority import ResponsePriority
-from chirpy.core.response_generator.nlu import get_default_flags
+
 from chirpy.symbolic_rgs import global_nlu
 from chirpy.core.util import load_text_file
 from typing import Set, Optional, List, Dict
@@ -39,107 +42,62 @@ def get_supernode_paths():
     return out
 
 
-class SymbolicResponseGenerator(ResponseGenerator):
+class SymbolicResponseGenerator:
     name='SYMBOLIC_RESPONSE'
     def __init__(self,
                  state_manager,
                  supernode_paths=None,
                  ):
-
-        super().__init__(state_manager,  
-            can_give_prompts=True,
-            state_constructor=BaseSymbolicState,
-            conditional_state_constructor=BaseSymbolicConditionalState,
-        )
         
         if supernode_paths is None:
             supernode_paths = get_supernode_paths()
-        
+        self.state_manager = state_manager
         self.paths_to_supernodes = self.load_supernodes_from_paths(supernode_paths)
                 
     def load_supernodes_from_paths(self, supernode_paths):
-        return {path: Supernode(path) for path in supernode_paths}
-        
-    def get_global_flags(self, state, utterance):
-        # response types
-        global_flags = {"GlobalFlag__" + k.name: v for k, v in global_response_type_dict(self, utterance).items()} 
-
-        # map from string to None / template
-        abrupt_initiative_templates = {
-            "weather": WeatherTemplate(),   # problems
-            # "time": 
-            "repeat": SayThatAgainTemplate(),
-            # "correct_name":
-            "request_name": RequestNameTemplate(),
-            # "age"
-            # "clarification"
-            # "abilities"
-            # "personal"
-            # "interrupt"
-            "chatty": ChattyTemplate(),
-            # "story"
-            # "personal_problem"
-            # "anything"
-        }
-
-        global_flags.update({f"GlobalFlag__Initiative__{k}": bool(v.execute(utterance)) for k, v in abrupt_initiative_templates.items()})
-        global_flags.update(global_nlu.get_flags(self, state, utterance))
-                
-        return global_flags
+        output = {}
+        for path in supernode_paths:
+            output[path] = Supernode.load_from_path(path)
+        return output
         
     def get_supernodes(self):
         return self.paths_to_supernodes.values()
         
-    def get_next_supernode(self, python_context, contexts):
-        can_start_supernodes = {supernode: supernode.can_start(python_context, contexts, return_specificity=True)
-                                for supernode in self.get_supernodes()}
-        can_start_supernodes = sorted(can_start_supernodes.items(), key=lambda kv: (kv[1][0], kv[1][1]), reverse=True)
-        return can_start_supernodes[0][0]
+    def get_next_supernode(self, context):
+        possible_supernodes = [supernode for supernode in self.get_supernodes() if supernode.entry_conditions.evaluate(context)]
+        logger.primary_info(f"Possible supernodes are: " + "; ".join(f"{supernode} (score={supernode.entry_conditions.get_score()})" for supernode in possible_supernodes))
+        possible_supernodes = sorted(possible_supernodes, key=lambda x: x.entry_conditions.get_score(), reverse=True)
+        return possible_supernodes[0]
 
-    def get_any_takeover_supernode(self, python_context, contexts, cancelled_supernodes):
+    def get_any_takeover_supernode(self, context, cancelled_supernodes):
         for supernode in self.get_supernodes():
             if supernode.name in cancelled_supernodes:
                 continue
-            if supernode.can_takeover(python_context, contexts):
+            if supernode.entry_conditions_takeover.evaluate(context):
                 return supernode
         return self.paths_to_supernodes['GLOBALS']
 
-    def get_current_supernode_with_fallback(self, state):
+    def get_current_supernode_with_fallback(self, context):
         """Returns the current supernode or GLOBALS (if no current supernode exists)."""
-        path = state.cur_supernode or 'GLOBALS'
+        logging.warning(f"Current supernode is {context.state.cur_supernode}.")
+        path = context.state.cur_supernode or 'GLOBALS'
         return self.paths_to_supernodes[path]
         
-    def get_takeover_or_current_supernode(self, state, python_context, contexts):
-        """Returns a takeover supernode if one has high priority.
-        Else, returns the current supernode if it exists."""
+    def get_takeover_or_current_supernode(self, context):
+        """
+        Returns a takeover supernode if one has high priority.
+        Else, returns the current supernode if it exists.
+        """
         for supernode in self.get_supernodes():
-            if supernode.can_takeover(python_context, contexts):
+            if supernode.entry_conditions_takeover.evaluate(context):
                 return supernode
-        return self.get_current_supernode_with_fallback(state)
+        return self.get_current_supernode_with_fallback(context)
 
-    def get_python_context(self, supernode, state):
-        """Returns the supernode's python context."""
-        python_context = get_context_for_supernode(supernode)
-        python_context.update({
-            'rg': self,
-            'supernode': supernode,
-            'state': state
-        })
-        return python_context
+    
 
     def get_utilities(self, supernode):
         """Packages some useful data into one object."""
-        return {
-            "last_utterance": self.get_last_response().text, 
-            "cur_entity": self.get_current_entity(),
-            "cur_entity_name": self.get_current_entity().name if self.get_current_entity() else "",
-            "cur_entity_name_lower": self.get_current_entity().name.lower() if self.get_current_entity() else "",
-            "cur_talkable": self.get_current_entity().talkable_name if self.get_current_entity() else "",
-            "cur_entity_talkable_lower": self.get_current_entity().talkable_name.lower() if self.get_current_entity() else "",
-            "cur_supernode": supernode.name,
-            "cur_turn_num": self.state_manager.current_state.turn_num,
-        }
-
+        
     def get_background_flags(self, utterance):
         """Collects all background flags from all supernodes."""
         flags = {}
@@ -147,30 +105,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
             bg_flags = supernode.get_background_flags(self, utterance)
             flags.update(bg_flags)
         return flags
-
-    def get_initial_contexts(self, state, utterance):
-        """Gets the python context, utilities, and contexts dictionary for 
-        the currently active supernode."""
-        # grab python context
-        supernode = self.get_current_supernode_with_fallback(state)
-        python_context = self.get_python_context(supernode, state)
-        utilities = self.get_utilities(supernode)
-        # grab global flags
-        global_flags = self.get_global_flags(state, utterance)
-        global_flags.update(self.get_background_flags(utterance))
-        # construct contexts dictionary
-        contexts = self.construct_contexts(global_flags, state, utilities)
-        return python_context, utilities, contexts
-
-    def construct_contexts(self, flags, state, utilities):
-        """Constructs contexts dictionary."""
-        return {
-            "flags": flags,
-            "state": state,
-            "utilities": utilities,
-            "supernode_turns": state.turns_history,
-        }
-
+        
     def init_state(self):
         # Supernode turn counters:
         # There is a dictionary in base symbolic state (the state object for symbolic rg)
@@ -198,104 +133,52 @@ class SymbolicResponseGenerator(ResponseGenerator):
             else:
                 state_update_dict[value_name] = value
                 
-    def get_response(self, state) -> ResponseGeneratorResult:
-        logger.primary_info("Begin response for SymbolicResponseGenerator.")
-        
-        # Legacy response types
-
-        self.state = state
-
-        state, utterance, _ = self.get_state_utterance_response_types()
-
-        logger.primary_info(f"Turn history for supernodes: {state.turns_history}.")
-
-        # get initial python context, utilities, and contexts in order to determine the takeover supernode
-        python_context, utilities, contexts = self.get_initial_contexts(state, utterance)
-        
-        # Figure out what supernode we're in
-        supernode = self.get_takeover_or_current_supernode(state, python_context, contexts)
+    def get_launch_supernode(self):
+        return self.paths_to_supernodes['LAUNCH']
                 
-        # Re-update python context and utilities with new supernode
-        # We can keep the global flags as what we had before because their values are not dependent
-        # on the selected supernode
-        python_context = self.get_python_context(supernode, state)
-        utilities = self.get_utilities(supernode)
-        global_flags = contexts['flags']
-
-        cancelled_supernodes = set()
-        
-        while True:
-            flags = get_default_flags()
-            flags.update(global_flags)
-            flags.update(supernode.get_flags(self, state, utterance))
+    def get_response(self, state, utterance) -> ResponseGeneratorResult:
+        logger.warning("Begin response for SymbolicResponseGenerator.")
+        state.utterance = utterance
+        if not self.state_manager.is_first_turn():
+            supernode = self.get_takeover_or_current_supernode(Context.get_context(state, self.state_manager))
+            context = Context.get_context(state, self.state_manager, supernode)
             
-            logging.warning(f"Flags for supernode {supernode} are: {flags}")
+            cancelled_supernodes = set()
             
-            contexts = self.construct_contexts(flags, state, utilities)
-            
-            if not supernode.can_continue(python_context, contexts):
+            while not supernode.continue_conditions.evaluate(context):
                 cancelled_supernodes.add(supernode.name)
-                supernode = self.get_any_takeover_supernode(python_context, contexts, cancelled_supernodes)
                 logger.primary_info(f"Switching to supernode {supernode}")
-                continue
+                supernode = self.get_any_takeover_supernode(context, cancelled_supernodes)
+                context = Context.get_context(state, self.state_manager, supernode)
+                print(supernode.continue_conditions)
                 
-            locals = supernode.evaluate_locals(python_context, contexts)
-            contexts['locals'] = locals
-            logger.debug(f"Finished evaluating locals: {'; '.join((k + ': ' + str(v)) for (k, v) in locals.items())}")
-            locals['cur_entity'] = self.get_current_entity()
-            break
-
-        # Updating the turn number
-        state.turns_history[supernode.name] = utilities["cur_turn_num"]
-
-        conditional_state_updates = {}
-        self.update_context(supernode.get_state_updates(python_context, contexts),
-                            flags,
-                            conditional_state_updates)
-        state.update(conditional_state_updates)
-
-        # select subnode
-        subnode = supernode.get_optimal_subnode(python_context, contexts)
-        response = subnode.get_response(python_context, contexts)
-        logger.primary_info(f'Received {response} from subnode {subnode}.')
-        assert response is not None, f"Received a None response from subnode {subnode}."
-
-        # Making response available to yaml supernode
-        contexts['response_data'] = { 'response': response }
-
-        # update state
-        conditional_state_updates = {}
-        self.update_context(supernode.get_state_updates_after(python_context, contexts),
-                            flags,
-                            conditional_state_updates)
-        self.update_context(subnode.get_state_updates(python_context, contexts),
-                            flags,
-                            conditional_state_updates)
-        
-        state.update(conditional_state_updates)
-        
-        # get next prompt
-        next_supernode = self.get_next_supernode(python_context, contexts)
-        python_context = self.get_python_context(next_supernode, state)
-        prompt = next_supernode.get_optimal_prompt(python_context, contexts) # TODO fix contexts
-
-        print(f"OPTIMAL PROMPT: {prompt}")
-        
-        conditional_state = BaseSymbolicConditionalState(
-            data=state.data,
-            cur_supernode=next_supernode.name,                                                    
-        )
+            context.compute_locals()
+            supernode.set_state.evaluate(context)
+            
+            subnode = supernode.subnodes.select(context)
+            response = subnode.generate(context) + " "
+            logger.primary_info(f'Received {response} from subnode {subnode}.')
+            assert response is not None
     
-        # TODO
-        answer_type = AnswerType.QUESTION_SELFHANDLING
-        
-        return ResponseGeneratorResult(text=response + " " + prompt,
+            subnode.set_state.evaluate(context)
+            supernode.set_state_after.evaluate(context)
+            next_supernode = self.get_next_supernode(context)
+        else:
+            next_supernode = self.get_launch_supernode()
+            response = ""
+            
+        context = Context.get_context(state, self.state_manager, next_supernode)
+        prompt = next_supernode.prompts.select(context)
+        prompt_response = prompt.generate(context)
+        logger.primary_info(f"Received {prompt_response} from prompt {prompt}.") 
+        state.cur_supernode = next_supernode.name
+                
+        return ResponseGeneratorResult(text=response + prompt_response,
                                        priority=ResponsePriority.STRONG_CONTINUE, 
                                        needs_prompt=False,
                                        state=state,
                                        cur_entity=None, 
-                                       answer_type=answer_type,
-                                       conditional_state=conditional_state
+                                       answer_type=AnswerType.QUESTION_SELFHANDLING,
                                       )
         
 
