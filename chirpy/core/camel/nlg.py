@@ -29,7 +29,7 @@ class NLGNode(ABC):
     def generate(self, context):
         pass
 
-def get_all_neural_responses(context, history, prefix=None):
+def get_neural_response_given_history(context, history, prefix=None):
     """
     Sends history to BlenderBot and returns response.
     
@@ -55,6 +55,12 @@ def get_all_neural_responses(context, history, prefix=None):
 
 
 def transform_questions_into_statements(responses, scores):
+    """
+    Filters through a series of related responses + scores.
+    - If the response contains 0 questions, keep it as is.
+    - If the response starts with a question, delete it.
+    - Otherwise, keep only the part before the first question.
+    """
     out = []
     for response, score in zip(responses, scores):
         if '?' in response:
@@ -104,7 +110,7 @@ def get_neural_response(context, prefix=None, allow_questions=False, conditions=
     """
     if conditions is None: conditions = []
     history = context.state_manager.current_state.history + [context.utterance]
-    responses, scores = get_all_neural_responses(context, history, prefix=prefix)
+    responses, scores = get_neural_response_given_history(context, history, prefix=prefix)
     if not allow_questions:
         responses, scores = transform_questions_into_statements(responses, scores)
         responses_scores = [(response, score) for response, score in zip(responses, scores) if '?' not in response]

@@ -62,7 +62,6 @@ class Handler():
         user_attributes = UserAttributes.deserialize(user_attributes)
         if last_state:
             last_state = State.deserialize(last_state)
-            logger.warning(f"Last state is {last_state.rg_state}")
             current_state.update_from_last_state(last_state)
         state_manager = StateManager(current_state, user_attributes, last_state)
 

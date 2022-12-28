@@ -1,6 +1,3 @@
-
-
-
 %import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB)
 %import .nlg ( nlg )
 %import .condition ( condition )

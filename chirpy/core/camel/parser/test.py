@@ -7,5 +7,3 @@ json_parser = Lark(grammar, start='document')
 with open('test1.camel', 'r') as f:
     text = f.read()
     print(json_parser.parse(text).pretty())
-
-

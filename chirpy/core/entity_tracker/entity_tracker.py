@@ -247,7 +247,7 @@ class EntityTrackerState(object):
                 return True
             return False
 
-        logger.warning(f"Last_state.response is {state_manager.last_state_response}")
+        logger.primary_info(f"Last_state.response is {state_manager.last_state_response}")
         last_response = state_manager.last_state_response
         last_answer_type = AnswerType.QUESTION_SELFHANDLING
 

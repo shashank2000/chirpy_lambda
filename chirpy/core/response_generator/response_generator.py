@@ -208,7 +208,7 @@ class ResponseGenerator:
         """
         if conditions is None: conditions = []
         history = self.get_conversation_history() + [self.utterance]
-        responses, scores = self.get_all_neural_responses(history, prefix=prefix)
+        responses, scores = self.get_neural_response_given_history(history, prefix=prefix)
         if not allow_questions:
             responses, scores = self.transform_questions_into_statements(responses, scores)
             responses_scores = [(response, score) for response, score in zip(responses, scores) if '?' not in response]
@@ -219,7 +219,7 @@ class ResponseGenerator:
         best_response = self.get_best_neural_response(responses, scores, history, conditions=conditions)
         return best_response
 
-    def get_all_neural_responses(self, history, prefix=None):
+    def get_neural_response_given_history(self, history, prefix=None):
         """
         Sends history to BlenderBot and returns response.
 
