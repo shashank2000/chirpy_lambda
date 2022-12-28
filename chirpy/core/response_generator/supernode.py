@@ -26,23 +26,7 @@ from concurrent import futures
 import inflect
 engine = inflect.engine()
 
-
 logger = logging.getLogger('chirpylogger')
-
-
-# 		for cases in self.nlg_yamls[supernode]['unconditional_prompt']:
-# 	requirements = cases['entry_conditions']
-# 	matches_entry_criteria = True
-# 	for key in requirements:
-# 		if flags[key] != requirements[key]:
-# 			matches_entry_criteria = False
-# 			break
-# 	if matches_entry_criteria:
-# 		return cases['case_name'], cases['prompt']
-# return None
-
-
-
 BASE_PATH = os.path.join(os.path.dirname(__file__), '../../symbolic_rgs')
 
 def lookup_value(value_name, contexts):
@@ -78,10 +62,10 @@ def evaluate_nlg_call(data, python_context, contexts):
 		assert isinstance(nlg_params, dict)
 		function_name = nlg_params['name']
 		# logger.warning(f"NLG helpers dir: {dir(python_context['supernode'].nlg_helpers)}")
-		assert hasattr(python_context['supernode'].nlg_helpers, function_name), f"Function name {function_name} not found"
+		assert hasattr(python_context['supernode'].nlg_helpers, function_name), f"Function name {function_name} not found. Possible functions: {[x for x in dir(python_context['supernode'].nlg_helpers) if not x.startswith('_')]}"
 		args = nlg_params.get('args', [])
 		args = [evaluate_nlg_call(arg, python_context, contexts) for arg in args]
-		args = [python_context['rg']] + args  # Add RG as first argument
+		# args = [python_context['rg']] + args  # Add RG as first argument
 		return getattr(python_context['supernode'].nlg_helpers, function_name)(*args)
 	elif type == 'inflect':
 		assert isinstance(nlg_params, dict)
@@ -141,9 +125,6 @@ def evaluate_nlg_calls(datas, python_context, contexts):
 	return spacingaware_join(output)
 	
 def evaluate_nlg_calls_or_constant(datas, python_context, contexts):
-	if isinstance(datas, dict):
-		assert len(datas) == 1, "should be a dict with key constant"
-		return datas['constant']
 	return evaluate_nlg_calls(datas, python_context, contexts)
 	
 CONDITION_STYLE_TO_BEHAVIOR = {

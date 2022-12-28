@@ -199,7 +199,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
                 state_update_dict[value_name] = value
                 
     def get_response(self, state) -> ResponseGeneratorResult:
-        logger.warning("Begin response for SymbolicResponseGenerator.")
+        logger.primary_info("Begin response for SymbolicResponseGenerator.")
         
         # Legacy response types
 
@@ -207,7 +207,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
 
         state, utterance, _ = self.get_state_utterance_response_types()
 
-        logger.warning(f"Turn history for supernodes: {state.turns_history}.")
+        logger.primary_info(f"Turn history for supernodes: {state.turns_history}.")
 
         # get initial python context, utilities, and contexts in order to determine the takeover supernode
         python_context, utilities, contexts = self.get_initial_contexts(state, utterance)
@@ -236,12 +236,12 @@ class SymbolicResponseGenerator(ResponseGenerator):
             if not supernode.can_continue(python_context, contexts):
                 cancelled_supernodes.add(supernode.name)
                 supernode = self.get_any_takeover_supernode(python_context, contexts, cancelled_supernodes)
-                logger.warning(f"Switching to supernode {supernode}")
+                logger.primary_info(f"Switching to supernode {supernode}")
                 continue
                 
             locals = supernode.evaluate_locals(python_context, contexts)
             contexts['locals'] = locals
-            logger.warning(f"Finished evaluating locals: {'; '.join((k + ': ' + str(v)) for (k, v) in locals.items())}")
+            logger.debug(f"Finished evaluating locals: {'; '.join((k + ': ' + str(v)) for (k, v) in locals.items())}")
             locals['cur_entity'] = self.get_current_entity()
             break
 
@@ -257,8 +257,8 @@ class SymbolicResponseGenerator(ResponseGenerator):
         # select subnode
         subnode = supernode.get_optimal_subnode(python_context, contexts)
         response = subnode.get_response(python_context, contexts)
-        logger.warning(f'Received {response} from subnode {subnode}.')
-        assert response is not None, "Received a None response."
+        logger.primary_info(f'Received {response} from subnode {subnode}.')
+        assert response is not None, f"Received a None response from subnode {subnode}."
 
         # Making response available to yaml supernode
         contexts['response_data'] = { 'response': response }
@@ -276,6 +276,7 @@ class SymbolicResponseGenerator(ResponseGenerator):
         
         # get next prompt
         next_supernode = self.get_next_supernode(python_context, contexts)
+        python_context = self.get_python_context(next_supernode, state)
         prompt = next_supernode.get_optimal_prompt(python_context, contexts) # TODO fix contexts
 
         print(f"OPTIMAL PROMPT: {prompt}")

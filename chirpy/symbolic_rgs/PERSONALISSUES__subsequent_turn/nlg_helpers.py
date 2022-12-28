@@ -9,5 +9,5 @@ logger = logging.getLogger('chirpylogger')
 add_template(response_templates.PartialSubsequentTurnResponseTemplate)
 
 @nlg_helper 
-def response_contains_question(rg, response):
+def response_contains_question(response):
     return '?' in response
