@@ -10,6 +10,8 @@
 - GlobalFlag__THATS
 - GlobalFlag__NOTHING
 - GlobalFlag__BACKCHANNEL
+- GlobalFlag__WHAT
+- GlobalFlag__WHY
 - GlobalFlag__Initiative__weather
 - GlobalFlag__Initiative__repeat
 - GlobalFlag__Initiative__request_name
@@ -24,3 +26,5 @@
 - PERSONALISSUE__is_continued_sharing
 - PERSONALISSUE__noncommittal
 - PERSONALISSUE__short_response
+- LAUNCH__NoDiscloseName
+- LAUNCH__ProposedName
