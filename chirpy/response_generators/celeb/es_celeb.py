@@ -46,7 +46,7 @@ def scrape_es():
 
 if __name__ == "__main__":
     es = get_elasticsearch()
-    ent = "Castle (TV series)"
+    ent = "Wrexham"
 
     query = {'query': {'bool': {"must": [{'terms': {'categories.keyword': ["20th-century American male actors"]}},
                                          {"range": {"pageview": {"gte": 100000}}}]}},

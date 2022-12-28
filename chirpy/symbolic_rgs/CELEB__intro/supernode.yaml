@@ -13,7 +13,9 @@ locals:
     - one of:
         - Wow, same!
         - Me too!
-    - I like
+    - one of:
+      - I like
+      - I love
     - val: utilities.cur_entity_name
     - a lot as well!
 
@@ -22,32 +24,60 @@ set_state:
     - val: utilities.cur_entity
   state.User__FavoriteCelebrityName:
     - val: utilities.cur_entity_name
+  state.User__FavoriteCelebrityWorkType:
+    - nlg_helper:
+        name: get_celeb_work_type
+        args:
+        - val: utilities.cur_entity_name
+  state.User__FavoriteCelebrityMovie:
+    - nlg_helper:
+        name: sample_celeb_movie
+        args:
+        - val: utilities.cur_entity_name
+  state.User__FavoriteCelebrityTV:
+    - nlg_helper:
+        name: sample_celeb_tv
+        args:
+        - val: utilities.cur_entity_name
+  state.User__FavoriteCelebritySong:
+    - nlg_helper:
+        name: sample_celeb_song
+        args:
+        - val: utilities.cur_entity_name
+  state.User__FavoriteCelebrityCharacter:
+    - nlg_helper:
+        name: sample_celeb_character
+        args:
+        - val: utilities.cur_entity_name
+  state.User__FavoriteCelebrityPronoun:
+    - nlg_helper:
+        name: get_celeb_pronoun
+        args:
+        - val: utilities.cur_entity_name
 
 subnodes:
-#  - node_name: make_celeb_movie_comment
-#    entry_state_conditions:
-#      - is_not_none: state.User__FavoriteCelebrityMovie
-#    response:
-#      - I particularly like
-#      - inflect:
-#          inflect_token: him
-#          inflect_entity: utilities.cur_entity
-#      - in
-#      - val: state.User__FavoriteCelebrityMovie
-#      - !
-#  - node_name: make_celeb_album_comment
-#    entry_state_conditions:
-#      - is_not_none: state.User__FavoriteCelebrityAlbum
-#    response:
-#      - one of:
-#          - I really love
-#          - I absolutely enjoy listening to
-#      - inflect:
-#          inflect_token: his
-#          inflect_entity: utilities.cur_entity
-#      - album,
-#      - val: state.User__FavoriteCelebrityAlbum
-#      - .
+  - node_name: make_celeb_movie_comment
+    entry_state_conditions:
+      - is_not_none: state.User__FavoriteCelebrityMovie
+    response:
+      - val: locals.intro_statement
+      - I particularly like
+      - him
+      - in
+      - val: state.User__FavoriteCelebrityMovie
+      - !
+  - node_name: make_celeb_song_comment
+    entry_state_conditions:
+      - is_not_none: state.User__FavoriteCelebritySong
+    response:
+      - val: locals.intro_statement
+      - one of:
+          - I really love
+          - I absolutely enjoy listening to
+      - his
+      - song,
+      - val: state.User__FavoriteCelebritySong
+      - .
   - node_name: neural_fallback
     response:
       - neural_generation:

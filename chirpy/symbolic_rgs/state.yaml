@@ -12,7 +12,12 @@ User__FavoriteSport: null
 User__FavoritePlace: null
 User__FavoriteCelebrity: null
 User__FavoriteCelebrityName: null
-User__FavoriteCelebrityType: null
+User__FavoriteCelebrityWorkType: null
+User__FavoriteCelebrityMovie: null
+User__FavoriteCelebrityTV: null
+User__FavoriteCelebritySong: null
+User__FavoriteCelebrityCharacter: null
+User__FavoriteCelebrityPronoun: null
 PERSONALISSUE__supernode_is_responding: False
 PERSONALISSUE__user_has_personal_issue: False
 PERSONALISSUE__need_confirmation_for_further_discussion: False
