@@ -1,3 +1,4 @@
+# User
 User__FavoriteFood: null
 User__FavoriteFoodAttribute: null
 User__FavoriteFoodFactoidOrigin: null
@@ -10,18 +11,18 @@ User__FavoriteFoodTalkable: null
 User__FavoriteFoodTexture: null
 User__FavoriteSport: null
 User__FavoritePlace: null
-PERSONALISSUE__supernode_is_responding: False
-PERSONALISSUE__user_has_personal_issue: False
-PERSONALISSUE__need_confirmation_for_further_discussion: False
-PERSONALISSUE__confirming_further_discussion: False
-PERSONALISSUE__responded_with_question: False
-<<<<<<< HEAD
-WIKI__Entity: null
-=======
-
 
 # Launch
 User__Name : null
 User__NameGivenUp : False
 LAUNCH__NumTimesAskedName : 0
->>>>>>> improved-intra-rg
+
+# Personal Issue
+PERSONALISSUE__supernode_is_responding: False
+PERSONALISSUE__user_has_personal_issue: False
+PERSONALISSUE__need_confirmation_for_further_discussion: False
+PERSONALISSUE__confirming_further_discussion: False
+PERSONALISSUE__responded_with_question: False
+
+# Wiki
+WIKI__Entity: null

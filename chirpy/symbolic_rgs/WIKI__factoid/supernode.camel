@@ -1,0 +1,31 @@
+<PROMPTS>
+Prompt what_to_talk_about [ ] {
+	"What topic do you want to learn more about?"
+}
+
+<LOCALS>
+Locals.factoid = @helper.get_factoid(@val(Utilities.cur_entity))
+
+<SET_STATE>
+State.WIKI__Entity = @val(Utilities.cur_entity)
+
+<SUBNODES>
+Subnode factoid [
+	not IS_NONE(Locals.factoid)
+] {
+	- @one_of(
+		{"Ah yes"},
+		{"Oh yeah"}
+	)
+	- "I love talking about"
+	- @val(Utilities.cur_talkable)
+	- .
+	- @val(Locals.factoid)
+}
+
+Subnode default [
+] {
+	- @neural_generation(prefix={
+		- "I don't know much about this, but I'm happy to learn more. Even though I'm a bot, I don't know everything yet."
+	})
+}
