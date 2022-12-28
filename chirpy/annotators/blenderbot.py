@@ -141,10 +141,11 @@ class BlenderBot(Annotator):
             if len(CACHE) > MAX_CACHE_SIZE:
                 CACHE.popitem(last=False)
 
-        if res is None or len(res)==0:
+        if res is None or len(res) == 0:
             default_response = self.get_default_response()
             logger.info(f'{type(self).__name__} using default response: {default_response}')
             return default_response["responses"], default_response['response_probabilities']
+            
         logger.primary_info(f'Received this from BlenderBot remote module: {res}')
         responses = [response.strip() for response in res['responses'] if response.strip()]  # list of strings
         responses = [add_sentence_end_token(response) for response in responses]  # add sentence end tokens if necessary

@@ -247,9 +247,9 @@ class EntityTrackerState(object):
                 return True
             return False
 
-
+        logger.primary_info(f"Last_state.response is {state_manager.last_state_response}")
         last_response = state_manager.last_state_response
-        last_answer_type = last_response.answer_type if last_response else None
+        last_answer_type = AnswerType.QUESTION_SELFHANDLING
 
         logger.primary_info(f"Last response is {last_response}; last answer type is {last_answer_type}; options are [{AnswerType.QUESTION_SELFHANDLING}, {AnswerType.QUESTION_HANDOFF}]")
 
