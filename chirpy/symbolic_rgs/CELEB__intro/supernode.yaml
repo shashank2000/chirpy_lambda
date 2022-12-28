@@ -16,7 +16,7 @@ locals:
     - one of:
       - I like
       - I love
-    - val: utilities.cur_entity_name
+    - val: utilities.cur_entity
     - a lot as well!
 
 set_state:
@@ -65,7 +65,7 @@ subnodes:
       - him
       - in
       - val: state.User__FavoriteCelebrityMovie
-      - !
+      - "!"
   - node_name: make_celeb_song_comment
     entry_state_conditions:
       - is_not_none: state.User__FavoriteCelebritySong

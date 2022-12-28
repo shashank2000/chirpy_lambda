@@ -134,8 +134,6 @@ def extract_entities(subject):
         e_sp = call_search(e)
         if e_sp is not None and "Award" not in e:
             all_cats = call_categories(e)
-            if e == "Hermione Granger":
-                print(all_cats)
             if decide_work(all_cats):
                 pv = call_pageview(e)
                 if pv > 1000:

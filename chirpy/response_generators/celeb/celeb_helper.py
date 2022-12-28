@@ -48,4 +48,4 @@ def sample_celeb_work(celeb, type_work):
     random_sel_work = random.choices(all_celeb_work, weights=all_probs, k=1)[0][0]
     if "(" in random_sel_work:
         random_sel_work = random_sel_work[:random_sel_work.index("(")]
-    return random_sel_work
+    return random_sel_work.strip()

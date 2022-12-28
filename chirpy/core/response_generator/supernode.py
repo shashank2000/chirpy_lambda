@@ -115,6 +115,7 @@ def evaluate_nlg_calls(datas, python_context, contexts):
 		return evaluate_nlg_call(datas, python_context, contexts)
 	if len(datas) == 1:
 		return evaluate_nlg_call(datas[0], python_context, contexts)
+	print(datas)
 	for elem in datas:
 		out = evaluate_nlg_call(elem, python_context, contexts)
 		if not isinstance(out, str):	
