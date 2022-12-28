@@ -62,7 +62,16 @@ class SupernodeMaker(Transformer):
 	
 	def nlg__ESCAPED_STRING(self, tok): return nlg.String(str(tok.value)[1:-1])
 	def nlg__PUNCTUATION(self, tok): return nlg.String(str(tok.value))
-	def nlg__val(self, tok): return nlg.Val(tok[0], tok[1:])
+	def nlg__val(self, tok): 
+		operations = []
+		if len(tok) > 1:
+			# tokens are [operator, pipe function, operator, pipe function, ...]
+			extra_args = tok[1:]
+			iterator = iter(extra_args)
+			# pairs extra_args into [(operator, pipe function), (operator, pipe function), ...]
+			operations = list(zip(iterator, iterator))
+			operations = [(op[0].value, op[1].value) for op in operations]
+		return nlg.Val(tok[0], operations)
 	def nlg__neural_generation(self, tok): return nlg.NeuralGeneration(tok[0])
 	def nlg__one_of(self, tok): 
 		return nlg.OneOf(tok)
