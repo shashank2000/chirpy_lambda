@@ -32,3 +32,21 @@ def sample_celeb_character(celeb: str):
 """
     Grammatical helpers to get the pronouns right
 """
+
+@nlg_helper
+def pronoun_possessive_adjs(pronoun: str):
+    if pronoun == "he":
+        return "his"
+    elif pronoun == "she":
+        return "her"
+    else:
+        return "their"
+
+@nlg_helper
+def pronoun_obj(pronoun: str):
+    if pronoun == "he":
+        return "him"
+    elif pronoun == "she":
+        return "her"
+    else:
+        return "them"
