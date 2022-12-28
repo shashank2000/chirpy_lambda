@@ -1,0 +1,74 @@
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__Name) and IS_FALSE(State.User__NameGivenUp)
+
+<PROMPTS>
+
+Prompt launch [ 
+	IS_EQUAL(Utilities.cur_turn_num, @constant(0))
+] {
+	"Hi, this is an Alexa Prize Socialbot. I'd love to get to know you a bit better before we chat! Is it all right if I ask for your name?"
+}
+
+<SET_STATE>
+
+State.User__Name = @val(Flags.LAUNCH__ProposedName)
+State.User__NameGivenUp = @val(Flags.LAUNCH__NoDiscloseName)
+
+<SUBNODES>
+
+Subnode what [
+	IS_TRUE(Flags.GlobalFlag__WHAT)
+] {
+	"OK! What's your name?"
+}
+
+Subnode why [
+	IS_TRUE(Flags.GlobalFlag__WHY)
+] {
+	- "Oh, I just want to get to know you!"
+	- "But if you'd prefer to stay anonymous,"
+	- "that's no problem."
+	- "So, do you mind telling me your name?"
+}
+
+Subnode greet_with_name [
+	NOT IS_NONE(State.User__Name)
+] {
+	- @one_of(
+		{"Well it's nice to meet you"},
+		{"It's nice to meet you"}
+	)
+	- @val(State.User__Name)
+	- "!"
+	- @one_of(
+		{"I'm excited to chat with you today"},
+		{"I'm looking forward to chatting with you today"},
+		{"I appreciate you taking the time to chat with me today"}
+	)
+	- .
+}
+
+Subnode greet_without_name [
+	IS_TRUE(State.User__NameGivenUp)
+] {
+	- @one_of(
+		{"Great"},
+		{"Glad"},
+		{"Nice"}
+	)
+	- "to meet you! Let's get started chatting!"
+}
+
+Subnode ask_name_again [
+	IS_NONE(State.User__Name)
+] {
+	- "Sorry, I didn't catch your name. Would you mind repeating it?"
+} <
+	State.LAUNCH__NumTimesAskedName = @val(State.LAUNCH__NumTimesAskedName | increment)
+>
+
+Subnode give_up [
+	IS_GREATER_THAN(State.LAUNCH__NumTimesAskedName, @constant(0))
+] {
+	- "Sorry, I didn't catch your name. Would you mind repeating it?"
+}

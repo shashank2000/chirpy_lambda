@@ -1,0 +1,33 @@
+%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, _PERIOD, _OP, _CP, _OB, _CB, _COMMA, _EQ, variable)
+%import common.ESCAPED_STRING
+
+PUNCTUATION: /[?.,;]/
+
+nlg : "{" ("-"? nlg)* "}"
+	| PUNCTUATION
+	| val
+	| neural_generation
+	| helper
+	| inflect
+	| inflect_engine
+	| one_of
+	| constant
+	| ESCAPED_STRING
+	| "\"" "\""
+	
+LIST : _OB _CB
+	 | _OB
+
+val : "@val" _OP variable ("|" PARAM_ARG_NAME)* _CP
+
+neural_generation : "@neural_generation" _OP "prefix" _EQ nlg _CP
+
+helper : "@helper" _PERIOD PARAM_ARG_NAME _OP (nlg (_COMMA nlg)*)? _CP
+
+inflect : "@inflect" _OP "inflect_token" _EQ nlg _COMMA "inflect_entity" _EQ variable _CP
+
+inflect_engine : "@inflect_engine" _OP "type" _EQ nlg _COMMA "str" _EQ nlg _CP
+
+one_of : "@one_of" _OP (nlg (_COMMA nlg)* _COMMA?)? _CP
+
+constant : "@constant" _OP STRING _CP
