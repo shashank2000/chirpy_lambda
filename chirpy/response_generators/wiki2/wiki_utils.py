@@ -270,13 +270,11 @@ def search_wiki_sections(doc_title: str, phrases: tuple, wiki_links:tuple) -> Li
 
 def get_text_for_entity(entity):
     results = es.search(index='enwiki-20201201-sections', body={
-    'query': {
-      'bool': {
-        'filter': [
-          {'term': {'doc_title': entity}}
-        ]
-      }
-    }
+        "query": {
+            "match": {
+                "doc_title": entity
+            }
+        }
     })
     sections = results['hits']['hits']
     # print(sections)

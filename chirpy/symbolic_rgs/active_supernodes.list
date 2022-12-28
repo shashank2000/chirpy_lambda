@@ -1,8 +1,10 @@
 # comments start with
 
-PERSONALISSUES__intro
-PERSONALISSUES__subsequent_turn
-FOOD__factoid
-FOOD__intro
+# PERSONALISSUES__intro
+# PERSONALISSUES__subsequent_turn
+# FOOD__factoid
+# FOOD__intro
+WIKI__discuss_article
+WIKI__factoid
 GLOBAL__openended
 GLOBALS

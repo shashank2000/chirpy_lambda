@@ -10,9 +10,13 @@ prompts:
 locals:
   factoid:
     - nlg_helper:
-        name: get_overview
+        name: get_factoid
         args:
-          - val: utilities.cur_talkable
+          - val: utilities.cur_entity
+
+set_state:
+  state.WIKI__Entity:
+    - val: utilities.cur_entity
 
 subnodes:
   - node_name: factoid
