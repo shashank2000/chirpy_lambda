@@ -100,14 +100,6 @@ class SymbolicResponseGenerator:
     def get_utilities(self, supernode):
         """Packages some useful data into one object."""
         
-    def get_background_flags(self, utterance):
-        """Collects all background flags from all supernodes."""
-        flags = {}
-        for supernode in self.get_supernodes():
-            bg_flags = supernode.get_background_flags(self, utterance)
-            flags.update(bg_flags)
-        return flags
-        
     def get_initial_turns_history(self):
         # This dictionary counts what turn number each supernode was last called
         # For each selected supernode, mark its last turn called as the current turn number
@@ -140,7 +132,9 @@ class SymbolicResponseGenerator:
         logger.warning("Begin response for SymbolicResponseGenerator.")
         state.utterance = utterance
         if not self.state_manager.is_first_turn():
-            supernode = self.get_takeover_or_current_supernode(Context.get_context(state, self.state_manager))
+            context = Context.get_context(state, self.state_manager)
+            context.update_with_background_flags(self.get_supernodes())
+            supernode = self.get_takeover_or_current_supernode(context)
             context = Context.get_context(state, self.state_manager, supernode)
             
             cancelled_supernodes = set()
