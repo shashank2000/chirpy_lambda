@@ -23,6 +23,7 @@ def get_utilities(state_manager, supernode):
 		"cur_entity": current_entity,
 		"cur_supernode": supernode.name if supernode else "",
 		"cur_turn_num": state_manager.current_state.turn_num,
+		"response_text" : "",
 	}
 
 

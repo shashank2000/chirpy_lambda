@@ -161,6 +161,7 @@ class SymbolicResponseGenerator:
             assert response is not None
 
             self.update_turns_history(state, supernode)
+            context.utilities.update('response_text', response)
 
             subnode.set_state.evaluate(context)
             supernode.set_state_after.evaluate(context)
