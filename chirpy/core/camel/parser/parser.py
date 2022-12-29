@@ -20,7 +20,7 @@ class SupernodeMaker(Transformer):
 	def condition__variable(self, tok): return self.variable(tok)
 	
 	def condition__bool(self, tok):
-		if str(tok[0]) == 'True':
+		if str(tok[0]).lower() == 'true':
 			return predicate.TruePredicate()
 		return predicate.FalsePredicate()
 	
