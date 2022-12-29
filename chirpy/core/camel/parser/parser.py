@@ -123,6 +123,9 @@ class SupernodeMaker(Transformer):
 		
 	def assignment(self, tok):
 		return assignment.Assignment(tok[0], tok[1])
+	
+	def condition_assignment(self, tok):
+		return assignment.Assignment(tok[0], tok[1], True)
 		
 	### PROMPT
 	def prompt_section(self, tok):
