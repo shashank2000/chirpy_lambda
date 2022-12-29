@@ -35,39 +35,39 @@ Locals.subsequent_turn_statement = {
     "That's tough and really unfortunate."
   )
   - @one_of(
-    - @one_of(
-      "How long have you been feeling this way?",
-      "Is there anything you've been doing to help cope with this?",
-      "Do you think the situation might improve soon?",
-      "Is there anyone who might be able to help you get through this?"
-    ),
-    - @one_of(
-      "I'm here to listen if you would like to tell me more.",
-      "I would be interested to hear more if you don't mind sharing.",
-      "Feel free to continue telling me more.",
-      "Please continue telling me more if you would like to.",
-      "I'm willing to hear more if you'd like to tell me about it.",
-      "I'd be willing to listen if you're willing to continue sharing."
-    )
+      @one_of(
+        "How long have you been feeling this way?",
+        "Is there anything you've been doing to help cope with this?",
+        "Do you think the situation might improve soon?",
+        "Is there anyone who might be able to help you get through this?"
+      ),
+      @one_of(
+        "I'm here to listen if you would like to tell me more.",
+        "I would be interested to hear more if you don't mind sharing.",
+        "Feel free to continue telling me more.",
+        "Please continue telling me more if you would like to.",
+        "I'm willing to hear more if you'd like to tell me about it.",
+        "I'd be willing to listen if you're willing to continue sharing."
+      )
   )
 }
 
 Locals.partial_subsequent_turn_statement = {
   - @one_of(
-    - @one_of(
-      "How long have you been feeling this way?",
-      "Is there anything you've been doing to help cope with this?",
-      "Do you think the situation might improve soon?",
-      "Is there anyone who might be able to help you get through this?"
-    ),
-    - @one_of(
-      "I'm here to listen if you would like to tell me more.",
-      "I would be interested to hear more if you don't mind sharing.",
-      "Feel free to continue telling me more.",
-      "Please continue telling me more if you would like to.",
-      "I'm willing to hear more if you'd like to tell me about it.",
-      "I'd be willing to listen if you're willing to continue sharing."
-    )
+      @one_of(
+        "How long have you been feeling this way?",
+        "Is there anything you've been doing to help cope with this?",
+        "Do you think the situation might improve soon?",
+        "Is there anyone who might be able to help you get through this?"
+      ),
+      @one_of(
+        "I'm here to listen if you would like to tell me more.",
+        "I would be interested to hear more if you don't mind sharing.",
+        "Feel free to continue telling me more.",
+        "Please continue telling me more if you would like to.",
+        "I'm willing to hear more if you'd like to tell me about it.",
+        "I'd be willing to listen if you're willing to continue sharing."
+      )
   )
 }
 
@@ -254,9 +254,9 @@ Subnode possible_continue [
       IS_TRUE(Flags.PERSONALISSUE__short_response)
     ) or
     (
-      IS_TRUE(state.PERSONALISSUE__user_has_personal_issue) and
-      IS_FALSE(state.PERSONALISSUE__need_confirmation_for_further_discussion) and
-      IS_FALSE(state.PERSONALISSUE__confirming_further_discussion)
+      IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and
+      IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and
+      IS_FALSE(State.PERSONALISSUE__confirming_further_discussion)
     )
   )
 ] {
@@ -282,16 +282,16 @@ Subnode possible_continue [
 Subnode possible_continue_accepted [
   (
     (
-      IS_TRUE(State.PERSONALISSUE__user_has_personal_issue)
-      IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion)
-      IS_FALSE(State.PERSONALISSUE__confirming_further_discussion)
-      IS_FALSE(State.PERSONALISSUE__responded_with_question)
+      IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and
+      IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and
+      IS_FALSE(State.PERSONALISSUE__confirming_further_discussion) and
+      IS_FALSE(State.PERSONALISSUE__responded_with_question) and
       IS_TRUE(Flags.GlobalFlag__YES)
     ) or
     (
-      IS_TRUE(State.PERSONALISSUE__user_has_personal_issue)
-      IS_TRUE(State.PERSONALISSUE__need_confirmation_for_further_discussion)
-      IS_FALSE(State.PERSONALISSUE__confirming_further_discussion)
+      IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and
+      IS_TRUE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and
+      IS_FALSE(State.PERSONALISSUE__confirming_further_discussion) and
       IS_TRUE(Flags.GlobalFlag__YES)
     )
   )

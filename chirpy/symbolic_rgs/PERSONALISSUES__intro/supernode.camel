@@ -7,20 +7,6 @@ Prompt personal_issue_intro [
 	- ""
 }
 
-<ENTRY_CONDITIONS_TAKEOVER>
-NOT IS_IN(Utilities.cur_supernode, [
-  "PERSONALISSUES__intro", 
-  "PERSONALISSUES__subsequent_turn", 
-  "OPINION__TODO_ADD_SUPERNODE",
-  "OPINION__TODO_ADD_SUPERNODE",
-  "WIKI__TODO_ADD_SUPERNODE", 
-  "ALIENS__TODO_ADD_SUPERNODE",
-  "CATEGORIES__TODO_ADD_SUPERNODE"
-]) and (
-  IS_GREATER_THAN(Supernodeturns.PERSONALISSUES__intro), @val(Utilities.cur_turn_num + 14) or
-  IS_EQUAL(Supernodeturns.PERSONALISSUES__intro, @constant(0))
-) and IS_TRUE(Flags.PERSONALISSUE__personal_sharing_negative)
-
 <LOCALS>
 Locals.intro_statement = {
   - "Thank you for sharing that with me."
@@ -39,8 +25,22 @@ Locals.intro_statement = {
   )
 }
 
+<ENTRY_CONDITIONS_TAKEOVER>
+NOT IS_IN(Utilities.cur_supernode, [
+  "PERSONALISSUES__intro", 
+  "PERSONALISSUES__subsequent_turn", 
+  "OPINION__TODO_ADD_SUPERNODE",
+  "OPINION__TODO_ADD_SUPERNODE",
+  "WIKI__TODO_ADD_SUPERNODE", 
+  "ALIENS__TODO_ADD_SUPERNODE",
+  "CATEGORIES__TODO_ADD_SUPERNODE"
+]) and (
+  IS_GREATER_THAN(Supernodeturns.PERSONALISSUES__intro, @val(Utilities.cur_turn_num + 14)) or
+  IS_EQUAL(Supernodeturns.PERSONALISSUES__intro, @constant(0))
+) and IS_TRUE(Flags.PERSONALISSUE__personal_sharing_negative)
+
 <SUBNODES>
-Subnode prompt_name_1 [
+Subnode respond_to_personal_issue [
 ] {
 	- @val(Locals.intro_statement)
 }
