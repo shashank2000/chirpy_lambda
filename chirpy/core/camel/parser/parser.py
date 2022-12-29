@@ -143,7 +143,7 @@ class SupernodeMaker(Transformer):
 		
 	### ENTRY CONDITIONS TAKEOVER
 	def entry_conditions_takeover_section(self, tok):
-		return "entry_conditions_takeover", tok
+		return "entry_conditions_takeover", tok[0]
 		
 	### SET STATE
 	def set_state_section(self, tok):
