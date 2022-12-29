@@ -128,7 +128,7 @@ class NeuralGeneration(NLGNode):
         return get_neural_response(context, prefix=self.prefix.generate(context))
 
 @dataclass
-class Val:
+class Val(NLGNode):
     variable : Variable
     operations : List[Tuple[str, str]]
     def generate(self, context):
