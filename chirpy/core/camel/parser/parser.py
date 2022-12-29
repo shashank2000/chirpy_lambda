@@ -28,7 +28,7 @@ class SupernodeMaker(Transformer):
 		if str(tok[0]) == 'IS_EQUAL':
 			return predicate.VariableIsPredicate(variable=tok[1], val=tok[2])
 		elif str(tok[0]) == 'IS_IN': 
-			return predicate.VariableInPredicate(variable=tok[1], vals=tok[2])
+			return predicate.VariableInPredicate(variable=tok[1], vals=tok[2:])
 		elif str(tok[0]) == 'IS_GREATER_THAN': 
 			return predicate.VariableGTPredicate(variable=tok[1], val=tok[2])
 		elif str(tok[0]) == 'IS_LESS_THAN': 

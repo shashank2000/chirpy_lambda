@@ -13,7 +13,7 @@
 
 predicate: PREDICATE _OP variable _CP
 		 | PREDICATE_TWO _OP variable _COMMA nlg _CP
-		 | PREDICATE_LIST _OP variable _COMMA _OB nlg (_COMMA nlg)* (_COMMA)? _OB _CP
+		 | PREDICATE_LIST _OP variable _COMMA _OB nlg (_COMMA nlg)* (_COMMA)? _CB _CP
 		 
 bool: BOOL
 
