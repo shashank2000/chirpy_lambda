@@ -80,6 +80,10 @@ class Context:
 			logger.primary_info(f"Non-null flags for supernode {supernode} are: {[x for x in flags if bool(flags[x])]}")
 		return self
 		
+	@property
+	def supernodeturns(self):
+		return self.state.turns_history
+
 	def set(self, variable, value):
 		namespace = getattr(self, variable.namespace.lower())
 		namespace[variable.name] = value

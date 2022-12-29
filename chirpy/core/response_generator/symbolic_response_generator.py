@@ -111,7 +111,7 @@ class SymbolicResponseGenerator:
     def get_initial_turns_history(self):
         # This dictionary counts what turn number each supernode was last called
         # For each selected supernode, mark its last turn called as the current turn number
-        return {supernode.name: -1 for supernode in self.get_supernodes()}
+        return {supernode.name: 0 for supernode in self.get_supernodes()}
 
     def update_turns_history(self, state, supernode):
         assert supernode.name in state.turns_history
