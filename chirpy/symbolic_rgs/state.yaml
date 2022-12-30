@@ -17,6 +17,10 @@ PERSONALISSUE__confirming_further_discussion: False
 PERSONALISSUE__responded_with_question: False
 PERSONALISSUE__LastTurnUsedNeuralGeneration: False
 
+# Movies
+User__LikeMovie: null
+User__FavoriteMovie: null
+
 
 # Launch
 User__Name : null
