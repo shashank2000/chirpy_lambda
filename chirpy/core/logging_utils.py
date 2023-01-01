@@ -43,6 +43,20 @@ PROD_LOGGER_SETTINGS = LoggerSettings(logtoscreen_level=PRIMARY_INFO_NUM,
                                       allow_rich_formatting=True,
                                       filter_by_rg=None,
                                       disable_annotation=False)
+                                      
+def get_bluejay_logger_settings(code):  
+    return LoggerSettings(
+        logtoscreen_level=100,
+        logtoscreen_usecolor=False,
+        logtofile_level=10,
+        logtofile_path=f'/tmp/output_{code}.log',
+        logtoscreen_allow_multiline=True,
+        integ_test=False,
+        remove_root_handlers=True,
+        allow_rich_formatting=False,
+        filter_by_rg=None,
+        disable_annotation=False
+    )
 
 
 def setup_logger(logger_settings, session_id=None):
@@ -94,8 +108,8 @@ def setup_logger(logger_settings, session_id=None):
         chirpy_logger.setLevel(logging.DEBUG)
 
     # Create the stream handler and attach it to the root logger
-    print("allow_multiline = ", logger_settings.logtoscreen_allow_multiline )
-    print("rich formatting = ", logger_settings.allow_rich_formatting)
+    #print("allow_multiline = ", logger_settings.logtoscreen_allow_multiline )
+    #print("rich formatting = ", logger_settings.allow_rich_formatting)
     if logger_settings.logtoscreen_allow_multiline and logger_settings.allow_rich_formatting:
         root_logger.addHandler(ChirpyHandler(log_time_format="[%H:%M:%S.%f]",
                                              level=logger_settings.logtoscreen_level,

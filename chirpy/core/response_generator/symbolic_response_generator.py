@@ -144,7 +144,6 @@ class SymbolicResponseGenerator:
                 logger.primary_info(f"Switching to supernode {supernode}")
                 supernode = self.get_any_takeover_supernode(context, cancelled_supernodes)
                 context = Context.get_context(state, self.state_manager, supernode)
-                print(supernode.continue_conditions)
                 
             context.compute_locals()
             supernode.set_state.evaluate(context)
