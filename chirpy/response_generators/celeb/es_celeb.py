@@ -2,6 +2,7 @@ import json
 import pickle
 
 from chirpy.core.util import query_es_index, get_elasticsearch
+import tqdm
 
 MAX_ES_SEARCH_SIZE = 500
 
@@ -80,7 +81,7 @@ if __name__ == "__main__":
     filtered_celeb = {}
     all_celeb_info = json.load(open("all_celeb_info.json"))
 
-    for c in all_celeb_info:
+    for c in tqdm.tqdm(all_celeb_info):
         for k in all_celeb_info[c]:
             filtered_celeb.update({c: {k: []}})
             for e in all_celeb_info[c][k]:

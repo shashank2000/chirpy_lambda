@@ -40,8 +40,6 @@ Prompt fav_celeb_song_1 [IS_TRUE(Flags.CELEB__discuss_song)] {
     - "that you absolutely love?"
 }
 
-<CONTINUE_CONDITIONS>
-IS_TRUE(@helper)
 
 <SET_STATE>
 State.User__FavoriteCelebrityCurrWork = @val(Utilities.cur_entity | name)
@@ -51,4 +49,22 @@ Subnode assess_movie [
     not IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_movie)
 ] {
     - "I have heard of that one!"
+}
+
+Subnode unknown_movie [
+    IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_movie)
+] {
+    - "Oh, interesting, I am not familiar with that movie! Can you tell me more about it?"
+}
+
+Subnode unknown_movie [
+    IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_tv)
+] {
+    - "I think I have heard of that show but I'm not very familiar! Can you tell me more about it?"
+}
+
+Subnode unknown_song [
+    IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_song)
+] {
+    - "Sorry, I don't think I have listened to that song. Can you tell me more about this song?"
 }
