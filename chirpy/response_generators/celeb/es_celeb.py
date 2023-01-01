@@ -1,3 +1,4 @@
+import json
 import pickle
 
 from chirpy.core.util import query_es_index, get_elasticsearch
@@ -44,8 +45,20 @@ def scrape_es():
     print(len(all_celebs))
     return all_celebs
 
-if __name__ == "__main__":
-    es = get_elasticsearch()
+
+def filter_entities(ent):
+    query_term = {'query': {'bool': {'should': [
+        {'terms': {'doc_title.keyword': [ent]}}]}},
+        'sort': {'pageview': 'desc'}}
+    results = query_es_index(es, ARTICLES_INDEX_NAME, query_term, size=MAX_ES_SEARCH_SIZE,
+                             timeout=ANCHORTEXT_QUERY_TIMEOUT,
+                             filter_path=['hits.hits._source.{}'.format(field) for field in FIELDS_FILTER])
+    if len(results):
+        return True
+    return False
+
+
+def run_test_es():
     ent = "Wrexham"
 
     query = {'query': {'bool': {"must": [{'terms': {'categories.keyword': ["20th-century American male actors"]}},
@@ -61,5 +74,20 @@ if __name__ == "__main__":
         print(r['_source'].keys())
     print(results)
 
-    # all_celebs = scrape_es()
-    # pickle.dump(all_celebs, open("scraped_celebs.p", "wb+"))
+
+if __name__ == "__main__":
+    es = get_elasticsearch()
+    filtered_celeb = {}
+    all_celeb_info = json.load(open("all_celeb_info.json"))
+
+    for c in all_celeb_info:
+        for k in all_celeb_info[c]:
+            filtered_celeb.update({c: {k: []}})
+            for e in all_celeb_info[c][k]:
+                if filter_entities(e[0]):
+                    filtered_celeb[c][k].append(e)
+
+    json.dump(filtered_celeb, open("filtered_celeb.json", "w+"))
+
+
+

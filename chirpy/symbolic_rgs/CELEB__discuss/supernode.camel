@@ -1,0 +1,54 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.User__FavoriteCelebrity) and not IS_EQUAL(State.User__FavoriteCelebrityWorkType, "other")
+
+<PROMPTS>
+Prompt fav_celeb_movie [IS_TRUE(Flags.CELEB__discuss_movie)] {
+    - @one_of(
+        {
+        - "How about you? Which movies with"
+        - @val(State.User__FavoriteCelebrityName)
+        - "do you like?"
+        },
+        {
+        - "Is there a movie with"
+        - @val(State.User__FavoriteCelebrityName)
+        - "that you like?"
+        }
+    )
+}
+
+
+Prompt fav_celeb_tv [IS_TRUE(Flags.CELEB__discuss_tv)] {
+    - @one_of(
+        {
+        - "Do you like any of"
+        - @helper.pronoun_possessive_adjs(@val(State.User__FavoriteCelebrityPronoun))
+        - "TV shows?"
+        },
+        {
+        - "What about you? Is there a TV show with"
+        - @val(State.User__FavoriteCelebrity
+        - "that you enjoy?"
+        }
+    )
+
+}
+
+Prompt fav_celeb_song_1 [IS_TRUE(Flags.CELEB__discuss_song)] {
+    - "How about you? Is there a song by"
+    - @val(State.User__FavoriteCelebrityName)
+    - "that you absolutely love?"
+}
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(@helper)
+
+<SET_STATE>
+State.User__FavoriteCelebrityCurrWork = @val(Utilities.cur_entity | name)
+
+<SUBNODES>
+Subnode assess_movie [
+    not IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_movie)
+] {
+    - "I have heard of that one!"
+}

@@ -7,7 +7,7 @@ from os.path import abspath, dirname
 logger = logging.getLogger('chirpylogger')
 
 # CELEBS = ["taylor swift", "ryan reynolds", "nathan fillion", "matthew mcconaughey"]
-CELEBS = json.load(open(os.path.join(abspath(dirname(__file__)), 'all_celeb_info.json')))
+CELEBS = json.load(open(os.path.join(abspath(dirname(__file__)), 'all_celeb_info_test.json')))
 
 
 def is_known_celeb(entity_name):

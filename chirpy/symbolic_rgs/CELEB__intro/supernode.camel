@@ -40,12 +40,14 @@ Subnode make_celeb_movie_comment [
     not IS_NONE(State.User__FavoriteCelebrityMovie) and IS_EQUAL(State.User__FavoriteCelebrityWorkType, "movie")
 ] {
     - @val(Locals.intro_statement)
-    - "I particularly like"
+    - "I particularly liked"
     - @helper.pronoun_obj(@val(State.User__FavoriteCelebrityPronoun))
     - "in"
     - @val(State.User__FavoriteCelebrityMovie)
     - "!"
-}
+} <
+    Flags.CELEB__discuss_movie = {@constant(True)}
+>
 
 Subnode make_celeb_song_comment [
     not IS_NONE(State.User__FavoriteCelebritySong) and IS_EQUAL(State.User__FavoriteCelebrityWorkType, "song")
@@ -57,17 +59,21 @@ Subnode make_celeb_song_comment [
     )
     - @val(State.User__FavoriteCelebritySong)
     - "."
-}
+} <
+    Flags.CELEB__discuss_song = {@constant(True)}
+>
 
 Subnode make_celeb_tv_comment [
-    not IS_NONE(State.User__FavoriteCelebrityTV)
+    not IS_NONE(State.User__FavoriteCelebrityTV) and IS_EQUAL(State.User__FavoriteCelebrityWorkType, "TV show")
 ] {
     - @val(Locals.intro_statement)
     - "I binged"
     - @helper.pronoun_possessive_adjs(@val(State.User__FavoriteCelebrityPronoun))
     - @val(State.User__FavoriteCelebrityTV)
     - "in one sitting!"
-}
+} <
+    Flags.CELEB__discuss_tv = {@constant(True)}
+>
 
 Subnode make_celeb_character_comment [
     not IS_NONE(State.User__FavoriteCelebrityCharacter)

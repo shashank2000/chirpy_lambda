@@ -158,13 +158,13 @@ def extract_entities(subject):
 
 
 if __name__ == "__main__":
-    # all_celebs = pickle.load(open("scraped_celebs.p", "rb"))
-    all_celebs = ["Tom Cruise", "Nathan Fillion", "Ariana Grande", "Emma Watson"]
+    all_celebs = pickle.load(open("scraped_celebs.p", "rb"))
+    # all_celebs = ["Tom Cruise", "Nathan Fillion", "Ariana Grande", "Emma Watson"]
     master_celeb = {}
     for c in all_celebs:
         master_celeb.update({
             c.lower(): extract_entities(c)
         })
     print(master_celeb)
-    json.dump(master_celeb, open("all_celeb_info.json", "w+"))
+    json.dump(master_celeb, open("all_celeb_info_test.json", "w+"))
 
