@@ -141,7 +141,7 @@ class SymbolicResponseGenerator:
             
             while not supernode.continue_conditions.evaluate(context):
                 cancelled_supernodes.add(supernode.name)
-                logger.primary_info(f"Switching to supernode {supernode}")
+                logger.primary_info(f"FOOD_Intro can't start, switching to supernode {supernode}")
                 supernode = self.get_any_takeover_supernode(context, cancelled_supernodes)
                 context = Context.get_context(state, self.state_manager, supernode)
                 print(supernode.continue_conditions)
