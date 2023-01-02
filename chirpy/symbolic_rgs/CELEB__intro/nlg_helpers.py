@@ -50,3 +50,8 @@ def pronoun_obj(pronoun: str):
         return "her"
     else:
         return "them"
+
+
+@nlg_helper
+def decide_type(work_type, type_name):
+    return work_type == type_name
