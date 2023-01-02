@@ -1,4 +1,5 @@
 import json
+import logging
 import pickle
 
 from chirpy.core.util import query_es_index, get_elasticsearch
@@ -15,6 +16,8 @@ ARTICLES_INDEX_NAME = 'enwiki-20201201-articles'
 FIELDS_FILTER = ['doc_title', 'doc_id', 'categories', 'pageview', 'linkable_span_info', 'wikidata_categories_all',
                  'redirects', 'plural']
 
+
+logger = logging.getLogger('chirpylogger')
 
 def gen_list_of_terms():
     times = ['20th', '21st']

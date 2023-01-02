@@ -27,7 +27,7 @@ Prompt fav_celeb_tv [IS_TRUE(Flags.CELEB__discuss_tv)] {
         },
         {
         - "What about you? Is there a TV show with"
-        - @val(State.User__FavoriteCelebrity
+        - @val(State.User__FavoriteCelebrity)
         - "that you enjoy?"
         }
     )
@@ -43,28 +43,35 @@ Prompt fav_celeb_song_1 [IS_TRUE(Flags.CELEB__discuss_song)] {
 
 <SET_STATE>
 State.User__FavoriteCelebrityCurrWork = @val(Utilities.cur_entity | name)
+Flags.CELEB__known_work = @helper.is_known_work(@val(Utilities.cur_entity | name))
 
 <SUBNODES>
-Subnode assess_movie [
-    not IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_movie)
+Subnode assess_work [
+    IS_TRUE(Flags.CELEB__known_work)
 ] {
-    - "I have heard of that one!"
+    - @one_of(
+        {"I have heard of that one!"},
+        {"Oh, I remember that!"}
+    )
+    - @helper.find_opinion(@val(State.User__FavoriteCelebrityCurrWork), @val(State.User__FavoriteCelebrityName))
 }
 
 Subnode unknown_movie [
-    IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_movie)
+    not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(Flags.CELEB__discuss_movie)
 ] {
     - "Oh, interesting, I am not familiar with that movie! Can you tell me more about it?"
-}
+} <
+    Flags.CELEB__discuss_movie = {@constant(False)}
+>
 
 Subnode unknown_movie [
-    IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_tv)
+    not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(Flags.CELEB__discuss_tv)
 ] {
     - "I think I have heard of that show but I'm not very familiar! Can you tell me more about it?"
 }
 
 Subnode unknown_song [
-    IS_NONE(State.User__FavoriteCelebrityCurrWork) and IS_TRUE(Flags.CELEB__discuss_song)
+    not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(Flags.CELEB__discuss_song)
 ] {
     - "Sorry, I don't think I have listened to that song. Can you tell me more about this song?"
 }

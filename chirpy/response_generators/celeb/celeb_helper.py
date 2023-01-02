@@ -8,12 +8,25 @@ logger = logging.getLogger('chirpylogger')
 
 # CELEBS = ["taylor swift", "ryan reynolds", "nathan fillion", "matthew mcconaughey"]
 CELEBS = json.load(open(os.path.join(abspath(dirname(__file__)), 'all_celeb_info_test.json')))
+OPINIONS = json.load(open(os.path.join(abspath(dirname(__file__)), 'all_opinions_test.json')))
 
 
 def is_known_celeb(entity_name):
     logger.primary_info(entity_name.lower() in CELEBS)
     logger.primary_info(entity_name)
     return entity_name.lower() in CELEBS
+
+
+def is_known_film_tv_song(entity_name):
+    print(entity_name)
+    return entity_name in OPINIONS
+
+
+def find_celeb_opinion(work_name, celeb_name):
+    work_opinions = OPINIONS[work_name]
+    if celeb_name in work_opinions:
+        return work_opinions[celeb_name]
+    return work_opinions["General"]
 
 
 def find_celeb_pronoun(entity_name):
