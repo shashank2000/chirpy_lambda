@@ -33,24 +33,78 @@ Prompt why [ ] {
 >
 
 <LOCALS>
+Locals.commiseration_acknowledgement = {
+	- @one_of(
+		"Yeah, that is rather disheartening.",
+    "That does sound very unfortunate.",
+    "Mm, it is a real shame.",
+    "Yes, it is a bit disappointing."
+	)
+}
+Locals.opinion = {
+	- "Personally, I feel like TODO"
+}
 
 <SET_STATE>
 
 <SUBNODES>
-Subnode when_response [
-	IS_TRUE(State.WIKI__AskedWhenInterested)
+Subnode dont_know [
+	IS_TRUE(Flags.GlobalFlag__DONT_KNOW)
 ] {
-	- "I also learned about it then."
+	- @one_of(
+		"That's alright.",
+		"Sure, no worries."
+	)
+	- @val(Locals.opinion)
 }
 
-Subnode what_response [
-	IS_TRUE(State.WIKI__AskedWhatInterested)
+Subnode no [
+	IS_TRUE(Flags.GlobalFlag__NO)
 ] {
-	- "Me too! I also learned about it because of that."
+	- @one_of(
+		"Okay, no worries.",
+		"Sure that's fine."
+	)
+	- @val(Locals.opinion)
 }
 
-Subnode why_response [
-	IS_TRUE(State.WIKI__AskedWhyInterested)
+Subnode positive_opinion [
+	IS_TRUE(Flags.WIKI__POS_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
 ] {
-	- "Same reason for me too!"
+	- @one_of(
+		"Yeah, that's cool!",
+    "Yeah, I understand what you mean.",
+    "I know, right?"
+	)
+	- @val(Locals.opinion)
+}
+
+Subnode negative_opinion [
+	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
+] {
+	- "That's an interesting take,"
+	- @val(Locals.commiseration_acknowledgement)
+	- @val(Locals.opinion)
+}
+
+Subnode negative_no_opinion [
+	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_FALSE(Flags.WIKI__OPINION)
+] {
+	- @val(Locals.commiseration_acknowledgement)
+	- @val(Locals.opinion)
+}
+
+Subnode neutral_opinion [
+	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
+] {
+	- @one_of(
+		"I see, thanks for sharing that!",
+    "That was interesting, thanks for sharing that!"
+	)
+	- @val(Locals.opinion)
+}
+
+Subnode default [ ] {
+	- @neural_generation(prefix="")
+	- @val(Locals.opinion)
 }
