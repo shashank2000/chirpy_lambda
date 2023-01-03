@@ -19,9 +19,7 @@
 - GlobalFlag__LastBotTurnWasOpenEnded
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
-<<<<<<< HEAD
 - PLACES__user_mentioned_place
-=======
 - PERSONALISSUE__personal_sharing_negative
 - PERSONALISSUE__gratitude
 - PERSONALISSUE__is_continued_sharing
@@ -29,4 +27,3 @@
 - PERSONALISSUE__short_response
 - LAUNCH__NoDiscloseName
 - LAUNCH__ProposedName
->>>>>>> improved-intra-rg
