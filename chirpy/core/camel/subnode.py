@@ -5,6 +5,7 @@ from chirpy.core.camel.assignment import AssignmentList
 from chirpy.core.camel.predicate import Predicate
 from chirpy.core.camel.nlg import NLGNode
 
+import random
 import logging
 logger = logging.getLogger('chirpylogger')
 
@@ -35,5 +36,6 @@ class SubnodeList:
 		]
 		logger.primary_info(f"Possible subnodes are: {possible_subnodes}")
 		assert len(possible_subnodes), "No subnode found!"
-		# for now, just return the first possible subnode
-		return possible_subnodes[0]
+
+		# return a possible subnode
+		return random.choice(possible_subnodes)

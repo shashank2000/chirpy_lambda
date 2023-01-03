@@ -144,7 +144,6 @@ class SymbolicResponseGenerator:
                 logger.primary_info(f"Switching to supernode {supernode}")
                 supernode = self.get_any_takeover_supernode(context, cancelled_supernodes)
                 context = Context.get_context(state, self.state_manager, supernode)
-                print(supernode.continue_conditions)
                 
             context.compute_locals()
             supernode.set_state.evaluate(context)
@@ -167,6 +166,7 @@ class SymbolicResponseGenerator:
         context = Context.get_context(state, self.state_manager, next_supernode)
         prompt = next_supernode.prompts.select(context)
         prompt_response = prompt.generate(context)
+        prompt.assignments.evaluate(context)
         logger.primary_info(f"Received {prompt_response} from prompt {prompt}.") 
         state.cur_supernode = next_supernode.name
                 
