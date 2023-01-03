@@ -11,8 +11,6 @@ User__FavoriteFoodTexture: null
 User__FavoriteSport: null
 User__FavoritePlace: null
 User__FavoritePlaceTalkable: null
-User__FavoritePlaceIsFamousBuilding: false
-User__FavoritePlaceIsCityCountry: false
 User__FavoritePlacePopulation: null
+User__FavoritePlacePopulationPercentOfCountry: null
 User__FavoritePlaceLanguagesSpoken: null
-User__FavoritePlaceYearBuilt: null
