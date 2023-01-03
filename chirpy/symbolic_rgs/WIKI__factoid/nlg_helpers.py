@@ -1,6 +1,6 @@
 from chirpy.core.entity_linker.entity_linker import WikiEntity
 from chirpy.core.response_generator import nlg_helper, ResponseType
-from chirpy.core.response_generator.symbolic_response_generator import SymbolicResponseGenerator
+from chirpy.core.state_manager import StateManager
 
 from chirpy.response_generators.wiki2 import wiki_utils, wiki_response_generator, wiki_infiller, blacklists
 from chirpy.response_generators.wiki2.response_templates import response_components
@@ -12,6 +12,7 @@ from concurrent import futures
 from typing import Optional, Tuple
 import logging
 import threading
+import random
 import math
 import os
 
@@ -44,57 +45,12 @@ def get_overview(rg, entity):
 
 
 
-def get_recommended_entity(rg: SymbolicResponseGenerator, state=None, initiated_this_turn=True):
-    if state is not None:
-        pass
-    else:
-        state = rg.state
-    entity = rg.get_current_entity(initiated_this_turn)
-
-    if initiated_this_turn and not entity and rg.get_last_active_rg() == 'TRANSITION':
-        entity = rg.get_current_entity()
-
-    # import pdb; pdb.set_trace()
-    if entity:
-        if entity.is_category:
-            logger.primary_info(f"Recommended entity {entity} is a category, not using it for WIKI")
-        elif entity.name in blacklists.ENTITY_BLACK_LIST or wiki_utils.remove_parens(entity.name) in blacklists.ENTITY_BLACK_LIST:
-            logger.primary_info(f"Recommended entity {entity} is blacklisted for WIKI")
-        elif entity.name in state.entity_state and state.entity_state[entity.name].finished_talking:
-            logger.primary_info(f"Wiki has finished talking about recommended entity {entity}")
-        else:
-            logger.primary_info(f"Recommending entity {entity}: {entity.name}.")
-            return entity
-    logger.primary_info("Wiki didn't find an entity; returning.")
-    return None
-
-def get_wiki_sentences(rg: SymbolicResponseGenerator, cur_entity):
+def get_wiki_sentences(cur_entity: WikiEntity, state_manager: StateManager, first_turn: bool):
     sections = wiki_utils.get_text_for_entity(cur_entity.name)
-    sentences = wiki_utils.get_sentences_from_sections_tfidf(sections, rg.state_manager,
-                                                                first_turn=rg.active_last_turn())
+    sentences = wiki_utils.get_sentences_from_sections_tfidf(sections, state_manager, first_turn=first_turn)
     return sentences
 
-def get_infilling_ack_components(rg: SymbolicResponseGenerator, top_da):
-    """
-
-    :param top_da: top dialog act
-    :return:
-    """
-    state, utterance, response_types = rg.get_state_utterance_response_types()
-    infilling_ack_context = None
-    infilling_ack_prompts = None
-
-    if top_da in ['statement', 'opinion', 'comment']:
-        # agree with user
-        infilling_ack_context = utterance
-        infilling_ack_prompts = response_components.STATEMENT_ACKNOWLEDGEMENT_TEMPLATES
-    elif ResponseType.POS_SENTIMENT in response_types or ResponseType.APPRECIATIVE in response_types:
-        infilling_ack_context = rg.get_conversation_history()[-1]
-        infilling_ack_prompts = response_components.APPRECIATION_ACKNOWLEDGEMENT_TEMPLATES
-    return infilling_ack_context, infilling_ack_prompts
-
-def execute_infiller(rg: SymbolicResponseGenerator, input_data):
-    infiller_cache = rg.get_cache('infiller')
+def execute_infiller(input_data, infiller_cache):
     if infiller_cache is not None:
         # assert not include_acknowledgements, "Infiller cache should only be set while prompting"
         logger.primary_info(f"Using the infiller cache.")
@@ -117,7 +73,7 @@ def execute_infiller(rg: SymbolicResponseGenerator, input_data):
         )
     return infiller_results
 
-def select_best_response(self, utterance, responses, contexts, prompts, acknowledgements=None) -> Tuple[str, str]:
+def select_best_response(state_manager: StateManager, utterance, responses, contexts, prompts, acknowledgements=None) -> Tuple[str, str]:
     """
 
     :param utterance:
@@ -127,7 +83,7 @@ def select_best_response(self, utterance, responses, contexts, prompts, acknowle
     :param acknowledgements: an optional list of acknowledgements to rank
     :return: Returns top_res, top_ack (optional)
     """
-    ranker = ResponseRanker(self.state_manager)
+    ranker = ResponseRanker(state_manager)
     top_ack = None
     if acknowledgements:
         scores = wiki_infiller.get_scores(ranker, utterance, acknowledgements + responses)
@@ -167,7 +123,9 @@ def select_best_response(self, utterance, responses, contexts, prompts, acknowle
 
     return top_res, top_ack
 
-def get_infilling_statement(rg: SymbolicResponseGenerator, entity: Optional[WikiEntity] = None, neural_ack=False, infill_ack=False) -> Tuple[Optional[str], Optional[str]]:
+USE_INFILLER = False
+
+def get_infilling_statement(entity: WikiEntity, state_manager: StateManager, first_turn: bool) -> Tuple[Optional[str], Optional[str]]:
     """
     Get an infilled statement, optionally with acknowledgement infilled as well.
 
@@ -175,129 +133,104 @@ def get_infilling_statement(rg: SymbolicResponseGenerator, entity: Optional[Wiki
     :return: (top response, top acknowledgement)
     """
 
-    print(1)
-
-    state, utterance, response_types = rg.get_state_utterance_response_types()
+    # state, utterance, response_types = rg.get_state_utterance_response_types()
     cur_entity = entity
 
     ## STEP 1: Get Wiki sections and the sentences from those sections
-    sentences = get_wiki_sentences(rg, cur_entity)
-    print(1.5, sentences)
+    sentences = get_wiki_sentences(cur_entity, state_manager, first_turn)
     logger.primary_info(f"Wiki sentences are: {sentences}")
-    if len(sentences) < 4:
-        logger.primary_info("Infiller does not have enough sentences to work with")
-        return None, None
 
-    print(2)
+    if USE_INFILLER:
+        if len(sentences) < 4:
+            logger.primary_info("Infiller does not have enough sentences to work with")
+            return None, None
 
-    ## Step 2a: Get the relevant templates for the entity
-    # Retrieve questions, text.
-    specific_responses, best_ent_group = wiki_infiller.get_templates(cur_entity)
-    if specific_responses is None:
-        return None, None
-    # specific_responses example:
-    # [["In my opinion, the best place for [clothing] is [store].", ["clothing", "fashion", "retailer", "dress", "suits"]]]
-    ## Step 2b:
-    # We replace pronouns on second one onwards.
-    # Note that this is irrelevant for the prompt case, since we reconstruct the prompts later anyway.
-    pronouns = wiki_response_generator.get_pronoun(best_ent_group, sentences)
-    prompt_to_pronoun_prompt = {prompt: wiki_infiller.replace_entity_placeholder(prompt, pronouns, cur_entity.talkable_name, omit_first=True)
-                                for (prompt, _) in specific_responses}
-    specific_responses = [(prompt_to_pronoun_prompt[a], b) for (a, b) in specific_responses]
-    # logger.primary_info(f"After replacement: {specific_questions} {type(specific_questions[0])}")
-    specific_responses = [q for q in specific_responses if q[0] not in state.entity_state[cur_entity.name].templates_used]
+        ## Step 2a: Get the relevant templates for the entity
+        # Retrieve questions, text.
+        specific_responses, best_ent_group = wiki_infiller.get_templates(cur_entity)
+        if specific_responses is None:
+            return None, None
+        # specific_responses example:
+        # [["In my opinion, the best place for [clothing] is [store].", ["clothing", "fashion", "retailer", "dress", "suits"]]]
+        ## Step 2b:
+        # We replace pronouns on second one onwards.
+        # Note that this is irrelevant for the prompt case, since we reconstruct the prompts later anyway.
+        pronouns = wiki_response_generator.get_pronoun(best_ent_group, sentences)
+        prompt_to_pronoun_prompt = {prompt: wiki_infiller.replace_entity_placeholder(prompt, pronouns, cur_entity.talkable_name, omit_first=True)
+                                    for (prompt, _) in specific_responses}
+        specific_responses = [(prompt_to_pronoun_prompt[a], b) for (a, b) in specific_responses]
+        # logger.primary_info(f"After replacement: {specific_questions} {type(specific_questions[0])}")
 
-    print(3)
+        specific_responses = [q for q in specific_responses if q[0] not in state_manager.current_state.WIKI__EntityState[cur_entity.name].templates_used]
 
-    input_data = {
-        'tuples': tuple((q[0], tuple(q[1])) for q in specific_responses),
-        'sentences': tuple(s.strip().strip('.') for s in sentences), # TODO tuple(s.strip().strip('.') for s in sentences),
-        'max_length': 40
-    }
+        input_data = {
+            'tuples': tuple((q[0], tuple(q[1])) for q in specific_responses),
+            'sentences': tuple(s.strip().strip('.') for s in sentences), # TODO tuple(s.strip().strip('.') for s in sentences),
+            'max_length': 40
+        }
 
-    execute_neural = None
-    acknowledgements = None
+        execute_neural = None
+        acknowledgements = None
 
-    print(4)
+        ### BEGIN THREADING ###
+        thread = threading.currentThread()
+        should_kill = getattr(thread, "killable", False)
+        if should_kill:
+            logger.primary_info(f"Infiller interior call detected to be running in a killable thread.")
+        is_done = getattr(thread, "isKilled", False)
 
-    if infill_ack:
-        top_da = rg.get_top_dialogact()
-        infilling_ack_context, infilling_ack_prompts = get_infilling_ack_components(top_da)
-        input_data.update({
-            'contexts': tuple([infilling_ack_context] * len(infilling_ack_prompts)),
-            'prompts': tuple(infilling_ack_prompts),
-        })
-    elif neural_ack:
-        MAX_HISTORY_UTTERANCES = 3
-        history = rg.state_manager.current_state.history[-(MAX_HISTORY_UTTERANCES - 1):]   # TODO: if we're changing topic, don't use history
-        def execute_neural():
-            responses, _ = BlenderBot(rg.state_manager).execute(input_data={'history': history+[utterance]})
-            return responses
+        def initializer(killable: bool):
+            threading.currentThread().killable = killable
+            threading.currentThread().isKilled = is_done
 
-    ### BEGIN THREADING ###
-    thread = threading.currentThread()
-    should_kill = getattr(thread, "killable", False)
-    if should_kill:
-        logger.primary_info(f"Infiller interior call detected to be running in a killable thread.")
-    is_done = getattr(thread, "isKilled", False)
+        infiller_cache = state_manager.current_state.cache['infiller']
 
-    def initializer(killable: bool):
-        threading.currentThread().killable = killable
-        threading.currentThread().isKilled = is_done
+        with futures.ThreadPoolExecutor(max_workers=2, initializer=initializer, initargs=(should_kill,)) as executor:
+            if execute_neural:
+                neural_future = executor.submit(execute_neural)
+            infiller_future = executor.submit(execute_infiller, input_data, infiller_cache)
+        ### END THREADING ###
 
-    with futures.ThreadPoolExecutor(max_workers=2, initializer=initializer, initargs=(should_kill,)) as executor:
         if execute_neural:
-            neural_future = executor.submit(execute_neural)
-        infiller_future = executor.submit(execute_infiller, rg, input_data)
-    ### END THREADING ###
+            acknowledgements = neural_future.result()
 
-    if execute_neural:
-        acknowledgements = neural_future.result()
+        infiller_results = infiller_future.result()
 
-    infiller_results = infiller_future.result()
+        if infiller_results['error']:
+            logger.primary_info("Infiller failed")
+            return None, None
 
-    if infiller_results['error']:
-        logger.primary_info("Infiller failed")
-        return None, None
+        if acknowledgements is not None:
+            acknowledgements = wiki_infiller.filter_responses(state_manager, acknowledgements, cur_entity.name)
+            logger.primary_info(f"Got acknowledgements: {acknowledgements}")
 
-    if infill_ack:
-        # if need_to_infill_acknowledgements:
-        # Cut up the responses, if we asked for acknowledgement generation
-            # import pdb; pdb.set_trace()
-        ack_results, infiller_results = wiki_utils.split_dict_with_length(infiller_results, len(infilling_ack_prompts))
-        acknowledgements = ack_results['completions']
+        state_manager.current_state.cache['infiller'] = infiller_results
 
-    if acknowledgements is not None:
-        acknowledgements = wiki_infiller.filter_responses(rg, acknowledgements, cur_entity.name)
-        logger.primary_info(f"Got acknowledgements: {acknowledgements}")
+        responses = infiller_results['completions']
+        prompts = infiller_results['prompts']
 
-    rg.set_cache('infiller', infiller_results)
+        # TODO check this -- why is this only done for smooth transition? ANS: It will replace the first occurrence of entity with the pronoun.
+        # if smooth_transition:
+        #     logger.primary_info(f"Responses before pronouns treatment: {responses}")
+        #     pronouns = get_pronoun(best_ent_group, sentences)
+        #     pronoun_prompt_to_prompt = {b: a for (a, b) in prompt_to_pronoun_prompt.items()}
+        #     responses = [revert_to_entity_placeholder(response, cur_entity.name, pronoun_prompt_to_prompt[prompt]) for response, prompt in zip(responses, prompts)]
+        #     responses = [replace_entity_placeholder(response, pronouns) for response in responses]
+        #     logger.primary_info(f"Responses after pronouns treatment: {responses}")
 
-    responses = infiller_results['completions']
-    prompts = infiller_results['prompts']
+        responses = wiki_infiller.filter_responses(state_manager, responses, cur_entity.name)
 
-    # TODO check this -- why is this only done for smooth transition? ANS: It will replace the first occurrence of entity with the pronoun.
-    # if smooth_transition:
-    #     logger.primary_info(f"Responses before pronouns treatment: {responses}")
-    #     pronouns = get_pronoun(best_ent_group, sentences)
-    #     pronoun_prompt_to_prompt = {b: a for (a, b) in prompt_to_pronoun_prompt.items()}
-    #     responses = [revert_to_entity_placeholder(response, cur_entity.name, pronoun_prompt_to_prompt[prompt]) for response, prompt in zip(responses, prompts)]
-    #     responses = [replace_entity_placeholder(response, pronouns) for response in responses]
-    #     logger.primary_info(f"Responses after pronouns treatment: {responses}")
+        logger.primary_info(f"Got responses: {responses}")
 
-    responses = wiki_infiller.filter_responses(rg, responses, cur_entity.name)
+        prompts = infiller_results['prompts']
+        contexts = infiller_results['contexts']
 
-    logger.primary_info(f"Got responses: {responses}")
-
-    prompts = infiller_results['prompts']
-    contexts = infiller_results['contexts']
-
-    return select_best_response(utterance, responses, contexts, prompts, acknowledgements)
+        utterance = state_manager.current_state.text
+        return select_best_response(state_manager, utterance, responses, contexts, prompts, acknowledgements)
+    else:
+        return random.choice(sentences), None
 
 @nlg_helper
-def get_factoid(rg: SymbolicResponseGenerator, entity: Optional[WikiEntity] = None):
-    print("entity12421", entity)
-    print("entity2", get_recommended_entity(rg))
-    print(1)
-    top_res, top_ack = get_infilling_statement(rg, entity)
+def get_factoid(entity: Optional[WikiEntity], state_manager: StateManager):
+    top_res, top_ack = get_infilling_statement(entity, state_manager, first_turn=True)
     return top_res

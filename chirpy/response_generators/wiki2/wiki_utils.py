@@ -277,11 +277,9 @@ def get_text_for_entity(entity):
         }
     })
     sections = results['hits']['hits']
-    # print(sections)
     sections = [(section['_source']['title'], section['_source']['text']) for section in sections]
     logger.primary_info(f"Recovered: {[section[0] for section in sections]}")
     def replaceByLength(matchobj):
-        # print("matchobj", matchobj.group(0))
         if len(matchobj.group(0).split(' ')) < 10: return matchobj.group(0)
         return ''
     sections = [(title, re.sub(r'"[^"]*"', replaceByLength, text)) for (title, text) in sections]

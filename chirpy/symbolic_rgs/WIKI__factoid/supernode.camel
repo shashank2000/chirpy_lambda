@@ -4,7 +4,7 @@ Prompt what_to_talk_about [ ] {
 }
 
 <LOCALS>
-Locals.factoid = @helper.get_factoid(@val(Utilities.cur_entity))
+Locals.factoid = @helper.get_factoid(@val(Utilities.cur_entity), @val(Utilities.state_manager))
 
 <SET_STATE>
 State.WIKI__Entity = @val(Utilities.cur_entity)
@@ -18,9 +18,10 @@ Subnode factoid [
 		{"Oh yeah"}
 	)
 	- "I love talking about"
-	- @val(Utilities.cur_talkable)
+	- @val(Utilities.cur_entity | talkable)
 	- .
 	- @val(Locals.factoid)
+	- .
 }
 
 Subnode default [
