@@ -4,7 +4,7 @@
 # PERSONALISSUES__subsequent_turn
 # FOOD__factoid
 # FOOD__intro
-WIKI__discuss_article
+WIKI__check_user_knowledge
 WIKI__factoid
 GLOBAL__openended
 GLOBALS

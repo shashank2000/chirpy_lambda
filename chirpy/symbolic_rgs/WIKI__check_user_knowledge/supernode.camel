@@ -1,0 +1,71 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.WIKI__Entity)
+
+<PROMPTS>
+Prompt do_you_know_about [ ] {
+	- @one_of(
+		{
+			- "Do you know a lot about"
+			- @val(State.WIKI__Entity | talkable)
+		}, {
+			- "Do you happen to know a lot about"
+			- @val(State.WIKI__Entity | talkable)
+		}, {
+			- "Are you pretty familiar with"
+			- @val(State.WIKI__Entity | talkable)
+		}, {
+			- "Are you especially knowledgeable about"
+			- @val(State.WIKI__Entity | talkable)
+		},
+		{
+			- @inflect(inflect_token="is", inflect_entity=State.WIKI__Entity)
+			- @val(State.WIKI__Entity | talkable)
+			- @helper.inflect_some_one_thing(@val(State.WIKI__Entity))
+			- "you know a lot about"
+		}
+		, {
+			- "Would you say that"
+			- @val(State.WIKI__Entity | talkable)
+			- @inflect(inflect_token="is", inflect_entity=State.WIKI__Entity)
+			- @inflect(inflect_token="something", inflect_entity=State.WIKI__Entity)
+			- "you know a lot about"
+		}, {
+			- "Do you know a great deal about"
+			- @val(State.WIKI__Entity | talkable)
+		}, {
+			- "Would I be correct in guessing that you know a lot about"
+			- @val(State.WIKI__Entity | talkable)
+		}
+	)
+	- "?"
+}
+
+<LOCALS>
+
+<SET_STATE>
+
+<SUBNODES>
+Subnode yes_response [
+	IS_TRUE(Flags.GlobalFlag__YES)
+] {
+	- @one_of(
+		{"Amazing,"},
+		{"Nice,"}
+	)
+	- "let's talk more about it."
+}
+
+Subnode no_response [
+	IS_TRUE(Flags.GlobalFlag__NO)
+] {
+	- "That's alright, we can talk about something else."
+} <
+  State.WIKI__Entity = @constant(None)
+>
+
+Subnode default [
+] {
+	- @neural_generation(prefix={
+		- "I'm sorry, I'm not sure I understand. I don't want to talk more about it if you don't want to."
+	})
+}
