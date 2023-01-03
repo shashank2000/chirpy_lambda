@@ -1,9 +1,10 @@
-from chirpy.response_generators.food import food_helpers
+from chirpy.response_generators.wiki2 import wiki_helpers
 from chirpy.core.response_generator.nlu import nlu_processing
+from chirpy.core.camel.context import Context
 
 @nlu_processing
-def get_flags(context):
-    return
+def get_flags(context: Context):
+    wiki_helpers.add_flags(context, ADD_NLU_FLAG)
 
 @nlu_processing
 def get_background_flags(context):

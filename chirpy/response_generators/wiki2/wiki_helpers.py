@@ -1,4 +1,5 @@
 from chirpy.core.response_generator.response_type import add_response_types, ResponseType
+from chirpy.core.camel.context import Context, get_global_flags
 import logging
 from chirpy.response_generators.wiki2.regex_templates import *
 from chirpy.annotators.corenlp import Sentiment
@@ -13,32 +14,35 @@ ADDITIONAL_RESPONSE_TYPES = ['CONFUSED', 'WHAT_ABOUT_YOU', 'HIGH_INITIATIVE', 'P
 
 ResponseType = add_response_types(ResponseType, ADDITIONAL_RESPONSE_TYPES)
 
-def user_is_confused(rg, utterance):
-    return (ClarificationQuestionTemplate().execute(utterance) and not rg.get_navigational_intent_output().pos_intent) \
+def user_is_confused(context: Context, utterance: str):
+    return (ClarificationQuestionTemplate().execute(utterance) and not context.state_manager.current_state.navigational_intent.pos_intent) \
            or DoubtfulTemplate().execute(utterance)
 
-def is_high_initiative(rg, utterance):
-    corenlp_output = rg.state_manager.current_state.corenlp
+def is_high_initiative(context: Context, utterance: str):
+    corenlp_output = context.state_manager.current_state.corenlp
     return not ((len(utterance) <= 4 and not corenlp_output['nouns'] and
                  not corenlp_output['proper_nouns']) or len(utterance) <= 3)
 
-def is_pos_sentiment(rg, utterance):
-    return rg.get_sentiment() in [Sentiment.POSITIVE, Sentiment.STRONG_POSITIVE]
+def get_sentiment(context: Context):
+    return context.state_manager.current_state.corenlp['sentiment']
 
-def is_neg_sentiment(rg, utterance):
-    return rg.get_sentiment() in [Sentiment.NEGATIVE, Sentiment.STRONG_NEGATIVE]
+def is_pos_sentiment(context, utterance):
+    return get_sentiment(context) in [Sentiment.POSITIVE, Sentiment.STRONG_POSITIVE]
 
-def is_neutral_sentiment(rg, utterance):
-    return rg.get_sentiment() == Sentiment.NEUTRAL
+def is_neg_sentiment(context: Context, utterance: str):
+    return get_sentiment(context) in [Sentiment.NEGATIVE, Sentiment.STRONG_NEGATIVE]
 
-def is_appreciative(rg, utterance):
-    return rg.get_top_dialogact() == 'appreciation' or AppreciativeTemplate().execute(utterance) is not None
+def is_neutral_sentiment(context: Context, utterance: str):
+    return get_sentiment(context) == Sentiment.NEUTRAL
 
-def starts_with_what(rg, utterance):
+def is_appreciative(context: Context, utterance: str):
+    return context.state_manager.current_state.dialogact['top_1'] == 'appreciation' or AppreciativeTemplate().execute(utterance) is not None
+
+def starts_with_what(context: Context, utterance: str):
     tokens = list(utterance.split())
     return 'what' in tokens[:3]
 
-def user_wants_to_know_more(rg, utterance):
+def user_wants_to_know_more(context: Context, utterance: str):
     return KnowMoreTemplate().execute(utterance) is not None
 
 FIRST_PERSON_WORDS = {
@@ -46,18 +50,19 @@ FIRST_PERSON_WORDS = {
     "me", "my", "myself", "mine"
 }
 
-def contains_first_person_word(utterance):
+def contains_first_person_word(utterance: str):
     tokens = set(utterance.split())
     return not tokens.isdisjoint(FIRST_PERSON_WORDS)
 
-def is_personal_disclosure(rg, utterance):
+def is_personal_disclosure(context: Context, utterance: str):
     return contains_first_person_word(utterance) and len(utterance.split()) >= 5
 
-def is_opinion(rg, utterance):
+def is_opinion(context: Context, utterance: str):
     return utterance.startswith('because') or \
-           'opinion' in (rg.state_manager.current_state.dialogact['top_1'], rg.state_manager.current_state.dialogact['top_2']) or \
+           'opinion' in (context.state_manager.current_state.dialogact['top_1'], context.state_manager.current_state.dialogact['top_2']) or \
            any([utterance.startswith(x) for x in ['i believe', 'i think', 'i feel']])
 
+# Wiki RG only
 def is_no_to_sections(rg, utterance):
     state = rg.state
     tokens = set(utterance.split())
@@ -65,13 +70,10 @@ def is_no_to_sections(rg, utterance):
         NO_WORDS = {'neither', 'else', 'nothing', 'none', "not"}
         return not tokens.isdisjoint(NO_WORDS)
 
-# def is_yes_to_user_knowledge(rg, utterance):
-#     state =
-
-def user_agrees(rg, utterance):
+def user_agrees(context: Context, utterance: str):
     return AgreementTemplate().execute(utterance) is not None
 
-def user_disagees(rg, utterance):
+def user_disagees(context: Context, utterance: str):
     return DisagreementTemplate().execute(utterance) is not None
 
 def original_til_templates(apologize: bool, original_til: str):
@@ -94,4 +96,24 @@ def original_til_templates(apologize: bool, original_til: str):
     else:
         return THEN_ORIGINAL
 
+def add_flags(context: Context, add_nlu_flag) -> set[str]:
+    utterance = context.utterance
+    if user_is_confused(context, utterance): add_nlu_flag('WIKI__CONFUSED')
+    if is_neg_sentiment(context, utterance): add_nlu_flag('WIKI__NEG_SENTIMENT')
+    if is_pos_sentiment(context, utterance): add_nlu_flag('WIKI__POS_SENTIMENT')
+    if is_neutral_sentiment(context, utterance): add_nlu_flag('WIKI__NEUTRAL_SENTIMENT')
+    if is_opinion(context, utterance): add_nlu_flag('WIKI__OPINION')
+    if is_appreciative(context, utterance): add_nlu_flag('WIKI__APPRECIATIVE')
 
+    if not context.flags['GlobalFlag__COMPLAINT'] and not context.flags['GlobalFlag__DISINTERESTED']:
+        # to counter false positives, e.g. "that is not interesting"
+        if user_wants_to_know_more(context, utterance):
+            add_nlu_flag('WIKI__KNOW_MORE')
+
+    if is_personal_disclosure(context, utterance): add_nlu_flag('WIKI__PERSONAL_DISCLOSURE')
+    if user_disagees(context, utterance):
+        add_nlu_flag('WIKI__DISAGREEMENT')
+    else: # check is necessary to prevent false positives
+        if user_agrees(context, utterance): add_nlu_flag('WIKI__AGREEMENT')
+    # if is_no_to_sections(self, utterance): response_types.add(ResponseType.NO)
+    if starts_with_what(context, utterance): add_nlu_flag('WIKI__STARTS_WITH_WHAT')
