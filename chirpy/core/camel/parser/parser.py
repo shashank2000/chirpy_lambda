@@ -92,12 +92,23 @@ class SupernodeMaker(Transformer):
 	def condition__nlg(self, tok): return self.nlg(tok)
 	
 	def prompt(self, tok):
-		if len(tok) == 3:
-			prompt_name, condition, nlg = tok
-		else:
-			prompt_name, nlg = tok
-			condition = predicate.TruePredicate()
-		return prompt.Prompt(prompt_name.value, condition, nlg)
+		prompt_name = tok[0].value
+		condition = predicate.TruePredicate()
+		assignment_list = []
+		response = None
+		for token in tok[1:]:
+			if isinstance(token, predicate.Predicate):
+				condition = token
+			elif isinstance(token, nlg.NLGNode):
+				response = token
+			elif isinstance(token, assignment.Assignment):
+				assignment_list.append(token)
+		return prompt.Prompt(
+			name=prompt_name,
+			entry_conditions=condition,
+			response=response,
+			assignments=assignment.AssignmentList(assignment_list)
+		)
 		
 	def subnode(self, tok):
 		subnode_name = tok[0].value

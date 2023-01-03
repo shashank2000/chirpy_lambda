@@ -25,5 +25,5 @@ class PromptList:
 		]
 		assert len(possible_prompts), "No prompt found!"
 		
-		# for now, just return the first possible subnode
+		# for now, just return the first possible prompt
 		return possible_prompts[0]
