@@ -228,7 +228,7 @@ def get_infilling_statement(entity: WikiEntity, state_manager: StateManager, fir
         utterance = state_manager.current_state.text
         return select_best_response(state_manager, utterance, responses, contexts, prompts, acknowledgements)
     else:
-        return random.choice(sentences), None
+        return random.choice(sentences).strip(), None
 
 @nlg_helper
 def get_factoid(entity: Optional[WikiEntity], state_manager: StateManager):
