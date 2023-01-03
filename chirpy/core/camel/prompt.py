@@ -5,8 +5,6 @@ from chirpy.core.camel.predicate import Predicate
 from chirpy.core.camel.nlg import NLGNode
 from chirpy.core.camel.assignment import AssignmentList
 
-import random
-
 @dataclass
 class Prompt:
 	name : str
@@ -27,5 +25,5 @@ class PromptList:
 		]
 		assert len(possible_prompts), "No prompt found!"
 		
-		# return a possible prompt
-		return random.choice(possible_prompts)
+		# for now, just return the first possible prompt
+		return possible_prompts[0]
