@@ -23,6 +23,7 @@ PERSONALISSUE__user_has_personal_issue: False
 PERSONALISSUE__need_confirmation_for_further_discussion: False
 PERSONALISSUE__confirming_further_discussion: False
 PERSONALISSUE__responded_with_question: False
+PERSONALISSUE__LastTurnUsedNeuralGeneration: False
 
 # Wiki
 WIKI__Entity: null

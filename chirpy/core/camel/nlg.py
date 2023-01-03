@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from typing import List, Any, Optional
+from typing import List, Any, Optional, Tuple
 from concurrent import futures
 import random 
 
@@ -128,13 +128,18 @@ class NeuralGeneration(NLGNode):
         return get_neural_response(context, prefix=self.prefix.generate(context))
 
 @dataclass
-class Val:
+class Val(NLGNode):
     variable : Variable
-    pipes : List[str]
+    operations : List[Tuple[str, str]]
     def generate(self, context):
         value = self.variable.generate(context)
-        for pipe_name in self.pipes:
-            value = get_pipe(pipe_name)(value)
+        for operator, operation in self.operations:
+            if operator == '|':
+                value = get_pipe(operation)(value)
+            elif operator == '+':
+                value += int(operation)
+            elif operator == '-':
+                value -= int(operation)
         return value
         
 @dataclass

@@ -49,9 +49,9 @@ class Supernode:
 		flags = self.nlu.get_flags(context)
 		return flags
 	
-	def get_background_flags(self, rg, utterance):
+	def get_background_flags(self, context):
 		# background_flags: flags to update even if this supernode was not chosen
-		flags = self.nlu.get_background_flags(rg, utterance)
+		flags = self.nlu.get_background_flags(context)
 		return flags		
 		
 	def __str__(self):
