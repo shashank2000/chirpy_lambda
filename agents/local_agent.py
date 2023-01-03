@@ -207,22 +207,6 @@ class LocalAgent():
                 response_generator_classes=[LaunchResponseGenerator, 
                                             FallbackResponseGenerator,
                                             NeuralFallbackResponseGenerator,
-<<<<<<< HEAD
-                                            # NeuralChatResponseGenerator,
-                                            # OffensiveUserResponseGenerator,
-                                            # CategoriesResponseGenerator,
-                                            # ClosingConfirmationResponseGenerator,
-                                            # AcknowledgmentResponseGenerator,
-                                            # PersonalIssuesResponseGenerator,
-                                            # OpinionResponseGenerator2,
-                                            # AliensResponseGenerator,
-                                            # TransitionResponseGenerator,
-                                            # FoodResponseGenerator,
-                                            SymbolicResponseGenerator,
-                                            # WikiResponseGenerator,
-                                            # MusicResponseGenerator,
-
-=======
                                             NeuralChatResponseGenerator,
                                             OffensiveUserResponseGenerator,
                                             CategoriesResponseGenerator,
@@ -235,7 +219,6 @@ class LocalAgent():
                                             FoodResponseGenerator,
                                             WikiResponseGenerator,
                                             #MusicResponseGenerator,
->>>>>>> main
                                             ],
             annotator_classes = [QuestionAnnotator, DialogActAnnotator, NavigationalIntentModule, StanfordnlpModule, CorenlpModule,
                                  EntityLinkerModule, BlenderBot],
