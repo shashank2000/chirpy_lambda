@@ -1,0 +1,57 @@
+%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB)
+%import .nlg ( nlg )
+%import .condition ( condition )
+
+// ignore whitespace
+
+%import common.WS
+%ignore WS
+
+// comments
+COMMENT: "#" /[^\n]/*
+%ignore COMMENT
+
+// assignment
+assignment : variable "=" nlg
+condition_assignment : variable "=" condition
+
+// CAMEL syntax
+
+document: entry_conditions_section? \
+          prompt_section? \
+          continue_conditions_section? \
+          locals_section? \
+          entry_conditions_takeover_section? \
+          set_state_section? \
+          subnodes_section \
+          set_state_after_section?
+
+// Section: Entry Conditions
+entry_conditions_section : "<ENTRY_CONDITIONS>" condition?
+
+// Section: Prompt
+prompt_section : "<PROMPTS>" prompt*
+prompt : "Prompt" PROMPT_NAME _OB condition? _CB nlg ("<" assignment* ">")?
+PROMPT_NAME: /[a-zA-Z_1-9]+/
+
+// Section: Continue Conditions
+continue_conditions_section : "<CONTINUE_CONDITIONS>" condition?
+
+// Section: Locals
+locals_section : "<LOCALS>" assignment* condition_assignment*
+
+// entry conditions takeover
+entry_conditions_takeover_section : "<ENTRY_CONDITIONS_TAKEOVER>" condition?
+
+// Section: Locals
+set_state_section : "<SET_STATE>" assignment*
+
+// Section: Subnodes
+subnodes_section : "<SUBNODES>" subnode+
+subnode: "Subnode" SUBNODE_NAME _OB condition? _CB nlg ("<" assignment* ">")?
+SUBNODE_NAME: /[a-zA-Z_1-9]+/
+
+
+// Section: Set State After
+set_state_after_section : "<SET_STATE_AFTER>" assignment*
+

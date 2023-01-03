@@ -10,7 +10,22 @@ User__FavoriteFoodTalkable: null
 User__FavoriteFoodTexture: null
 User__FavoriteSport: null
 User__FavoritePlace: null
+<<<<<<< HEAD
 User__FavoritePlaceTalkable: null
 User__FavoritePlacePopulation: null
 User__FavoritePlacePopulationPercentOfCountry: null
 User__FavoritePlaceLanguagesSpoken: null
+=======
+PERSONALISSUE__supernode_is_responding: False
+PERSONALISSUE__user_has_personal_issue: False
+PERSONALISSUE__need_confirmation_for_further_discussion: False
+PERSONALISSUE__confirming_further_discussion: False
+PERSONALISSUE__responded_with_question: False
+PERSONALISSUE__LastTurnUsedNeuralGeneration: False
+
+
+# Launch
+User__Name : null
+User__NameGivenUp : False
+LAUNCH__NumTimesAskedName : 0
+>>>>>>> improved-intra-rg

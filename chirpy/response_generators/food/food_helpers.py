@@ -35,8 +35,8 @@ def is_unknown_food(rg, utterance):
 
 def is_known_food(food: str) -> bool:
     """Make sure to call this first, all of the following functions assume input is in FOODS"""
-    logger.primary_info(str((food.lower() in FOODS) or is_ingredient(food) or get_custom_question(food)))
-    return (food.lower() in FOODS) or is_ingredient(food) or get_custom_question(food)
+    logger.primary_info(str((food.lower() in FOODS) or get_custom_question(food)))
+    return (food.lower() in FOODS) or get_custom_question(food)
 
 def get_food_data(food):
     return FOODS[food.lower()]

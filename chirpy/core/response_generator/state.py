@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Any, List, Tuple, Set, Optional, Dict  # NOQA
-
+from chirpy.symbolic_rgs import state_initialization
 from chirpy.core.response_generator.response_type import ResponseType
 
 import os
@@ -46,19 +46,30 @@ class BaseSymbolicState:
     num_turns_in_rg: int = 0
     cur_supernode: str = ''
     data: Dict[str, Any] = field(default_factory=dict)
+    turns_history: Dict[str, int] = field(default_factory=dict)
     
     def __getitem__(self, key):
-        assert key in ALL_STATE_KEYS
-        logger.warning(f"Looking up value for {key}, data keys are {self.data}, all_state_keys are {ALL_STATE_KEYS}")
-        return self.data.get(key, ALL_STATE_KEYS[key])
+        assert key in ALL_STATE_KEYS, f"Key not found: {key}"
+        if key not in self.data:
+            default_val = ALL_STATE_KEYS[key]
+            if isinstance(default_val, str) and default_val.startswith('_'):
+                func_name = default_val[1:]
+                assert hasattr(state_initialization, func_name), f"{func_name} not found in state_initialization"
+                func = getattr(state_initialization, func_name)
+                default_val = func()
+            self.data[key] = default_val
+        return self.data[key]
         
     def __setitem__(self, key, new_value):
-        assert key in ALL_STATE_KEYS
+        assert key in ALL_STATE_KEYS, f"Key not found: {key}"
         self.data[key] = new_value
+
+    def __contains__(self, key, new_value):
+        return key in ALL_STATE_KEYS
         
     def update(self, data):
         for key in data:
-            assert key in ALL_STATE_KEYS, f"Key not found: {key}"    
+            assert key in ALL_STATE_KEYS, f"Key not found: {key}"
         self.data.update(data)
         
 @dataclass

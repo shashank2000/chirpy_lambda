@@ -57,5 +57,7 @@ metaphone==0.6
 
 textstat
 
-# logging
 rich
+
+# For CAMEL parsing
+lark

@@ -28,5 +28,7 @@ class StateManager:
     @property
     def last_state_response(self):
         if not self.last_state: return None
-        if hasattr(self.last_state, 'prompt_results'): return self.last_state.prompt_results[self.last_state.active_rg]
-        else: return self.last_state.response_results[self.last_state.active_rg]
+        return self.last_state.rg_state.response
+        
+    def is_first_turn(self):
+        return self.current_state.turn_num == 0

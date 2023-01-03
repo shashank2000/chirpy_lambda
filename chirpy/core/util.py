@@ -213,11 +213,10 @@ def query_es_index(es: Elasticsearch, index_name: str, query: dict, size: int, t
         A list of results. If there's an error or a timeout, returns an empty list.
     """
     timeout = timeout if use_timeouts else inf_timeout
-    logger.warning(f"Querying ElasticSearch '{index_name}' index with timeout={timeout}s, size={size}, and this query: {query}")
+    logger.primary_info(f"Querying ElasticSearch '{index_name}' index with timeout={timeout}s, size={size}, and this query: {query}")
     try:
         results = es.search(index=index_name, body=query, size=size, filter_path=filter_path,
                             request_timeout=timeout)
-        logger.warning(f"Results are {results}")
         # logger.debug('Query to ElasticSearch "{}" took {}ms'.format(index_name, results['took']))  # sometimes 'took' isn't in results, I'm not sure why
         if not results:
             return []
@@ -567,3 +566,7 @@ def infl(word, is_plural):
         return word #
 
     return plur_form if is_plural else sing_form
+
+def get_none_replace(data, key, replace):
+    '''Gets key in dictionary and replaces with replace if key doesn't exist'''
+    return data.get(key, replace) or replace

@@ -1,8 +1,11 @@
 # comments start with
 
+PERSONALISSUES__intro
+PERSONALISSUES__subsequent_turn
 FOOD__factoid
 FOOD__intro
 PLACES__factoid
 PLACES__intro
 GLOBAL__openended
 GLOBALS
+LAUNCH
