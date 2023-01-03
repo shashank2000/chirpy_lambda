@@ -1,8 +1,8 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity)
+not IS_NONE(State.WIKI__Entity) and not IS_TRUE(Flags.WIKI__understand_user_better)
 
 <PROMPTS>
-Prompt do_you_know_about [ ] {
+Prompt check_user_knowledge [ ] {
 	- @one_of(
 		{
 			- "Do you know a lot about"
@@ -49,11 +49,12 @@ Subnode yes_response [
 	IS_TRUE(Flags.GlobalFlag__YES)
 ] {
 	- @one_of(
-		{"Amazing,"},
-		{"Nice,"}
+		{"Amazing!"},
+		{"Nice!"}
 	)
-	- "let's talk more about it."
-}
+} <
+	Flags.WIKI__understand_user_better = @constant(True)
+>
 
 Subnode no_response [
 	IS_TRUE(Flags.GlobalFlag__NO)

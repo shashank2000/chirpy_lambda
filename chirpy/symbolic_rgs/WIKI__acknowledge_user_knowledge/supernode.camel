@@ -1,0 +1,56 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__understand_user_better)
+
+<PROMPTS>
+Prompt when [ ] {
+	- @one_of(
+		"When did you start having an interest in",
+		"When did you start being interested in"
+	)
+	- @val(State.WIKI__Entity | talkable)
+	- "?"
+} <
+	State.WIKI__AskedWhenInterested = @constant(True)
+>
+
+Prompt what [ ] {
+	- @one_of(
+		"What got you interested in",
+		"What made you interested in"
+	)
+	- @val(State.WIKI__Entity | talkable)
+	- "?"
+} <
+	State.WIKI__AskedWhatInterested = @constant(True)
+>
+
+Prompt why [ ] {
+	- "Why are you interested in"
+	- @val(State.WIKI__Entity | talkable)
+	- "?"
+} <
+	State.WIKI__AskedWhyInterested = @constant(True)
+>
+
+<LOCALS>
+
+<SET_STATE>
+
+<SUBNODES>
+Subnode when_response [
+	IS_TRUE(State.WIKI__AskedWhenInterested)
+] {
+	- "I also learned about it then."
+}
+
+Subnode what_response [
+	IS_TRUE(State.WIKI__AskedWhatInterested)
+] {
+	- "Me too! I also learned about it because of that."
+}
+
+Subnode why_response [
+	IS_TRUE(State.WIKI__AskedWhyInterested)
+] {
+	- "Same reason for me too!"
+}

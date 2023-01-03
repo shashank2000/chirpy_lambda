@@ -27,3 +27,9 @@ PERSONALISSUE__LastTurnUsedNeuralGeneration: False
 
 # Wiki
 WIKI__Entity: null
+WIKI__AskedWhenInterested: False
+WIKI__AskedWhatInterested: False
+WIKI__AskedWhyInterested: False
+WIKI__WhenInterested: null
+WIKI__WhatInterested: null
+WIKI__WhyInterested: null
