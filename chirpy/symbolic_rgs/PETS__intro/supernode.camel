@@ -1,0 +1,35 @@
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__HasPet)
+
+<PROMPTS>
+Prompt has_pet [ ] {
+    "Do you have a pet?"
+}
+
+<SET_STATE>
+# TODO: user may potentially say pet type here, should be able to handle it here
+
+<SUBNODES>
+
+Subnode has_pet [
+   IS_TRUE(Flags.PETS__userOwnsPet)
+] {
+   - "Isn't it awesome to own a pet!"
+} <
+    State.User__HasPet = @constant(True)
+>
+
+Subnode has_no_pet [
+   IS_TRUE(Flags.PETS__userOwnsNoPet)
+] {
+   - "Oh interesting! That makes me think --"
+} <
+    State.User__HasPet = @constant(False)
+>
+
+Subnode default [
+] {
+  - "Sorry, I didn't quite catch that! I'd love to learn more about your experience with animals, so let's start again :)"
+}
+
+

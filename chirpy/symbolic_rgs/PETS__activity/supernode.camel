@@ -1,0 +1,34 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(State.User__HasPet)
+
+<PROMPTS>
+Prompt pet_activity_with_name [
+  not IS_NONE(State.User__PetName)
+] {
+    - "What's your favorite thing to do with"
+    - @val(State.User__PetName)
+    - "?"
+}
+
+Prompt pet_activity_no_name [ 
+  IS_NONE(State.User__PetName)
+] {
+    - "What is your favorite thing to do with your pet?"
+}
+
+
+<SET_STATE>
+#TODO  add handling to store favorite activity
+
+<SUBNODES>
+
+Subnode default [
+] {
+  - "That sounds like a great time!"
+} 
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+

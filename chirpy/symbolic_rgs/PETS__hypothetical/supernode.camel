@@ -1,0 +1,40 @@
+<ENTRY_CONDITIONS>
+IS_FALSE(State.User__HasPet) and
+IS_NONE(State.User__HypotheticalPetType)
+
+<PROMPTS>
+Prompt favorite_pet [ ] {
+    "If you could own any animal in the world as your pet, what would you choose?"
+}
+
+
+<SET_STATE>
+State.User__HypotheticalPetType= @val(Utilities.cur_entity)
+State.User__HypotheticalPetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
+
+<SUBNODES>
+Subnode valid_hypothetical_type [
+  not IS_NONE(State.User__HypotheticalPetType)
+] {
+  - "That's awesome!"
+  - "I love"
+  - @val(State.User__HypotheticalPetTypeTalkable)
+  - "."
+  - "I'd personally want a pet giraffe".
+  # TODO: add some neural generation and/or a factoid here for the user's idea pet instead maybe
+  #- @neural_generation(prefix="Did you know that " + str(State.User__PetType))
+  #- "I think that's really cool."
+}
+
+Subnode default [
+] {
+  - "That's awesome!"
+  - "I'd personally want a pet giraffe".
+  - @neural_generation(prefix="Did you know that giraffes")
+} 
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+

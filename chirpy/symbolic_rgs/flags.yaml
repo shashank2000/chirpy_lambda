@@ -26,3 +26,9 @@
 - PERSONALISSUE__short_response
 - LAUNCH__NoDiscloseName
 - LAUNCH__ProposedName
+- PETS__userOwnsPet
+- PETS__userOwnsNoPet
+- PETS__favoritePetType
+- PETS__NoDiscloseName
+- PETS__ProposedName
+- PETS__age

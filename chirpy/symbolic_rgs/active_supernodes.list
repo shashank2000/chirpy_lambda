@@ -1,10 +1,18 @@
 # comments start with
 
-PERSONALISSUES__intro
-PERSONALISSUES__subsequent_turn
-FOOD__factoid
+PETS__intro
+PETS__name
+PETS__type
+PETS__hypothetical
+PETS__age
+PETS__activity
+#PERSONALISSUES__intro
+#PERSONALISSUES__subsequent_turn
+#FOOD__factoid
 #FOOD__factoid_gpt
-FOOD__intro
+#FOOD__intro
+#FOOD__factoid
+#FOOD__intro
 GLOBAL__openended
 GLOBALS
 LAUNCH
