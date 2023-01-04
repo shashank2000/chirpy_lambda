@@ -1,6 +1,7 @@
 <ENTRY_CONDITIONS>
-(IS_NONE(State.User__FavoriteCelebrity) and IS_TRUE(Flags.CELEB__visited)) or
-(not IS_TRUE(Flags.CELEB__known_work) and (IS_TRUE(Flags.CELEB__discuss_movie) or IS_TRUE(Flags.CELEB__discuss_tv) or IS_TRUE(Flags.CELEB__discuss_song)))
+((IS_NONE(State.User__FavoriteCelebrity) and IS_TRUE(Flags.CELEB__visited)) or
+(not IS_TRUE(Flags.CELEB__known_work) and (IS_TRUE(Flags.CELEB__discuss_movie) or IS_TRUE(Flags.CELEB__discuss_tv) or IS_TRUE(Flags.CELEB__discuss_song))))
+and (not IS_TRUE(Flags.CELEB__unknown))
 
 <PROMPTS>
 Prompt unknown_celeb [
@@ -36,3 +37,7 @@ Subnode make_celeb_work_comment [
         {"Cool, I will probably like it too! Thanks!"}
     )
 }
+
+<SET_STATE_AFTER>
+Flags.CELEB__visited = {@constant(True)}
+Flags.CELEB__unknown = {@constant(True)}

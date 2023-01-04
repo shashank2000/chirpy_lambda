@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(Flags.CELEB__visited)
+IS_NONE(State.User__FavoriteCelebrity) and (not IS_TRUE(Flags.CELEB__visited))
 
 <PROMPTS>
 Prompt favorite_celeb []
@@ -19,7 +19,7 @@ Locals.intro_statement = {
         {"I like"},
         {"I love"}
     )
-    - @val(Utilities.cur_entity | name)
+    - @helper.get_celeb_name(@val(Utilities.cur_entity))
     - {"a lot as well!"}
 }
 

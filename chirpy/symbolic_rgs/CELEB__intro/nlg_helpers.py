@@ -9,7 +9,7 @@ from chirpy.core.response_generator import nlg_helper
 @nlg_helper
 def get_celeb_name(celeb):
     if celeb is None:
-        return None
+        return "None"
     return celeb.name
 
 @nlg_helper

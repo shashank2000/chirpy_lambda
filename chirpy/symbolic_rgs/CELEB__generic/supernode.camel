@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-IS_NOT_NONE(State.User__FavoriteCelebrity)
+not IS_NONE(State.User__FavoriteCelebrity)
 
 <PROMPTS>
 Prompt celeb_when []
