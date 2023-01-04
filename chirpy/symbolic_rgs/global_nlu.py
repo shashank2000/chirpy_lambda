@@ -8,5 +8,5 @@ def get_flags(context):
 		ADD_NLU_FLAG("GlobalFlag__WHAT")
 	if 'why' in utterance:
 		ADD_NLU_FLAG("GlobalFlag__WHY")
-	if current_state.entity_tracker.cur_entity and current_state.navigational_intent.pos_intent:
-		ADD_NLU_FLAG("GlobalFlag__SpecifiedEntity", current_state.entity_tracker.cur_entity)
+	if context.utilities["cur_entity"] and current_state.navigational_intent.pos_intent:
+		ADD_NLU_FLAG("GlobalFlag__SpecifiedEntity", context.utilities["cur_entity"])
