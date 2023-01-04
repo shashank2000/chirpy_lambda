@@ -238,47 +238,6 @@ Subnode subsequent_turn_neural [
   State.PERSONALISSUE__confirming_further_discussion = @constant(False)
 >
 
-Subnode possible_continue [
-  (
-    (
-      IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and 
-      IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and 
-      IS_TRUE(State.PERSONALISSUE__confirming_further_discussion) and
-      (IS_TRUE(Flags.GlobalFlag__YES) or IS_TRUE(Flags.PERSONALISSUE__noncommittal))
-    ) or
-    (
-      IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and
-      IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and
-      IS_FALSE(State.PERSONALISSUE__confirming_further_discussion) and
-      IS_TRUE(State.PERSONALISSUE__responded_with_question) and
-      IS_TRUE(Flags.PERSONALISSUE__short_response)
-    ) or
-    (
-      IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and
-      IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and
-      IS_FALSE(State.PERSONALISSUE__confirming_further_discussion)
-    )
-  )
-] {
-	- @neural_generation(prefix = {
-    - @one_of(
-      "That sounds frustrating.",
-      "How awful, I'm sorry.",
-      "That's tough and really unfortunate."
-    )
-    - @one_of(
-      "hopefully",
-      "I hope",
-    )
-  })
-  - @val(Locals.possible_continue_statement)
-} <
-	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
-  State.PERSONALISSUE__user_has_personal_issue = @constant(True)
-  State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(True)
-  State.PERSONALISSUE__confirming_further_discussion = @constant(False)
->
-
 Subnode possible_continue_accepted [
   (
     (
@@ -337,6 +296,27 @@ Subnode ending [
   State.PERSONALISSUE__supernode_is_responding = @constant(False)
   State.PERSONALISSUE__user_has_personal_issue = @constant(False)
   State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(False)
+  State.PERSONALISSUE__confirming_further_discussion = @constant(False)
+>
+
+Subnode possible_continue [
+] {
+	- @neural_generation(prefix = {
+    - @one_of(
+      "That sounds frustrating.",
+      "How awful, I'm sorry.",
+      "That's tough and really unfortunate."
+    )
+    - @one_of(
+      "hopefully",
+      "I hope",
+    )
+  })
+  - @val(Locals.possible_continue_statement)
+} <
+	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
+  State.PERSONALISSUE__user_has_personal_issue = @constant(True)
+  State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(True)
   State.PERSONALISSUE__confirming_further_discussion = @constant(False)
 >
 
