@@ -1,25 +1,19 @@
-from chirpy.response_generators.food import food_helpers
+import pickle as pkl
 from chirpy.core.response_generator.nlu import nlu_processing
 
-def get_best_attribute(food):
-    food_data = food_helpers.get_food_data(food)
-    if 'ingredients' in food_data:
-        return 'has_ingredient'
-    elif 'texture' in food_data:
-        return 'texture'
-    elif food_helpers.is_ingredient(food):
-        return 'is_ingredient'
-    else:
-        return None
+CITY_INFO_PATH = "/Users/virginiaadams/chirpycardinal/chirpy/symbolic_rgs/PLACES__intro/city_info.pkl"
+city_info = pkl.load(open(CITY_INFO_PATH, "rb"))
 
 @nlu_processing
-def get_flags(rg, state, utterance):
-    entity = rg.get_current_entity()	
+def get_flags(context):
+    entity = context.utilities["cur_entity"]
     if entity is None: return
     
     entity_name = entity.name.lower()
-    is_known_food = food_helpers.is_known_food(entity_name)
-    if is_known_food:
-        best_attribute = get_best_attribute(entity_name)
-        ADD_NLU_FLAG('FOOD__user_mentioned_food') 
-        ADD_NLU_FLAG('FOOD__best_comment_type', best_attribute) 
+    is_known_city = entity_name in city_info
+    if is_known_city:
+        ADD_NLU_FLAG('PLACES__user_mentioned_city') 
+        
+@nlu_processing
+def get_background_flags(context):
+    return

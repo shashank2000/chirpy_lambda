@@ -1,8 +1,8 @@
 locals:
   cur_entity:
-    eval: "rg.get_current_entity()"
+    eval: utilities.cur_entity
   lowercased_entity:
-    eval: "(rg.get_current_entity() or '').name.lower()"
+    eval: "(utilities.cur_entity or '').name.lower()"
     
   intro_statement: # Ah yes, potatoes are one of my favorite things to eat up here...
     - one of: 
