@@ -1,0 +1,21 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.User__FavoriteMovie)
+
+
+<PROMPTS>
+Prompt ask_user_opinion [ ] {
+    - "What"
+    - @one_of(
+        "do", "did"
+    )
+    - "you like about the movie?"
+}
+
+
+<LOCALS>
+Locals.placeholder = {
+  - "placeholder"
+}
+
+
+<SET_STATE>
