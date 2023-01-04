@@ -26,6 +26,7 @@
 - CELEB__known_work
 - CELEB__visited
 - CELEB__unknown
+- CELEB__generic
 - PERSONALISSUE__personal_sharing_negative
 - PERSONALISSUE__gratitude
 - PERSONALISSUE__is_continued_sharing

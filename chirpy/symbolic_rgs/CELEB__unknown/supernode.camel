@@ -41,3 +41,6 @@ Subnode make_celeb_work_comment [
 <SET_STATE_AFTER>
 Flags.CELEB__visited = {@constant(True)}
 Flags.CELEB__unknown = {@constant(True)}
+Flags.CELEB__discuss_movie = {@constant(False)}
+Flags.CELEB__discuss_tv = {@constant(False)}
+Flags.CELEB__discuss_song = {@constant(False)}

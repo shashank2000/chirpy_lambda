@@ -1,5 +1,7 @@
 <ENTRY_CONDITIONS>
 not IS_NONE(State.User__FavoriteCelebrity) and not IS_EQUAL(State.User__FavoriteCelebrityWorkType, "other")
+and (IS_TRUE(Flags.CELEB__discuss_movie) or IS_TRUE(Flags.CELEB__discuss_tv) or IS_TRUE(Flags.CELEB__discuss_song))
+and IS_TRUE(Flags.CELEB__unknown)
 
 <PROMPTS>
 Prompt fav_celeb_movie [IS_TRUE(Flags.CELEB__discuss_movie)] {
@@ -53,14 +55,18 @@ Subnode assess_work [
         {"Oh, I remember that!"}
     )
     - @helper.find_opinion(@val(State.User__FavoriteCelebrityCurrWork), @val(State.User__FavoriteCelebrityName))
-}
+} <
+    Flags.CELEB__discuss_movie = {@constant(False)}
+    Flags.CELEB__discuss_tv = {@constant(False)}
+    Flags.CELEB__discuss_song = {@constant(False)}
+>
 
 Subnode unknown_movie [
     not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(Flags.CELEB__discuss_movie)
 ] {
     - "Oh, interesting, I am not familiar with that movie!"
 } <
-    Flags.CELEB__discuss_movie = {@constant(False)}
+    Flags.CELEB__unknown = @constant(False)
 >
 
 Subnode unknown_tv [
@@ -74,3 +80,6 @@ Subnode unknown_song [
 ] {
     - "Sorry, I don't think I have listened to that song."
 }
+
+<SET_STATE_AFTER>
+Flags.CELEB__unknown = @val(Flags.CELEB__known_work)

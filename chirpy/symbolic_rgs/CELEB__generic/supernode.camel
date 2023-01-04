@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.User__FavoriteCelebrity)
+not IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(Flags.CELEB__generic) and IS_TRUE(Flags.CELEB__unknown)
 
 <PROMPTS>
 Prompt celeb_when []
@@ -18,3 +18,6 @@ Subnode give_celeb_opinion [] {
     )
     - @helper.get_celeb_opinion(@val(State.User__FavoriteCelebrityName))
 }
+
+<SET_STATE_AFTER>
+Flags.CELEB__generic = @constant(True)
