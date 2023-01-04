@@ -90,6 +90,9 @@ class SupernodeMaker(Transformer):
 			return nlg.NLGList(tok)
 		return tok
 	def condition__nlg(self, tok): return self.nlg(tok)
+
+	def prompt_group(self, tok):
+		return prompt.PromptGroup(tok)
 	
 	def prompt(self, tok):
 		prompt_name = tok[0].value
@@ -109,6 +112,9 @@ class SupernodeMaker(Transformer):
 			response=response,
 			assignments=assignment.AssignmentList(assignment_list)
 		)
+	
+	def subnode_group(self, tok):
+		return prompt.PromptGroup(tok)
 		
 	def subnode(self, tok):
 		subnode_name = tok[0].value
