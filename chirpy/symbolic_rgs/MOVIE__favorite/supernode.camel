@@ -16,25 +16,30 @@ Locals.placeholder = {
 
 
 <SET_STATE>
-State.User__FavoriteMovie = @helper.enterMovie(@val(Utilities.cur_entity))
+State.User__FavoriteMovie = {
+  @helper.enter_movie(@val(Utilities.cur_entity | talkable | lower))
+}
+# State.User__FavoriteMovie = @val(Utilities.cur_entity | talkable | lower)
+
 
 
 <SUBNODES>
 Subnode bot_has_watched [ ] {
-  @one_of(
-    {
+  # @one_of(
+    # {
       - @val(State.User__FavoriteMovie)
       - @one_of(
-        { "! It is one of my favorite movies!" },
-        { "is a fantastic movie, I agree." }
+        "! It is one of my favorite movies!",
+        "is a fantastic movie, I agree."
       )
-    },
-    {
-      - "I haven't watched"
-      - @val(State.User__FavoriteMovie)
-      - "yet!"
-    }
-  )
+      - @helper.get_important_scene(@val(State.User__FavoriteMovie))
+    # }
+    # {
+    #   - "I haven't watched"
+    #   - @val(State.User__FavoriteMovie)
+    #   - "yet!"
+    # }
+  # )
 }
 
 
