@@ -2,6 +2,8 @@
 
 CELEB__intro
 CELEB__discuss
+CELEB__generic
+CELEB__unknown
 # PERSONALISSUES__intro
 # PERSONALISSUES__subsequent_turn
 # FOOD__factoid

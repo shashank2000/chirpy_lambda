@@ -8,6 +8,7 @@ def get_flags(context):
 
     entity_name = entity.name.lower()
     is_known_celeb = celeb_helper.is_known_celeb(entity_name)
+    print("CHECKING CELEB")
     if is_known_celeb:
         ADD_NLU_FLAG('CELEB__user_mentioned_celeb')
         ADD_NLU_FLAG('CELEB__discuss_movie', False)
@@ -15,6 +16,8 @@ def get_flags(context):
         ADD_NLU_FLAG('CELEB__discuss_song', False)
         ADD_NLU_FLAG('CELEB__known_work', False)
 
+
 @nlu_processing
 def get_background_flags(context):
-    return
+    print("ADDING CELEB")
+    ADD_NLU_FLAG('CELEB__visited', True)

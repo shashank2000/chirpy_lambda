@@ -1,0 +1,20 @@
+<ENTRY_CONDITIONS>
+IS_NOT_NONE(State.User__FavoriteCelebrity)
+
+<PROMPTS>
+Prompt celeb_when []
+{
+    - "When did you start following"
+    - @val(State.User__FavoriteCelebrityName)
+    - "?"
+}
+
+<SUBNODES>
+Subnode give_celeb_opinion [] {
+    - @one_of(
+        {"I see!"},
+        {"Gotcha!"},
+        {"Right!"}
+    )
+    - @helper.get_celeb_opinion(@val(State.User__FavoriteCelebrityName))
+}

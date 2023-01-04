@@ -63,7 +63,7 @@ Subnode unknown_movie [
     Flags.CELEB__discuss_movie = {@constant(False)}
 >
 
-Subnode unknown_movie [
+Subnode unknown_tv [
     not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(Flags.CELEB__discuss_tv)
 ] {
     - "I think I have heard of that show but I'm not very familiar!"
