@@ -13,6 +13,7 @@ COMMENT: "#" /[^\n]/*
 
 // assignment
 assignment : variable "=" nlg
+condition_assignment : variable "=" condition
 
 // CAMEL syntax
 
@@ -37,7 +38,7 @@ PROMPT_NAME: /[a-zA-Z_1-9]+/
 continue_conditions_section : "<CONTINUE_CONDITIONS>" condition?
 
 // Section: Locals
-locals_section : "<LOCALS>" assignment*
+locals_section : "<LOCALS>" assignment* condition_assignment*
 
 // entry conditions takeover
 entry_conditions_takeover_section : "<ENTRY_CONDITIONS_TAKEOVER>" condition?

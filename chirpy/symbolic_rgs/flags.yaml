@@ -17,7 +17,6 @@
 - GlobalFlag__Initiative__request_name
 - GlobalFlag__Initiative__chatty
 - GlobalFlag__LastBotTurnWasOpenEnded
-- GlobalFlag__LastTurnUsedNeuralGeneration
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
 - CELEB__user_mentioned_celeb

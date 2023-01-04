@@ -120,7 +120,7 @@ class VariableInPredicate(Predicate):
 	def evaluate(self, context):
 		var = self.variable.generate(context)
 		for val in self.vals:
-			if variable == val.generate(context): return True
+			if var == val.generate(context): return True
 		return False
 		
 	def get_score(self):

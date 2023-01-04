@@ -23,6 +23,7 @@ def get_utilities(state_manager, supernode):
 		"cur_entity": current_entity,
 		"cur_supernode": supernode.name if supernode else "",
 		"cur_turn_num": state_manager.current_state.turn_num,
+		"response_text" : "",
 	}
 
 
@@ -80,6 +81,18 @@ class Context:
 			logger.primary_info(f"Non-null flags for supernode {supernode} are: {[x for x in flags if bool(flags[x])]}")
 		return self
 		
+	@property
+	def supernodeturns(self):
+		return self.state.turns_history
+
+	def update_with_background_flags(self, supernodes):
+			"""Update context's flags with all background flags from all supernodes."""
+			_flags = {}
+			for supernode in supernodes:
+					bg_flags = supernode.get_background_flags(self)
+					_flags.update(bg_flags)
+			self.flags.update(_flags)
+
 	def set(self, variable, value):
 		namespace = getattr(self, variable.namespace.lower())
 		namespace[variable.name] = value

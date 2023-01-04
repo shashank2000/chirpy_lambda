@@ -19,11 +19,16 @@ class SupernodeMaker(Transformer):
 	def nlg__variable(self, tok): return self.variable(tok)
 	def condition__variable(self, tok): return self.variable(tok)
 	
+	def condition__bool(self, tok):
+		if str(tok[0]).lower() == 'true':
+			return predicate.TruePredicate()
+		return predicate.FalsePredicate()
+	
 	def condition__predicate(self, tok):
 		if str(tok[0]) == 'IS_EQUAL':
 			return predicate.VariableIsPredicate(variable=tok[1], val=tok[2])
 		elif str(tok[0]) == 'IS_IN': 
-			return predicate.VariableInPredicate(variable=tok[1], vals=tok[2])
+			return predicate.VariableInPredicate(variable=tok[1], vals=tok[2:])
 		elif str(tok[0]) == 'IS_GREATER_THAN': 
 			return predicate.VariableGTPredicate(variable=tok[1], val=tok[2])
 		elif str(tok[0]) == 'IS_LESS_THAN': 
@@ -57,7 +62,16 @@ class SupernodeMaker(Transformer):
 	
 	def nlg__ESCAPED_STRING(self, tok): return nlg.String(str(tok.value)[1:-1])
 	def nlg__PUNCTUATION(self, tok): return nlg.String(str(tok.value))
-	def nlg__val(self, tok): return nlg.Val(tok[0], tok[1:])
+	def nlg__val(self, tok): 
+		operations = []
+		if len(tok) > 1:
+			# tokens are [operator, pipe function, operator, pipe function, ...]
+			extra_args = tok[1:]
+			iterator = iter(extra_args)
+			# pairs extra_args into [(operator, pipe function), (operator, pipe function), ...]
+			operations = list(zip(iterator, iterator))
+			operations = [(op[0].value, op[1].value) for op in operations]
+		return nlg.Val(tok[0], operations)
 	def nlg__neural_generation(self, tok): return nlg.NeuralGeneration(tok[0])
 	def nlg__one_of(self, tok): 
 		return nlg.OneOf(tok)
@@ -78,12 +92,23 @@ class SupernodeMaker(Transformer):
 	def condition__nlg(self, tok): return self.nlg(tok)
 	
 	def prompt(self, tok):
-		if len(tok) == 3:
-			prompt_name, condition, nlg = tok
-		else:
-			prompt_name, nlg = tok
-			condition = predicate.TruePredicate()
-		return prompt.Prompt(prompt_name.value, condition, nlg)
+		prompt_name = tok[0].value
+		condition = predicate.TruePredicate()
+		assignment_list = []
+		response = None
+		for token in tok[1:]:
+			if isinstance(token, predicate.Predicate):
+				condition = token
+			elif isinstance(token, nlg.NLGNode):
+				response = token
+			elif isinstance(token, assignment.Assignment):
+				assignment_list.append(token)
+		return prompt.Prompt(
+			name=prompt_name,
+			entry_conditions=condition,
+			response=response,
+			assignments=assignment.AssignmentList(assignment_list)
+		)
 		
 	def subnode(self, tok):
 		subnode_name = tok[0].value
@@ -109,6 +134,9 @@ class SupernodeMaker(Transformer):
 		
 	def assignment(self, tok):
 		return assignment.Assignment(tok[0], tok[1])
+	
+	def condition_assignment(self, tok):
+		return assignment.Assignment(tok[0], tok[1], True)
 		
 	### PROMPT
 	def prompt_section(self, tok):
@@ -126,7 +154,7 @@ class SupernodeMaker(Transformer):
 		
 	### ENTRY CONDITIONS TAKEOVER
 	def entry_conditions_takeover_section(self, tok):
-		return "entry_conditions_takeover", tok
+		return "entry_conditions_takeover", tok[0]
 		
 	### SET STATE
 	def set_state_section(self, tok):
