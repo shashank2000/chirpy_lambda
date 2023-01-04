@@ -11,7 +11,13 @@ def found_phrase(phrase, utterance):
 
 
 def is_positive(rg, utterance):
-    top_da = rg.state_manager.current_state.dialogact['top_1']
-    return top_da == 'pos_answer' or \
-        utterance.lower() in YES or \
-        (any(found_phrase(i.lower(), utterance) for i in YES) and not any(found_phrase(i.lower(), utterance) for i in NO))
+    pos_prob = rg.state_manager.current_state.dialogact['pos_answer']
+    neg_prob = rg.state_manager.current_state.dialogact['neg_answer']
+    if pos_prob >= neg_prob:
+        return True 
+    else:
+        return False
+    # top_da = rg.state_manager.current_state.dialogact['top_1']
+    # return top_da == 'pos_answer' or \
+    #     utterance.lower() in YES or \
+    #     (any(found_phrase(i.lower(), utterance) for i in YES) and not any(found_phrase(i.lower(), utterance) for i in NO))
