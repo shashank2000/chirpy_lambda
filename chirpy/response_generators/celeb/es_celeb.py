@@ -5,6 +5,10 @@ import pickle
 from chirpy.core.util import query_es_index, get_elasticsearch
 import tqdm
 
+from chirpy.core.logging_utils import setup_logger, PROD_LOGGER_SETTINGS
+
+setup_logger(PROD_LOGGER_SETTINGS)
+
 MAX_ES_SEARCH_SIZE = 500
 
 ANCHORTEXT_QUERY_TIMEOUT = 3.0  # seconds
@@ -85,11 +89,15 @@ if __name__ == "__main__":
     all_celeb_info = json.load(open("all_celeb_info.json"))
 
     for c in tqdm.tqdm(all_celeb_info):
+        filtered_celeb.update({c: {}})
         for k in all_celeb_info[c]:
-            filtered_celeb.update({c: {k: []}})
-            for e in all_celeb_info[c][k]:
-                if filter_entities(e[0]):
-                    filtered_celeb[c][k].append(e)
+            if k != "pronoun":
+                filtered_celeb[c].update({k: []})
+                for e in all_celeb_info[c][k]:
+                    if filter_entities(e[0]):
+                        filtered_celeb[c][k].append(e)
+            else:
+                filtered_celeb[c].update({k: all_celeb_info[c][k]})
 
     json.dump(filtered_celeb, open("filtered_celeb.json", "w+"))
 

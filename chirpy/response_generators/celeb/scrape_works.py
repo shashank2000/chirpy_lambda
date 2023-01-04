@@ -7,6 +7,8 @@ import json
 
 from tqdm import tqdm
 
+from es_celeb import filter_entities
+
 
 def call_search(sub):
     url = 'https://en.wikipedia.org/w/api.php'
@@ -130,13 +132,14 @@ def extract_entities(subject):
         "characters": [],
         "pronoun": determine_pronouns(subject)
     }
+    sum_ents = 0
     for e in tqdm(related_entities):
         e_sp = call_search(e)
         if e_sp is not None and "Award" not in e:
             all_cats = call_categories(e)
             if decide_work(all_cats):
                 pv = call_pageview(e)
-                if pv > 1000:
+                if pv > 2000:
                     """
                         Check to make sure it is a song or a film or a TV show
                     """
@@ -144,17 +147,22 @@ def extract_entities(subject):
                     matches_e = re.findall(subject, e_text)
                     total_nums = len(matches_e)
 
-                    if total_nums >= 3:
-                        if "people" in all_cats or "character" in all_cats:
+                    if total_nums >= 3 and filter_entities(e):
+                        if "people" in all_cats or "character" in all_cats or "fictional" in all_cats:
                             celeb_dict['characters'].append((e, pv))
-                        elif "songs" in all_cats:
-                            celeb_dict['songs'].append((e, pv))
-                        elif "films" in all_cats:
-                            celeb_dict['films'].append((e, pv))
-                        elif "television" in all_cats or "tv" in all_cats:
-                            celeb_dict['tv'].append((e, pv))
+                            sum_ents += 1
+                        else:
+                            if "songs" in all_cats:
+                                celeb_dict['songs'].append((e, pv))
+                                sum_ents += 1
+                            elif "films" in all_cats or "movie" in all_cats:
+                                celeb_dict['films'].append((e, pv))
+                                sum_ents += 1
+                            elif "television" in all_cats or "tv" in all_cats or "series" in all_cats:
+                                celeb_dict['tv'].append((e, pv))
+                                sum_ents += 1
     print("Finished final parsing for", subject)
-    return celeb_dict
+    return celeb_dict, sum_ents
 
 
 if __name__ == "__main__":
@@ -162,9 +170,11 @@ if __name__ == "__main__":
     # all_celebs = ["Tom Cruise", "Nathan Fillion", "Ariana Grande", "Emma Watson"]
     master_celeb = {}
     for c in all_celebs:
-        master_celeb.update({
-            c.lower(): extract_entities(c)
-        })
+        c_d, e_sum = extract_entities(c)
+        if e_sum >= 3:
+            master_celeb.update({
+                c.lower(): c_d
+            })
     print(master_celeb)
-    json.dump(master_celeb, open("all_celeb_info_test.json", "w+"))
+    json.dump(master_celeb, open("all_celeb_info.json", "w+"))
 
