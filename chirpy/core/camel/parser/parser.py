@@ -1,7 +1,7 @@
 import os
 
 from lark import Lark, Transformer, Token, Tree
-from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode
+from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode, entitygroup
 
 import sys
 
@@ -137,6 +137,10 @@ class SupernodeMaker(Transformer):
 	
 	def condition_assignment(self, tok):
 		return assignment.Assignment(tok[0], tok[1], True)
+
+	def entity_group(self, tok):
+		entityGroupName = str(tok[0].value)[1:-1] # remove leading and ending quotes
+		return entitygroup.EntityGroup(entityGroupName)
 		
 	### PROMPT
 	def prompt_section(self, tok):
@@ -167,6 +171,10 @@ class SupernodeMaker(Transformer):
 	### SET STATE AFTER
 	def set_state_after_section(self, tok):
 		return "set_state_after", assignment.AssignmentList(tok)
+
+	### ENTITY GROUPS (for takeover)
+	def entity_groups_section(self, tok):
+		return "entity_groups", entitygroup.EntityGroupList(tok)
 	
 	def document(self, tok):
 		return tok
