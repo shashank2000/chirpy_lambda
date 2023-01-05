@@ -1,0 +1,67 @@
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__FavoriteMovie)
+
+<PROMPTS>
+Prompt favorite_movie [ ] {
+    "What's your favorite movie?"
+}
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.MOVIE__user_mentioned_movie)
+
+<LOCALS>
+Locals.intro_statement = {
+    - @one_of(
+        {"Ah yes"},
+        {"Oh yeah"}
+    )
+    - ,
+    - @val(Utilities.cur_entity | talkable | lower)
+    - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
+    - @one_of(
+        "one of my favorite movies to watch up here in the cloud.",
+        "such an amazing choice. It's one of my favorite movies up here in the cloud."
+    )
+}
+
+<SET_STATE>
+State.User__FavoriteMovie = @val(Utilities.cur_entity | name)
+State.User__FavoriteMovieTalkable = @val(Utilities.cur_entity | talkable | lower)
+State.User__FavoriteMovieMainActor = @helper.get_movie_actor(@val(Utilities.cur_entity | name))
+State.User__FavoriteMovieDirector = @helper.get_movie_director(@val(Utilities.cur_entity | name))
+State.User__FavoriteMovieGenre = @helper.get_movie_genre(@val(Utilities.cur_entity | name))
+
+
+<SUBNODES>
+Subnode make_actor_comment [
+  not IS_NONE(State.User__FavoriteMovieMainActor)
+] {
+  - @val(Locals.intro_statement)
+  - "Personally, I really loved the acting of"
+  - @val(State.User__FavoriteMovieMainActor)
+  - .
+}
+
+Subnode make_director_comment [
+  not IS_NONE(State.User__FavoriteMovieMainActor)
+] {
+  - @val(Locals.intro_statement)
+  - "Personally, I really loved the unique directing style of"
+  - @val(State.User__FavoriteMovieDirector)
+  - .
+}
+
+Subnode default [
+] {
+  - @val(Locals.intro_statement)
+  - @neural_generation(prefix={
+     - "I especially love how"
+     - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
+  })
+}
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+

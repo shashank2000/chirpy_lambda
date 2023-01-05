@@ -1,0 +1,47 @@
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__PreferredMovieActor)
+
+<PROMPTS>
+Prompt actor_preferences [ ] {
+    "I'm interested in your preferences for Movies. What actor do you enjoy watching?"
+}
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.MOVIE__user_mentioned_preferred_actor)
+
+<LOCALS>
+Locals.intro_statement = {
+    - @one_of(
+        {"Ah yes"},
+        {"Oh yeah"}
+    )
+    - ,
+    - @val(Utilities.cur_entity | talkable | lower)
+    - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
+    - "an amazing actor."
+}
+
+<SET_STATE>
+State.User__PreferredMovieActor = @val(Utilities.cur_entity | name)
+State.User__PreferredMovieActorMovie = @helper.get_movie_from_actor(@val(Utilities.cur_entity | name))
+State.User__PreferredMovieActorMovieDesc = @helper.get_movie_desc(@val(State.User__PreferredMovieActorMovie))
+
+<SUBNODES>
+Subnode make_actor_comment [
+  not IS_NONE(State.User__PreferredMovieActorMovie)
+] {
+  - @val(Locals.intro_statement)
+  - "You should see"
+  - @val(State.User__PreferredMovieActor)
+  - "in"
+  - @val(State.User__PreferredMovieActorMovie)
+  - "."
+  - @val(State.User__PreferredMovieActorMovieDesc)
+}
+
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+

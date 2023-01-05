@@ -40,3 +40,16 @@ User__CurrentOpinionFollowUp: False
 User__CurrentOpinionBotResponse: False
 User__OpinionYes: False
 User__OpinionNo: False
+User__FavoriteMovie: null
+User__FavoriteMovieTalkable: null
+User__FavoriteMovieMainActor: null
+User__FavoriteMovieDirector: null
+User__FavoriteMovieGenre: null
+
+User__PreferredMovieActor: null
+User__PreferredMovieActorMovie: null
+User__PreferredMovieActorMovieDesc: null
+
+User__PreferredMovieGenre: null
+User__PreferredMovieGenreMovie: null
+User__PreferredMovieGenreMovieDesc: null

@@ -1,0 +1,44 @@
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__PreferredMovieGenre)
+
+<PROMPTS>
+Prompt genre_preferences [ ] {
+    "I'm interested in your preferences for Movies. What genre of movies do you enjoy watching?"
+}
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.MOVIE__user_mentioned_preferred_genre)
+
+<LOCALS>
+Locals.intro_statement = {
+    - @one_of(
+        {"Ah yes"},
+        {"Oh yeah"}
+    )
+    - "I love"
+    - @val(Utilities.cur_entity | talkable | lower)
+    - "movies."
+}
+
+<SET_STATE>
+State.User__PreferredMovieGenre = @val(Utilities.cur_entity | name)
+State.User__PreferredMovieGenreMovie = @helper.get_movie_from_genre(@val(Utilities.cur_entity | name))
+State.User__PreferredMovieGenreMovieDesc = @helper.get_movie_desc(@val(State.User__PreferredMovieGenreMovie))
+
+<SUBNODES>
+Subnode make_actor_comment [
+  not IS_NONE(State.User__PreferredMovieGenreMovie)
+] {
+  - @val(Locals.intro_statement)
+  - "You should see"
+  - @val(State.User__PreferredMovieGenreMovie)
+  - "."
+  - @val(State.User__PreferredMovieGenreMovieDesc)
+}
+
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+

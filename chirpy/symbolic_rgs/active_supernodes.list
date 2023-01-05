@@ -16,3 +16,6 @@ FOOD__intro
 FOOD__factoid_gpt
 GLOBAL__openended
 GLOBALS
+MOVIE__favourite
+MOVIE__preferences_actor
+MOVIE__preferences_genre
