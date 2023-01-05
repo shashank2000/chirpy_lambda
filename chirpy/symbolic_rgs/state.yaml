@@ -20,6 +20,7 @@ PERSONALISSUE__LastTurnUsedNeuralGeneration: False
 # Movies
 User__LikeMovie: null
 User__FavoriteMovie: null
+User__FavoriteMovieReason: null
 
 
 # Launch
