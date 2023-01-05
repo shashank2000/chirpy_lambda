@@ -91,7 +91,7 @@ class SymbolicResponseGenerator:
         Else, returns the current supernode if it exists.
         """
         for supernode in self.get_supernodes():
-            if supernode.entry_conditions_takeover.evaluate(context):
+            if supernode.entry_conditions_takeover.evaluate(context) or supernode.entity_groups.evaluate(context):
                 return supernode
         return self.get_current_supernode_with_fallback(context)
 
