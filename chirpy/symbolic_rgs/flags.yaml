@@ -19,7 +19,7 @@
 - GlobalFlag__LastBotTurnWasOpenEnded
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
-- PLACES__user_mentioned_place
+- PLACES__user_mentioned_city
 - PERSONALISSUE__personal_sharing_negative
 - PERSONALISSUE__gratitude
 - PERSONALISSUE__is_continued_sharing
