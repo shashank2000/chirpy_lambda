@@ -21,7 +21,7 @@ Locals.intro_statement = {
         {"Awesome!"},
         {"Nice!"},
         {"No way!"},
-        {"Such an amazing choice"}
+        {"Such an amazing choice!"}
     )
 }
 
@@ -41,14 +41,15 @@ Subnode make_city_food_comment [
    - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
    - "famous for"
    - @val(State.User__FavoritePlaceFoodComment)
-   - "Have you ever tried it?"
 }
+
 Subnode make_city_specific_comment [
    not IS_NONE(State.User__FavoritePlaceComment)
 ] {
    - @val(Locals.intro_statement)
    - @val(State.User__FavoritePlaceComment)
 }
+
 <SET_STATE_AFTER>
 Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
   @constant(True)
