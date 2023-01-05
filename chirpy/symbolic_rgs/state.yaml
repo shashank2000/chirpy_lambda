@@ -10,16 +10,7 @@ User__FavoriteFoodTalkable: null
 User__FavoriteFoodTexture: null
 User__FavoriteSport: null
 User__FavoritePlace: null
-<<<<<<< HEAD
 User__FavoritePlaceComment: null
-=======
-User__FavoritePlaceTalkable: null
-User__FavoritePlaceComment: null
-User__FavoritePlaceFoodComment: null
-User__FavoritePlacePopulation: null
-User__FavoritePlacePopulationPercentOfCountry: null
-User__FavoritePlaceLanguagesSpoken: null
->>>>>>> db7511cae10017521637c317703d9646577d43a5
 PERSONALISSUE__supernode_is_responding: False
 PERSONALISSUE__user_has_personal_issue: False
 PERSONALISSUE__need_confirmation_for_further_discussion: False
