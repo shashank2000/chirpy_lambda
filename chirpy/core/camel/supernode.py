@@ -5,6 +5,7 @@ from chirpy.core.camel.predicate import Predicate, TruePredicate, FalsePredicate
 from chirpy.core.camel.prompt import PromptList
 from chirpy.core.camel.subnode import SubnodeList
 from chirpy.core.camel.assignment import AssignmentList
+from chirpy.core.camel.entitygroup import EntityGroupList
 from dataclasses import dataclass, field, fields
 from typing import List, Any
 
@@ -21,6 +22,7 @@ class Supernode:
 	entry_conditions_takeover : Predicate = field(default_factory=FalsePredicate)
 	set_state : AssignmentList = field(default_factory=AssignmentList)
 	set_state_after : AssignmentList = field(default_factory=AssignmentList)
+	entity_groups : EntityGroupList = field(default_factory=EntityGroupList)
 	
 	@classmethod
 	def load(cls, camel_tree, name):
