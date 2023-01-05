@@ -1,5 +1,6 @@
 <ENTRY_CONDITIONS>
 not IS_NONE(State.User__FavoriteMovie)
+and IS_NONE(State.User__FavoriteMovieReason)
 
 
 <PROMPTS>
@@ -19,3 +20,21 @@ Locals.placeholder = {
 
 
 <SET_STATE>
+State.User__FavoriteMovieReason = {
+    @helper.get_user_reasons(Utterance)
+#   @helper.get_user_reasons(@val(Utilities.utterance))
+}
+
+
+<SUBNODES>
+Subnode bot_answers [
+    IS_TRUE(Flags.MOVIE__user_mentioned_reason)
+] {
+    - "I see. Thank you for sharing!"
+    - @one_of(
+        "I can't agree more with what you've just said. The",
+        "I completely agree with you that the"
+    )
+    - @val(State.User__FavoriteMovieReason)
+    - "of the movie is phenomenal."
+}

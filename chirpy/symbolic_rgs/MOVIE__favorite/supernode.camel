@@ -25,25 +25,26 @@ State.User__FavoriteMovie = {
 
 <SUBNODES>
 Subnode bot_has_watched [ ] {
-  # @one_of(
-    # {
+  @one_of(
+    {
       - @val(State.User__FavoriteMovie)
       - @one_of(
         "! It is one of my favorite movies!",
-        "is a fantastic movie, I agree."
+        "is a fantastic movie, I agree.",
+        "! That's a great one."
       )
       - @helper.get_important_scene(@val(State.User__FavoriteMovie))
-    # }
-    # {
-    #   - "I haven't watched"
-    #   - @val(State.User__FavoriteMovie)
-    #   - "yet!"
-    # }
-  # )
+    },
+    {
+      - "I haven't watched"
+      - @val(State.User__FavoriteMovie)
+      - "yet!"
+    }
+  )
 }
 
 
 <SET_STATE_AFTER>
-Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
-  @constant(True)
-}
+# Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+#   @constant(True)
+# }
