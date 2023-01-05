@@ -47,6 +47,7 @@ class BaseSymbolicState:
     last_response : ResponseGeneratorResult = field(default_factory=lambda: None)
     
     def check(self, key):
+        print(key)
         assert key in ALL_STATE_KEYS, f"Key not found: {key}"
         
     def __getitem__(self, key):

@@ -1,7 +1,10 @@
 import pickle as pkl
 from chirpy.core.response_generator.nlu import nlu_processing
+import os
 
-CITY_INFO_PATH = "/Users/virginiaadams/chirpycardinal/chirpy/symbolic_rgs/PLACES__intro/city_info.pkl"
+print(os.getcwd())
+
+CITY_INFO_PATH = "./chirpy/symbolic_rgs/PLACES__intro/city_info.pkl"
 city_info = pkl.load(open(CITY_INFO_PATH, "rb"))
 
 @nlu_processing
