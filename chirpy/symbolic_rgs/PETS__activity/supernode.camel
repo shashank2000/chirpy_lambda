@@ -19,8 +19,19 @@ Prompt pet_activity_no_name [
 
 <SET_STATE>
 #TODO  add handling to store favorite activity
+State.User__PetFavoriteActivity = @val(Utilities.cur_entity)
+# talkable ie wiki stuff might not be as relevant here
+State.User__PetFavoriteActivityTalkable = @val(Utilities.cur_entity | talkable | lower)
 
 <SUBNODES>
+
+
+Subnode valid_activity [
+  not IS_NONE(State.User__PetFavoriteActivity)
+] {
+  # v0 of this lol
+  - @helper.generate(@val(State.User__PetFavoriteActivityTalkable));
+}
 
 Subnode default [
 ] {

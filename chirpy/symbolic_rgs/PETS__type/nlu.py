@@ -17,7 +17,6 @@ def is_known_animal(entity):
 
 @nlu_processing
 def get_flags(context):
-    breakpoint()
     entity = context.utilities["cur_entity"]
     if entity is None: return
     
