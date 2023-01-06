@@ -1,0 +1,49 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(Flags.PETS__user_has_dog) and
+IS_NONE(State.User__PetType)
+
+<PROMPTS>
+Prompt pet_type_with_name [ 
+  not IS_NONE(State.User__PetName)
+] {
+    - "What breed is"
+    - @val(State.User__PetName)
+    - "?"
+}
+
+Prompt pet_type_no_name [ 
+  IS_NONE(State.User__PetName)
+] {
+    "What breed is your dog?"
+}
+
+
+<SET_STATE>
+State.User__PetBreedTalkable = @val(Utilities.cur_entity | talkable | lower)
+
+<SUBNODES>
+
+Subnode valid_type [
+  not IS_NONE(State.User__PetBreedTalkable)
+] {
+  - @oneof(
+    {
+      - "That's awesome!"
+      - "I love"
+      - @val(State.User__PetBreedTalkable)
+      - "."
+    },
+    @helpers.generate(@val(State.User__PetBreedTalkable))
+  )
+	 
+}
+
+Subnode default [
+] {
+  - "A great choice! Did you know that"
+  - @helpers.generate("A fun fact about alligators is that ")
+} <
+   State.User__HypotheticalPet = @constant(None)
+>
+
+<SET_STATE_AFTER>

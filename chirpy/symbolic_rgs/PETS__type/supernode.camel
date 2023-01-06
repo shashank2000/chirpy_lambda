@@ -20,7 +20,6 @@ Prompt pet_type_no_name [
 
 <SET_STATE>
 State.User__PetType = @val(Utilities.cur_entity)
-# TODO(Shashank): does talkable automatically deal with sg/pl for me? 
 State.User__PetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
 
 <SUBNODES>
@@ -37,7 +36,7 @@ Subnode valid_type [
 Subnode default [
 ] {
   - "A great choice! Did you know that"
-  - @neural_generation(prefix="giraffes")
+  - @helpers.generate("A fun fact about giraffes is that ")
 } <
    State.User__HypotheticalPet = @constant(None)
 >
