@@ -43,9 +43,7 @@ Locals.commiseration_acknowledgement = {
     "Yes, it is a bit disappointing."
 	)
 }
-Locals.opinion = {
-	- "Personally, I feel like TODO"
-}
+Locals.opinion = @helper.get_opinion(@val(Utilities.cur_entity), @val(Flags.WIKI__NEUTRAL_SENTIMENT), @val(Flags.WIKI__POS_SENTIMENT))
 
 <SET_STATE>
 
@@ -84,8 +82,7 @@ Subnode positive_opinion [
 Subnode negative_opinion [
 	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
 ] {
-	- "That's an interesting take,"
-	- @val(Locals.commiseration_acknowledgement)
+	- "That's an interesting take."
 	- @val(Locals.opinion)
 }
 
