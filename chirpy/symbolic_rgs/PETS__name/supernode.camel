@@ -7,8 +7,8 @@ Prompt pet_name [ ] {
 }
 
 <SET_STATE>
-State.User__PetName = @val(Flags.PETS__ProposedName)
-State.User__PetNameGivenUp = @val(Flags.PETS__NoDiscloseName)
+State.User__PetName = @val(Flags.PETS__proposed_name)
+State.User__PetNameGivenUp = @val(Flags.PETS__no_disclose_name)
 
 <SUBNODES>
 Subnode has_name [

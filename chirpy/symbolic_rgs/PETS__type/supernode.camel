@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-IS_TRUE(State.User__HasPet) and
+IS_TRUE(Flags.PETS__user_owns_pet) and
 IS_NONE(State.User__PetType)
 
 <PROMPTS>
@@ -20,23 +20,27 @@ Prompt pet_type_no_name [
 
 <SET_STATE>
 State.User__PetType = @val(Utilities.cur_entity)
-State.User__PetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
-
+# TODO(Shashank): does talkable automatically deal with sg/pl for me? 
 
 <SUBNODES>
 
 Subnode valid_type [
   not IS_NONE(State.User__PetType)
 ] {
-  - "That's awesome!"
-  - "I love"
-  - @val(State.User__PetTypeTalkable)
-  - "."
-  # TODO: add some neural generation and/or a factoid here maybe
-  #- @neural_generation(prefix="Did you know that " + str(State.User__PetType))
-  #- "I think that's really cool."
+	- @neural_generation(prefix = {
+    - @one_of(
+      "That sounds frustrating.",
+      "How awful, I'm sorry.",
+      "That's tough and really unfortunate."
+    )
+    - @one_of(
+      "hopefully",
+      "I hope",
+    )
+  })
 }
 
+# TODO(Shashank): I don't konw if this is the best way to do default here
 Subnode default [
 ] {
   - "A great choice! Did you know that"

@@ -26,9 +26,10 @@
 - PERSONALISSUE__short_response
 - LAUNCH__NoDiscloseName
 - LAUNCH__ProposedName
-- PETS__userOwnsPet
-- PETS__userOwnsNoPet
-- PETS__favoritePetType
-- PETS__NoDiscloseName
-- PETS__ProposedName
+- PETS__user_owns_pet
+- PETS__user_owns_no_pet
+- PETS__favorite_pet_type
+- PETS__no_disclose_name
+- PETS__proposed_name
 - PETS__age
+- PETS__user_has_dog

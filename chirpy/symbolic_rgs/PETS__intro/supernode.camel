@@ -9,10 +9,11 @@ Prompt has_pet [ ] {
 <SET_STATE>
 # TODO: user may potentially say pet type here, should be able to handle it here
 
+
 <SUBNODES>
 
 Subnode has_pet [
-   IS_TRUE(Flags.PETS__userOwnsPet)
+   IS_TRUE(Flags.PETS__user_owns_pet)
 ] {
    - "Isn't it awesome to own a pet!"
 } <
@@ -20,7 +21,7 @@ Subnode has_pet [
 >
 
 Subnode has_no_pet [
-   IS_TRUE(Flags.PETS__userOwnsNoPet)
+   IS_TRUE(Flags.PETS__user_owns_no_pet)
 ] {
    - "Oh interesting! That makes me think --"
 } <

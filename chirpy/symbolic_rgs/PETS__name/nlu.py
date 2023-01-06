@@ -92,10 +92,10 @@ def get_name_from_utterance(context, remove_no=False) -> Optional[str]:
 def get_flags(context):
     no_slots = DoesNotWantToSayNameTemplate().execute(context.utterance)
     if no_slots or context.state_manager.current_state.corenlp['sentiment'] in (Sentiment.NEGATIVE, Sentiment.STRONG_NEGATIVE):
-        ADD_NLU_FLAG("PETS__NoDiscloseName")
+        ADD_NLU_FLAG("PETS__no_disclose_name")
         
     proposed_name = get_name_from_utterance(context)
-    ADD_NLU_FLAG("PETS__ProposedName", proposed_name)
+    ADD_NLU_FLAG("PETS__proposed_name", proposed_name)
 
 
 @nlu_processing
