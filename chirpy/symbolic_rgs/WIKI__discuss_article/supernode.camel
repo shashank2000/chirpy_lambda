@@ -1,0 +1,44 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__discuss_article)
+
+<PROMPTS>
+Prompt discuss_article [ ] {
+	- @one_of(
+		{
+			- "If you'd like, we could also talk about"
+			- @helper.entitys_section_choices(@val(Utilities.cur_entity), @val(State.WIKI__sections))
+			- "."
+		}, {
+    	- "Well, I've also read about"
+			- @helper.entitys_section_choices(@val(Utilities.cur_entity), @val(State.WIKI__sections))
+			- ","
+			- "if that sounds interesting to you."
+		}, {
+      - "I think"
+			- "{entitys_section_choices}"
+			- @helper.is_are(@val(State.WIKI__sections))
+			- "pretty interesting too."
+			- "Wanna hear about"
+			- @helper.them_it(@val(State.WIKI__sections))
+			- "?"
+		}, {
+      - "{entitys_section_choices} are rather fascinating. Do you want to hear more about"
+			- @helper.them_it(@val(State.WIKI__sections))
+			- "?"
+		}
+	)
+}
+
+Prompt keep_discussing_article [] {
+	- "Not implemented yet."
+}
+
+<LOCALS>
+
+<SET_STATE>
+
+<SUBNODES>
+Subnode default [
+] {
+	- "Nothing to say yet."
+}

@@ -107,3 +107,7 @@ Subnode default [ ] {
 	- @neural_generation(prefix="")
 	- @val(Locals.opinion)
 }
+
+<SET_STATE>
+Flags.WIKI__understand_user_better = @constant(False)
+Flags.WIKI__discuss_article = @constant(True)
