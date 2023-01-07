@@ -1,46 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchResult } from './fetch';
+import ChatBox from './ChatBox';
 import RGStatePanel from './RGState';
 import SubnodePanel from './Subnode';
 import SupernodePanel from './Supernode';
+import PromptPanel from './Prompt';
+import LogsPanel from './Logs';
 import GenerationPanel from './Generation';
 
-
-const ChatBox = (props) => {
-  const out = [];
-  
-  for (const [idx, message] of props.messages.entries()) {
-    if (message.source == "spin") {
-      out.push(
-        <div className="message-spin">
-          <i className="fa fa-spinner fa-spin"></i>
-        </div>
-      ) 
-    } else {
-      out.push(
-        <div className={`message message-${message.source} ${(props.activeMessage.text == message.text) ? "active" : "inactive"}`} key={idx} onClick={e => props.activateMessage(message)}>
-          {message.text}
-        </div>
-      );
-    }
-  }
-  return (
-    <div className="chat-container">
-      <div className="messages">{out}</div>
-      <div id="type-bar">
-        <form onSubmit={props.onInput}>
-          <input type="text" className="input" value={props.message} onChange={e => props.setMessage(e.target.value)} placeholder="hi"/>
-        </form>
-      </div>
-   </div> 
-  );
-}
+const START = "hi";
 
 const ControlPanel = (props) => {
   return <div className="control-panel">
-      <RGStatePanel currMessage={props.currMessage}/>
-      <SubnodePanel currMessage={props.currMessage}/>
-      <SupernodePanel currMessage={props.currMessage}/>
-      <GenerationPanel currMessage={props.currMessage}/>
+      <div className="buttons">
+        <a className="reset-button button" href="#" onClick={e => props.reset()}>Reset</a>
+        <a className="reset-button button" href="#" onClick={e => props.resetAndRerollout()}>Reset and Rerollout</a>
+          <LogsPanel currMessage={props.currMessage}/>
+      </div>
+      <div className="panels">
+        <SubnodePanel currMessage={props.currMessage}/>
+        {/* <GenerationPanel currMessage={props.currMessage}/> */}
+        <SupernodePanel currMessage={props.currMessage}/>
+        <PromptPanel currMessage={props.currMessage}/>
+        <RGStatePanel currMessage={props.currMessage}/>
+      </div>
+      
+
   </div>
 }
 
@@ -48,57 +33,27 @@ const Main = (props) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [activeMessage, setActiveMessage] = useState({});
-  // const [currMessage, setCurrMessage] = useState({
-  //   "text": "this is a test",
-  //   "subnodes": {
-  //     "Global__Thingy": {
-  //       "available": true,
-  //       "chosen": true,
-  //     },
-  //     "Global__Thingy25": {
-  //       "available": true,
-  //       "chosen": false,
-  //     }
-  //   },
-  //   "supernodes": {
-  //     "FOOD_factoid": {
-  //       "available": true,
-  //       "chosen": true,
-  //     },
-  //     "GLOBALS": {
-  //       "available": true,
-  //       "chosen": false,
-  //     }
-  //   },
-  // });
+  const [firstRender, setFirstRender] = useState(true);
+  const [handling, setHandling] = useState(false);
+  const [unhandledMessages, setUnhandledMessages] = useState([]);
+  
 
-  const fetchResult = async (input) => {
-    let response = await fetch("/api/ping?" + new URLSearchParams({
-          input ,
-    }));
-    if (response.status == 500) {
-      alert("Server error.");
-      return;
-    }
-    let data = await response.json();
-    return data;
-  };
-    
-  const onInput = async (e) => {
-    e.preventDefault();
+  const addMessage = async (msg) => {
+    const reset = messages.length == 0;
     setMessages([...messages, {
-      "text": message,
+      "text": msg,
       "source": "user"
     }, {
-      "text": "spin",
+      "text": reset ? "Resetting Chirpy..." : "",
       "source": "spin",
-    }])
-    const submitted = message;
+    }]);  
+    
+    const submitted = msg;
     setMessage("");
-    const data = await fetchResult(submitted);
+    const data = await fetchResult(submitted, reset);
     if (data) {
       setMessages([...messages, {
-          "text": message,
+          "text": msg,
           "source": "user"
         }, {
           ...data,
@@ -106,17 +61,72 @@ const Main = (props) => {
         }
       ]);  
     }
+    if (unhandledMessages.length) {
+      unhandledMessages.shift(1);
+      setHandling(false);
+    }
+  }
     
+  const onFormSubmit = async (e) => {
+    e.preventDefault();
+    addMessage(message);
   }
   
   const activateMessage = (message) => {
     setActiveMessage(message);
   }
   
+  const reset = async () => {
+    messages.length = 0;
+    setActiveMessage({});
+    addMessage();
+  };
+  
+  const resetAndRerollout = async () => {
+    const userMessages = messages.filter(m => m.source == "user").map(m => m.text);  
+    setActiveMessage({});
+    setUnhandledMessages(userMessages);
+    messages.length = 0;
+  };
+  
+  const rerolloutToIdx = async (idx) => {
+    console.log("Slicing to", idx);
+    const userMessages = messages.slice(0, idx+1).filter(m => m.source == "user").map(m => m.text);  
+    setUnhandledMessages(userMessages);
+    messages.length = 0;
+  };
+  
+  useEffect(() => {
+    if (firstRender) {
+      reset();
+      setFirstRender(false);
+    }
+    
+    if (unhandledMessages.length && !handling) {
+      console.log(`We have to handle the following unhandled messages:`, unhandledMessages);
+      const nextMessage = unhandledMessages[0];
+      setHandling(true);
+      addMessage(nextMessage);
+    }
+  });
+  
+
   return (
-      <div class="container">
-      <ChatBox messages={messages} message={message} setMessage={setMessage} onInput={onInput} activateMessage={activateMessage} activeMessage={activeMessage}/>
-      <ControlPanel currMessage={activeMessage}/>
+      <div className="container">
+      <ChatBox 
+        messages={messages} 
+        message={message}
+        setMessage={setMessage}
+        onInput={onFormSubmit}
+        activateMessage={activateMessage}
+        activeMessage={activeMessage}
+        rerolloutToIdx={rerolloutToIdx}
+      />
+      <ControlPanel 
+        currMessage={activeMessage} 
+        reset={reset}
+        resetAndRerollout={resetAndRerollout}
+      />
     </div>
   );
 }

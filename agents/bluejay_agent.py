@@ -109,6 +109,7 @@ class StateTable:
         logger.primary_info('Using StateTable to persist state! Persisting to table {}'.format(self.table_name))
         logger.primary_info('session_id: {}'.format(state['session_id']))
         logger.primary_info('creation_date_time: {}'.format(state['creation_date_time']))
+        logger.bluejay('<<<END TURN>>>')
         
         try:
             assert 'session_id' in state

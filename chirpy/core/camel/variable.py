@@ -9,3 +9,6 @@ class Variable:
 		assert hasattr(context, self.namespace.lower()), f"Namespace {self.namespace} not found!"
 		namespace = getattr(context, self.namespace.lower())
 		return getattr(context, self.namespace.lower())[self.name]
+		
+	def __str__(self):
+		return f"{self.namespace}.{self.name}"

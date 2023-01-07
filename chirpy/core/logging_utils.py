@@ -49,7 +49,7 @@ def get_bluejay_logger_settings(code):
         logtoscreen_level=100,
         logtoscreen_usecolor=False,
         logtofile_level=10,
-        logtofile_path=f'/tmp/output_{code}.log',
+        logtofile_path=f'/tmp/logs/output_{code}.log',
         logtoscreen_allow_multiline=True,
         integ_test=False,
         remove_root_handlers=True,
@@ -139,6 +139,7 @@ def setup_logger(logger_settings, session_id=None):
 
     # Add the color PRIMARY_INFO level to chirpy logger
     add_new_level(chirpy_logger, 'PRIMARY_INFO', PRIMARY_INFO_NUM)
+    add_new_level(chirpy_logger, 'BLUEJAY', 95)
 
     return chirpy_logger
 

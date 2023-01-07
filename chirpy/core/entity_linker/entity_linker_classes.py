@@ -107,7 +107,7 @@ class WikiEntity(object):
 
     def __repr__(self):
         if hasattr(self, "confidence"):
-            return f"<WikiEntity: {self.name}> (confidence={self.confidence:.3f}, sum_anchortext_counts={self.sum_anchortext_counts})>"
+            return f"<WikiEntity: {self.name}>"
         else:
             logger.warning("DEPRECATION: WikiEntity object has no attribute 'confidence', so you are likely using an outdated version of the global State (older than April 2021). Make sure this is intentional.")
             return f"<WikiEntity: {self.name}>"

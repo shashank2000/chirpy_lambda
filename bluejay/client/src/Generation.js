@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const GenerationPanel = (props) => {
 	return (
-		<div class="panel">
+		<div className="panel">
 			<h3>Generation</h3>
 		</div>
 	);

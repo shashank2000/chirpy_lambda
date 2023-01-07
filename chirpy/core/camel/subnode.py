@@ -5,6 +5,8 @@ from chirpy.core.camel.assignment import AssignmentList
 from chirpy.core.camel.predicate import Predicate
 from chirpy.core.camel.nlg import NLGNode
 
+import json
+
 import logging
 logger = logging.getLogger('chirpylogger')
 
@@ -31,9 +33,11 @@ class SubnodeList:
 	
 	def select(self, context):
 		possible_subnodes = [
-			subnode for subnode in self.subnodes if subnode.entry_conditions.evaluate(context)
+			subnode for subnode in self.subnodes if subnode.entry_conditions.evaluate(context, label=f"subnode_entry_conditions//{subnode.name}")
 		]
 		logger.primary_info(f"Possible subnodes are: {possible_subnodes}")
+		logger.bluejay(f"subnodes: {json.dumps({node.name: {'available': True} for node in possible_subnodes})}")
 		assert len(possible_subnodes), "No subnode found!"
+		logger.bluejay(f"subnodes_chosen: {possible_subnodes[0].name}")
 		# for now, just return the first possible subnode
 		return possible_subnodes[0]
