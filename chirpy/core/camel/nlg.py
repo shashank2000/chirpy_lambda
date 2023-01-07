@@ -189,6 +189,7 @@ class String(NLGNode):
     def __repr__(self):
         return '"' + self.string + '"'
         
+SENTENCE_END_PUNCTUATION = ['.', '?', '!']
 PUNCTUATION = ['.', ',', '?', '!', ':', ';']
         
 
@@ -198,6 +199,8 @@ def spacingaware_join(x):
         assert isinstance(item, str), f"Item {item} (from {x}) is not a string"
         if idx != 0 and not any(item.startswith(punct) for punct in PUNCTUATION):
             result += " "
+        if idx != 0 and len(item) and any(x[idx - 1].endswith(punct) for punct in SENTENCE_END_PUNCTUATION):
+            item = item[0].upper() + item[1:]
         result += item
     return result
 
