@@ -143,6 +143,10 @@ class SupernodeMaker(Transformer):
 	
 	def condition_assignment(self, tok):
 		return assignment.Assignment(tok[0], tok[1], True)
+
+	### ENTRY LOCALS
+	def entry_locals_section(self, tok):
+		return "entry_locals", assignment.AssignmentList(tok)
 		
 	### PROMPT
 	def prompt_section(self, tok):
