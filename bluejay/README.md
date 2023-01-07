@@ -27,3 +27,7 @@ Bluejay is written in React and Flask.
 To develop, run `npm install` as usual. The server will start on `localhost:3000`.
 You'll also have to run the main bluejay server as well.
 
+To compile back to a static site:
+
+`bash build.sh`
+
