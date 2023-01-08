@@ -121,7 +121,7 @@ class SupernodeMaker(Transformer):
 		)
 	
 	def subnode_group(self, tok):
-		return prompt.PromptGroup(tok)
+		return subnode.SubnodeGroup(tok)
 		
 	def subnode(self, tok):
 		subnode_name = tok[0].value
