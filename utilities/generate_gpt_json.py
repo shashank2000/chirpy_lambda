@@ -30,17 +30,18 @@ def generate_json_output(prompts_file, output_file, prompt_prefix=""):
     with open(prompts_file, "r") as f:
         prompts = json.load(f)
     # generate output, but only for keys that are not dictionaries
-    output = []
+    output = {}
     # we can only do 20 requests per minute if we don't want to be rate-limited by OpenAI
     for key in tqdm(prompts):
         if isinstance(prompts[key], list):
             # loop through the list
             for key2 in tqdm(prompts[key]):
-                output.append(generate(key2, prompt_prefix))
+                output[key2] = generate(key2, prompt_prefix)
         else:
-            output.append(generate(prompts[key], prompt_prefix))
+            output[key] = generate(prompts[key], prompt_prefix)
     
     # write output to JSON file output_file
+    print(output)
     with open(output_file, "w") as f:
         json.dump(output, f, indent=4)
 
