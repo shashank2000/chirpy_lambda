@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-IS_FALSE(State.User__HasPet) and
+# IS_FALSE(State.User__HasPet) and
 IS_NONE(State.User__HypotheticalPetType)
 
 <PROMPTS>
@@ -21,16 +21,25 @@ Subnode valid_hypothetical_type [
   - @val(State.User__HypotheticalPetTypeTalkable)
   - "."
   - "I'd personally want a pet giraffe".
-  # TODO: add some neural generation and/or a factoid here for the user's idea pet instead maybe
-  #- @neural_generation(prefix="Did you know that " + str(State.User__PetType))
-  #- "I think that's really cool."
+  - "Fun fact about @val(State.User__HypotheticalPetTypeTalkable), "
+  # database lookup for fun fact, we don't want plural form
+  @lookup(
+        database_name="animal_gpt",
+        key={@val(State.User__HypotheticalPetType | name)}
+   )
 }
 
 Subnode default [
 ] {
   - "That's awesome!"
   - "I'd personally want a pet giraffe".
-  - @neural_generation(prefix="Did you know that giraffes")
+  # database lookup for fun fact 
+  - "Fun fact about giraffes, "
+  # database lookup for fun fact 
+  @lookup(
+        database_name="animal_gpt",
+        key="giraffe"
+   )
 } 
 
 <SET_STATE_AFTER>

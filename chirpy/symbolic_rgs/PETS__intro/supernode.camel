@@ -6,9 +6,12 @@ Prompt has_pet [ ] {
     "Do you have a pet?"
 }
 
-<SET_STATE>
-# TODO: user may potentially say pet type here, should be able to handle it here
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.PETS__user_mentioned_pets)
 
+
+<SET_STATE>
+# TODO: user may potentially say pet type here, should be able to handle it here - not sure how 
 
 <SUBNODES>
 
