@@ -41,7 +41,7 @@ const PromptPanel = (props) => {
 	if (props.currMessage.prompts) {
 		for (const [promptName, promptData] of Object.entries(props.currMessage.prompts)) {
 			promptList.push(
-				<Prompt promptName={promptName} promptData={promptData} selectedPrompt={selectedPrompt} onClickHandler={e => selectPrompt(promptName)}>
+				<Prompt key={promptName} promptName={promptName} promptData={promptData} selectedPrompt={selectedPrompt} onClickHandler={e => selectPrompt(promptName)}>
 				</Prompt>
 			)
 		}	
