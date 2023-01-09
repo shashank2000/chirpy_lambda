@@ -141,6 +141,10 @@ class SupernodeMaker(Transformer):
 	def entity_group(self, tok):
 		entityGroupName = str(tok[0].value)[1:-1] # remove leading and ending quotes
 		return entitygroup.EntityGroup(entityGroupName)
+
+	def entity_group_regex(self, tok):
+		entityGroupRegexName = str(tok[0].value)[1:-1] # remove leading and ending quotes
+		return entitygroup.EntityGroupRegex(entityGroupRegexName)
 		
 	### PROMPT
 	def prompt_section(self, tok):
@@ -175,6 +179,10 @@ class SupernodeMaker(Transformer):
 	### ENTITY GROUPS (for takeover)
 	def entity_groups_section(self, tok):
 		return "entity_groups", entitygroup.EntityGroupList(tok)
+
+	### ENTITY GROUP REGEXES (for takeover)
+	def entity_groups_regex_section(self, tok):
+		return "entity_groups_regex", entitygroup.EntityGroupRegexList(tok)
 	
 	def document(self, tok):
 		return tok
