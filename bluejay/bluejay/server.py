@@ -68,6 +68,8 @@ def execute_chirpy(input_line, reset=False):
 	return output, log_outputs, full_logs
 	#return line
 	
+FALSY = ['False', '0', 'None']
+	
 def augment_result(result):
 	logs = result['logs']
 	for key in ['rg_state']:
@@ -111,9 +113,11 @@ def augment_result(result):
 		prompts[logs['prompts_chosen']]['chosen'] = True
 	result['prompts'] = OrderedDict(sorted(prompts.items(), key=lambda kv: kv[1]['available'] + kv[1]['chosen'], reverse=True))
 		
-		
 	if 'rg_state' in logs:
-		result['rg_state'] = json.loads(logs['rg_state'])	
+		rg_state = json.loads(logs['rg_state'])
+		rg_state = {k: {'value': v, 'falsy': v in FALSY} for k, v in rg_state.items()}
+		print(rg_state)
+		result['rg_state'] = OrderedDict(sorted(rg_state.items(), key=lambda kv: kv[1]['falsy']))
 	
 	
 @app.route("/api/ping")

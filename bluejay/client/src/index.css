@@ -265,6 +265,7 @@ input[type=text]:focus, textarea:focus {
   grid-template-rows: 1fr 1fr 1fr;
   flex-grow: 1;
   overflow-y: scroll;
+  scrollbar-width: none; 
   mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
 
