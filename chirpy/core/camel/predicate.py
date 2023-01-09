@@ -5,7 +5,6 @@ import json
 
 from chirpy.core.camel.variable import Variable
 from chirpy.core.camel.nlg import NLGNode
-
 import logging
 logger = logging.getLogger('chirpylogger')
 
@@ -147,3 +146,14 @@ class NotPredicate(Predicate):
 	
 	def get_score(self):
 		return self.predicate.get_score()
+		
+@dataclass
+class ExistsPredicate(Predicate):
+	database_name : str
+	database_key : NLGNode
+	def evaluate(self, context):
+		print("tok", self.database_name)
+		return exists(self.database_name.generate(context), self.database_key.generate(context))
+
+	def get_score(self):
+		return 1.

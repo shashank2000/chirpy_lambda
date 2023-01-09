@@ -44,7 +44,7 @@ const SubnodePanel = (props) => {
 	if (props.currMessage.subnodes) {
 		for (const [subnodeName, subnodeData] of Object.entries(props.currMessage.subnodes)) {
 			subnodeList.push(
-				<Subnode subnodeName={subnodeName} subnodeData={subnodeData} selectedSubnode={selectedSubnode} onClickHandler={e => selectSubnode(subnodeName)}>
+				<Subnode key={subnodeName} subnodeName={subnodeName} subnodeData={subnodeData} selectedSubnode={selectedSubnode} onClickHandler={e => selectSubnode(subnodeName)}>
 				</Subnode>
 			)
 		}	

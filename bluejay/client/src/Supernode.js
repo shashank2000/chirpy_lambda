@@ -41,7 +41,7 @@ const SupernodePanel = (props) => {
 	if (props.currMessage.supernodes) {
 		for (const [supernodeName, supernodeData] of Object.entries(props.currMessage.supernodes)) {
 			supernodeList.push(
-				<Supernode supernodeName={supernodeName} supernodeData={supernodeData} selectedSupernode={selectedSupernode} onClickHandler={e => selectSupernode(supernodeName)}>
+				<Supernode key={supernodeName} supernodeName={supernodeName} supernodeData={supernodeData} selectedSupernode={selectedSupernode} onClickHandler={e => selectSupernode(supernodeName)}>
 				</Supernode>
 			)
 		}	

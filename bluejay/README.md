@@ -12,7 +12,7 @@ One-time:
 
 Every time:
 
-- Run `portforward.sh` as usual.
+- Run `portforward.sh` as usual as well as the other steps present in `chirp.sh`.
 - `cd bluejay`
 - `python3 server.py`
 

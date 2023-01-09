@@ -73,7 +73,7 @@ class Context:
 			state=state,
 			flags=flags,
 			utilities=get_utilities(state_manager, supernode),
-			locals={},
+			locals=state.entry_locals,
 			utterance=state.utterance,
 			state_manager=state_manager
 		)
@@ -98,6 +98,10 @@ class Context:
 	def set(self, variable, value):
 		namespace = getattr(self, variable.namespace.lower())
 		namespace[variable.name] = value
+
+	def compute_entry_locals(self):
+		self.supernode.entry_locals.evaluate(self)
+		logger.debug(f"Finished evaluating entry locals: {'; '.join((k + ': ' + str(v)) for (k, v) in self.locals.items())}")
 
 	def compute_locals(self):
 		self.supernode.locals.evaluate(self)
