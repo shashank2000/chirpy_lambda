@@ -18,7 +18,7 @@ from typing import List, Dict, Set, Optional, Iterable, Any, Callable
 from chirpy.core.latency import measure
 import random
 from random import choices
-from elasticsearch import Elasticsearch, ElasticsearchException
+from elasticsearch import Elasticsearch, ElasticsearchException, RequestsHttpConnection
 from chirpy.core.flags import use_timeouts, inf_timeout
 from chirpy.core.canary import is_already_canary
 import threading
@@ -59,8 +59,12 @@ def get_elasticsearch():
     scheme = os.environ.get('ES_SCHEME', 'http')
     username = os.environ.get('ES_USER')
     password = os.environ.get('ES_PASSWORD')
-    return Elasticsearch([{'host': host, 'scheme': scheme, 'port': port}], http_auth=(username, password), timeout=99999)
-
+    return Elasticsearch(hosts = [{'host': host, 'port': port}],
+                         http_auth=(username, password),
+                         use_ssl = True,
+                         verify_certs = True,
+                         connection_class = RequestsHttpConnection,
+                         timeout=99999)
 
 def get_user_datetime(user_timezone=None) -> Optional[datetime.datetime]:
     """
