@@ -8,7 +8,6 @@ f = open('chirpy/symbolic_data/opinions/opionable_labeled_final.json')
 activities = json.load(f)
 f.close()
 
-
 def get_topic_type(topic: str):
     return f"What other {activities[topic]} do you like?"
 

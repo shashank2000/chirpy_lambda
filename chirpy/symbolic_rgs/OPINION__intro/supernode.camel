@@ -1,0 +1,24 @@
+<PROMPTS>
+Prompt do_you_like_prompt [
+] {
+	- "Do you like"
+	- @val(State.User__CurrentOpinionTopic)
+	- "?"
+}
+
+<SUBNODES>
+Subnode opinion_intro_response [
+] {
+	""
+}
+
+<SET_STATE_AFTER>
+State.User__CurrentOpinionFollowUp = {
+	@constant(True)
+}
+State.User__OpinionYes = {
+	@val(Flags.GlobalFlag__YES)
+}
+State.User__OpinionNo = {
+	@val(Flags.GlobalFlag__NO)
+}

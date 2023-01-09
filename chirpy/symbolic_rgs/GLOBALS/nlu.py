@@ -5,5 +5,5 @@ def get_flags(context):
     pass
 
 @nlu_processing
-def get_background_flags(context):
-    return
+def get_background_flags(rg, utterance):
+    pass

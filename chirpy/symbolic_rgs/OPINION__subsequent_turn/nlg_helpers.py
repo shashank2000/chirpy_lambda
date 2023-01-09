@@ -17,6 +17,6 @@ response_tones = ['disagree', 'strong_disagree', 'agree']
 
 def get_opinion_response(user_sentiment: str, topic: str):
     tone = random.choice(response_tones)
-    if (user_sentiment == "positive" or user_sentiment == "negative"):
-        return data[topic][user_sentiment][tone]
+    if user_sentiment == "positive" or user_sentiment == "negative":
+        return str(data[topic][user_sentiment][tone])
     return None

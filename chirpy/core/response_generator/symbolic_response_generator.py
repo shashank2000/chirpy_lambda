@@ -142,6 +142,7 @@ class SymbolicResponseGenerator:
         if not self.state_manager.is_first_turn():
             supernode = self.get_takeover_or_current_supernode(Context.get_context(state, self.state_manager))
             context = Context.get_context(state, self.state_manager, supernode)
+            logger.warning(f"Context is: {context}")
             
             cancelled_supernodes = set()
             
