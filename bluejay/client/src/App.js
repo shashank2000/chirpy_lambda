@@ -5,7 +5,7 @@ import RGStatePanel from './RGState';
 import SubnodePanel from './Subnode';
 import SupernodePanel from './Supernode';
 import PromptPanel from './Prompt';
-import LogsPanel from './Logs';
+// import LogsPanel from './Logs';
 import GenerationPanel from './Generation';
 
 const START = "hi";
@@ -15,7 +15,7 @@ const ControlPanel = (props) => {
       <div className="buttons">
         <a className="reset-button button" href="#" onClick={e => props.reset()}>Reset</a>
         <a className="reset-button button" href="#" onClick={e => props.resetAndRerollout()}>Reset and Rerollout</a>
-          <LogsPanel currMessage={props.currMessage}/>
+          {/* <LogsPanel currMessage={props.currMessage}/> */}
       </div>
       <div className="panels">
         <SubnodePanel currMessage={props.currMessage}/>
@@ -59,7 +59,8 @@ const Main = (props) => {
           ...data,
           "source": "bot"
         }
-      ]);  
+      ]);
+      activateMessage(data);
     }
     if (unhandledMessages.length) {
       unhandledMessages.shift(1);
