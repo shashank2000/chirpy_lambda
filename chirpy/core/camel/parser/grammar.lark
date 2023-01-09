@@ -19,6 +19,7 @@ condition_assignment : variable "=" condition
 // CAMEL syntax
 
 document: entry_conditions_section? \
+          entry_locals_section? \
           prompt_section? \
           continue_conditions_section? \
           locals_section? \
@@ -32,15 +33,19 @@ document: entry_conditions_section? \
 // Section: Entry Conditions
 entry_conditions_section : "<ENTRY_CONDITIONS>" condition?
 
+// Section: Locals (before prompt)
+entry_locals_section : "<ENTRY_LOCALS>" assignment* condition_assignment*
+
 // Section: Prompt
-prompt_section : "<PROMPTS>" prompt*
+prompt_section : "<PROMPTS>" prompt_group*
+prompt_group : "[" prompt+ "]" | prompt
 prompt : "Prompt" PROMPT_NAME _OB condition? _CB nlg ("<" assignment* ">")?
 PROMPT_NAME: /[a-zA-Z_1-9]+/
 
 // Section: Continue Conditions
 continue_conditions_section : "<CONTINUE_CONDITIONS>" condition?
 
-// Section: Locals
+// Section: Locals (after prompt)
 locals_section : "<LOCALS>" assignment* condition_assignment*
 
 // entry conditions takeover
@@ -50,7 +55,8 @@ entry_conditions_takeover_section : "<ENTRY_CONDITIONS_TAKEOVER>" condition?
 set_state_section : "<SET_STATE>" assignment*
 
 // Section: Subnodes
-subnodes_section : "<SUBNODES>" subnode+
+subnodes_section : "<SUBNODES>" subnode_group+
+subnode_group : "[" subnode+ "]" | subnode
 subnode: "Subnode" SUBNODE_NAME _OB condition? _CB nlg ("<" assignment* ">")?
 SUBNODE_NAME: /[a-zA-Z_1-9]+/
 

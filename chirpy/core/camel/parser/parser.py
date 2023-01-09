@@ -33,6 +33,8 @@ class SupernodeMaker(Transformer):
 			return predicate.VariableGTPredicate(variable=tok[1], val=tok[2])
 		elif str(tok[0]) == 'IS_LESS_THAN': 
 			return predicate.VariableLTPredicate(variable=tok[1], val=tok[2])
+		elif str(tok[0]) == 'EXISTS':
+			return predicate.ExistsPredicate(database_name=tok[1], database_key=tok[2])
 		else:
 			return predicate.VariablePredicate(verb=str(tok[0]), variable=tok[1])
 	
@@ -61,6 +63,9 @@ class SupernodeMaker(Transformer):
 	## NLG
 	
 	def nlg__ESCAPED_STRING(self, tok): return nlg.String(str(tok.value)[1:-1])
+
+	def condition__ESCAPED_STRING(self, tok): return self.nlg__ESCAPED_STRING(tok)
+
 	def nlg__PUNCTUATION(self, tok): return nlg.String(str(tok.value))
 	def nlg__val(self, tok): 
 		operations = []
@@ -79,6 +84,8 @@ class SupernodeMaker(Transformer):
 	
 	def nlg__inflect(self, tok): return nlg.Inflect(tok[0], tok[1])
 	def nlg__inflect_engine(self, tok): return nlg.InflectEngine(tok[0], tok[1])
+
+	def nlg__lookup(self, tok): return nlg.DatabaseLookup(tok[0], tok[1], tok[2])
 	def nlg__STRING(self, tok): return tok
 	def nlg__helper(self, tok):
 		func_name = tok[0].value
@@ -90,6 +97,9 @@ class SupernodeMaker(Transformer):
 			return nlg.NLGList(tok)
 		return tok
 	def condition__nlg(self, tok): return self.nlg(tok)
+
+	def prompt_group(self, tok):
+		return prompt.PromptGroup(tok)
 	
 	def prompt(self, tok):
 		prompt_name = tok[0].value
@@ -109,6 +119,9 @@ class SupernodeMaker(Transformer):
 			response=response,
 			assignments=assignment.AssignmentList(assignment_list)
 		)
+	
+	def subnode_group(self, tok):
+		return subnode.SubnodeGroup(tok)
 		
 	def subnode(self, tok):
 		subnode_name = tok[0].value
@@ -137,6 +150,11 @@ class SupernodeMaker(Transformer):
 	
 	def condition_assignment(self, tok):
 		return assignment.Assignment(tok[0], tok[1], True)
+
+	### ENTRY LOCALS
+	def entry_locals_section(self, tok):
+		return "entry_locals", assignment.AssignmentList(tok)
+		
 
 	def entity_group(self, tok):
 		entityGroupName = str(tok[0].value)[1:-1] # remove leading and ending quotes

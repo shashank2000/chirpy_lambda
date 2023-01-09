@@ -16,6 +16,7 @@ class Supernode:
 	name : str
 	subnodes : SubnodeList
 	entry_conditions : Predicate = field(default_factory=TruePredicate)
+	entry_locals : AssignmentList = field(default_factory=AssignmentList)
 	prompts : PromptList = field(default_factory=PromptList)
 	continue_conditions : Predicate = field(default_factory=TruePredicate)
 	locals : AssignmentList = field(default_factory=AssignmentList)
