@@ -44,8 +44,3 @@ Subnode default [
 >
 
 <SET_STATE_AFTER>
-# TODO: should we be setting to open ended or not? 
-# Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
-#   @constant(True)
-# }
-
