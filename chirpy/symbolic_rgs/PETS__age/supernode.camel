@@ -1,7 +1,6 @@
 <ENTRY_CONDITIONS>
-IS_TRUE(State.User__HasPet) and 
 (not IS_NONE(State.User__PetName)) and
-IS_NONE(State.User__PetAge)
+(IS_NONE(State.User__PetAge))
 
 <PROMPTS>
 Prompt favorite_pet [ ] {

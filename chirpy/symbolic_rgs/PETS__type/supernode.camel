@@ -25,13 +25,22 @@ State.User__PetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
 <SUBNODES>
 
 Subnode valid_type [
-  not IS_NONE(State.User__PetType)
+  (not IS_NONE(State.User__PetType)) and (
+    EXISTS(database_name="animal_gpt", key={
+        @val(State.User__PetType)
+    })
+  )
 ] {
 	 - "That's awesome!"
   - "I love"
   - @val(State.User__PetTypeTalkable)
   - "."
-  # TODO: fun fact about their pet
+  # talkable is plural
+  -@lookup(
+        database_name="animal_gpt",
+        key={@val(State.User__PetType)},
+        column="factoid"
+   )
 }
 
 Subnode default [

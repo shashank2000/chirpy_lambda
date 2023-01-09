@@ -14,7 +14,11 @@ State.User__HypotheticalPetTypeTalkable = @val(Utilities.cur_entity | talkable |
 
 <SUBNODES>
 Subnode valid_hypothetical_type [
-  not IS_NONE(State.User__HypotheticalPetType)
+  (not IS_NONE(State.User__HypotheticalPetType)) and (
+    EXISTS(database_name="animal_gpt", key={
+        @val(State.User__HypotheticalPetTypeTalkable)
+    })
+  )
 ] {
   - "That's awesome!"
   - "I love"
@@ -25,7 +29,7 @@ Subnode valid_hypothetical_type [
   # database lookup for fun fact, we don't want plural form
   -@lookup(
         database_name="animal_gpt",
-        key={@val(State.User__HypotheticalPetType | name | lower)},
+        key={@val(State.User__HypotheticalPetTypeTalkable)},
         column="factoid"
    )
 }

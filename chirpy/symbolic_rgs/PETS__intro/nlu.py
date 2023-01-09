@@ -5,7 +5,9 @@ from chirpy.core.regex.word_lists import YES, NO
 def get_flags(context):
     # this is run before the user has said anything this turn
     ans = context.utterance.lower()
+    breakpoint()
     # view all flags currently set
+    # this is buggy
     if ans in YES:
         ADD_NLU_FLAG('PETS__user_owns_pet') 
     elif ans in NO:
