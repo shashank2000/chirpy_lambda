@@ -25,11 +25,8 @@ State.User__PetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
 <SUBNODES>
 
 Subnode valid_type [
-  (not IS_NONE(State.User__PetType)) and (
-    EXISTS(database_name="animal_gpt", key={
-        @val(State.User__PetType)
-    })
-  )
+  (not IS_NONE(State.User__PetType)) and 
+    EXISTS(database_name="animal_gpt", key={@val(State.User__PetTypeTalkable)})
 ] {
 	 - "That's awesome!"
   - "I love"

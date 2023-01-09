@@ -360,7 +360,7 @@
         "factoid": "Leopards are the most agile of the big cats and can leap up to 20 feet in a single bound!"
     },
     "lion": {
-        "factoid": "shLionfish are considered to be the fastest growing invasive species in the world. They can double their population in as little as 15 months."
+        "factoid": "Lionfish are considered to be the fastest growing invasive species in the world. They can double their population in as little as 15 months."
     },
     "llama": {
         "factoid": "Llamas can often be seen spitting at each other as a way of expressing dominance or to settle disputes."
@@ -703,5 +703,50 @@
     },
     "zebra": {
         "factoid": "Zebras have unique stripes that act as camouflage, and no two zebras have the same stripe pattern."
+    },
+    "labrador": {
+        "factoid": "Labradors are the most popular breed in the United States and the United Kingdom."
+    },
+    "german shepherd": {
+        "factoid": "German Shepherds are versatile and are commonly used as working dogs."
+    },
+    "golden retriever": {
+        "factoid": "Golden Retrievers are known for their intelligence and loyalty."
+    },
+    "bulldog": {
+        "factoid": "Bulldogs are gentle and loyal companions."
+    },
+    "beagle": {
+        "factoid": "Beagles are friendly, curious, and active dogs."
+    },
+    "lionhead rabbit": {
+        "factoid": "Lionheads sport a unique mane around their head and neck!"
+    },
+    "holland lop": {
+        "factoid": "Hollands are the smallest breed of lop-eared rabbits!"
+    },
+    "mini rex": {
+        "factoid": "Mini Rexes have a unique, velvety coat!"
+    },
+    "english angora": {
+        "factoid": "Angoras are known for their thick, luxurious fur!"
+    },
+    "dutch rabbit": {
+        "factoid": "Dutch rabbits are known for their distinct coloring!"
+    },
+    "maine coon": {
+        "factoid": "Maine Coons are the largest breed of domesticated cats and are known for their intelligence and playful personalities."
+    },
+    "persian": {
+        "factoid": "Persians have a luxurious, long coat that requires daily grooming to keep it looking its best."
+    },
+    "siamese": {
+        "factoid": "Siamese cats are known for their distinct blue eyes and their vocal personalities."
+    },
+    "british shorthair": {
+        "factoid": "British Shorthairs are known for their gentle and relaxed temperaments."
+    },
+    "ragdoll": {
+        "factoid": "Ragdoll cats are known for their affectionate, laid-back personalities and their tendency to go limp when held."
     }
 }

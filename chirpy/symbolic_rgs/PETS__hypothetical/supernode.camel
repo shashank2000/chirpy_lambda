@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-# IS_FALSE(State.User__HasPet) and
+IS_FALSE(State.User__HasPet) and
 IS_NONE(State.User__HypotheticalPetType)
 
 <PROMPTS>
@@ -14,11 +14,8 @@ State.User__HypotheticalPetTypeTalkable = @val(Utilities.cur_entity | talkable |
 
 <SUBNODES>
 Subnode valid_hypothetical_type [
-  (not IS_NONE(State.User__HypotheticalPetType)) and (
-    EXISTS(database_name="animal_gpt", key={
-        @val(State.User__HypotheticalPetTypeTalkable)
-    })
-  )
+  (not IS_NONE(State.User__HypotheticalPetType)) and
+    EXISTS(database_name="animal_gpt", key={@val(State.User__HypotheticalPetTypeTalkable)})
 ] {
   - "That's awesome!"
   - "I love"

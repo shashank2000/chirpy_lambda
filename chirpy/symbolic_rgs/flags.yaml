@@ -34,3 +34,5 @@
 - PETS__proposed_name
 - PETS__age
 - PETS__user_has_dog
+- PETS__user_has_cat
+- PETS__user_has_rabbit

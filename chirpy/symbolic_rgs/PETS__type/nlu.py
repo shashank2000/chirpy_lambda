@@ -22,9 +22,12 @@ def get_flags(context):
     
     entity_name = entity.name.lower()
     if is_known_animal(entity_name):
-        # we only really care about dogs at this point
         if entity_name == 'dog':
             ADD_NLU_FLAG('PETS__user_has_dog')
+        if entity_name == 'rabbit':
+            ADD_NLU_FLAG('PETS__user_has_rabbit')
+        if entity_name == 'cat':
+            ADD_NLU_FLAG('PETS__user_has_cat')
 
 @nlu_processing
 def get_background_flags(context):
