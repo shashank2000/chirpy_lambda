@@ -35,8 +35,9 @@ Subnode valid_type [
 
 Subnode default [
 ] {
-  - "A great choice! Did you know that"
-  - @helpers.generate("A fun fact about giraffes is that ")
+  - "A great choice! Animals are great. Did you know that "
+  # fun fact about giraffes
+  - "Giraffes have the same number of bones in their necks as humans do in their arms."
 } <
    State.User__HypotheticalPet = @constant(None)
 >
