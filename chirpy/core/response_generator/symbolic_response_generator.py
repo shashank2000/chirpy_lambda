@@ -22,6 +22,8 @@ from typing import Set, Optional, List, Dict
 import logging
 import os
 
+import json
+
 from importlib import import_module
 
 from concurrent import futures
@@ -66,16 +68,23 @@ class SymbolicResponseGenerator:
         return self.paths_to_supernodes.values()
         
     def get_next_supernode(self, context):
-        possible_supernodes = [supernode for supernode in self.get_supernodes() if supernode.entry_conditions.evaluate(context)]
+        possible_supernodes = [
+            supernode for supernode in self.get_supernodes() if supernode.entry_conditions.evaluate(
+                context, label=f"supernode_entry_conditions//{supernode.name}"
+            )
+        ]
         logger.primary_info(f"Possible supernodes are: " + "; ".join(f"{supernode} (score={supernode.entry_conditions.get_score()})" for supernode in possible_supernodes))
+        logger.bluejay(f"supernodes: {json.dumps({supernode.name : {'score': supernode.entry_conditions.get_score()} for supernode in possible_supernodes})}")
         possible_supernodes = sorted(possible_supernodes, key=lambda x: x.entry_conditions.get_score(), reverse=True)
+        next_supernode = possible_supernodes[0]
+        logger.bluejay(f"supernode_chosen: {next_supernode.name}")
         return possible_supernodes[0]
 
     def get_any_takeover_supernode(self, context, cancelled_supernodes):
         for supernode in self.get_supernodes():
             if supernode.name in cancelled_supernodes:
                 continue
-            if supernode.entry_conditions_takeover.evaluate(context):
+            if supernode.entry_conditions_takeover.evaluate(context, label=f"entry_conditions_takeover//{supernode.name}"):
                 return supernode
         return self.paths_to_supernodes['GLOBALS']
 
@@ -158,6 +167,7 @@ class SymbolicResponseGenerator:
 
             subnode.set_state.evaluate(context)
             supernode.set_state_after.evaluate(context)
+            context.log_state()
             next_supernode = self.get_next_supernode(context)
         else:
             next_supernode = self.get_launch_supernode()
