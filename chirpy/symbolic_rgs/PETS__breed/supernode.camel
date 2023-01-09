@@ -29,9 +29,13 @@ Subnode valid_type [
   - @oneof(
     {
       - "That's awesome!"
-      - "I love"
+      - "Funnily enough, "
       - @val(State.User__PetBreedTalkable)
-      - "."
+      - " are one of my favorite dog breeds! Did you know "
+      # TODO: lookup breed_gpt facts 
+      # - @lookup(
+
+      # )
     },
     @helpers.generate(@val(State.User__PetBreedTalkable))
   )

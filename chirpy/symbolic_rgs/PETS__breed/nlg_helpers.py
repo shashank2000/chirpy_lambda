@@ -1,15 +1,31 @@
-import logging
-import random
-import openai
+from chirpy.core.response_generator.nlu import nlu_processing
+import os 
+from os.path import abspath, dirname
+import json 
 
-logger = logging.getLogger('chirpylogger')
+# we can actually just get rid of this file I/O and just put the list of animals here
+with open(os.path.join(abspath(dirname(__file__)), 'animals.json')) as datafile:
+    f = json.load(datafile)
+    breeds = f['dogs']
 
-openai.api_key = "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"
+# leaving helper function here instead of making new directory in response_generators
+def is_known_breed(entity):
+    if entity in breeds:
+        return True
+    return False
 
-def generate(prompt, **kwargs):
-    # we know input is a breed
-    prompt += " is a breed of dogs. "
-    completion = openai.Completion.create(engine="text-davinci-003", prompt=prompt, max_tokens=256, temperature=0.7,
-                                          **kwargs)
-    return completion.choices[0]
 
+@nlu_processing
+def get_flags(context):
+    entity = context.utilities["cur_entity"]
+    if entity is None: return
+    
+    entity_name = entity.name.lower()
+    if is_known_animal(entity_name):
+        # we only really care about dogs at this point
+        if entity_name == 'dog':
+            ADD_NLU_FLAG('PETS__user_has_dog')
+
+@nlu_processing
+def get_background_flags(context):
+    return

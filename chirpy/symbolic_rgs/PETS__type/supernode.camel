@@ -31,6 +31,7 @@ Subnode valid_type [
   - "I love"
   - @val(State.User__PetTypeTalkable)
   - "."
+  # TODO: fun fact about their pet
 }
 
 Subnode default [
@@ -43,7 +44,8 @@ Subnode default [
 >
 
 <SET_STATE_AFTER>
-Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
-  @constant(True)
-}
+# TODO: should we be setting to open ended or not? 
+# Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+#   @constant(True)
+# }
 

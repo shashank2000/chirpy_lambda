@@ -11,9 +11,9 @@ def get_flags(context):
     elif ans in NO:
         ADD_NLU_FLAG('PETS__user_owns_no_pet') 
     else:
-        ADD_NLU_FLAG('PETS__user_mentioned_pets', False)
+        ADD_NLU_FLAG('PETS__user_mentioned_pet', False)
         return
-    ADD_NLU_FLAG('PETS__user_mentioned_pets', True)
+    ADD_NLU_FLAG('PETS__user_mentioned_pet', True)
     
 
     

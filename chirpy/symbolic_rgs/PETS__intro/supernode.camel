@@ -7,7 +7,7 @@ Prompt has_pet [ ] {
 }
 
 <CONTINUE_CONDITIONS>
-IS_TRUE(Flags.PETS__user_mentioned_pets)
+IS_TRUE(Flags.PETS__user_mentioned_pet)
 
 
 <SET_STATE>

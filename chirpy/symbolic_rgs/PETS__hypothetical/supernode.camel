@@ -21,11 +21,12 @@ Subnode valid_hypothetical_type [
   - @val(State.User__HypotheticalPetTypeTalkable)
   - "."
   - "I'd personally want a pet giraffe".
-  - "Fun fact about @val(State.User__HypotheticalPetTypeTalkable), "
+  - "Fun fact, "
   # database lookup for fun fact, we don't want plural form
-  @lookup(
+  -@lookup(
         database_name="animal_gpt",
-        key={@val(State.User__HypotheticalPetType | name)}
+        key={@val(State.User__HypotheticalPetType | name | lower)},
+        column="factoid"
    )
 }
 
@@ -36,10 +37,10 @@ Subnode default [
   # database lookup for fun fact 
   - "Fun fact about giraffes, "
   # database lookup for fun fact 
-  @lookup(
-        database_name="animal_gpt",
-        key="giraffe"
-   )
+  # @lookup(
+  #       database_name="animal_gpt",
+  #       key="giraffe"
+  #  )
 } 
 
 <SET_STATE_AFTER>
