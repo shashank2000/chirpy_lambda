@@ -5,6 +5,8 @@ from chirpy.core.response_generator.nlu import get_default_flags
 from chirpy.symbolic_rgs import global_nlu
 from chirpy.core.regex.templates import *
 
+import json
+
 logger = logging.getLogger('chirpylogger')
 
 
@@ -71,7 +73,7 @@ class Context:
 			state=state,
 			flags=flags,
 			utilities=get_utilities(state_manager, supernode),
-			locals={},
+			locals=state.entry_locals,
 			utterance=state.utterance,
 			state_manager=state_manager
 		)
@@ -97,11 +99,14 @@ class Context:
 		namespace = getattr(self, variable.namespace.lower())
 		namespace[variable.name] = value
 
+	def compute_entry_locals(self):
+		self.supernode.entry_locals.evaluate(self)
+		logger.debug(f"Finished evaluating entry locals: {'; '.join((k + ': ' + str(v)) for (k, v) in self.locals.items())}")
+
 	def compute_locals(self):
 		self.supernode.locals.evaluate(self)
 		logger.debug(f"Finished evaluating locals: {'; '.join((k + ': ' + str(v)) for (k, v) in self.locals.items())}")
 		
-	def update(self, assignments):
-		for assignment in assignments:
-			...
+	def log_state(self):
+		logger.bluejay(f"rg_state: {json.dumps(self.state.to_serializable())}")
 		

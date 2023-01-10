@@ -1,10 +1,30 @@
 <ENTRY_CONDITIONS>
 IS_NONE(State.User__FavoriteFood) and IS_NONE(State.User__FavoriteFood)
 
+<ENTRY_LOCALS>
+Locals.question_intro = {
+	- @one_of(
+		{"I was wondering."},
+		{"I have a question."},
+	)
+}
+
 <PROMPTS>
 Prompt favorite_food [ ] {
-	"What's your favorite food?"
+	- @val(Locals.question_intro)
+	- "What's your top food?"
 }
+
+[
+	Prompt favorite_food_a [ ] {
+		- @val(Locals.question_intro)
+		"What's your favorite food?"
+	}
+
+	Prompt favorite_food_b [ ] {
+		"What's your favorite food?"
+	}
+]
 
 <CONTINUE_CONDITIONS>
 IS_TRUE(Flags.FOOD__user_mentioned_food)
@@ -44,6 +64,22 @@ Subnode make_ingredient_attribute_comment [
 	- @inflect(inflect_token="them", inflect_entity=Utilities.cur_entity)
 	- "a really nice flavor."
 }
+
+[
+	Subnode subnode1 [
+		IS_NOT_NONE(State.User__FavoriteFoodIngredient)
+	] {
+		- "Hello,"
+		- "World!"
+	}
+
+	Subnode subnode2 [
+		IS_NOT_NONE(State.User__FavoriteFoodIngredient)
+	] {
+		- "Hello,"
+		- "World!"
+	}
+]
 
 Subnode default [
 ] {

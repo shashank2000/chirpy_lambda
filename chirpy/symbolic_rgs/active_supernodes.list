@@ -8,6 +8,7 @@ CELEB__generic
 # PERSONALISSUES__subsequent_turn
 # FOOD__factoid
 # FOOD__intro
+# FOOD__factoid_gpt
 GLOBAL__openended
 GLOBALS
 LAUNCH
