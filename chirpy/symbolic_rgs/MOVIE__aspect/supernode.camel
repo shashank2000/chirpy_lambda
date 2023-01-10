@@ -21,8 +21,7 @@ Locals.placeholder = {
 
 <SET_STATE>
 State.User__FavoriteMovieReason = {
-    @helper.get_user_reasons(Utterance)
-#   @helper.get_user_reasons(@val(Utilities.utterance))
+    @helper.get_user_reasons(@val(Context.utterance))
 }
 
 

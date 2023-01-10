@@ -21,3 +21,6 @@ def is_positive(rg, utterance):
     # return top_da == 'pos_answer' or \
     #     utterance.lower() in YES or \
     #     (any(found_phrase(i.lower(), utterance) for i in YES) and not any(found_phrase(i.lower(), utterance) for i in NO))
+
+def openai_reasons(rg):
+    logger.warning(f'rg: {rg}')

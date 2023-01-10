@@ -19,7 +19,6 @@ Locals.placeholder = {
 State.User__FavoriteMovie = {
   @helper.enter_movie(@val(Utilities.cur_entity | talkable | lower))
 }
-# State.User__FavoriteMovie = @val(Utilities.cur_entity | talkable | lower)
 
 
 
@@ -45,6 +44,3 @@ Subnode bot_has_watched [ ] {
 
 
 <SET_STATE_AFTER>
-# Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
-#   @constant(True)
-# }

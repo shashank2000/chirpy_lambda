@@ -8,14 +8,10 @@ import re
 logger = logging.getLogger('chirpylogger')
 
 
-def found_phrase(phrase, response):
-    return re.search(f'(\A| ){phrase}(\Z| )', response) is not None
-
 
 @nlg_helper
 def set_whether_user_likes_movie(flag):
     logger.warning('flag is %s' % flag)
-    logger.warning('flag type is %s' % type(flag))
     if flag:
         logger.primary_info('Setting state to True!')
     else:

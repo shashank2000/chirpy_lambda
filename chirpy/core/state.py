@@ -47,6 +47,7 @@ class BaseSymbolicState:
     last_response : ResponseGeneratorResult = field(default_factory=lambda: None)
     
     def check(self, key):
+        logger.warning(f'ALL_STATE_KEYS is: {ALL_STATE_KEYS}')
         assert key in ALL_STATE_KEYS, f"Key not found: {key}"
         
     def __getitem__(self, key):

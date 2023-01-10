@@ -18,6 +18,7 @@ def enter_movie(entity):
     # return string.capwords(entity.talkable_name)
     # return entity.talkable_name
 
+
 @nlg_helper
 def get_important_scene(entity):
     import openai
