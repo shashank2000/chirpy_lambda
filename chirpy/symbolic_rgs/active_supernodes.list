@@ -8,3 +8,15 @@ FOOD__intro
 GLOBAL__openended
 GLOBALS
 LAUNCH
+
+MUSIC__intro
+MUSIC__favorite_instrument
+MUSIC__intstrument_to_learn
+MUSIC__favorite_intstrument_how_long
+MUSIC__favorite_fintstrument_music_piece
+MUSIC__favorite_singer
+MUSIC__favorite_song
+MUSIC__favorite_song_opinion (Feel free to rename this.)
+MUSIC__favorite_song_singer (Feel free to rename this.)
+MUSIC__favorite_genre
+

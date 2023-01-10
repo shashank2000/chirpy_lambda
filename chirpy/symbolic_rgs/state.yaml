@@ -22,3 +22,30 @@ PERSONALISSUE__LastTurnUsedNeuralGeneration: False
 User__Name : null
 User__NameGivenUp : False
 LAUNCH__NumTimesAskedName : 0
+
+
+
+User__FavoriteInstrument: null
+User__NoFavoriteInstrument: false
+User__FavoriteInstrumentAdvanced: null
+User__FavoriteInstrumentMusicPiece: null
+User__FavoriteSinger: null
+User__FavoriteSingerStr: null
+User__FavoriteSong: null
+User__FavoriteSongStr: null
+User__FavoriteSongSinger: null
+User__FavoriteMusicGenre: null
+User__FavoriteMusicGenreIsInstrumental: null
+
+MUSIC__intro_was_triggered: false
+MUSIC__supernode_starts_responding: true
+MUSIC__exit_supernode: false
+MUSIC__exists_music_keyword: false
+MUSIC__bot_triggers_supernode: false
+
+MUSIC__fav_instr_was_triggered: false
+MUSIC__fav_singer_was_triggered: false
+MUSIC__fav_song_was_triggered: false
+MUSIC__fav_genre_was_triggered: false
+
+MUSIC__just_used_til: false

@@ -1,0 +1,28 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
+IS_FALSE(State.User__NoFavoriteInstrument) and
+IS_NOT_NONE(State.User__FavoriteInstrument) and
+IS_TRUE(State.User__FavoriteInstrumentAdvanced) and
+IS_TRUE(Flags.follow_up_on_advanced_musician)
+
+<PROMPTS>
+Prompt ask_piece_music [ ] {
+    - "I am now curious. What piece of music do you like to play with"
+    - @val(State.User__FavoriteInstrument | name | lower)
+    - "?"
+}
+
+<SET_STATE>
+#State.User__FavoriteInstrumentMusicPiece = @val(Flags.MUSIC__advanced_musician)    #TODO
+
+<SUBNODES>
+Subnode default [
+
+] {
+    - "TODO "
+}
+
+
+<SET_STATE_AFTER>

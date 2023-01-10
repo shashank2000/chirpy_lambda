@@ -1,0 +1,40 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
+IS_FALSE(State.User__NoFavoriteInstrument) and
+IS_NOT_NONE(State.User__FavoriteInstrument) and
+IS_TRUE(Flags.follow_up_on_known_fav_instr)
+
+<PROMPTS>
+Prompt ask_how_long [ ] {
+    - "By the way, how many years have you been playing"
+    - @val(State.User__FavoriteInstrument | name | lower)
+    - "?"
+}
+
+<SET_STATE>
+
+
+<SUBNODES>
+Subnode beginner [
+   IS_FALSE(Flags.MUSIC__advanced_musician)
+] {
+    - "Practice makes perfect! It might be hard at the start, but you will do great. Keep going! "
+}
+
+Subnode advanced [
+   IS_TRUE(Flags.MUSIC__advanced_musician)
+] {
+    - "Wow!"
+    - @one_of(
+        "That's really cool.",
+        "You're so cool."
+    )
+   - "Not many people could stick to things for years. You must really like it, and I am sure your music is beautiful."
+} <
+    State.User__FavoriteInstrumentAdvanced = @constant(True)
+    Flags.MUSIC__follow_up_on_advanced_musician = @constant(True)
+>
+
+<SET_STATE_AFTER>

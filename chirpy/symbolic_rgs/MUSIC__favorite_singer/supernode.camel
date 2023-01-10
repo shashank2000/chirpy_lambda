@@ -1,0 +1,146 @@
+<ENTRY_CONDITIONS>
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(State.MUSIC__supernode_starts_responding and
+IS_FALSE(State.MUSIC__fav_singer_was_triggered) and
+IS_NONE(State.User__FavoriteSinger) and IS_NONE(State.User__FavoriteSingerStr) and
+IS_NONE(State.User__FavoriteSongSinger)
+
+<PROMPTS>
+Prompt ask_favorite_singer [
+    IS_NONE(State.User__FavoriteSongSinger)
+ ] {
+    "Do you have a favorite singer? Who is it?"
+}
+
+<SET_STATE>
+State.User__FavoriteSinger = @val(Flags.MUSIC__fav_singer_ent)
+State.User__FavoriteSingerStr = @val(Flags.MUSIC__fav_singer_str)
+
+<SUBNODES>
+Subnode musical_group_with_til [
+   IS_NOT_NONE(State.User__FavoriteSinger) and
+   IS_TRUE(Flags.MUSIC__singer_is_musical_group) and
+   IS_TRUE(Flags.MUSIC__singer_tils_exist)
+] {
+    - @helper.least_repetitive_compliment()
+    - @val(State.User__FavoriteSingerStr)
+    - "is definitely a great band!"
+    - @helper.pick_til(@helper.get_tils(@val(State.User__FavoriteSingerStr)))
+} <
+    State.MUSIC__just_used_til = {
+        @constant(True)
+    }
+>
+
+Subnode musical_group_wo_til [
+   IS_NOT_NONE(State.User__FavoriteSinger) and
+   IS_TRUE(Flags.MUSIC__singer_is_musical_group) and
+   IS_FALSE(Flags.MUSIC__singer_tils_exist)
+] {
+    - @helper.least_repetitive_compliment()
+    - @val(State.User__FavoriteSingerStr)
+    - "is definitely a great band!"
+    - @one_of(
+        {
+            - @val(State.User__FavoriteSingerStr)
+            - "does really nice songs."
+        },
+        {
+            - @val(State.User__FavoriteSingerStr)
+            - "has some really good tunes."
+        }
+    )
+}
+
+Subnode single_musician_with_til [
+   IS_NOT_NONE(State.User__FavoriteSinger) and
+   IS_FALSE(Flags.MUSIC__singer_is_musical_group) and
+   IS_TRUE(Flags.MUSIC__singer_tils_exist)
+] {
+    - @helper.least_repetitive_compliment()
+    - @val(State.User__FavoriteSingerStr)
+    - "is definitely a great musician!"
+    - @helper.pick_til(@helper.get_tils(@val(State.User__FavoriteSingerStr)))
+} <
+    State.MUSIC__just_used_til = {
+        @constant(True)
+    }
+>
+
+Subnode single_musician_wo_til [
+   IS_NOT_NONE(State.User__FavoriteSinger) and
+   IS_FALSE(Flags.MUSIC__singer_is_musical_group) and
+   IS_FALSE(Flags.MUSIC__singer_tils_exist)
+] {
+    - @helper.least_repetitive_compliment()
+    - @val(State.User__FavoriteSingerStr)
+    - "is definitely a great musician!"
+    - @one_of(
+        {
+            - @val(State.User__FavoriteSingerStr)
+            - "does really nice songs."
+        },
+        {
+            - @val(State.User__FavoriteSingerStr)
+            - "has some really good tunes."
+        }
+    )
+}
+
+Subnode only_know_singer_str_no_genre [
+   IS_NONE(State.User__FavoriteSinger) and
+   IS_NOT_NONE(State.User__FavoriteSingerStr) and
+   IS_TRUE(Flags.MUSIC__singer_has_no_genre)
+] {
+    - "Oh I don't seem to recognize that artist, I definitely need to get out more."
+}
+
+Subnode only_know_singer_str_w_genre [
+   IS_NONE(State.User__FavoriteSinger) and
+   IS_NOT_NONE(State.User__FavoriteSingerStr) and
+   IS_FALSE(Flags.MUSIC__singer_has_no_genre)
+] {
+    - @helper.least_repetitive_compliment()
+    - "I love"
+    - @val(State.User__FavoriteSingerStr)
+    - "too!"
+    - @one_of(
+        {
+            - @val(State.User__FavoriteSingerStr)
+            - "does really nice songs."
+        },
+        {
+            - @val(State.User__FavoriteSingerStr)
+            - "has some really good tunes."
+        }
+    )
+}
+
+Subnode no_fav_musician [
+   IS_NONE(State.User__FavoriteSinger) and
+   IS_NONE(State.User__FavoriteSingerStr) and
+   (IS_TRUE(Flags.GlobalFlag__NO) or
+   IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
+   IS_TRUE(Flags.GlobalFlag__NOTHING) or
+   IS_TRUE(Flags.MUSIC__user_has_negative_opinion))
+] {
+    - "Yeah, it can be hard to pick a particular musician when there are so many."
+}
+
+Subnode catch_all [
+   IS_NONE(State.User__FavoriteSinger) and
+   IS_NONE(State.User__FavoriteSingerStr) and
+   IS_FALSE(Flags.MUSIC__singer_has_no_genre) and
+   IS_FALSE(Flags.GlobalFlag__NO) and
+   IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+   IS_FALSE(Flags.GlobalFlag__NOTHING) and
+   IS_FALSE(Flags.MUSIC__user_has_negative_opinion)
+] {
+    - "Oh I don't seem to recognize that."
+}
+
+
+<SET_STATE_AFTER>
+State.MUSIC__fav_singer_was_triggered = {
+    @constant(True)
+}
