@@ -96,7 +96,7 @@ Subnode unknown_celeb [
 
 <SET_STATE_AFTER>
 Flags.CELEB__visited = {@constant(True)}
-Flags.CELEB__unknown = @val(Flags.CELEB__user_mentioned_celeb)
+Flags.CELEB__unknown_visited = @val(Flags.CELEB__user_mentioned_celeb)
 Flags.CELEB__discuss_movie = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"movie"})
 Flags.CELEB__discuss_song = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"song"})
 Flags.CELEB__discuss_tv = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"TV show"})

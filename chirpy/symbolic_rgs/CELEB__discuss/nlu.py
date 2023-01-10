@@ -15,7 +15,7 @@ def get_flags(context):
     ADD_NLU_FLAG('CELEB__discuss_song')
     ADD_NLU_FLAG('CELEB__known_work')
     ADD_NLU_FLAG('CELEB__visited')
-    ADD_NLU_FLAG('CELEB__unknown')
+    ADD_NLU_FLAG('CELEB__unknown_visited')
     return
 
 @nlu_processing

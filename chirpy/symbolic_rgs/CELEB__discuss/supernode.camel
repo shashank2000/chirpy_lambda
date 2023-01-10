@@ -1,7 +1,7 @@
 <ENTRY_CONDITIONS>
 not IS_NONE(State.User__FavoriteCelebrity) and not IS_EQUAL(State.User__FavoriteCelebrityWorkType, "other")
 and (IS_TRUE(Flags.CELEB__discuss_movie) or IS_TRUE(Flags.CELEB__discuss_tv) or IS_TRUE(Flags.CELEB__discuss_song))
-and IS_TRUE(Flags.CELEB__unknown)
+and not IS_TRUE(Flags.CELEB__unknown_visited)
 
 <PROMPTS>
 Prompt fav_celeb_movie [IS_TRUE(Flags.CELEB__discuss_movie)] {
@@ -28,7 +28,7 @@ Prompt fav_celeb_tv [IS_TRUE(Flags.CELEB__discuss_tv)] {
         },
         {
         - "What about you? Is there a TV show with"
-        - @val(State.User__FavoriteCelebrity)
+        - @val(State.User__FavoriteCelebrityName)
         - "that you enjoy?"
         }
     )
@@ -65,9 +65,7 @@ Subnode unknown_movie [
     not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(Flags.CELEB__discuss_movie)
 ] {
     - "Oh, interesting, I am not familiar with that movie!"
-} <
-    Flags.CELEB__unknown = @constant(False)
->
+}
 
 Subnode unknown_tv [
     not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(Flags.CELEB__discuss_tv)
@@ -82,4 +80,4 @@ Subnode unknown_song [
 }
 
 <SET_STATE_AFTER>
-Flags.CELEB__unknown = @val(Flags.CELEB__known_work)
+Flags.CELEB__unknown_visited = @val(Flags.CELEB__known_work)
