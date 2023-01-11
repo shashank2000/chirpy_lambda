@@ -14,7 +14,7 @@ from chirpy.annotators.navigational_intent.navigational_intent import Navigation
 from chirpy.annotators.stanfordnlp import StanfordnlpModule
 from chirpy.annotators.coref import CorefAnnotator
 from chirpy.annotators.emotion import EmotionAnnotator
-from chirpy.annotators.g2p import NeuralGraphemeToPhoneme
+# from chirpy.annotators.g2p import NeuralGraphemeToPhoneme
 from chirpy.annotators.gpt2ed import GPT2ED
 from chirpy.annotators.question import QuestionAnnotator
 from chirpy.annotators.blenderbot import BlenderBot
