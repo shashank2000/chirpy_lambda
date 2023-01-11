@@ -25,9 +25,19 @@ def merge_opinions_work(celeb_keys):
     return merged_celeb_work_ops
 
 
+def add_dummy_column():
+    opinion_file = json.load(open("individual_celeb_opinions.json"))
+    for c in opinion_file:
+        opinion_file[c] = {"opinion": opinion_file[c]}
+    json.dump(opinion_file, open("individual_celeb_opinions.json", "w+"))
+
+
+
+
 if __name__ == "__main__":
-    merge_celeb_ops = merge_opinions()
-    json.dump(merge_celeb_ops, open("individual_celeb_opinions.json", "w+"))
-    merge_celeb_work_ops = merge_opinions_work(merge_celeb_ops)
-    json.dump(merge_celeb_work_ops, open("celeb_work_opinions.json", "w+"))
+    add_dummy_column()
+    # merge_celeb_ops = merge_opinions()
+    # json.dump(merge_celeb_ops, open("individual_celeb_opinions.json", "w+"))
+    # merge_celeb_work_ops = merge_opinions_work(merge_celeb_ops)
+    # json.dump(merge_celeb_work_ops, open("celeb_work_opinions.json", "w+"))
 

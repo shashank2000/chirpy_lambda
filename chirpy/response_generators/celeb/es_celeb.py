@@ -100,7 +100,7 @@ def run_test_es():
 
 def filter_all_celebs():
     filtered_celeb = {}
-    all_celeb_info = json.load(open("all_celeb_info.json"))
+    all_celeb_info = json.load(open("all_celeb_info_newest1.json"))
 
     for c in tqdm.tqdm(all_celeb_info):
         filtered_celeb.update({c: {}})
@@ -113,7 +113,7 @@ def filter_all_celebs():
             else:
                 filtered_celeb[c].update({k: all_celeb_info[c][k]})
 
-    json.dump(filtered_celeb, open("filtered_celebs.json", "w+"))
+    json.dump(filtered_celeb, open("all_celeb_info_newest1.json", "w+"))
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ def generate(prompt, **kwargs):
     return completion.choices[0].text
 
 
-def create_prompts(celeb_info):
+def create_prompts(celeb_info, list_celebs=[]):
     all_p = []
 
     MOVIE_TV_PROMPT = "Give a relatable opinion about {name}'s performance in {film_tv}."
@@ -42,6 +42,8 @@ GENERATION_PROMPT = "Give a relatable opinion about {name}."
 
 if __name__ == "__main__":
     # all_celebs = json.load(open("filtered_celeb.json"))
+    sub_celebs = ["Shawn Mendes", "Olivia Rodrigo", "Shakira", "Rihanna", "The Weeknd", "Keanu Reeves",
+                  "Rachel McAdams", "Jude Law", "James McAvoy", "Michael Fassbender", "Jesse Eisenberg", "Adam Levine"]
     all_celebs = pickle.load(open("list_celebs.p", "rb"))
     all_celeb_info = json.load(open("all_celeb_info.json"))
 

@@ -1,6 +1,5 @@
 <ENTRY_CONDITIONS>
-(not IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(Flags.CELEB__generic_visited) and IS_TRUE(Flags.CELEB__unknown_visited))
-or (not IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(Flags.CELEB__generic_visited))
+not IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(State.CELEB__generic_visited)
 
 <PROMPTS>
 Prompt celeb_when []
@@ -14,14 +13,14 @@ Prompt celeb_when []
 Subnode give_celeb_opinion [] {
     - @one_of(
         {"I see!"},
-        {"Gotcha!"},
-        {"Right!"}
+        {"Gotcha!"}
     )
     - @lookup(
-        database_name="individual_celeb_opinions",
-        key={@val(State.User__FavoriteCelebrityName)}
+        database_name="celeb_opinion",
+        key={@val(State.User__FavoriteCelebrityName)},
+        column="opinion"
    )
 }
 
 <SET_STATE_AFTER>
-Flags.CELEB__generic_visited = @constant(True)
+State.CELEB__generic_visited = @constant(True)

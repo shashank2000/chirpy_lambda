@@ -19,6 +19,13 @@ User__FavoriteCelebritySong: null
 User__FavoriteCelebrityCharacter: null
 User__FavoriteCelebrityPronoun: null
 User__FavoriteCelebrityCurrWork: null
+CELEB__discuss_visited: False
+CELEB__unknown_visited: False
+CELEB__generic_visited: False
+CELEB__visited: False
+CELEB__discuss_movie: False
+CELEB__discuss_tv: False
+CELEB__discuss_song: False
 PERSONALISSUE__supernode_is_responding: False
 PERSONALISSUE__user_has_personal_issue: False
 PERSONALISSUE__need_confirmation_for_further_discussion: False

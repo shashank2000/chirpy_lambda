@@ -134,6 +134,7 @@ def extract_entities(subject):
     }
     sum_ents = 0
     for e in tqdm(related_entities):
+        print(e)
         e_sp = call_search(e)
         if e_sp is not None and "Award" not in e:
             all_cats = call_categories(e)
@@ -144,10 +145,15 @@ def extract_entities(subject):
                         Check to make sure it is a song or a film or a TV show
                     """
                     e_text = extract_non_ref(e_sp)
-                    matches_e = re.findall(subject, e_text)
+                    if "(" in subject:
+                        subject_call = subject[:subject.index("(")]
+                    else:
+                        subject_call = subject
+                    matches_e = re.findall(subject_call, e_text)
                     total_nums = len(matches_e)
+                    print(total_nums)
 
-                    if total_nums >= 3 and filter_entities(e):
+                    if total_nums >= 1:
                         if "people" in all_cats or "character" in all_cats or "fictional" in all_cats:
                             celeb_dict['characters'].append((e, pv))
                             sum_ents += 1
@@ -166,15 +172,16 @@ def extract_entities(subject):
 
 
 if __name__ == "__main__":
-    all_celebs = pickle.load(open("scraped_celebs.p", "rb"))
+    # all_celebs = pickle.load(open("scraped_celebs.p", "rb"))
     # all_celebs = ["Tom Cruise", "Nathan Fillion", "Ariana Grande", "Emma Watson"]
+    all_celebs = ["Shawn Mendes", "Olivia Rodrigo", "Shakira", "Rihanna", "The Weeknd"]
     master_celeb = {}
     for c in all_celebs:
         c_d, e_sum = extract_entities(c)
-        if e_sum >= 3:
-            master_celeb.update({
-                c.lower(): c_d
-            })
+        # if e_sum >= 3:
+        master_celeb.update({
+            c.lower(): c_d
+        })
     print(master_celeb)
-    json.dump(master_celeb, open("all_celeb_info.json", "w+"))
+    json.dump(master_celeb, open("all_celeb_info_newest1.json", "w+"))
 

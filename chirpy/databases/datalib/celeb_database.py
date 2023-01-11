@@ -23,7 +23,7 @@ def verify_celeb_exists(celeb_name : str):
 def lookup_celeb(celeb_name : str):
     return celeb_opinion[celeb_name]
 
-# load food database
+# load celeb database
 with open(CELEB_WORK_OPINION_FILE) as f:
     celeb_work_opinion = json.load(f)
 
