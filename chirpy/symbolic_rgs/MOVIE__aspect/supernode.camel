@@ -13,6 +13,10 @@ Prompt ask_user_opinion [ ] {
 }
 
 
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.MOVIE__user_mentioned_reason)
+
+
 <LOCALS>
 Locals.placeholder = {
   - "placeholder"
@@ -21,19 +25,25 @@ Locals.placeholder = {
 
 <SET_STATE>
 State.User__FavoriteMovieReason = {
-    @helper.get_user_reasons(@val(Context.utterance))
+    @helper.get_user_reasons(@val(Flags.MOVIE__last_utterance))
 }
 
 
 <SUBNODES>
-Subnode bot_answers [
-    IS_TRUE(Flags.MOVIE__user_mentioned_reason)
+Subnode reason_specified [
+    not IS_NONE(State.User__FavoriteMovieReason)
 ] {
-    - "I see. Thank you for sharing!"
+    - "Thank you for sharing!"
     - @one_of(
-        "I can't agree more with what you've just said. The",
+        "I can't agree more with what you've just said. In particular, the",
         "I completely agree with you that the"
     )
     - @val(State.User__FavoriteMovieReason)
-    - "of the movie is phenomenal."
+    - "of the movie was phenomenal."
+}
+
+Subnode reason_specified_but_not_listed [
+    IS_NONE(State.User__FavoriteMovieReason)
+] {
+    - "Thank you for sharing! I totally agree with you."
 }

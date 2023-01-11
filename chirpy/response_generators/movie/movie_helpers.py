@@ -6,21 +6,3 @@ import re
 logger = logging.getLogger('chirpylogger')
 
 
-def found_phrase(phrase, utterance):
-    return re.search(f'(\A| ){phrase}(\Z| )', utterance) is not None
-
-
-def is_positive(rg, utterance):
-    pos_prob = rg.state_manager.current_state.dialogact['pos_answer']
-    neg_prob = rg.state_manager.current_state.dialogact['neg_answer']
-    if pos_prob >= neg_prob:
-        return True 
-    else:
-        return False
-    # top_da = rg.state_manager.current_state.dialogact['top_1']
-    # return top_da == 'pos_answer' or \
-    #     utterance.lower() in YES or \
-    #     (any(found_phrase(i.lower(), utterance) for i in YES) and not any(found_phrase(i.lower(), utterance) for i in NO))
-
-def openai_reasons(rg):
-    logger.warning(f'rg: {rg}')

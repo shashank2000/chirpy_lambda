@@ -28,3 +28,4 @@
 - LAUNCH__ProposedName
 - MOVIE__user_likes_movie
 - MOVIE__user_mentioned_reason
+- MOVIE__last_utterance
