@@ -76,18 +76,15 @@ if __name__ == '__main__':
         "dialogact": {
             "url": "http://localhost:4081"
         },
-        # "g2p": {
-        #     "url": "http://localhost:4082"
-        # },
+        "g2p": {
+            "url": "http://localhost:4082"
+        },
         # "gpt2ed": {
         #     "url": "http://localhost:4083"
         # },
         "question": {
             "url": "http://localhost:4084"
         },
-        # "convpara": {
-        #     "url": "http://localhost:4085"
-        # },
         "entitylinker": {
             "url": "http://localhost:4086"
         },
