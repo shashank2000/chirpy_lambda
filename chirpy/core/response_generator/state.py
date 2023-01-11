@@ -67,6 +67,12 @@ class BaseSymbolicState:
     def __contains__(self, key, new_value):
         return key in ALL_STATE_KEYS
         
+    def to_serializable(self):
+        result = {}
+        for k, v in self.data.items():
+            result[k] = str(v)
+        return result
+        
     def update(self, data):
         for key in data:
             assert key in ALL_STATE_KEYS, f"Key not found: {key}"

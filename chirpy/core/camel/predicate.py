@@ -1,15 +1,17 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass 
 from typing import List
+import json
 
 from chirpy.core.camel.variable import Variable
 from chirpy.core.camel.nlg import NLGNode
-
+import logging
+logger = logging.getLogger('chirpylogger')
 
 @dataclass
 class Predicate(ABC):
 	@abstractmethod
-	def evaluate(self, context):
+	def evaluate(self, context, label=""):
 		pass
 		
 funcs = {
@@ -33,9 +35,18 @@ class VariablePredicate(Predicate):
 	verb : str
 	variable : Variable
 	
-	def evaluate(self, context):
+	def evaluate(self, context, label=""):
 		val = self.variable.generate(context)
-		return get_func(self.verb)(val)
+		result = get_func(self.verb)(val)
+		log = {
+			"val": str(val),
+			"variable_name": str(self.variable),
+			"verb": self.verb,
+			"result": result
+		}
+		if label:
+			logger.bluejay(f"predicate_{label}//{self.variable}: {json.dumps(log)}")
+		return result
 		
 	def get_score(self):
 		return get_score(self.variable)
@@ -45,8 +56,8 @@ class AndPredicate(Predicate):
 	pred1 : Predicate
 	pred2 : Predicate
 	
-	def evaluate(self, context):
-		return self.pred1.evaluate(context) and self.pred2.evaluate(context)
+	def evaluate(self, context, label=""):
+		return self.pred1.evaluate(context, label) and self.pred2.evaluate(context, label)
 		
 	def get_score(self):
 		return max(self.pred1.get_score(), self.pred2.get_score())
@@ -56,22 +67,23 @@ class OrPredicate(Predicate):
 	pred1 : Predicate
 	pred2 : Predicate
 	
-	def evaluate(self, context):
-		return self.pred1.evaluate(context) or self.pred2.evaluate(context)
+	def evaluate(self, context, label=""):
+		return self.pred1.evaluate(context, label) or self.pred2.evaluate(context, label)
 		
 	def get_score(self):
 		return max(self.pred1.get_score(), self.pred2.get_score())
 		
 @dataclass
 class FalsePredicate(Predicate):
-	def evaluate(self, context):
-		return False
+	def evaluate(self, context, label=""):
+		return False 
+	
 	def get_score(self):
 		return 0
 		
 @dataclass
 class TruePredicate(Predicate):
-	def evaluate(self, context):
+	def evaluate(self, context, label=""):
 		return True 
 		
 	def get_score(self):
@@ -82,7 +94,7 @@ class VariableIsPredicate(Predicate):
 	variable : Variable
 	val : NLGNode
 	
-	def evaluate(self, context):	
+	def evaluate(self, context, label=""):	
 		return self.variable.generate(context) == self.val.generate(context)
 		
 	def get_score(self):
@@ -93,31 +105,29 @@ class VariableGTPredicate(Predicate):
 	variable : Variable
 	val : NLGNode
 	
-	def evaluate(self, context):	
+	def evaluate(self, context, label=""):	
 		return self.variable.generate(context) > self.val.generate(context)
 		
 	def get_score(self):
-		return get_score(self.variable)
-				
+		return get_score(self.variable)	
 				
 @dataclass
 class VariableLTPredicate(Predicate):
 	variable : Variable
 	val : NLGNode
 	
-	def evaluate(self, context):	
+	def evaluate(self, context, label=""):	
 		return self.variable.generate(context) < self.val.generate(context)
 		
 	def get_score(self):
 		return get_score(self.variable)
-		
 		
 @dataclass 
 class VariableInPredicate(Predicate):
 	variable : Variable
 	vals : List[NLGNode]
 	
-	def evaluate(self, context):
+	def evaluate(self, context, label=""):
 		var = self.variable.generate(context)
 		for val in self.vals:
 			if var == val.generate(context): return True
@@ -130,10 +140,20 @@ class VariableInPredicate(Predicate):
 class NotPredicate(Predicate):
 	predicate : Predicate
 	
-	def evaluate(self, context):
-		base = self.predicate.evaluate(context)
+	def evaluate(self, context, label=""):
+		base = self.predicate.evaluate(context, label)
 		return not base
 	
 	def get_score(self):
 		return self.predicate.get_score()
 		
+@dataclass
+class ExistsPredicate(Predicate):
+	database_name : str
+	database_key : NLGNode
+	def evaluate(self, context):
+		print("tok", self.database_name)
+		return exists(self.database_name.generate(context), self.database_key.generate(context))
+
+	def get_score(self):
+		return 1.

@@ -1,13 +1,23 @@
 <ENTRY_CONDITIONS>
 IS_NONE(State.User__FavoriteFood) and IS_NONE(State.User__FavoriteFood)
 
+<ENTRY_LOCALS>
+Locals.question_intro = {
+	- @one_of(
+		{"I was wondering."},
+		{"I have a question."},
+	)
+}
+
 <PROMPTS>
 Prompt favorite_food [ ] {
-	"What's your favorite food?"
+	- @val(Locals.question_intro)
+	- "What's your top food?"
 }
 
 [
 	Prompt favorite_food_a [ ] {
+		- @val(Locals.question_intro)
 		"What's your favorite food?"
 	}
 
