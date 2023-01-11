@@ -105,8 +105,13 @@ def get_wiki_sections(title=str) -> List[WikiSection]:
         List[WikiSection]: Sections of the wikipedia page
     """
 
-    query = {'query': {'bool': {'filter': [
-            {'term': {'doc_title': title}}]}}}
+    query = {
+        "query": {
+            "match": {
+                "doc_title": title
+            }
+        }
+    }
     sections = es.search(index='enwiki-20201201-sections', body=query, size=100)
     filtered_sections = filter_sections(title, sections)
     return filtered_sections

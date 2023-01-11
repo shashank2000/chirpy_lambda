@@ -1,29 +1,33 @@
 <ENTRY_CONDITIONS>
 not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__discuss_article)
 
+<ENTRY_LOCALS>
+Locals.sections = @helper.get_sections(@val(Utilities.cur_entity), @val(State.WIKI__suggested_sections), @val(State.WIKI__discussed_sections), @val(State.WIKI__last_discussed_section))
+Locals.chosen_sections_titles = @helper.choose_from_sections(@val(Locals.sections))
+Locals.entitys_section_choices = @helper.entitys_section_choices(@val(Utilities.cur_entity), @val(Locals.chosen_sections_titles))
+
 <PROMPTS>
 Prompt discuss_article [ ] {
 	- @one_of(
 		{
 			- "If you'd like, we could also talk about"
-			- @helper.entitys_section_choices(@val(Utilities.cur_entity), @val(State.WIKI__sections))
+			- @val(Locals.entitys_section_choices)
 			- "."
 		}, {
     	- "Well, I've also read about"
-			- @helper.entitys_section_choices(@val(Utilities.cur_entity), @val(State.WIKI__sections))
+			- @val(Locals.entitys_section_choices)
 			- ","
 			- "if that sounds interesting to you."
 		}, {
       - "I think"
-			- "{entitys_section_choices}"
-			- @helper.is_are(@val(State.WIKI__sections))
+			- @helper.is_are(@val(Locals.chosen_sections_titles))
 			- "pretty interesting too."
 			- "Wanna hear about"
-			- @helper.them_it(@val(State.WIKI__sections))
+			- @helper.them_it(@val(Locals.chosen_sections_titles))
 			- "?"
 		}, {
       - "{entitys_section_choices} are rather fascinating. Do you want to hear more about"
-			- @helper.them_it(@val(State.WIKI__sections))
+			- @helper.them_it(@val(Locals.chosen_sections_titles))
 			- "?"
 		}
 	)

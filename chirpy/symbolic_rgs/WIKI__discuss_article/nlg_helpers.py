@@ -1,7 +1,13 @@
 from chirpy.core.entity_linker.entity_linker import WikiEntity
 from chirpy.core.response_generator import nlg_helper
+from chirpy.core.util import filter_and_log
 from chirpy.response_generators.wiki2 import wiki_utils
+from chirpy.response_generators.wiki2.wiki_utils import WikiSection
+from typing import List
+import random
 
+import logging
+logger = logging.getLogger('chirpylogger')
 
 def is_plural(sections):
     return len(sections) >= 2
@@ -32,7 +38,7 @@ def sanitize_section_title(section, entity: WikiEntity):
     return section
 
 
-def construct_entitys_section_choices(entity: WikiEntity, sections, conj='and'):
+def construct_entitys_section_choices(entity: str, sections: List[str], conj='and'):
     """
     Constructs the exact phrasing for section_choices and entitys_section_choices,
     so that we avoid phrases like "Philosophy's history of philosophy" or "Singing's singing animals"
@@ -61,6 +67,74 @@ def construct_entitys_section_choices(entity: WikiEntity, sections, conj='and'):
 
 
 @nlg_helper
-def entitys_section_choices(entity: WikiEntity, sections):
-    _, entitys_section_choices = construct_entitys_section_choices(entity, sections)
+def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], discussed_sections: List[WikiSection], last_discussed_section: WikiSection):
+    sections = wiki_utils.get_wiki_sections(entity.name)
+    print("SECTOPMS", sections)
+    valid_sections = filter_and_log(lambda section: section not in suggested_sections, sections,
+                                        'Wiki Section', reason_for_filtering='these sections were suggested')
+    valid_sections = filter_and_log(lambda section: section not in discussed_sections, valid_sections,
+                                        'Wiki Section', reason_for_filtering='these sections were discussed')
+
+    if last_discussed_section is not None:
+        # TODO
+        return []
+    
+    first_level_sections = list(filter(lambda section: section.level() == 1, valid_sections))
+
+    if first_level_sections:
+        logger.primary_info(
+            f"Choosing from {[s.title for s in first_level_sections]} 1st level sections")
+        return first_level_sections
+    
+    logger.info("No more unused 1st level sections left to ")
+    
+    # TODO
+    return []
+
+
+@nlg_helper
+def choose_from_sections(sections: List[WikiSection]):
+    """
+    Returns two sections that don't contain "and" or a single section that contains an "and".
+    Note that we construct this function this way, so as to avoid downstream phrases like:
+    "(Etymology and terminology) and (Personal life and background)"
+    :param sections: either List[str] or List[WikiSection]
+    :param k:
+    :return:
+    """
+    # TODO-later: Make this a multi armed bandit for recommendations
+    # TODO merge sections with the same name
+    logger.primary_info(f"Wiki sections being chosen from: {[s.title for s in sections]}")
+    chosen_sections = []
+    try:
+        if isinstance(sections[0], WikiSection):
+            sections = list({s.title: s for s in sections[::-1]}.values())
+            random.shuffle(sections)
+            # logger.primary_info(f"titles are {[s.title for s in sections]}")
+            s_and = [s for s in sections if "and" in s.title.split()]
+            s_no_and = [s for s in sections if "and" not in s.title.split()]
+        else: # List[str]
+            sections = list(set(sections))
+            random.shuffle(sections)
+            s_and = [s for s in sections if "and" in s.split()]
+            s_no_and = [s for s in sections if "and" not in s.split()]
+            
+        if len(s_no_and) >= 2:
+            chosen_sections = s_no_and[:2]
+
+        elif len(s_and) >= 1:
+            chosen_sections = [s_and[0]]
+
+        else:
+            chosen_sections = [s_no_and[0]]
+    except ValueError:
+        chosen_sections = sections
+    chosen_sections_titles = [s.title for s in chosen_sections]
+    logger.primary_info(f"Chose {chosen_sections_titles} to suggest.")
+    return chosen_sections_titles
+
+
+@nlg_helper
+def entitys_section_choices(entity: WikiEntity, chosen_sections_titles: List[str]):
+    _, entitys_section_choices = construct_entitys_section_choices(entity.talkable_name, chosen_sections_titles)
     return wiki_utils.clean_wiki_text(entitys_section_choices)
