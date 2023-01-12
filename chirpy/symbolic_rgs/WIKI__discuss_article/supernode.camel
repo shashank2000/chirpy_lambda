@@ -74,11 +74,25 @@ Prompt keep_discussing_article [] {
 }
 
 <LOCALS>
+Locals.selected_section = @helper.get_selected_section(@val(State.WIKI__Entity), @val(Locals.suggested_sections), @val(Locals.chosen_sections_titles), @val(Utilities.response_text), @val(Flags.GlobalFlag__YES))
+Locals.section_summary = @helper.get_section_summary(@val(Locals.selected_section), @val(Utilities.state_manager))
 
 <SET_STATE>
 
 <SUBNODES>
+Subnode discuss_section [
+	not IS_NONE(Locals.selected_section) and not IS_NONE(Locals.section_summary)
+] {
+	- @one_of(
+		"So, about",
+		"Great, so regarding"
+	)
+	- @helper.entitys_section(@val(State.WIKI__Entity), @val(Locals.selected_section))
+	- ","
+	- @val(Locals.section_summary)
+}
+
 Subnode default [
 ] {
-	- "Nothing to say yet."
+	- "I wish I knew more about this." # TODO
 }

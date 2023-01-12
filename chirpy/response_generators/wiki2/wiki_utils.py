@@ -310,10 +310,11 @@ def check_section_summary(rg, section_summary, selected_section, allow_history_o
     if contains_offensive(section_summary):
         logger.primary_info(f"The section summary {section_summary} contains some offensivephrase")
         return None
-    if not allow_history_overlap and rg.has_overlap_with_history(section_summary, threshold=0.8):
-        logger.primary_info(f"Section chosen using title overlap: {selected_section.title} has high overlap with a past utterance. "
-                            f"Discarding it. ")
-        return None
+    # TODO: Add this back
+    # if not allow_history_overlap and rg.has_overlap_with_history(section_summary, threshold=0.8):
+    #     logger.primary_info(f"Section chosen using title overlap: {selected_section.title} has high overlap with a past utterance. "
+    #                         f"Discarding it. ")
+    #     return None
     return section_summary
 
 

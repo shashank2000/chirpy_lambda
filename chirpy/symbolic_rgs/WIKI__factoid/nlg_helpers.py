@@ -140,7 +140,7 @@ def get_infilling_statement(entity: WikiEntity, state_manager: StateManager, fir
     sentences = get_wiki_sentences(cur_entity, state_manager, first_turn)
     logger.primary_info(f"Wiki sentences are: {sentences}")
 
-    if USE_INFILLER:
+    if USE_INFILLER: # TODO: This code has not been tested and is not ready to be used.
         if len(sentences) < 4:
             logger.primary_info("Infiller does not have enough sentences to work with")
             return None, None

@@ -1,9 +1,11 @@
+from chirpy.core.state_manager import StateManager
 from chirpy.core.entity_linker.entity_linker import WikiEntity
 from chirpy.core.response_generator import nlg_helper
 from chirpy.core.util import filter_and_log
 from chirpy.response_generators.wiki2 import wiki_utils
 from chirpy.response_generators.wiki2.wiki_utils import WikiSection
 from typing import List, Optional
+import editdistance
 import random
 
 import logging
@@ -195,3 +197,80 @@ def entitys_section_choices(entity: WikiEntity, chosen_sections_titles: List[str
 
 # Subnode Helpers (equivalent to the discuss section treelet)
 
+@nlg_helper
+def entitys_section(entity: WikiEntity, section: WikiSection):
+    if entity.name not in section.title:
+        return f"{entity.name}'s {section.title}"
+    else:
+        return f"the {section.title}"
+
+@nlg_helper
+def get_selected_section(entity: WikiEntity, suggested_sections: List[WikiSection], chosen_sections_titles: List[str], response_text: str, GlobalFlag__YES: bool):
+    """
+    Get the section that the user says they want to talk about
+    :param sections: possible sections
+    :return:
+    """
+    prompted_options = chosen_sections_titles
+    utterance = response_text
+    sections = wiki_utils.get_wiki_sections(entity.name)
+    for option in prompted_options:
+        # CC: removed all(). 'musical style' -- 'style' did not match
+        if any(editdistance.eval(u_token, eu_token) < 2 for u_token in utterance.split(' ')
+                for eu_token in option.lower().split(' ')):
+            logger.primary_info(f'WIKI prompted {option} and successfully found it in user utterance')
+            # In case the prompted option was for 1st level section, but actually the second level section was suggested,
+            # run the following code to get the right option.
+
+            # While we expect the option selected from prompted_options to have been chosen,
+            # In the case of an entity switching (entity_a -> entity_b -> entity_a),
+            # the prompted options are from a entity_b but the suggested sections are from entity_a
+            options = [sec for sec in suggested_sections if option in str(sec)]
+            if options:
+                option = options[0].title
+                break
+    else:
+        #Check if any section title directly matches (TODO: remove replicated code in any_section_title_matches)
+        for section in sections:
+            if any(editdistance.eval(u_token, eu_token) < 2 for u_token in utterance.split(' ')
+                    for eu_token in section.title.lower().split(' ')):
+                option = section.title
+                logger.primary_info(f'WIKI found successfully section title {option} in user utterance')
+                break
+        else:
+            #If we see many users talking about random things, we should use search_sections here
+            # elif: yes in user utterance then pick the first section, but no section is specifically mentioned
+            if GlobalFlag__YES:
+                if prompted_options:
+                    option = prompted_options[0]
+                    # In case the prompted option was for 1st level section, but actually the second level section was suggested,
+                    # run the following code to get the right option
+                    new_options = [sec for sec in suggested_sections if option in str(sec)]
+                    new_option = new_options[0].title if new_options else None
+                    if new_option and new_option != option:
+                        logger.primary_info(f'WIKI detected user saying yes to section {option}, but the prompted section was actually {new_option}. Responding using that.')
+                        option = new_option
+                    else:
+                        logger.primary_info(f'WIKI detected user saying yes to section {option}, responding to that section')
+                else:
+                    logger.primary_info("User did not reply to open prompt with anything specific to talk about")
+                    return None
+            else:
+                option = None
+    if option:
+        selected_section = [sec for sec in sections if sec.title == option][0]
+        return selected_section
+    return None
+
+@nlg_helper
+def get_section_summary(section: Optional[WikiSection], state_manager: StateManager):
+    if section is None:
+        return None
+    # Check if there is high fuzzy overlap between prompted options and user utterance, if so, pick that section
+    #Prepared apology response
+    # TODO: Check what this does
+    # apology_state = deepcopy(state)
+    # apology_state.entity_state[entity.name].finished_talking = True
+    section_summary = section.summarize(state_manager, max_sents=3)
+    section_summary = wiki_utils.check_section_summary(None, section_summary, section)
+    return section_summary
