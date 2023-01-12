@@ -9,6 +9,10 @@ import random
 import logging
 logger = logging.getLogger('chirpylogger')
 
+
+
+# Prompt Helpers (equivalent to the discuss article treelet)
+
 def is_plural(sections):
     return len(sections) >= 2
 
@@ -75,7 +79,6 @@ def construct_entitys_section_choices(entity: str, sections: List[str], conj='an
 @nlg_helper
 def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], discussed_sections: List[WikiSection], last_discussed_section: WikiSection):
     sections = wiki_utils.get_wiki_sections(entity.name)
-    print("SECTOPMS", sections)
     valid_sections = filter_and_log(lambda section: section not in suggested_sections, sections,
                                         'Wiki Section', reason_for_filtering='these sections were suggested')
     valid_sections = filter_and_log(lambda section: section not in discussed_sections, valid_sections,
@@ -187,3 +190,8 @@ def choose_from_sections(sections: List[WikiSection]):
 def entitys_section_choices(entity: WikiEntity, chosen_sections_titles: List[str], parent_section: Optional[WikiSection]):
     _, entitys_section_choices = construct_entitys_section_choices(entity.talkable_name, chosen_sections_titles, 'or' if parent_section else 'and')
     return wiki_utils.clean_wiki_text(entitys_section_choices)
+
+
+
+# Subnode Helpers (equivalent to the discuss section treelet)
+
