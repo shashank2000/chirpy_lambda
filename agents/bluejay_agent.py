@@ -16,8 +16,9 @@ args = parser.parse_args()
 
 try:
     from chirpy.core.logging_utils import setup_logger, update_logger, get_bluejay_logger_settings
-except:
-    print("Error")
+except Exception as e:
+    print("Error", e)
+    raise e
 
 logger = logging.getLogger('chirpylogger')
 root_logger = logging.getLogger()
@@ -219,6 +220,7 @@ class LocalAgent():
         return last_state
 
     def create_handler(self):
+        logger.warning(f"Annotator timeout is {NLP_PIPELINE_TIMEOUT}")
         return Handler(
             annotator_classes = [
                 QuestionAnnotator,
@@ -261,14 +263,6 @@ class LocalAgent():
         return response, deserialized_current_state
 
 
-def lambda_handler():
-    local_agent = LocalAgent()
-    user_input = ""
-    while user_input != "bye":
-        user_input = input()
-        response, deserialized_current_state = local_agent.process_utterance(user_input)
-        print(response)
-        
 from chirpy.core import flags
 
 
@@ -298,15 +292,14 @@ def lambda_handler(args):
             user_input = input('> ')
         logger.warning(f"received input {user_input}")
         try:
+            logger.bluejay('before end turn')
             response, deserialized_current_state = local_agent.process_utterance(user_input)
             logger.bluejay('<<<END TURN>>>')
             print(response)
         except Exception as e:
-            print("Error")
             logger.bluejay(f"error: {traceback.format_exc()}", exc_info=True)
             logger.bluejay('<<<END TURN>>>')
             exit()
-        #print(response)
 
 
 remote_url_config = {

@@ -48,6 +48,7 @@ def execute_chirpy(input_line, reset=False):
 		process.stdin.write(input_line + '\n')
 		process.stdin.flush()
 	output = process.stdout.readline()
+	print('output', output)
 	# open the logs
 	with open(f'/tmp/logs/output_{CODE}.log', 'r') as f:
 		data = f.read()

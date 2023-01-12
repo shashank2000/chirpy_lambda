@@ -146,7 +146,6 @@ class SymbolicResponseGenerator:
         state.utterance = utterance
         if not self.state_manager.is_first_turn():
             context = Context.get_context(state, self.state_manager)
-            context.update_with_background_flags(self.get_supernodes())
             supernode = self.get_takeover_or_current_supernode(context)
             context = Context.get_context(state, self.state_manager, supernode)
             

@@ -1,4 +1,5 @@
 from chirpy.core.response_generator.nlu import *
+from chirpy.response_generators.personal_issues import personal_issues_helpers
 import logging
 import re
 import string
@@ -107,6 +108,10 @@ def get_flags(context):
 	for virtual_assistant in ['siri', 'cortana']:
 		if utterance_contains_word(utterance, virtual_assistant):
 			ADD_NLU_FLAG("GlobalFlag__VirtualAssistantCompetitor")
+	
+	# Personal issue
+	if personal_issues_helpers.is_personal_issue(context.state_manager, context.utterance):
+		ADD_NLU_FLAG('PERSONALISSUE__personal_sharing_negative')
 	
 	# Red question
 	# <=3 word utterances are not asking for advice (bold assumption!)
