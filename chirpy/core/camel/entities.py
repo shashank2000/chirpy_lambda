@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from chirpy.core.entity_linker.entity_groups import EntityGroup as _EntityGroup, EntityGroupsForExpectedType
+from chirpy.core.entity_linker.entity_groups import EntityGroup as EntityLinkerGroup, EntityGroupsForExpectedType
 from chirpy.core.regex.regex_template import RegexTemplate
 from chirpy.core.response_generator.helpers import global_templates_cache
 
 
 @dataclass
 class EntityGroup():
-	entityGroup : _EntityGroup
+	entityGroup : EntityLinkerGroup
 	def __init__(self, entityGroupName: str) -> None:
 		self.entityGroup = getattr(EntityGroupsForExpectedType, entityGroupName)
 	def evaluate(self, context):
