@@ -12,14 +12,20 @@ const ChatBox = (props) => {
 		</div>
 	  ) 
 	} else if (message.text) {
-	  out.push(
+	if (message.error) {
+		message.source = "error";
+	}
+	console.log(message.error);
+  	out.push(
 		<div className={`message-container message-${message.source}`} key={idx}>
-		  <div className={`message message-${message.source} ${(props.activeMessage.text == message.text) ? "active" : "inactive"}`} onClick={e => props.activateMessage(message)}>
-			{message.text}
-		  </div>
-		  {message.source == "user" && <a className="rerollout" href="#" onClick={e => props.rerolloutToIdx(idx)}>(rerollout to here)</a>}
+	  		<div className={`message message-${message.source} ${(props.activeMessage.text == message.text) ? "active" : "inactive"}`} onClick={e => props.activateMessage(message)} dangerouslySetInnerHTML={{__html: 
+					(message.error || message.text).replace(/\s\s\s\s([^\n]*)/g, '\n<i class="errorLine">$1</i>;\n').replace(/\n/g, "<br />")   
+	  		}}>
+	  		</div>
+			
+	  	{message.source == "user" && <a className="rerollout" href="#" onClick={e => props.rerolloutToIdx(idx)}>(rerollout to here)</a>}
 		</div>
-	  );
+  	);
 	}
   }
   return (
