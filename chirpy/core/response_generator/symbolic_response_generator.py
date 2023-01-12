@@ -22,6 +22,8 @@ from typing import Set, Optional, List, Dict
 import logging
 import os
 
+import json
+
 from importlib import import_module
 
 from concurrent import futures
@@ -53,6 +55,8 @@ class SymbolicResponseGenerator:
             supernode_paths = get_supernode_paths()
         self.state_manager = state_manager
         self.paths_to_supernodes = self.load_supernodes_from_paths(supernode_paths)
+        if not self.state_manager.current_state.rg_state.turns_history:
+            self.state_manager.current_state.rg_state.turns_history = self.get_initial_turns_history()
                 
     def load_supernodes_from_paths(self, supernode_paths):
         output = {}
@@ -64,16 +68,23 @@ class SymbolicResponseGenerator:
         return self.paths_to_supernodes.values()
         
     def get_next_supernode(self, context):
-        possible_supernodes = [supernode for supernode in self.get_supernodes() if supernode.entry_conditions.evaluate(context)]
+        possible_supernodes = [
+            supernode for supernode in self.get_supernodes() if supernode.entry_conditions.evaluate(
+                context, label=f"supernode_entry_conditions//{supernode.name}"
+            )
+        ]
         logger.primary_info(f"Possible supernodes are: " + "; ".join(f"{supernode} (score={supernode.entry_conditions.get_score()})" for supernode in possible_supernodes))
+        logger.bluejay(f"supernodes: {json.dumps({supernode.name : {'score': supernode.entry_conditions.get_score()} for supernode in possible_supernodes})}")
         possible_supernodes = sorted(possible_supernodes, key=lambda x: x.entry_conditions.get_score(), reverse=True)
+        next_supernode = possible_supernodes[0]
+        logger.bluejay(f"supernode_chosen: {next_supernode.name}")
         return possible_supernodes[0]
 
     def get_any_takeover_supernode(self, context, cancelled_supernodes):
         for supernode in self.get_supernodes():
             if supernode.name in cancelled_supernodes:
                 continue
-            if supernode.entry_conditions_takeover.evaluate(context):
+            if supernode.entry_conditions_takeover.evaluate(context, label=f"entry_conditions_takeover//{supernode.name}"):
                 return supernode
         return self.paths_to_supernodes['GLOBALS']
 
@@ -89,7 +100,11 @@ class SymbolicResponseGenerator:
         Else, returns the current supernode if it exists.
         """
         for supernode in self.get_supernodes():
-            if supernode.entry_conditions_takeover.evaluate(context):
+            if (
+                supernode.entry_conditions_takeover.evaluate(context) or 
+                supernode.entity_groups.evaluate(context) or 
+                supernode.entity_groups_regex.evaluate(context)
+            ):
                 return supernode
         return self.get_current_supernode_with_fallback(context)
 
@@ -98,24 +113,14 @@ class SymbolicResponseGenerator:
     def get_utilities(self, supernode):
         """Packages some useful data into one object."""
         
-    def get_background_flags(self, utterance):
-        """Collects all background flags from all supernodes."""
-        flags = {}
-        for supernode in self.get_supernodes():
-            bg_flags = supernode.get_background_flags(self, utterance)
-            flags.update(bg_flags)
-        return flags
-        
-    def init_state(self):
-        # Supernode turn counters:
-        # There is a dictionary in base symbolic state (the state object for symbolic rg)
+    def get_initial_turns_history(self):
         # This dictionary counts what turn number each supernode was last called
-        # We overload the init_state function to return a fresh instance of base symbolic state 
-        #   with all of the supernodes' last_turn_called set to -1
-        # For selected supernode, set last_turn_called to current turn number
-        state = BaseSymbolicState()
-        state.turns_history = {supernode.name: -1 for supernode in self.get_supernodes()}
-        return state
+        # For each selected supernode, mark its last turn called as the current turn number
+        return {supernode.name: 0 for supernode in self.get_supernodes()}
+
+    def update_turns_history(self, state, supernode):
+        assert supernode.name in state.turns_history
+        state.turns_history[supernode.name] = self.state_manager.current_state.turn_num
                 
     def update_context(
         self,
@@ -140,18 +145,19 @@ class SymbolicResponseGenerator:
         logger.warning("Begin response for SymbolicResponseGenerator.")
         state.utterance = utterance
         if not self.state_manager.is_first_turn():
-            supernode = self.get_takeover_or_current_supernode(Context.get_context(state, self.state_manager))
+            context = Context.get_context(state, self.state_manager)
+            context.update_with_background_flags(self.get_supernodes())
+            supernode = self.get_takeover_or_current_supernode(context)
             context = Context.get_context(state, self.state_manager, supernode)
             
             cancelled_supernodes = set()
             
             while not supernode.continue_conditions.evaluate(context):
                 cancelled_supernodes.add(supernode.name)
-                logger.primary_info(f"Switching to supernode {supernode}")
+                logger.primary_info(f"FOOD_Intro can't start, switching to supernode {supernode}")
                 supernode = self.get_any_takeover_supernode(context, cancelled_supernodes)
                 context = Context.get_context(state, self.state_manager, supernode)
-                print(supernode.continue_conditions)
-                
+
             context.compute_locals()
             supernode.set_state.evaluate(context)
             
@@ -159,17 +165,25 @@ class SymbolicResponseGenerator:
             response = subnode.generate(context) + " "
             logger.primary_info(f'Received {response} from subnode {subnode}.')
             assert response is not None
-    
+
+            self.update_turns_history(state, supernode)
+            context.utilities['response_text'] = response
+
             subnode.set_state.evaluate(context)
             supernode.set_state_after.evaluate(context)
+            context.log_state()
             next_supernode = self.get_next_supernode(context)
         else:
             next_supernode = self.get_launch_supernode()
             response = ""
             
+        state.entry_locals = {}
         context = Context.get_context(state, self.state_manager, next_supernode)
+        context.compute_entry_locals()
+        state.entry_locals = context.locals
         prompt = next_supernode.prompts.select(context)
         prompt_response = prompt.generate(context)
+        prompt.assignments.evaluate(context)
         logger.primary_info(f"Received {prompt_response} from prompt {prompt}.") 
         state.cur_supernode = next_supernode.name
                 

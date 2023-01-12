@@ -1,13 +1,15 @@
-from typing import List
+from typing import List, Union
 from dataclasses import dataclass, field
 
 from chirpy.core.camel.variable import Variable
 from chirpy.core.camel.nlg import NLGNode
+from chirpy.core.camel.predicate import Predicate
 
 @dataclass
 class Assignment:
 	variable : Variable
-	value : NLGNode
+	value : Union[NLGNode, Predicate]
+	is_predicate : bool = False
 
 @dataclass
 class AssignmentList:
@@ -15,5 +17,8 @@ class AssignmentList:
 	
 	def evaluate(self, context):
 		for assignment in self.assignments:
-			context.set(assignment.variable, assignment.value.generate(context))
+			if assignment.is_predicate:
+				context.set(assignment.variable, assignment.value.evaluate(context))
+			else:
+				context.set(assignment.variable, assignment.value.generate(context))
 		

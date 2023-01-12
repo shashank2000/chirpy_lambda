@@ -1,7 +1,7 @@
 import os
 
 from lark import Lark, Transformer, Token, Tree
-from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode
+from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode, attribute, entities
 
 import sys
 
@@ -19,15 +19,22 @@ class SupernodeMaker(Transformer):
 	def nlg__variable(self, tok): return self.variable(tok)
 	def condition__variable(self, tok): return self.variable(tok)
 	
+	def condition__bool(self, tok):
+		if str(tok[0]).lower() == 'true':
+			return predicate.TruePredicate()
+		return predicate.FalsePredicate()
+	
 	def condition__predicate(self, tok):
 		if str(tok[0]) == 'IS_EQUAL':
 			return predicate.VariableIsPredicate(variable=tok[1], val=tok[2])
 		elif str(tok[0]) == 'IS_IN': 
-			return predicate.VariableInPredicate(variable=tok[1], vals=tok[2])
+			return predicate.VariableInPredicate(variable=tok[1], vals=tok[2:])
 		elif str(tok[0]) == 'IS_GREATER_THAN': 
 			return predicate.VariableGTPredicate(variable=tok[1], val=tok[2])
 		elif str(tok[0]) == 'IS_LESS_THAN': 
 			return predicate.VariableLTPredicate(variable=tok[1], val=tok[2])
+		elif str(tok[0]) == 'EXISTS':
+			return predicate.ExistsPredicate(database_name=tok[1], database_key=tok[2])
 		else:
 			return predicate.VariablePredicate(verb=str(tok[0]), variable=tok[1])
 	
@@ -56,8 +63,20 @@ class SupernodeMaker(Transformer):
 	## NLG
 	
 	def nlg__ESCAPED_STRING(self, tok): return nlg.String(str(tok.value)[1:-1])
+
+	def condition__ESCAPED_STRING(self, tok): return self.nlg__ESCAPED_STRING(tok)
+
 	def nlg__PUNCTUATION(self, tok): return nlg.String(str(tok.value))
-	def nlg__val(self, tok): return nlg.Val(tok[0], tok[1:])
+	def nlg__val(self, tok): 
+		operations = []
+		if len(tok) > 1:
+			# tokens are [operator, pipe function, operator, pipe function, ...]
+			extra_args = tok[1:]
+			iterator = iter(extra_args)
+			# pairs extra_args into [(operator, pipe function), (operator, pipe function), ...]
+			operations = list(zip(iterator, iterator))
+			operations = [(op[0].value, op[1].value) for op in operations]
+		return nlg.Val(tok[0], operations)
 	def nlg__neural_generation(self, tok): return nlg.NeuralGeneration(tok[0])
 	def nlg__one_of(self, tok): 
 		return nlg.OneOf(tok)
@@ -65,6 +84,8 @@ class SupernodeMaker(Transformer):
 	
 	def nlg__inflect(self, tok): return nlg.Inflect(tok[0], tok[1])
 	def nlg__inflect_engine(self, tok): return nlg.InflectEngine(tok[0], tok[1])
+
+	def nlg__lookup(self, tok): return nlg.DatabaseLookup(tok[0], tok[1], tok[2])
 	def nlg__STRING(self, tok): return tok
 	def nlg__helper(self, tok):
 		func_name = tok[0].value
@@ -76,17 +97,12 @@ class SupernodeMaker(Transformer):
 			return nlg.NLGList(tok)
 		return tok
 	def condition__nlg(self, tok): return self.nlg(tok)
+
+	def prompt_group(self, tok):
+		return prompt.PromptGroup(tok)
 	
 	def prompt(self, tok):
-		if len(tok) == 3:
-			prompt_name, condition, nlg = tok
-		else:
-			prompt_name, nlg = tok
-			condition = predicate.TruePredicate()
-		return prompt.Prompt(prompt_name.value, condition, nlg)
-		
-	def subnode(self, tok):
-		subnode_name = tok[0].value
+		prompt_name = tok[0].value
 		condition = predicate.TruePredicate()
 		assignment_list = []
 		response = None
@@ -97,11 +113,43 @@ class SupernodeMaker(Transformer):
 				response = token
 			elif isinstance(token, assignment.Assignment):
 				assignment_list.append(token)
+		return prompt.Prompt(
+			name=prompt_name,
+			entry_conditions=condition,
+			response=response,
+			assignments=assignment.AssignmentList(assignment_list)
+		)
+	
+	def subnode_group(self, tok):
+		return subnode.SubnodeGroup(tok)
+		
+	def attribute_list(self, tok):
+		return attribute.AttributeList(attributes=[str(x) for x in tok])
+		
+	def subnode(self, tok):
+		subnode_name = tok[0].value
+		condition = predicate.TruePredicate()
+		assignment_list = []
+		response = None
+		attributes = attribute.AttributeList()
+		for token in tok[1:]:
+			if isinstance(token, predicate.Predicate):
+				condition = token
+			elif isinstance(token, nlg.NLGNode):
+				response = token
+			elif isinstance(token, assignment.Assignment):
+				assignment_list.append(token)
+			elif isinstance(token, attribute.AttributeList):
+				attributes = token
+			else:
+				assert False, f"Unrecognized token {token}"
+				
 		return subnode.Subnode(
 			name=subnode_name,
 			entry_conditions=condition,
 			response=response,
-			set_state=assignment.AssignmentList(assignment_list)
+			set_state=assignment.AssignmentList(assignment_list),
+			attributes=attributes,
 		)
 	
 	def continue_conditions_section(self, tok):
@@ -109,6 +157,22 @@ class SupernodeMaker(Transformer):
 		
 	def assignment(self, tok):
 		return assignment.Assignment(tok[0], tok[1])
+	
+	def condition_assignment(self, tok):
+		return assignment.Assignment(tok[0], tok[1], True)
+
+	### ENTRY LOCALS
+	def entry_locals_section(self, tok):
+		return "entry_locals", assignment.AssignmentList(tok)
+		
+
+	def entity_group(self, tok):
+		entityGroupName = str(tok[0].value)[1:-1] # remove leading and ending quotes
+		return entities.EntityGroup(entityGroupName)
+
+	def entity_group_regex(self, tok):
+		entityGroupRegexName = str(tok[0].value)[1:-1] # remove leading and ending quotes
+		return entities.EntityGroupRegex(entityGroupRegexName)
 		
 	### PROMPT
 	def prompt_section(self, tok):
@@ -126,7 +190,7 @@ class SupernodeMaker(Transformer):
 		
 	### ENTRY CONDITIONS TAKEOVER
 	def entry_conditions_takeover_section(self, tok):
-		return "entry_conditions_takeover", tok
+		return "entry_conditions_takeover", tok[0]
 		
 	### SET STATE
 	def set_state_section(self, tok):
@@ -139,6 +203,14 @@ class SupernodeMaker(Transformer):
 	### SET STATE AFTER
 	def set_state_after_section(self, tok):
 		return "set_state_after", assignment.AssignmentList(tok)
+
+	### ENTITY GROUPS (for takeover)
+	def entity_groups_section(self, tok):
+		return "entity_groups", entities.EntityGroupList(tok)
+
+	### ENTITY GROUP REGEXES (for takeover)
+	def entity_groups_regex_section(self, tok):
+		return "entity_groups_regex", entities.EntityGroupRegexList(tok)
 	
 	def document(self, tok):
 		return tok

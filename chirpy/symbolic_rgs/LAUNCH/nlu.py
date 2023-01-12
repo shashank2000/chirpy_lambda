@@ -103,3 +103,7 @@ def get_flags(context):
 	
 	proposed_name = get_name_from_utterance(context)
 	ADD_NLU_FLAG("LAUNCH__ProposedName", proposed_name)
+
+@nlu_processing
+def get_background_flags(context):
+    return

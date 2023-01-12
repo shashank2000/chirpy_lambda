@@ -5,6 +5,7 @@ from chirpy.core.camel.predicate import Predicate, TruePredicate, FalsePredicate
 from chirpy.core.camel.prompt import PromptList
 from chirpy.core.camel.subnode import SubnodeList
 from chirpy.core.camel.assignment import AssignmentList
+from chirpy.core.camel.entities import EntityGroupList, EntityGroupRegexList
 from dataclasses import dataclass, field, fields
 from typing import List, Any
 
@@ -15,12 +16,15 @@ class Supernode:
 	name : str
 	subnodes : SubnodeList
 	entry_conditions : Predicate = field(default_factory=TruePredicate)
+	entry_locals : AssignmentList = field(default_factory=AssignmentList)
 	prompts : PromptList = field(default_factory=PromptList)
 	continue_conditions : Predicate = field(default_factory=TruePredicate)
 	locals : AssignmentList = field(default_factory=AssignmentList)
 	entry_conditions_takeover : Predicate = field(default_factory=FalsePredicate)
 	set_state : AssignmentList = field(default_factory=AssignmentList)
 	set_state_after : AssignmentList = field(default_factory=AssignmentList)
+	entity_groups : EntityGroupList = field(default_factory=EntityGroupList)
+	entity_groups_regex : EntityGroupRegexList = field(default_factory=EntityGroupRegexList)
 	
 	@classmethod
 	def load(cls, camel_tree, name):
@@ -49,9 +53,9 @@ class Supernode:
 		flags = self.nlu.get_flags(context)
 		return flags
 	
-	def get_background_flags(self, rg, utterance):
+	def get_background_flags(self, context):
 		# background_flags: flags to update even if this supernode was not chosen
-		flags = self.nlu.get_background_flags(rg, utterance)
+		flags = self.nlu.get_background_flags(context)
 		return flags		
 		
 	def __str__(self):

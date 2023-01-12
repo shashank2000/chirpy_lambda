@@ -12,13 +12,16 @@ nlg : "{" ("-"? nlg)* "}"
 	| inflect_engine
 	| one_of
 	| constant
+	| lookup
 	| ESCAPED_STRING
 	| "\"" "\""
 	
 LIST : _OB _CB
 	 | _OB
 
-val : "@val" _OP variable ("|" PARAM_ARG_NAME)* _CP
+OPERATORS: "|" | "+" | "-"
+
+val : "@val" _OP variable (OPERATORS PARAM_ARG_NAME)* _CP
 
 neural_generation : "@neural_generation" _OP "prefix" _EQ nlg _CP
 
@@ -27,6 +30,8 @@ helper : "@helper" _PERIOD PARAM_ARG_NAME _OP (nlg (_COMMA nlg)*)? _CP
 inflect : "@inflect" _OP "inflect_token" _EQ nlg _COMMA "inflect_entity" _EQ variable _CP
 
 inflect_engine : "@inflect_engine" _OP "type" _EQ nlg _COMMA "str" _EQ nlg _CP
+
+lookup : "@lookup" _OP "database_name" _EQ ESCAPED_STRING _COMMA "key" _EQ nlg _COMMA "column" _EQ ESCAPED_STRING _CP
 
 one_of : "@one_of" _OP (nlg (_COMMA nlg)* _COMMA?)? _CP
 

@@ -6,6 +6,6 @@ def get_flags(context):
     pass
 
 @nlu_processing
-def get_background_flags(rg, utterance):
-    is_personal_issue = personal_issues_helpers.is_personal_issue(rg, utterance)
+def get_background_flags(context):
+    is_personal_issue = personal_issues_helpers.is_personal_issue(context.state_manager, context.utterance)
     ADD_NLU_FLAG('PERSONALISSUE__personal_sharing_negative', is_personal_issue)

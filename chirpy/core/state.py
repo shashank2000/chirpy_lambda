@@ -46,6 +46,7 @@ class BaseSymbolicState:
     data: Dict[str, Any] = field(default_factory=dict)
     turns_history: Dict[str, int] = field(default_factory=dict)
     last_response : ResponseGeneratorResult = field(default_factory=lambda: None)
+    entry_locals: Dict[str, Any] = field(default_factory=dict)
     
     def check(self, key):
         assert key in ALL_STATE_KEYS, f"Key not found: {key}"
@@ -66,10 +67,19 @@ class BaseSymbolicState:
         self.check(key)
         self.data[key] = new_value
         
+    def __contains__(self, key, new_value):
+        return key in ALL_STATE_KEYS
+        
     def update(self, data):
         for key in data:
             self.check(key)
         self.data.update(data)
+
+    def to_serializable(self):
+        result = {}
+        for k, v in self.data.items():
+            result[k] = str(v)
+        return result
         
 # @dataclass
 # class BaseSymbolicConditionalState:

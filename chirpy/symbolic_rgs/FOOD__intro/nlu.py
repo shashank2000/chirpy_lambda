@@ -25,3 +25,7 @@ def get_flags(context):
         best_attribute = get_best_attribute(entity_name)
         ADD_NLU_FLAG('FOOD__user_mentioned_food') 
         ADD_NLU_FLAG('FOOD__best_comment_type', best_attribute) 
+
+@nlu_processing
+def get_background_flags(context):
+    return
