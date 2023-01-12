@@ -1,6 +1,7 @@
-%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB)
+%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB, _COMMA)
 %import .nlg ( nlg )
 %import .condition ( condition )
+%import common.ESCAPED_STRING
 
 // ignore whitespace
 
@@ -25,7 +26,9 @@ document: entry_conditions_section? \
           entry_conditions_takeover_section? \
           set_state_section? \
           subnodes_section \
-          set_state_after_section?
+          set_state_after_section? \
+          entity_groups_section? \
+          entity_groups_regex_section?
 
 // Section: Entry Conditions
 entry_conditions_section : "<ENTRY_CONDITIONS>" condition?
@@ -60,4 +63,12 @@ SUBNODE_NAME: /[a-zA-Z_1-9]+/
 
 // Section: Set State After
 set_state_after_section : "<SET_STATE_AFTER>" assignment*
+
+// entry groups section
+entity_groups_section : "<ENTITY_GROUPS>" _OB (entity_group (_COMMA entity_group)* _COMMA?)? _CB
+entity_group: ESCAPED_STRING
+
+// entry groups regex section
+entity_groups_regex_section : "<ENTITY_GROUPS_REGEX>" _OB (entity_group_regex (_COMMA entity_group_regex)* _COMMA?)? _CB
+entity_group_regex: ESCAPED_STRING
 
