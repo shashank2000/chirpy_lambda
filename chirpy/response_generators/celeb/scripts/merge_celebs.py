@@ -17,7 +17,7 @@ def merge_opinions():
 def merge_opinions_work(celeb_keys):
     celeb_keys = {c.lower(): c for c in celeb_keys}
     celeb_opinion_work_file = open("celeb_opinions_works_new.jsonl").readlines()
-    merged_celeb_work_ops = json.load(open("celeb_work_opinions.json"))
+    merged_celeb_work_ops = json.load(open("../celeb_work_opinions.json"))
     for l in celeb_opinion_work_file:
         ld = json.loads(l)
         if ld['work_name'] not in merged_celeb_work_ops:
@@ -50,6 +50,6 @@ if __name__ == "__main__":
     # json.dump(orig_celeb_ops, open("individual_celeb_opinions.json", "w"))
     celeb_keys = json.load(open("../individual_celeb_opinions.json"))
     merged_ops = merge_opinions_work(celeb_keys)
-    json.dump(merged_ops, open("celeb_work_opinions.json", "w"))
+    json.dump(merged_ops, open("../celeb_work_opinions.json", "w"))
 
 

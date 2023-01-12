@@ -8,7 +8,7 @@ logger = logging.getLogger('chirpylogger')
 
 # CELEBS = ["taylor swift", "ryan reynolds", "nathan fillion", "matthew mcconaughey"]
 CELEBS = json.load(open(os.path.join(abspath(dirname(__file__)), 'reverse_filtered_celeb.json')))
-OPINIONS = json.load(open(os.path.join(abspath(dirname(__file__)), 'scripts/celeb_work_opinions.json')))
+OPINIONS = json.load(open(os.path.join(abspath(dirname(__file__)), 'celeb_work_opinions.json')))
 
 
 def is_known_celeb(entity_name):
