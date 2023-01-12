@@ -39,6 +39,8 @@ def find_celeb_type(entity_name):
     # Decide based on total page views
     # Assuming this entity name we have in our celeb dictionary
     et_name = entity_name.lower()
+    if et_name not in CELEBS:
+        return "other"
     pg_cts_songs = sum([x[1] for x in CELEBS[et_name]['songs']])
     pg_cts_films = sum([x[1] for x in CELEBS[et_name]['films']])
     pg_cts_tv = sum(x[1] for x in CELEBS[et_name]['tv'])
@@ -53,6 +55,8 @@ def find_celeb_type(entity_name):
 
 
 def sample_celeb_work(celeb, type_work):
+    if celeb.lower() not in CELEBS:
+        return None
     all_celeb_work = CELEBS[celeb.lower()][type_work]
     if len(all_celeb_work) == 0:
         return None
