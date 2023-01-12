@@ -1,0 +1,80 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.User__FavoriteCelebrity) and not IS_EQUAL(State.User__FavoriteCelebrityWorkType, "other")
+and (IS_TRUE(State.CELEB__discuss_movie) or IS_TRUE(State.CELEB__discuss_tv) or IS_TRUE(State.CELEB__discuss_song))
+and IS_TRUE(State.CELEB__unknown_visited) and not IS_TRUE(State.CELEB__discuss_visited)
+
+<PROMPTS>
+Prompt fav_celeb_movie [IS_TRUE(State.CELEB__discuss_movie)] {
+    - @one_of(
+        {
+        - "How about you? Which movies with"
+        - @val(State.User__FavoriteCelebrityName)
+        - "do you like?"
+        },
+        {
+        - "Is there a movie with"
+        - @val(State.User__FavoriteCelebrityName)
+        - "that you like?"
+        }
+    )
+}
+
+Prompt fav_celeb_tv [IS_TRUE(State.CELEB__discuss_tv)] {
+    - @one_of(
+        {
+        - "Do you like any of"
+        - @helper.pronoun_possessive_adjs(@val(State.User__FavoriteCelebrityPronoun))
+        - "TV shows?"
+        },
+        {
+        - "What about you? Is there a TV show with"
+        - @val(State.User__FavoriteCelebrityName)
+        - "that you enjoy?"
+        }
+    )
+
+}
+
+Prompt fav_celeb_song_1 [IS_TRUE(State.CELEB__discuss_song)] {
+    - "How about you? Is there a song by"
+    - @val(State.User__FavoriteCelebrityName)
+    - "that you absolutely love?"
+}
+
+
+<SET_STATE>
+State.User__FavoriteCelebrityCurrWork = @helper.extract_work_name(@val(Utilities.cur_entity))
+Flags.CELEB__known_work = @helper.is_known_work(@val(Utilities.cur_entity))
+
+<SUBNODES>
+Subnode assess_work [
+    IS_TRUE(Flags.CELEB__known_work)
+] {
+    - @one_of(
+        {"I have heard of that one!"},
+        {"Oh, I remember that!"}
+    )
+    - @helper.find_opinion(@val(State.User__FavoriteCelebrityCurrWork), @val(State.User__FavoriteCelebrityName))
+}
+
+Subnode unknown_movie [
+    not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(State.CELEB__discuss_movie)
+] {
+    - "Oh, interesting, I am not familiar with that movie!"
+}
+
+Subnode unknown_tv [
+    not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(State.CELEB__discuss_tv)
+] {
+    - "I think I have heard of that show but I'm not very familiar!"
+}
+
+Subnode unknown_song [
+    not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(State.CELEB__discuss_song)
+] {
+    - "Sorry, I don't think I have listened to that song."
+}
+
+<SET_STATE_AFTER>
+State.CELEB__unknown_visited = @val(Flags.CELEB__known_work)
+State.CELEB__discuss_visited = {@constant(True)}

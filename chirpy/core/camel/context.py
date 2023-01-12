@@ -81,7 +81,7 @@ class Context:
 		self.flags.update(get_global_flags(self))
 		if supernode is not None:
 			self.flags.update(supernode.get_flags(self))
-			logger.primary_info(f"Non-null flags for supernode {supernode} are: {[x for x in flags if bool(flags[x])]}")
+		logger.primary_info(f"Non-null flags for supernode {supernode} are: {[x for x in self.flags if bool(self.flags[x])]}")
 		return self
 		
 	@property
@@ -99,6 +99,15 @@ class Context:
 	def set(self, variable, value):
 		namespace = getattr(self, variable.namespace.lower())
 		namespace[variable.name] = value
+
+	def setDictionary(self, variable, keys, value):
+		if len(keys) == 0:
+			return self.set(variable, value)
+		namespace = getattr(self, variable.namespace.lower())
+		dictionary = namespace[variable.name]
+		for key in keys[:-1]:
+			dictionary = dictionary[key.generate(self)]
+		dictionary[keys[-1].generate(self)] = value
 
 	def compute_entry_locals(self):
 		self.supernode.entry_locals.evaluate(self)

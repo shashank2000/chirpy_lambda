@@ -21,7 +21,11 @@ LIST : _OB _CB
 
 OPERATORS: "|" | "+" | "-"
 
-val : "@val" _OP variable (OPERATORS PARAM_ARG_NAME)* _CP
+CONSTANT: STRING | "{}"
+
+key: "[" nlg "]"
+
+val : "@val" _OP variable key* (OPERATORS PARAM_ARG_NAME)* _CP
 
 neural_generation : "@neural_generation" _OP "prefix" _EQ nlg _CP
 
@@ -35,4 +39,4 @@ lookup : "@lookup" _OP "database_name" _EQ ESCAPED_STRING _COMMA "key" _EQ nlg _
 
 one_of : "@one_of" _OP (nlg (_COMMA nlg)* _COMMA?)? _CP
 
-constant : "@constant" _OP STRING _CP
+constant : "@constant" _OP CONSTANT _CP

@@ -1,13 +1,5 @@
-from collections import defaultdict
-
 import argparse
-import datetime
-import jsonpickle
 import logging
-import os
-import uuid
-import time
-from typing import Dict
 import uuid
 
 # This needs to happen as early as possible for logging purposes
@@ -22,32 +14,51 @@ def init_argparse() -> argparse.ArgumentParser:
 parser = init_argparse()
 args = parser.parse_args()
 
-from chirpy.core.logging_utils import setup_logger, update_logger, get_bluejay_logger_settings
+try:
+    from chirpy.core.logging_utils import setup_logger, update_logger, get_bluejay_logger_settings
+except:
+    print("Error")
 
 logger = logging.getLogger('chirpylogger')
 root_logger = logging.getLogger()
 if not hasattr(root_logger, 'chirpy_handlers'):
     setup_logger(get_bluejay_logger_settings(code=args.code))
+    
 
-from chirpy.annotators.corenlp import CorenlpModule
-from chirpy.annotators.navigational_intent.navigational_intent import NavigationalIntentModule
-from chirpy.annotators.stanfordnlp import StanfordnlpModule
-from chirpy.annotators.coref import CorefAnnotator
-from chirpy.annotators.emotion import EmotionAnnotator
-from chirpy.annotators.g2p import NeuralGraphemeToPhoneme
-from chirpy.annotators.gpt2ed import GPT2ED
-from chirpy.annotators.question import QuestionAnnotator
-from chirpy.annotators.blenderbot import BlenderBot
-import chirpy.core.flags as flags
-from chirpy.core.util import get_function_version_to_display
-from chirpy.annotators.dialogact import DialogActAnnotator
-from chirpy.core.entity_linker.entity_linker import EntityLinkerModule
 
-import chirpy.core.flags as flags
-from chirpy.core.latency import log_events_to_dynamodb, measure, clear_events
-from chirpy.core.regex.templates import StopTemplate
-from chirpy.core.handler import Handler
-
+try:
+    from collections import defaultdict
+    
+    import datetime
+    import jsonpickle
+    import os
+    import uuid
+    import time
+    from typing import Dict
+    import traceback
+    
+    from chirpy.annotators.corenlp import CorenlpModule
+    from chirpy.annotators.navigational_intent.navigational_intent import NavigationalIntentModule
+    from chirpy.annotators.stanfordnlp import StanfordnlpModule
+    from chirpy.annotators.coref import CorefAnnotator
+    from chirpy.annotators.emotion import EmotionAnnotator
+    from chirpy.annotators.g2p import NeuralGraphemeToPhoneme
+    from chirpy.annotators.gpt2ed import GPT2ED
+    from chirpy.annotators.question import QuestionAnnotator
+    from chirpy.annotators.blenderbot import BlenderBot
+    import chirpy.core.flags as flags
+    from chirpy.core.util import get_function_version_to_display
+    from chirpy.annotators.dialogact import DialogActAnnotator
+    from chirpy.core.entity_linker.entity_linker import EntityLinkerModule
+    import chirpy.core.flags as flags
+    from chirpy.core.latency import log_events_to_dynamodb, measure, clear_events
+    from chirpy.core.regex.templates import StopTemplate
+    from chirpy.core.handler import Handler
+    
+except Exception as e:
+    logger.bluejay(f"Error: %s %s", exc_info=True, stack_info=True)
+    raise e
+    #exit()
 import os
 import sys
 
@@ -109,7 +120,6 @@ class StateTable:
         logger.primary_info('Using StateTable to persist state! Persisting to table {}'.format(self.table_name))
         logger.primary_info('session_id: {}'.format(state['session_id']))
         logger.primary_info('creation_date_time: {}'.format(state['creation_date_time']))
-        logger.bluejay('<<<END TURN>>>')
         
         try:
             assert 'session_id' in state
@@ -287,8 +297,16 @@ def lambda_handler(args):
         else:
             user_input = input('> ')
         logger.warning(f"received input {user_input}")
-        response, deserialized_current_state = local_agent.process_utterance(user_input)
-        print(response)
+        try:
+            response, deserialized_current_state = local_agent.process_utterance(user_input)
+            logger.bluejay('<<<END TURN>>>')
+            print(response)
+        except Exception as e:
+            print("Error")
+            logger.bluejay(f"error: {traceback.format_exc()}", exc_info=True)
+            logger.bluejay('<<<END TURN>>>')
+            exit()
+        #print(response)
 
 
 remote_url_config = {

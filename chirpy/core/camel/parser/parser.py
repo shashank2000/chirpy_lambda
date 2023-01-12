@@ -1,7 +1,7 @@
 import os
 
 from lark import Lark, Transformer, Token, Tree
-from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode
+from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode, attribute, entities
 
 import sys
 
@@ -15,6 +15,7 @@ logger = logging.getLogger('chirpylogger')
 	
 class SupernodeMaker(Transformer):
 	def variable(self, tok): return variable.Variable(str(tok[0]), str(tok[1]))
+	def key(self, tok): return nlg.Key(tok[0])
 	
 	def nlg__variable(self, tok): return self.variable(tok)
 	def condition__variable(self, tok): return self.variable(tok)
@@ -67,16 +68,22 @@ class SupernodeMaker(Transformer):
 	def condition__ESCAPED_STRING(self, tok): return self.nlg__ESCAPED_STRING(tok)
 
 	def nlg__PUNCTUATION(self, tok): return nlg.String(str(tok.value))
-	def nlg__val(self, tok): 
+	def nlg__val(self, tok):
 		operations = []
+		keys = []
 		if len(tok) > 1:
+			operators_start = 1
+			for t in tok:
+				if isinstance(t, nlg.Key):
+					keys.append(t)
+					operators_start += 1
 			# tokens are [operator, pipe function, operator, pipe function, ...]
-			extra_args = tok[1:]
+			extra_args = tok[operators_start:]
 			iterator = iter(extra_args)
 			# pairs extra_args into [(operator, pipe function), (operator, pipe function), ...]
 			operations = list(zip(iterator, iterator))
 			operations = [(op[0].value, op[1].value) for op in operations]
-		return nlg.Val(tok[0], operations)
+		return nlg.Val(tok[0], keys, operations)
 	def nlg__neural_generation(self, tok): return nlg.NeuralGeneration(tok[0])
 	def nlg__one_of(self, tok): 
 		return nlg.OneOf(tok)
@@ -123,11 +130,15 @@ class SupernodeMaker(Transformer):
 	def subnode_group(self, tok):
 		return subnode.SubnodeGroup(tok)
 		
+	def attribute_list(self, tok):
+		return attribute.AttributeList(attributes=[str(x) for x in tok])
+		
 	def subnode(self, tok):
 		subnode_name = tok[0].value
 		condition = predicate.TruePredicate()
 		assignment_list = []
 		response = None
+		attributes = attribute.AttributeList()
 		for token in tok[1:]:
 			if isinstance(token, predicate.Predicate):
 				condition = token
@@ -135,18 +146,24 @@ class SupernodeMaker(Transformer):
 				response = token
 			elif isinstance(token, assignment.Assignment):
 				assignment_list.append(token)
+			elif isinstance(token, attribute.AttributeList):
+				attributes = token
+			else:
+				assert False, f"Unrecognized token {token}"
+				
 		return subnode.Subnode(
 			name=subnode_name,
 			entry_conditions=condition,
 			response=response,
-			set_state=assignment.AssignmentList(assignment_list)
+			set_state=assignment.AssignmentList(assignment_list),
+			attributes=attributes,
 		)
 	
 	def continue_conditions_section(self, tok):
 		return tok
 		
 	def assignment(self, tok):
-		return assignment.Assignment(tok[0], tok[1])
+		return assignment.Assignment(tok[0], tok[1:-1], tok[-1])
 	
 	def condition_assignment(self, tok):
 		return assignment.Assignment(tok[0], tok[1], True)
@@ -154,6 +171,15 @@ class SupernodeMaker(Transformer):
 	### ENTRY LOCALS
 	def entry_locals_section(self, tok):
 		return "entry_locals", assignment.AssignmentList(tok)
+		
+
+	def entity_group(self, tok):
+		entityGroupName = str(tok[0].value)[1:-1] # remove leading and ending quotes
+		return entities.EntityGroup(entityGroupName)
+
+	def entity_group_regex(self, tok):
+		entityGroupRegexName = str(tok[0].value)[1:-1] # remove leading and ending quotes
+		return entities.EntityGroupRegex(entityGroupRegexName)
 		
 	### PROMPT
 	def prompt_section(self, tok):
@@ -184,6 +210,14 @@ class SupernodeMaker(Transformer):
 	### SET STATE AFTER
 	def set_state_after_section(self, tok):
 		return "set_state_after", assignment.AssignmentList(tok)
+
+	### ENTITY GROUPS (for takeover)
+	def entity_groups_section(self, tok):
+		return "entity_groups", entities.EntityGroupList(tok)
+
+	### ENTITY GROUP REGEXES (for takeover)
+	def entity_groups_regex_section(self, tok):
+		return "entity_groups_regex", entities.EntityGroupRegexList(tok)
 	
 	def document(self, tok):
 		return tok
