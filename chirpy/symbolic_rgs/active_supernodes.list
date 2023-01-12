@@ -1,5 +1,6 @@
 # comments start with
 
+LAUNCH
 CELEB__intro
 CELEB__discuss
 CELEB__unknown
@@ -11,4 +12,3 @@ CELEB__generic
 # FOOD__factoid_gpt
 GLOBAL__openended
 GLOBALS
-LAUNCH
