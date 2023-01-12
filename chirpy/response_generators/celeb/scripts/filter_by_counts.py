@@ -1,7 +1,7 @@
 import json, tqdm
 
 if __name__ == "__main__":
-    all_celeb_info = json.load(open("all_celeb_info.json"))
+    all_celeb_info = json.load(open("../all_celeb_info.json"))
     filtered_celebs = {}
 
     for c in tqdm.tqdm(all_celeb_info):

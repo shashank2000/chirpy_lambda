@@ -101,8 +101,6 @@ def is_high_prec(linked_span: LinkedSpan, score_threshold: int, unigram_freq_thr
 
     # Anything on the LOW_PREC_SPANS list is low prec
     if linked_span.span in LOW_PREC_SPANS:
-        logger.primary_info("Low prec spans")
-        logger.primary_info(linked_span.span)
         return False
 
     # Anything directly mirroring what the bot just said is low prec
@@ -118,7 +116,6 @@ def is_high_prec(linked_span: LinkedSpan, score_threshold: int, unigram_freq_thr
 
     # If the rarest unigram in the span has frequency above the threshold, it's low prec
     if linked_span.min_unigram_freq > unigram_freq_threshold:
-        logger.primary_info("unigram freqs")
         return False
 
     # Otherwise, high precision

@@ -5,7 +5,7 @@ import json
 import pickle
 import tqdm
 
-openai.api_key = "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"
+openai.api_key = "<REPLACE WITH KEY>"
 
 
 def generate(prompt, **kwargs):
@@ -44,8 +44,8 @@ if __name__ == "__main__":
     # all_celebs = json.load(open("filtered_celeb.json"))
     sub_celebs = ["Shawn Mendes", "Olivia Rodrigo", "Shakira", "Rihanna", "The Weeknd", "Keanu Reeves",
                   "Rachel McAdams", "Jude Law", "James McAvoy", "Michael Fassbender", "Jesse Eisenberg", "Adam Levine"]
-    all_celebs = pickle.load(open("list_celebs.p", "rb"))
-    all_celeb_info = json.load(open("all_celeb_info.json"))
+    all_celebs = pickle.load(open("../list_celebs.p", "rb"))
+    all_celeb_info = json.load(open("../all_celeb_info.json"))
 
     all_prompts = create_prompts(all_celeb_info)
     print(all_prompts[:5])
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     cts = 0
     while cts < len(all_prompts):
-        celeb_opinion_file = open("celeb_opinions_work.jsonl", "a+")
+        celeb_opinion_file = open("../celeb_opinions_work.jsonl", "a+")
         try:
             for p in tqdm.tqdm(all_prompts[cts:]):
                 output = generate(p['prompt'])
@@ -76,5 +76,4 @@ if __name__ == "__main__":
             err_cts += 1
             time.sleep(20 + 10 * err_cts)
         celeb_opinion_file.close()
-    # json.dump(all_celeb_opinion, open("celeb_opinions.json", "w+"))
 
