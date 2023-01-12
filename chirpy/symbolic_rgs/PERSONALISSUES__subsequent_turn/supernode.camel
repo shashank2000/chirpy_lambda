@@ -4,7 +4,7 @@ IS_TRUE(State.PERSONALISSUE__supernode_is_responding)
 <PROMPTS>
 Prompt personal_issue_subsequent_turn [
 ] {
-	- ""
+  - ""
 }
 
 <LOCALS>
@@ -160,66 +160,66 @@ Locals.ending_statement = {
 }
 
 Locals.can_enter_subsequent_turn = (
-	IS_TRUE(Flags.PERSONALISSUE__is_continued_sharing) or 
-	IS_TRUE(Flags.PERSONALISSUE__personal_sharing_negative) or
-	(IS_FALSE(State.PERSONALISSUE__user_has_personal_issue) and IS_TRUE(Flags.PERSONALISSUE__short_response)) or
-	(
-		IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and 
-		IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and 
-		IS_FALSE(State.PERSONALISSUE__confirming_further_discussion) and 
-		IS_TRUE(State.PERSONALISSUE__responded_with_question) and
-		(IS_TRUE(Flags.GlobalFlag__YES) or IS_TRUE(Flags.GlobalFlag__NO))
-	) or
-	(
-		IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and
-		IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and
-		IS_FALSE(State.PERSONALISSUE__confirming_further_discussion) and
-		IS_FALSE(State.PERSONALISSUE__responded_with_question) and
-		IS_TRUE(Flags.PERSONALISSUE__short_response)
-	)
+  IS_TRUE(Flags.PERSONALISSUE__is_continued_sharing) or 
+  IS_TRUE(Flags.PERSONALISSUE__personal_sharing_negative) or
+  (IS_FALSE(State.PERSONALISSUE__user_has_personal_issue) and IS_TRUE(Flags.PERSONALISSUE__short_response)) or
+  (
+    IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and 
+    IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and 
+    IS_FALSE(State.PERSONALISSUE__confirming_further_discussion) and 
+    IS_TRUE(State.PERSONALISSUE__responded_with_question) and
+    (IS_TRUE(Flags.GlobalFlag__YES) or IS_TRUE(Flags.GlobalFlag__NO))
+  ) or
+  (
+    IS_TRUE(State.PERSONALISSUE__user_has_personal_issue) and
+    IS_FALSE(State.PERSONALISSUE__need_confirmation_for_further_discussion) and
+    IS_FALSE(State.PERSONALISSUE__confirming_further_discussion) and
+    IS_FALSE(State.PERSONALISSUE__responded_with_question) and
+    IS_TRUE(Flags.PERSONALISSUE__short_response)
+  )
 )
 
 <SUBNODES>
 Subnode subsequent_turn_after_short_response [
-	IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(Flags.PERSONALISSUE__short_response)
+  IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(Flags.PERSONALISSUE__short_response)
 ] {
-	- @one_of(
+  - @one_of(
     "Okay, I'm listening.",
     "Go ahead, I'm listening."
   )
 } <
-	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
+  State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
   State.PERSONALISSUE__user_has_personal_issue = @constant(True)
   State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(False)
   State.PERSONALISSUE__confirming_further_discussion = @constant(False)
 >
 
 Subnode subsequent_turn_after_question_response [
-	IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(State.PERSONALISSUE__responded_with_question)
+  IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(State.PERSONALISSUE__responded_with_question)
 ] {
-	- @val(Locals.validation_statement)
+  - @val(Locals.validation_statement)
 } <
-	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
+  State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
   State.PERSONALISSUE__user_has_personal_issue = @constant(True)
   State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(False)
   State.PERSONALISSUE__confirming_further_discussion = @constant(False)
 >
 
 Subnode subsequent_turn_templated [
-	IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(State.PERSONALISSUE__LastTurnUsedNeuralGeneration)
+  IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(State.PERSONALISSUE__LastTurnUsedNeuralGeneration)
 ] {
-	- @val(Locals.subsequent_turn_statement)
+  - @val(Locals.subsequent_turn_statement)
 } <
-	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
+  State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
   State.PERSONALISSUE__user_has_personal_issue = @constant(True)
   State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(False)
   State.PERSONALISSUE__confirming_further_discussion = @constant(False)
 >
 
 Subnode subsequent_turn_neural [
-	IS_TRUE(Locals.can_enter_subsequent_turn) and IS_FALSE(State.PERSONALISSUE__LastTurnUsedNeuralGeneration)
+  IS_TRUE(Locals.can_enter_subsequent_turn) and IS_FALSE(State.PERSONALISSUE__LastTurnUsedNeuralGeneration)
 ] {
-	- @neural_generation(prefix = {
+  - @neural_generation(prefix = {
     - @one_of(
       "That sounds frustrating.",
       "How awful, I'm sorry.",
@@ -232,7 +232,7 @@ Subnode subsequent_turn_neural [
   })
   - @val(Locals.partial_subsequent_turn_statement)
 } <
-	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(True)
+  State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(True)
   State.PERSONALISSUE__user_has_personal_issue = @constant(True)
   State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(False)
   State.PERSONALISSUE__confirming_further_discussion = @constant(False)
@@ -257,7 +257,7 @@ Subnode possible_continue_accepted [
 ] {
   - @val(Locals.possible_continue_accepted_statement)
 } <
-	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
+  State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
   State.PERSONALISSUE__user_has_personal_issue = @constant(True)
   State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(False)
   State.PERSONALISSUE__confirming_further_discussion = @constant(True)
@@ -292,7 +292,7 @@ Subnode ending [
 ] {
   - @val(Locals.ending_statement)
 } <
-	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
+  State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
   State.PERSONALISSUE__supernode_is_responding = @constant(False)
   State.PERSONALISSUE__user_has_personal_issue = @constant(False)
   State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(False)
@@ -301,7 +301,7 @@ Subnode ending [
 
 Subnode possible_continue [
 ] {
-	- @neural_generation(prefix = {
+  - @neural_generation(prefix = {
     - @one_of(
       "That sounds frustrating.",
       "How awful, I'm sorry.",
@@ -314,7 +314,7 @@ Subnode possible_continue [
   })
   - @val(Locals.possible_continue_statement)
 } <
-	State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
+  State.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(False)
   State.PERSONALISSUE__user_has_personal_issue = @constant(True)
   State.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(True)
   State.PERSONALISSUE__confirming_further_discussion = @constant(False)
