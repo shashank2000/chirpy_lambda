@@ -10,8 +10,8 @@ Locals.get_sections_result = @helper.get_sections(@val(State.WIKI__Entity), @val
 Locals.parent_section = @val(Locals.get_sections_result["parent_section"])
 Locals.sections = @val(Locals.get_sections_result["sections"])
 
-Locals.chosen_sections_titles = @helper.choose_from_sections(@val(Locals.sections))
-Locals.entitys_section_choices = @helper.entitys_section_choices(@val(State.WIKI__Entity), @val(Locals.chosen_sections_titles), @val(Locals.parent_section))
+Locals.chosen_sections = @helper.choose_from_sections(@val(Locals.sections))
+Locals.entitys_section_choices = @helper.entitys_section_choices(@val(State.WIKI__Entity), @val(Locals.chosen_sections), @val(Locals.parent_section))
 
 <PROMPTS>
 Prompt discuss_article_section [
@@ -29,15 +29,16 @@ Prompt discuss_article_section [
 			- "if that sounds interesting to you."
 		}, {
       - "I think"
-			- @helper.is_are(@val(Locals.chosen_sections_titles))
+			- @val(Locals.entitys_section_choices)
+			- @helper.is_are(@val(Locals.chosen_sections))
 			- "pretty interesting too."
 			- "Wanna hear about"
-			- @helper.them_it(@val(Locals.chosen_sections_titles))
+			- @helper.them_it(@val(Locals.chosen_sections))
 			- "?"
 		}, {
 			- @val(Locals.entitys_section_choices)
       - "are rather fascinating. Do you want to hear more about"
-			- @helper.them_it(@val(Locals.chosen_sections_titles))
+			- @helper.them_it(@val(Locals.chosen_sections))
 			- "?"
 		}
 	)
@@ -74,7 +75,7 @@ Prompt keep_discussing_article [] {
 }
 
 <LOCALS>
-Locals.selected_section = @helper.get_selected_section(@val(State.WIKI__Entity), @val(Locals.suggested_sections), @val(Locals.chosen_sections_titles), @val(Utilities.response_text), @val(Flags.GlobalFlag__YES))
+Locals.selected_section = @helper.get_selected_section(@val(State.WIKI__Entity), @val(Locals.suggested_sections), @val(Locals.chosen_sections), @val(Utilities.response_text), @val(Flags.GlobalFlag__YES))
 Locals.section_summary = @helper.get_section_summary(@val(Locals.selected_section), @val(Utilities.state_manager))
 
 <SET_STATE>
@@ -96,3 +97,8 @@ Subnode default [
 ] {
 	- "I wish I knew more about this." # TODO
 }
+
+<SET_STATE_AFTER>
+State.WIKI__suggested_sections[@val(State.WIKI__Entity)] = @helper.concat(@val(Locals.suggested_sections), @val(Locals.chosen_sections))
+State.WIKI__discussed_sections[@val(State.WIKI__Entity)] = @helper.append(@val(Locals.discussed_sections), @val(Locals.selected_section))
+State.WIKI__last_discussed_section[@val(State.WIKI__Entity)] = @val(Locals.selected_section)

@@ -11,6 +11,15 @@ import random
 import logging
 logger = logging.getLogger('chirpylogger')
 
+@nlg_helper
+def concat(items_a, items_b):
+    return items_a + items_b
+
+@nlg_helper
+def append(items, new_item):
+    items.append(new_item)
+    return items
+
 
 
 # Prompt Helpers (equivalent to the discuss article treelet)
@@ -183,13 +192,13 @@ def choose_from_sections(sections: List[WikiSection]):
             chosen_sections = [s_no_and[0]]
     except ValueError:
         chosen_sections = sections
-    chosen_sections_titles = [s.title for s in chosen_sections]
-    logger.primary_info(f"Chose {chosen_sections_titles} to suggest.")
-    return chosen_sections_titles
+    logger.primary_info(f"Chose {[s.title for s in chosen_sections]} to suggest.")
+    return chosen_sections
 
 
 @nlg_helper
-def entitys_section_choices(entity: WikiEntity, chosen_sections_titles: List[str], parent_section: Optional[WikiSection]):
+def entitys_section_choices(entity: WikiEntity, chosen_sections: List[str], parent_section: Optional[WikiSection]):
+    chosen_sections_titles = [s.title for s in chosen_sections]
     _, entitys_section_choices = construct_entitys_section_choices(entity.talkable_name, chosen_sections_titles, 'or' if parent_section else 'and')
     return wiki_utils.clean_wiki_text(entitys_section_choices)
 
@@ -205,13 +214,13 @@ def entitys_section(entity: WikiEntity, section: WikiSection):
         return f"the {section.title}"
 
 @nlg_helper
-def get_selected_section(entity: WikiEntity, suggested_sections: List[WikiSection], chosen_sections_titles: List[str], response_text: str, GlobalFlag__YES: bool):
+def get_selected_section(entity: WikiEntity, suggested_sections: List[WikiSection], chosen_sections: List[WikiSection], response_text: str, GlobalFlag__YES: bool):
     """
     Get the section that the user says they want to talk about
     :param sections: possible sections
     :return:
     """
-    prompted_options = chosen_sections_titles
+    prompted_options = [s.title for s in chosen_sections]
     utterance = response_text
     sections = wiki_utils.get_wiki_sections(entity.name)
     for option in prompted_options:
