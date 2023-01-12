@@ -160,7 +160,7 @@ class SymbolicResponseGenerator:
             context.compute_locals()
             supernode.set_state.evaluate(context)
             
-            subnode = supernode.subnodes.select(context)
+            subnode = supernode.subnodes.select(context, extra_subnodes=self.paths_to_supernodes['GLOBALS'].subnodes if supernode.name != "GLOBALS" else None)
             response = subnode.generate(context) + " "
             logger.primary_info(f'Received {response} from subnode {subnode}.')
             assert response is not None

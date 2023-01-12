@@ -55,7 +55,7 @@ WHATS_YOUR_NAME = [r'[\w\s\']*your name[\w\s]*', r'[\w\s\']*you called[\w\s]*']
 WHO_MADE_YOU = [r'[\w\s\']*who are you$', r'[\w\s\']*who are you alexa$', r'[\w\s\']*who you are$', r'[\w\s\']*who you are alexa$', r'[\w\s\']*who built you$', r'[\w\s\']*who made you$', r'[\w\s\']*who are you made by$', r'[\w\s\']*what are you$', r'[\w\s\']*tell me about yourself[\w\s]*', r'[\w\s\']*tell me about you$', r'[\w\s\']*tell me about you alexa$']
 WHERE_ARE_YOU = [r'[\w\s\']*where[\w\s\']*you[\w\s]*live', r'[\w\s\']*where[\w\s\']*you[\w\s\']*from', r'[\w\s\']*where are you( |$)[\w\s\']*']
 
-RED_QUESTION_TYPES = ['financial']
+RED_QUESTION_TYPES = ['financial', 'legal', 'medical']
 RQ_TYPE_TO_TOKENS = {kind : load_redquestion_list(kind) for kind in RED_QUESTION_TYPES}
 
 def preprocess(token : str):
