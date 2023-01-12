@@ -13,4 +13,4 @@ else
 fi
 source env.list
 export PYTHONPATH=$(pwd)
-python3 agents/remote_non_persistent.py
+python3 agents/remote_non_persistent.py --store_transcript

@@ -90,11 +90,12 @@ def utterance_contains_word(utterance, word):
 @nlu_processing
 def get_flags(context):
 	utterance = context.utterance
+	current_state = context.state_manager.current_state
 	if 'what' in utterance:
 		ADD_NLU_FLAG("GlobalFlag__WHAT")
 	if 'why' in utterance:
 		ADD_NLU_FLAG("GlobalFlag__WHY")
-		
+
 	# Other virtual assistants
 	if any(re.match(q, utterance) for q in WHATS_YOUR_NAME):
 		ADD_NLU_FLAG("GlobalFlag__WhatsYourName")
@@ -118,6 +119,5 @@ def get_flags(context):
 		if AreYouRecordingTemplate().execute(utterance) is not None:
 			ADD_NLU_FLAG("GlobalFlag__AreYouRecording")
 	
-	return None
-	
-	
+	if context.utilities["cur_entity"] and current_state.navigational_intent.pos_intent:
+		ADD_NLU_FLAG("GlobalFlag__SpecifiedEntity", context.utilities["cur_entity"])
