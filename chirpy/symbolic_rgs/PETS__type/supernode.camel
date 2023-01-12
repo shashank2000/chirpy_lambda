@@ -32,10 +32,12 @@ Subnode valid_type [
   - "I love"
   - @val(State.User__PetTypeTalkable)
   - "."
-  # talkable is plural
+  - "Here's a fun fact about "
+  - @val(State.User__PetTypeTalkable)
+  - ": "
   -@lookup(
         database_name="animal_gpt",
-        key={@val(State.User__PetType)},
+        key={@val(State.User__PetTypeTalkable)},
         column="factoid"
    )
 }
@@ -45,8 +47,6 @@ Subnode default [
   - "A great choice! Animals are great. Did you know that "
   # fun fact about giraffes
   - "Giraffes have the same number of bones in their necks as humans do in their arms."
-} <
-   State.User__HypotheticalPet = @constant(None)
->
+} 
 
 <SET_STATE_AFTER>

@@ -24,6 +24,7 @@ def database_exists(database_name):
 def lookup(database_name, *args):
 	return DATABASES[("lookup", database_name)](*args)
 
-def exists(database_name, *args):
-	return DATABASES[("exists", database_name)](*args)
+def exists(database_name, database_key):
+	# having variable number of args here seems like more trouble than it is worth
+	return DATABASES[("exists", database_name)](database_key)
 

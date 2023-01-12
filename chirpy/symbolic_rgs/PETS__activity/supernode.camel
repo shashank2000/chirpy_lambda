@@ -19,7 +19,7 @@ Prompt pet_activity_no_name [
 
 <SET_STATE>
 State.User__PetFavoriteActivity = @val(Utilities.cur_entity)
-State.User__PetFavoriteActivityTalkable = @val(Utilities.cur_entity | talkable | lower)
+# might be something like "go to the beach", which mean talkable would fail
 
 <SUBNODES>
 
@@ -28,8 +28,8 @@ Subnode valid_activity [
   not IS_NONE(State.User__PetFavoriteActivity)
 ] {
   - "That sounds like a great time!"
-  - "I should try "
-  - @val(State.User__PetFavoriteActivityTalkable)
+  - "I should try to "
+  - @val(State.User__PetFavoriteActivity)
   - " with my pet too!"
 }
 

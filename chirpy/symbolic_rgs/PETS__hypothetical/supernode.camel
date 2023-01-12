@@ -38,10 +38,11 @@ Subnode default [
   # database lookup for fun fact 
   - "Fun fact about giraffes, "
   # database lookup for fun fact 
-  # @lookup(
-  #       database_name="animal_gpt",
-  #       key="giraffe"
-  #  )
+  @lookup(
+        database_name="animal_gpt",
+        key="dutch rabbit",
+        column="factoid"
+  )
 } 
 
 <SET_STATE_AFTER>

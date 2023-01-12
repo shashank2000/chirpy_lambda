@@ -23,28 +23,30 @@ Prompt pet_type_no_name [
 
 
 <SET_STATE>
+State.User__PetBreed = @val(Utilities.cur_entity)
+# TODO: "dutch rabbit" goes to "netherlands", so need to think about what next
 State.User__PetBreedTalkable = @val(Utilities.cur_entity | talkable | lower)
 
 <SUBNODES>
 
+Subnode valid_type_and_key_exists [
+  (not IS_NONE(State.User__PetBreed)) and 
+    EXISTS(database_name="animal_gpt", key={@val(State.User__PetBreedTalkable)})
+] {
+  - @lookup(
+        database_name="animal_gpt",
+        key={@val(State.User__PetBreed | name)},
+        column="factoid"
+  )
+}
+
 Subnode valid_type [
   not IS_NONE(State.User__PetBreedTalkable)
 ] {
-  - @oneof(
-    {
-      - "That's awesome!"
-      - "Funnily enough, "
-      - @val(State.User__PetBreedTalkable)
-      - " are one of my favorite breeds!"
-    },
-    # we sneakily can get breed facts from the same animal db
-    -@lookup(
-        database_name="animal_gpt",
-        key={@val(State.User__PetBreedTalkable)},
-        column="factoid"
-    )
-  )
-	 
+  - "That's awesome!"
+  - "Funnily enough, "
+  - @val(State.User__PetBreedTalkable)
+  - " are one of my favorite breeds!" 
 }
 
 Subnode default [
@@ -53,7 +55,7 @@ Subnode default [
   - @val(State.User__PetBreedTalkable)
   - " one day."
 } <
-   State.User__HypotheticalPet = @constant(None)
+   State.User__HypotheticalPetType = @constant(None)
 >
 
 <SET_STATE_AFTER>
