@@ -75,21 +75,64 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
     valid_sections = filter_and_log(lambda section: section not in discussed_sections, valid_sections,
                                         'Wiki Section', reason_for_filtering='these sections were discussed')
 
+    # Suggest level 2 sections if that's what we should be doing
     if last_discussed_section is not None:
-        # TODO
-        return []
+        logger.primary_info("Last discussed section is not None")
+        # First check if there are subsections of the last discussed section
+        # For that we would need it to be level 1 section
+        if last_discussed_section.level() == 1:
+            subsections = list(
+                filter(lambda section: section.is_descendant_of(last_discussed_section), valid_sections))
+            if subsections:
+                return subsections
+                # text = self.choose(subsection_prompts(entity.talkable_name, last_discussed_section.title, chosen_section_titles, repeat=repeat or False))
+            logger.info(f"No more unused subsections of level 1 section {last_discussed_section.title}. Not suggesting more subsections")
+
+        if last_discussed_section.level() == 2:
+            parent_section = last_discussed_section.ancestor_titles[-1]
+
+            # Get all siblings of the section
+            siblings = list(
+                filter(lambda section: section.ancestor_titles and section.ancestor_titles[-1] == parent_section,
+                        sections))
+
+            # Don't suggest any more siblings if 2 have already been discussed, as a simplifying assumption
+            valid_siblings = list(set(siblings) & set(valid_sections))
+            if len(set(siblings) & set(discussed_sections)) < 2 and valid_siblings:
+                return valid_siblings
+                # text = self.choose(subsection_prompts(entity.talkable_name, parent_section, chosen_section_titles, repeat=repeat or True))
+            logger.info(f"One more sibling of {parent_section} has already been discussed. Not suggesting more sibling subsections.")
     
     first_level_sections = list(filter(lambda section: section.level() == 1, valid_sections))
 
+    # If not, suggest level 1 sections
+    # this can happen if sections have been suggested before,
+    # or we haven't been able to suggest any 2nd level sections to suggest
     if first_level_sections:
         logger.primary_info(
             f"Choosing from {[s.title for s in first_level_sections]} 1st level sections")
         return first_level_sections
+        # text = self.choose(section_prompt_text(entity.talkable_name, [s.title for s in chosen_sections], repeat=have_response or repeat or last_discussed_section is not None))
+    logger.info("No more unused 1st level sections left to choose from")
+
+    # All valid sections are 2nd level now
+    # but, second level section titles can feel disconnected, so
+    # suggest two 2nd level sections but read out their first level section titles
+    first_level_section_titles = set([section.ancestor_titles[-1] for section in valid_sections])
+    # if 2 or more children of the first level section headings have been discussed, remove it
+    filtered_first_level_section_titles = filter_and_log(lambda f_section_title:
+                                                            len([s for s in discussed_sections if (
+                                                                        s.level() >= 2 and s.ancestor_titles[
+                                                                    -1] == f_section_title) or s.title == f_section_title]) <= 3,
+                                                            first_level_section_titles, 'first level sections',
+                                                            reason_for_filtering='either the section overview or their children have been discussed at least three times in the past')
     
-    logger.info("No more unused 1st level sections left to ")
+    if filtered_first_level_section_titles:
+        return filtered_first_level_section_titles
+        # text = self.choose(section_prompt_text(entity.talkable_name, chosen_first_level_section_titles, repeat=have_response or repeat or last_discussed_section is not None))
     
-    # TODO
-    return []
+    logger.primary_info(f"No more useful sections left for entity: {entity.name}")
+    return [] # TODO: Make sure this doesn't create a bug
 
 
 @nlg_helper
