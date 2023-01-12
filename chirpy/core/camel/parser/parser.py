@@ -1,7 +1,7 @@
 import os
 
 from lark import Lark, Transformer, Token, Tree
-from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode, attribute
+from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode, attribute, entities
 
 import sys
 
@@ -124,7 +124,6 @@ class SupernodeMaker(Transformer):
 		return subnode.SubnodeGroup(tok)
 		
 	def attribute_list(self, tok):
-		logger.warning(f"Tok is {tok}")
 		return attribute.AttributeList(attributes=[str(x) for x in tok])
 		
 	def subnode(self, tok):

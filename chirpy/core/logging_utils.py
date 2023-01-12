@@ -139,7 +139,7 @@ def setup_logger(logger_settings, session_id=None):
 
     # Add the color PRIMARY_INFO level to chirpy logger
     add_new_level(chirpy_logger, 'PRIMARY_INFO', PRIMARY_INFO_NUM)
-    add_new_level(chirpy_logger, 'BLUEJAY', 95)
+    add_new_level(chirpy_logger, 'BLUEJAY', 2)
 
     return chirpy_logger
 
