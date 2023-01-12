@@ -80,7 +80,7 @@ class Context:
 		self.flags.update(get_global_flags(self))
 		if supernode is not None:
 			self.flags.update(supernode.get_flags(self))
-			logger.primary_info(f"Non-null flags for supernode {supernode} are: {[x for x in flags if bool(flags[x])]}")
+		logger.primary_info(f"Non-null flags for supernode {supernode} are: {[x for x in self.flags if bool(self.flags[x])]}")
 		return self
 		
 	@property

@@ -64,8 +64,14 @@ def execute_chirpy(input_line, reset=False):
 		tag = tag.strip()
 		value = value.strip()
 		log_outputs[tag] = value
+		
+	if 'error' in log_outputs:
+		output = "Error"
+		error = log_outputs['error']
+	else:
+		error = ""
 	
-	return output, log_outputs, full_logs
+	return output, log_outputs, full_logs, error
 	#return line
 	
 FALSY = ['False', '0', 'None']
@@ -124,11 +130,12 @@ def augment_result(result):
 def main():
 	input_line = request.args.get('input', 'hi')
 	reset = request.args.get('reset', False)
-	output, logs, full_logs = execute_chirpy(input_line, reset=reset)
+	output, logs, full_logs, error = execute_chirpy(input_line, reset=reset)
 	result = {
 		"text": output,
 		"logs": logs,
 		"full_logs": full_logs,
+		"error": error,
 	}
 	augment_result(result)
 		
@@ -149,7 +156,7 @@ if __name__ == '__main__':
 	if len(sys.argv) > 2:
 		while True:
 			input_line = input('> ')
-			output, logs, full_logs = execute_chirpy(input_line)
+			output, logs, full_logs, error = execute_chirpy(input_line)
 			result = {
 				"text": output,
 				"logs": logs,
@@ -159,5 +166,6 @@ if __name__ == '__main__':
 			print('output::', output)
 			print('logs::', json.dumps(logs, indent=2))
 			print('result::', json.dumps(result, indent=2))
+			print('error::', error)
 	else:
 		app.run(host='0.0.0.0', port=8765, debug=True)

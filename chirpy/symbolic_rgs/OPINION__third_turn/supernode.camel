@@ -1,0 +1,22 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(State.User__CurrentOpinionBotResponse)
+
+<PROMPTS>
+Prompt new_topic [ ] {
+	@helper.get_topic_type(@val(State.User__CurrentOpinionTopic))
+}
+
+<SUBNODES>
+Subnode general_response [
+] {
+	- "That's interesting."
+}
+
+<SET_STATE_AFTER>
+State.User__CurrentOpinionTopic = {
+	@helper.get_opinion(@val(Flags.OPINION__last_said))
+}
+
+State.User__CurrentOpinionBotResponse = {
+	@constant(False)
+}

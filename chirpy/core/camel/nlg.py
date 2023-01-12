@@ -202,14 +202,24 @@ SENTENCE_END_PUNCTUATION = ['.', '?', '!']
 PUNCTUATION = ['.', ',', '?', '!', ':', ';']
         
 
+
+
 def spacingaware_join(x):
     result = ""
     for idx, item in enumerate(x):
-        assert isinstance(item, str), f"Item {item} (from {x}) is not a string"
+        if not isinstance(item, str):
+            if isinstance(item, WikiEntity):
+                item = item.talkable
+            elif isinstance(item, [int, float]):
+                item = item.talkable
+            else:
+                raise TypeError(f"Item {item} (from {x}) is type {type(item)} and can't be converted to String")
+            assert isinstance(item, str), f"Conversion function failed for value {item} of type {type}!"
+            
         if idx != 0 and not any(item.startswith(punct) for punct in PUNCTUATION):
             result += " "
-        if idx != 0 and len(item) and any(x[idx - 1].endswith(punct) for punct in SENTENCE_END_PUNCTUATION):
-            item = item[0].upper() + item[1:]
+        if idx != 0 and len(item) and x[idx-1] in SENTENCE_END_PUNCTUATION:
+            item = item.capitalize()
         result += item
     return result
 
