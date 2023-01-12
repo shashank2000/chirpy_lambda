@@ -15,15 +15,12 @@ from chirpy.core.response_generator.nlu import nlu_processing
 
 logger = logging.getLogger('chirpylogger')
 
-# tentatively copied over from LAUNCH
-# TODO: check if updates are necessary to be pet-specific
 NAMES_FILEPATH = os.path.join(os.path.dirname(__file__), '../../core/regex/names.txt')
 NAMES = load_text_file(NAMES_FILEPATH)
 NAMES = [n.lower() for n in NAMES]
 # logger.primary_info(f"Found {len(NAMES)} names.")
 
 # tentatively copied over from LAUNCH
-# TODO: check if updates are necessary to be pet-specific
 def could_be_name(utterance):
 	if len(utterance.split()) == 1:
 		# If utterance is not in our high-frequency spoken unigrams (except for mark), then it may be a name
@@ -32,7 +29,6 @@ def could_be_name(utterance):
 	return False
 
 # tentatively copied over from LAUNCH
-# TODO: check if updates are necessary to be pet-specific
 def get_name_from_utterance(context, remove_no=False) -> Optional[str]:
 	"""
 
@@ -93,7 +89,7 @@ def get_flags(context):
     no_slots = DoesNotWantToSayNameTemplate().execute(context.utterance)
     if no_slots or context.state_manager.current_state.corenlp['sentiment'] in (Sentiment.NEGATIVE, Sentiment.STRONG_NEGATIVE):
         ADD_NLU_FLAG("PETS__no_disclose_name")
-        
+
     proposed_name = get_name_from_utterance(context)
     ADD_NLU_FLAG("PETS__proposed_name", proposed_name)
 
