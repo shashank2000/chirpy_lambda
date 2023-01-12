@@ -5,7 +5,7 @@ from chirpy.core.camel.predicate import Predicate, TruePredicate, FalsePredicate
 from chirpy.core.camel.prompt import PromptList
 from chirpy.core.camel.subnode import SubnodeList
 from chirpy.core.camel.assignment import AssignmentList
-from chirpy.core.camel.entitygroup import EntityGroupList, EntityGroupRegexList
+from chirpy.core.camel.entities import EntityGroupList, EntityGroupRegexList
 from dataclasses import dataclass, field, fields
 from typing import List, Any
 
