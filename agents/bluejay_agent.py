@@ -1,15 +1,6 @@
-from collections import defaultdict
-
 import argparse
-import datetime
-import jsonpickle
 import logging
-import os
 import uuid
-import time
-from typing import Dict
-import uuid
-import traceback
 
 # This needs to happen as early as possible for logging purposes
 def init_argparse() -> argparse.ArgumentParser:
@@ -23,14 +14,29 @@ def init_argparse() -> argparse.ArgumentParser:
 parser = init_argparse()
 args = parser.parse_args()
 
-from chirpy.core.logging_utils import setup_logger, update_logger, get_bluejay_logger_settings
+try:
+    from chirpy.core.logging_utils import setup_logger, update_logger, get_bluejay_logger_settings
+except:
+    print("Error")
 
 logger = logging.getLogger('chirpylogger')
 root_logger = logging.getLogger()
 if not hasattr(root_logger, 'chirpy_handlers'):
     setup_logger(get_bluejay_logger_settings(code=args.code))
+    
+
 
 try:
+    from collections import defaultdict
+    
+    import datetime
+    import jsonpickle
+    import os
+    import uuid
+    import time
+    from typing import Dict
+    import traceback
+    
     from chirpy.annotators.corenlp import CorenlpModule
     from chirpy.annotators.navigational_intent.navigational_intent import NavigationalIntentModule
     from chirpy.annotators.stanfordnlp import StanfordnlpModule
@@ -51,7 +57,8 @@ try:
     
 except Exception as e:
     logger.bluejay(f"Error: %s %s", exc_info=True, stack_info=True)
-    exit()
+    raise e
+    #exit()
 import os
 import sys
 
