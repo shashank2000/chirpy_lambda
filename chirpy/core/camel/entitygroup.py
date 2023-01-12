@@ -23,9 +23,7 @@ class EntityGroupRegex():
 		self.entityRegex = global_templates_cache[entityRegexName]
 	def evaluate(self, context):
 		slots = self.entityRegex.execute(context.utterance)
-		if not slots:
-			return False
-		return True
+		return bool(slots)
 
 @dataclass
 class EntityGroupList():
