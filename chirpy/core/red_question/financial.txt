@@ -111,7 +111,7 @@ savings
 schwab
 secured
 stipend
-stocks
+stock
 subsidized
 takehome
 tax

@@ -6,35 +6,35 @@ Prompt what_to_talk_about [ ] {
 
 <SUBNODES>
 
-Subnode red_question_financial [
+Subnode red_question_financial:force_activation [
 	IS_TRUE(Flags.GlobalFlag__RedQuestion__Financial)
 ] {
 	"Sorry, I'm unable to comment on financial matters."
 	"Let's talk about something else!"
 }
 
-Subnode red_question_legal [
+Subnode red_question_legal:force_activation [
 	IS_TRUE(Flags.GlobalFlag__RedQuestion__Legal)
 ] {
 	"Sorry, I'm unable to provide legal advice. I hope I haven't overreacted, but I have to be careful about that kind of thing!"
 	"On another note,"
 }
 
-Subnode red_question_medical [
+Subnode red_question_medical:force_activation [
 	IS_TRUE(Flags.GlobalFlag__RedQuestion__Medical)
 ] {
 	"Sorry, I'm unable to provide medical advice. I hope I haven't overreacted, but I have to be careful about that kind of thing!"
 	"On another note,"
 }
 
-Subnode whats_your_name [
+Subnode whats_your_name:force_activation [
 	IS_TRUE(Flags.GlobalFlag__WhatsYourName)
 ] {
 	"Sorry, I can't tell you my real name. I have to remain anonymous for the Alexa Prize competition. But you can still call me Alexa if you want."
 	"On another note,"
 }
 
-Subnode who_made_you [
+Subnode who_made_you:force_activation [
 	IS_TRUE(Flags.GlobalFlag__WhoMadeYou)
 ] {
 	"I am an Alexa Prize social bot built by a university."
@@ -42,21 +42,21 @@ Subnode who_made_you [
 	"On another note,"
 }
 
-Subnode where_are_you [
+Subnode where_are_you:force_activation [
 	IS_TRUE(Flags.GlobalFlag__WhereAreYou)
 ] {
 	"I live in the cloud. It's quite comfortable since it's so soft."
 	"On another note,"
 }
 
-Subnode virtual_assistant_competitor [
+Subnode virtual_assistant_competitor:force_activation [
 	IS_TRUE(Flags.GlobalFlag__VirtualAssistantCompetitor)
 ] {
 	"Sorry, I don't know much about that so I can't really comment!"
 	"On another note,"
 }
 
-Subnode are_you_recording [
+Subnode are_you_recording:force_activation [
 	IS_TRUE(Flags.GlobalFlag__AreYouRecording)
 ] {
 	"I'm designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed."

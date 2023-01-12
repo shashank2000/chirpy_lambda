@@ -66,10 +66,11 @@ def classify_utterance(utterance : str, rq_type : str):
 	# tokens = [preprocess(word) for word in utterance.split(' ')]
 	# tokens = [x for x in tokens if len(x)]
 	n_bad = 0
+	logger.warning(f"Red question: utterance is {utterance}, tokens are {RQ_TYPE_TO_TOKENS[rq_type][:10]}")
 	for token in RQ_TYPE_TO_TOKENS[rq_type]:
 		if token in utterance:
 			n_bad += 1
-	if n_bad > 1:
+	if n_bad > 0:
 		return True
 	## todo add more nuanced handling
 	return False
