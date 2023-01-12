@@ -64,6 +64,10 @@ def execute_chirpy(input_line, reset=False):
 		tag = tag.strip()
 		value = value.strip()
 		log_outputs[tag] = value
+		
+	if 'error' in log_outputs:
+		print(log_outputs['error'])
+		output += log_outputs['error']
 	
 	return output, log_outputs, full_logs
 	#return line
