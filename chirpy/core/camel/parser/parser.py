@@ -1,7 +1,7 @@
 import os
 
 from lark import Lark, Transformer, Token, Tree
-from chirpy.core.camel import entities, nlg, predicate, variable, prompt, assignment, subnode
+from chirpy.core.camel import nlg, predicate, variable, prompt, assignment, subnode, attribute, entities
 
 import sys
 
@@ -123,11 +123,15 @@ class SupernodeMaker(Transformer):
 	def subnode_group(self, tok):
 		return subnode.SubnodeGroup(tok)
 		
+	def attribute_list(self, tok):
+		return attribute.AttributeList(attributes=[str(x) for x in tok])
+		
 	def subnode(self, tok):
 		subnode_name = tok[0].value
 		condition = predicate.TruePredicate()
 		assignment_list = []
 		response = None
+		attributes = attribute.AttributeList()
 		for token in tok[1:]:
 			if isinstance(token, predicate.Predicate):
 				condition = token
@@ -135,11 +139,17 @@ class SupernodeMaker(Transformer):
 				response = token
 			elif isinstance(token, assignment.Assignment):
 				assignment_list.append(token)
+			elif isinstance(token, attribute.AttributeList):
+				attributes = token
+			else:
+				assert False, f"Unrecognized token {token}"
+				
 		return subnode.Subnode(
 			name=subnode_name,
 			entry_conditions=condition,
 			response=response,
-			set_state=assignment.AssignmentList(assignment_list)
+			set_state=assignment.AssignmentList(assignment_list),
+			attributes=attributes,
 		)
 	
 	def continue_conditions_section(self, tok):

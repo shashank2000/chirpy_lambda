@@ -57,8 +57,10 @@ set_state_section : "<SET_STATE>" assignment*
 // Section: Subnodes
 subnodes_section : "<SUBNODES>" subnode_group+
 subnode_group : "[" subnode+ "]" | subnode
-subnode: "Subnode" SUBNODE_NAME _OB condition? _CB nlg ("<" assignment* ">")?
+subnode: "Subnode" SUBNODE_NAME (":" attribute_list)? _OB condition? _CB nlg ("<" assignment* ">")?
+attribute_list : ATTRIBUTE ("," ATTRIBUTE)*
 SUBNODE_NAME: /[a-zA-Z_1-9]+/
+ATTRIBUTE: /[a-z_=0-9]+/                          // might want to allow subnode_name:key=value in the future
 
 
 // Section: Set State After
