@@ -1,5 +1,5 @@
 %import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB)
-%import .nlg ( nlg )
+%import .nlg ( nlg, key )
 %import .condition ( condition )
 
 // ignore whitespace
@@ -12,7 +12,7 @@ COMMENT: "#" /[^\n]/*
 %ignore COMMENT
 
 // assignment
-assignment : variable "=" nlg
+assignment : variable key* "=" nlg
 condition_assignment : variable "=" condition
 
 // CAMEL syntax

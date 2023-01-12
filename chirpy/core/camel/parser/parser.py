@@ -15,6 +15,7 @@ logger = logging.getLogger('chirpylogger')
 	
 class SupernodeMaker(Transformer):
 	def variable(self, tok): return variable.Variable(str(tok[0]), str(tok[1]))
+	def key(self, tok): return nlg.Key(tok[0])
 	
 	def nlg__variable(self, tok): return self.variable(tok)
 	def condition__variable(self, tok): return self.variable(tok)
@@ -67,16 +68,22 @@ class SupernodeMaker(Transformer):
 	def condition__ESCAPED_STRING(self, tok): return self.nlg__ESCAPED_STRING(tok)
 
 	def nlg__PUNCTUATION(self, tok): return nlg.String(str(tok.value))
-	def nlg__val(self, tok): 
+	def nlg__val(self, tok):
 		operations = []
+		keys = []
 		if len(tok) > 1:
+			operators_start = 1
+			for t in tok:
+				if isinstance(t, nlg.Key):
+					keys.append(t)
+					operators_start += 1
 			# tokens are [operator, pipe function, operator, pipe function, ...]
-			extra_args = tok[1:]
+			extra_args = tok[operators_start:]
 			iterator = iter(extra_args)
 			# pairs extra_args into [(operator, pipe function), (operator, pipe function), ...]
 			operations = list(zip(iterator, iterator))
 			operations = [(op[0].value, op[1].value) for op in operations]
-		return nlg.Val(tok[0], operations)
+		return nlg.Val(tok[0], keys, operations)
 	def nlg__neural_generation(self, tok): return nlg.NeuralGeneration(tok[0])
 	def nlg__one_of(self, tok): 
 		return nlg.OneOf(tok)
@@ -146,7 +153,7 @@ class SupernodeMaker(Transformer):
 		return tok
 		
 	def assignment(self, tok):
-		return assignment.Assignment(tok[0], tok[1])
+		return assignment.Assignment(tok[0], tok[1:-1], tok[-1])
 	
 	def condition_assignment(self, tok):
 		return assignment.Assignment(tok[0], tok[1], True)

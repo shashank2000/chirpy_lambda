@@ -128,11 +128,20 @@ class NeuralGeneration(NLGNode):
         return get_neural_response(context, prefix=self.prefix.generate(context))
 
 @dataclass
+class Key(NLGNode):
+    name: NLGNode
+    def generate(self, context):
+        return self.name.generate(context)
+
+@dataclass
 class Val(NLGNode):
     variable : Variable
+    keys : List[Key]
     operations : List[Tuple[str, str]]
     def generate(self, context):
         value = self.variable.generate(context)
+        for key in self.keys:
+            value = value[key.generate(context)]
         for operator, operation in self.operations:
             if operator == '|':
                 value = get_pipe(operation)(value)
@@ -222,4 +231,3 @@ class DatabaseLookup(NLGNode):
             self.key.generate(context)
         )
         return result[self.column.generate(context)]
-
