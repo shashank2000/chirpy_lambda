@@ -34,22 +34,23 @@
 - MUSIC__user_response_is_about_music
 
 - MUSIC__fav_instr_ent
-- MUSIC__instr_exists_with_til
-- MUSIC__instr_exists_wo_til
+- MUSIC__instr_ent_exists
 - MUSIC__instr_to_learn_ent
-- MUSIC__instr_to_learn_exists_with_til
-- MUSIC__instr_to_learn_exists_wo_til
-- MUSIC__advanced_musician
+- MUSIC__instr_to_learn_exists
 - MUSIC__follow_up_on_no_fav_instr
 - MUSIC__follow_up_on_known_fav_instr
-- MUSIC__follow_up_on_advanced_musician
--
-- MUSIC__fav_singer_ent
-- MUSIC__fav_singer_str
-- MUSIC__singer_has_no_genre
-- MUSIC__singer_is_musical_group
-- MUSIC__singer_tils_exist
-- MUSIC__user_has_negative_opinion
+- MUSIC__instrument_to_learn_ent
+- MUSIC__instr_to_learn_exists
+- MUSIC__advanced_musician
 
-- MUSIC__first_follow_up_on_fav_song
-- MUSIC__second_follow_up_on_fav_song
+#- MUSIC__fav_singer_ent
+#- MUSIC__fav_singer_str
+#- MUSIC__singer_has_no_genre
+#- MUSIC__singer_is_musical_group
+#- MUSIC__user_has_negative_opinion
+#- MUSIC__fav_singer_comment
+
+#- MUSIC__first_follow_up_on_fav_song
+#- MUSIC__second_follow_up_on_fav_song
+
+

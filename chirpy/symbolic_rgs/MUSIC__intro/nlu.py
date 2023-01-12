@@ -117,6 +117,7 @@ def get_flags(context):
     if is_music_response(context):
         ADD_NLU_FLAG('MUSIC__user_response_is_music_response')
 
+
 @nlu_processing
 def get_background_flags(context):
     return

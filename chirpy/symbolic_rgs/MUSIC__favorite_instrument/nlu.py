@@ -17,7 +17,6 @@ def get_instrument_entity(context):
 
     for e in entities:
         if is_instrument(e):
-            print(e)
             return e
 
 @nlu_processing
@@ -25,11 +24,8 @@ def get_flags(context):
     instr_entity = get_instrument_entity(context)
     ADD_NLU_FLAG('MUSIC__fav_instr_ent', instr_entity)
     if instr_entity:
-        tils = get_til_title(instr_entity.name)
-        if len(tils):
-            ADD_NLU_FLAG('MUSIC__instr_exists_with_til')
-        else:
-            ADD_NLU_FLAG('MUSIC__instr_exists_wo_til')
+        ADD_NLU_FLAG('MUSIC__instr_ent_exists')
+
 
 @nlu_processing
 def get_background_flags(context):

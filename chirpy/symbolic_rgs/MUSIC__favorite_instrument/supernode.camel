@@ -6,27 +6,16 @@ IS_NONE(State.User__FavoriteInstrument)
 
 <PROMPTS>
 Prompt ask_favorite_instrument [ ] {
-    "There are so many instruments in the world. What is your favorite one you like to play?"
+    "There are so many instruments in the world. Do you play any instrument? What is your favorite one?"
 }
 
 <SET_STATE>
 State.User__FavoriteInstrument = @val(Flags.MUSIC__fav_instr_ent)
 
 <SUBNODES>
-Subnode instr_exists_with_til [
-   IS_TRUE(Flags.MUSIC__instr_exists_with_til)
-] {
-    - "The"
-    - @val(State.User__FavoriteInstrument | name | lower)
-    - "is a really fascinating instrument!"
-    - @helper.get_til_response(@helper.get_til_title_helper(@val(State.User__FavoriteInstrument | name)))
-} <
-    State.MUSIC__just_used_til = @constant(True)
-    Flags.MUSIC__follow_up_on_known_fav_instr = @constant(True)
->
 
-Subnode instr_exists_wo_til [
-   IS_TRUE(Flags.MUSIC__instr_exists_wo_til)
+Subnode instr_exists [
+   IS_TRUE(Flags.MUSIC__instr_ent_exists)
 ] {
     - "The"
     - @val(State.User__FavoriteInstrument | name | lower)
@@ -36,21 +25,19 @@ Subnode instr_exists_wo_til [
 >
 
 Subnode no_fav_instrument [
-   IS_FALSE(Flags.MUSIC__instr_exists_with_til) and
-   IS_FALSE(Flags.MUSIC__instr_exists_wo_til) and
+   IS_FALSE(Flags.MUSIC__instr_ent_exists) and
    (IS_TRUE(Flags.GlobalFlag__NO) or
    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
    IS_TRUE(Flags.GlobalFlag__NOTHING))
 ] {
-    - "It's alright, I think many people don't play any instrument nor have a favorite one either."
+    - "It's alright, I think many people enjoy music even though they don't play any instrument."
 } <
     State.User__NoFavoriteInstrument = @constant(True)
     Flags.MUSIC__follow_up_on_no_fav_instr = @constant(True)
 >
 
 Subnode catch_all [
-   IS_FALSE(Flags.MUSIC__instr_exists_with_til) and
-   IS_FALSE(Flags.MUSIC__instr_exists_wo_til) and
+   IS_FALSE(Flags.MUSIC__instr_ent_exists) and
    IS_FALSE(Flags.GlobalFlag__NO) and
    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
    IS_FALSE(Flags.GlobalFlag__NOTHING)

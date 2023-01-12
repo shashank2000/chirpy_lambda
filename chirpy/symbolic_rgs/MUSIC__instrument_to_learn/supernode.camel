@@ -3,7 +3,7 @@ IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
 IS_TRUE(State.User__NoFavoriteInstrument) and
-IS_TRUE(Flags.follow_up_on_no_fav_instr)
+IS_TRUE(Flags.MUSIC__follow_up_on_no_fav_instr)
 
 <PROMPTS>
 Prompt ask_instrument_to_learn [ ] {
@@ -14,22 +14,8 @@ Prompt ask_instrument_to_learn [ ] {
 State.User__InstrumentToLearn = @val(Flags.MUSIC__instrument_to_learn_ent)
 
 <SUBNODES>
-Subnode instr_to_learn_exists_with_til [
-   IS_TRUE(Flags.MUSIC__instr_to_learn_exists_with_til)
-] {
-    - "That is a"
-    - @one_of(
-        "great",
-        "interesting"
-    )
-    - "choice!"
-    - @helper.get_til_response(@helper.get_til_title_helper(@val(State.User__InstrumentToLearn | name)))
-} <
-    State.MUSIC__just_used_til = @constant(True)
->
-
-Subnode instr_to_learn_exists_wo_til [
-   IS_TRUE(Flags.MUSIC__instr_to_learn_exists_wo_til)
+Subnode instr_to_learn_exists [
+   IS_TRUE(Flags.MUSIC__instr_to_learn_exists)
 ] {
     - "The"
     - @val(State.User__InstrumentToLearn | name | lower)
@@ -37,8 +23,7 @@ Subnode instr_to_learn_exists_wo_til [
 }
 
 Subnode no_instrument_to_learn [
-   IS_FALSE(Flags.MUSIC__instr_to_learn_exists_with_til) and
-   IS_FALSE(Flags.MUSIC__instr_to_learn_exists_wo_til) and
+   IS_FALSE(Flags.MUSIC__instr_to_learn_exists) and
    (IS_TRUE(Flags.GlobalFlag__NO) or
    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
    IS_TRUE(Flags.GlobalFlag__NOTHING))
@@ -49,8 +34,7 @@ Subnode no_instrument_to_learn [
 >
 
 Subnode catch_all [
-   IS_FALSE(Flags.MUSIC__instr_to_learn_exists_with_til) and
-   IS_FALSE(Flags.MUSIC__instr_to_learn_exists_wo_til) and
+   IS_FALSE(Flags.MUSIC__instr_to_learn_exists) and
    IS_FALSE(Flags.GlobalFlag__NO) and
    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
    IS_FALSE(Flags.GlobalFlag__NOTHING)

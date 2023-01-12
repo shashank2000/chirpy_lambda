@@ -13,7 +13,7 @@ FREQUENCY_ANSWERS = [
     "often",
     "sometimes",
     "always",
-    "every day",
+    "everyday",
     "a day",
     "every",
     "when",

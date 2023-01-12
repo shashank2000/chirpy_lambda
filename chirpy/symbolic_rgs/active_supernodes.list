@@ -1,22 +1,22 @@
 # comments start with
 
-PERSONALISSUES__intro
-PERSONALISSUES__subsequent_turn
-FOOD__factoid
+#PERSONALISSUES__intro
+#PERSONALISSUES__subsequent_turn
+#FOOD__factoid
 #FOOD__factoid_gpt
-FOOD__intro
+#FOOD__intro
 GLOBAL__openended
 GLOBALS
 LAUNCH
 
 MUSIC__intro
 MUSIC__favorite_instrument
-MUSIC__intstrument_to_learn
-MUSIC__favorite_intstrument_how_long
-MUSIC__favorite_fintstrument_music_piece
+MUSIC__instrument_to_learn
+MUSIC__favorite_instrument_how_long
+#MUSIC__favorite_instrument_music_piece
 MUSIC__favorite_singer
-MUSIC__favorite_song
-MUSIC__favorite_song_opinion (Feel free to rename this.)
-MUSIC__favorite_song_singer (Feel free to rename this.)
-MUSIC__favorite_genre
+#MUSIC__favorite_song
+#MUSIC__favorite_song_opinion
+#MUSIC__favorite_song_singer
+#MUSIC__favorite_genre
 

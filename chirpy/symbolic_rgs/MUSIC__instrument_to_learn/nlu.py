@@ -1,7 +1,7 @@
 from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_TYPE
-from chirpy.response_generators.wiki2.wiki_utils import get_til_title
+
 
 def get_instrument_entity(context):
     def is_instrument(ent):
@@ -25,11 +25,7 @@ def get_flags(context):
     instr_entity = get_instrument_entity(context)
     ADD_NLU_FLAG('MUSIC__instrument_to_learn_ent', instr_entity)
     if instr_entity:
-        tils = get_til_title(instr_entity.name)
-        if len(tils):
-            ADD_NLU_FLAG('MUSIC__instr_to_learn_exists_with_til')
-        else:
-            ADD_NLU_FLAG('MUSIC__instr_to_learn_exists_wo_til')
+        ADD_NLU_FLAG('MUSIC__instr_to_learn_exists')
 
 @nlu_processing
 def get_background_flags(context):

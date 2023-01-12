@@ -4,7 +4,9 @@ from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_T
 from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_linker_simple import link_span_to_entity
 from chirpy.response_generators.music.regex_templates import NameFavoriteSongTemplate
-from chirpy.response_generators.wiki2.wiki_utils import get_til_title
+
+import chirpy.response_generators.music.response_templates.general_templates as templates
+from chirpy.core.util import choose_least_repetitive
 
 import re
 from chirpy.response_generators.music.expression_lists import NEGATIVE_WORDS
@@ -40,6 +42,9 @@ def is_negative(context):
     top_da = context.state_manager.current_state.dialogact['top_1']
     return top_da == 'neg_answer' or any(found_phrase(i, context.utterance) for i in NEGATIVE_WORDS)
 
+def least_repetitive_compliment(context):
+	return choose_least_repetitive(context, templates.compliment_user_musician_choice())
+
 @nlu_processing
 def get_flags(context):
     singer_ent = get_singer_entity(context)
@@ -52,8 +57,8 @@ def get_flags(context):
             singer_ent = get_musician_entity(context, singer_str)
             if singer_ent:
                 singer_str = singer_ent .name
-            if get_singer_genre(singer_str) is None:
-                ADD_NLU_FLAG('MUSIC__singer_has_no_genre')
+            #if get_singer_genre(singer_str) is None:   # TODO
+            #    ADD_NLU_FLAG('MUSIC__singer_has_no_genre')
 
     ADD_NLU_FLAG('MUSIC__fav_singer_ent', singer_ent)
     ADD_NLU_FLAG('MUSIC__fav_singer_str', singer_str)
@@ -61,14 +66,13 @@ def get_flags(context):
     if singer_ent:
         if WikiEntityInterface.is_in_entity_group(singer_ent, ENTITY_GROUPS_FOR_EXPECTED_TYPE.musical_group):
             ADD_NLU_FLAG('MUSIC__singer_is_musical_group')
-        tils = get_til_title(singer_ent.name)
-        if len(tils):
-            ADD_NLU_FLAG('MUSIC__singer_tils_exist')
 
     if is_negative(context):
         ADD_NLU_FLAG('MUSIC__user_has_negative_opinion')
 
+    ADD_NLU_FLAG('MUSIC__fav_singer_comment', least_repetitive_compliment(context))
+
 @nlu_processing
-def get_background_flags(rg, utterance):
+def get_background_flags(context):
     return
 

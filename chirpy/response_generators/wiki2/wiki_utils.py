@@ -651,6 +651,8 @@ def get_til_title(doc_title : str) -> List[Tuple[str, str, str]]:
     [(' humans can theoretically survive on a diet entirely composed of nothing but potatoes and butter.', 'Potato', 'Nutrition'), ('The Average Potato Has Lost 100% of its Vitamin A Since 1951', 'Potato', 'Nutrition')]
     """
     # We have some hardcoded content for content invariant testing
+    for index in es.indices.get('*'):
+        print(index)
     if doc_title == 'Taylor Swift':
         return TAYLOR_SWIFT_TILS
     if doc_title == 'Stanford':

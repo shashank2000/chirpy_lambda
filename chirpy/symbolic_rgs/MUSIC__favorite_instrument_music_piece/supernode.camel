@@ -3,9 +3,9 @@ IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
 IS_FALSE(State.User__NoFavoriteInstrument) and
-IS_NOT_NONE(State.User__FavoriteInstrument) and
-IS_TRUE(State.User__FavoriteInstrumentAdvanced) and
-IS_TRUE(Flags.follow_up_on_advanced_musician)
+not IS_NONE(State.User__FavoriteInstrument) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr)
+
 
 <PROMPTS>
 Prompt ask_piece_music [ ] {
