@@ -1,16 +1,22 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__discuss_article)
+not IS_NONE(State.WIKI__Entity) # and IS_TRUE(Flags.WIKI__discuss_article)
 
 <ENTRY_LOCALS>
 Locals.suggested_sections = @val(State.WIKI__suggested_sections[@val(Utilities.cur_entity), @constant([])])
 Locals.discussed_sections = @val(State.WIKI__discussed_sections[@val(Utilities.cur_entity), @constant([])])
 Locals.last_discussed_section = @val(State.WIKI__last_discussed_section[@val(Utilities.cur_entity), @constant(None)])
-Locals.sections = @helper.get_sections(@val(Utilities.cur_entity), @val(Locals.suggested_sections), @val(Locals.discussed_sections), @val(Locals.last_discussed_section))
+
+Locals.get_sections_result = @helper.get_sections(@val(Utilities.cur_entity), @val(Locals.suggested_sections), @val(Locals.discussed_sections), @val(Locals.last_discussed_section))
+Locals.parent_section = @val(Locals.get_sections_result["parent_section"])
+Locals.sections = @val(Locals.get_sections_result["sections"])
+
 Locals.chosen_sections_titles = @helper.choose_from_sections(@val(Locals.sections))
-Locals.entitys_section_choices = @helper.entitys_section_choices(@val(Utilities.cur_entity), @val(Locals.chosen_sections_titles))
+Locals.entitys_section_choices = @helper.entitys_section_choices(@val(Utilities.cur_entity), @val(Locals.chosen_sections_titles), @val(Locals.parent_section))
 
 <PROMPTS>
-Prompt discuss_article [ ] {
+Prompt discuss_article_section [
+	IS_NONE(Locals.parent_section)
+] {
 	- @one_of(
 		{
 			- "If you'd like, we could also talk about"
@@ -29,15 +35,42 @@ Prompt discuss_article [ ] {
 			- @helper.them_it(@val(Locals.chosen_sections_titles))
 			- "?"
 		}, {
-      - "{entitys_section_choices} are rather fascinating. Do you want to hear more about"
+			- @val(Locals.entitys_section_choices)
+      - "are rather fascinating. Do you want to hear more about"
 			- @helper.them_it(@val(Locals.chosen_sections_titles))
 			- "?"
 		}
 	)
 }
 
+Prompt discuss_article_subsection [
+	not IS_NONE(Locals.parent_section)
+] {
+	- @one_of(
+		{
+			- "Well, since we are on the topic of"
+			- @helper.section_string(@val(Utilities.cur_entity), @val(Locals.parent_section))
+			- "do you have any interest in talking about"
+			- @val(Locals.entitys_section_choices)
+			- "?"
+		}, {
+			- "Well, since we are talking about"
+			- @helper.section_string(@val(Utilities.cur_entity), @val(Locals.parent_section))
+			- "are you interested in hearing about"
+			- @val(Locals.entitys_section_choices)
+			- "?"
+		}, {
+			- "Speaking of"
+			- @helper.section_string(@val(Utilities.cur_entity), @val(Locals.parent_section))
+			- "are you interested in hearing about"
+			- @val(Locals.entitys_section_choices)
+			- "?"
+		}
+	)
+}
+
 Prompt keep_discussing_article [] {
-	- "Not implemented yet."
+	- "Not implemented yet." # TODO
 }
 
 <LOCALS>

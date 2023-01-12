@@ -3,7 +3,7 @@ from chirpy.core.response_generator import nlg_helper
 from chirpy.core.util import filter_and_log
 from chirpy.response_generators.wiki2 import wiki_utils
 from chirpy.response_generators.wiki2.wiki_utils import WikiSection
-from typing import List
+from typing import List, Optional
 import random
 
 import logging
@@ -21,6 +21,12 @@ def them_it(sections):
 @nlg_helper
 def is_are(sections):
     return "are" if is_plural(sections) else "is"
+
+
+@nlg_helper
+def section_string(entity: WikiEntity, parent_section: WikiSection):
+    entitys = f"{entity.talkable_name}'s"
+    return parent_section.title if entity.talkable_name in parent_section.title else f"{entitys} {parent_section.title}"
 
 
 def sanitize_section_title(section, entity: WikiEntity):
@@ -84,7 +90,7 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
             subsections = list(
                 filter(lambda section: section.is_descendant_of(last_discussed_section), valid_sections))
             if subsections:
-                return subsections
+                return { 'parent_section': last_discussed_section, 'sections': subsections }
                 # text = self.choose(subsection_prompts(entity.talkable_name, last_discussed_section.title, chosen_section_titles, repeat=repeat or False))
             logger.info(f"No more unused subsections of level 1 section {last_discussed_section.title}. Not suggesting more subsections")
 
@@ -99,7 +105,7 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
             # Don't suggest any more siblings if 2 have already been discussed, as a simplifying assumption
             valid_siblings = list(set(siblings) & set(valid_sections))
             if len(set(siblings) & set(discussed_sections)) < 2 and valid_siblings:
-                return valid_siblings
+                return { 'parent_section': parent_section, 'sections': valid_siblings }
                 # text = self.choose(subsection_prompts(entity.talkable_name, parent_section, chosen_section_titles, repeat=repeat or True))
             logger.info(f"One more sibling of {parent_section} has already been discussed. Not suggesting more sibling subsections.")
     
@@ -111,7 +117,7 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
     if first_level_sections:
         logger.primary_info(
             f"Choosing from {[s.title for s in first_level_sections]} 1st level sections")
-        return first_level_sections
+        return { 'parent_section': None, 'sections': first_level_sections }
         # text = self.choose(section_prompt_text(entity.talkable_name, [s.title for s in chosen_sections], repeat=have_response or repeat or last_discussed_section is not None))
     logger.info("No more unused 1st level sections left to choose from")
 
@@ -128,11 +134,11 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
                                                             reason_for_filtering='either the section overview or their children have been discussed at least three times in the past')
     
     if filtered_first_level_section_titles:
-        return filtered_first_level_section_titles
+        return { 'parent_section': None, 'sections': filtered_first_level_section_titles }
         # text = self.choose(section_prompt_text(entity.talkable_name, chosen_first_level_section_titles, repeat=have_response or repeat or last_discussed_section is not None))
     
     logger.primary_info(f"No more useful sections left for entity: {entity.name}")
-    return [] # TODO: Make sure this doesn't create a bug
+    return { 'parent_section': None, 'sections': [] } # TODO: Make sure this doesn't create a bug
 
 
 @nlg_helper
@@ -178,6 +184,6 @@ def choose_from_sections(sections: List[WikiSection]):
 
 
 @nlg_helper
-def entitys_section_choices(entity: WikiEntity, chosen_sections_titles: List[str]):
-    _, entitys_section_choices = construct_entitys_section_choices(entity.talkable_name, chosen_sections_titles)
+def entitys_section_choices(entity: WikiEntity, chosen_sections_titles: List[str], parent_section: Optional[WikiSection]):
+    _, entitys_section_choices = construct_entitys_section_choices(entity.talkable_name, chosen_sections_titles, 'or' if parent_section else 'and')
     return wiki_utils.clean_wiki_text(entitys_section_choices)
