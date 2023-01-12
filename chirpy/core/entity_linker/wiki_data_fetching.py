@@ -75,7 +75,6 @@ def result2entity(result: dict) -> Optional[WikiEntity]:
     Returns None if the result is a not talkable article (e.g. list pages, disambiguation pages)
     """
     source = result['_source']
-    logging.warning(f"Source is {source}")
     wikidata_categories = source.get('wikidata_categories_all', set())
     categories = source.get('categories', set())
 

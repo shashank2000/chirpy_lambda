@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-IS_TRUE(State.User__CurrentOpinionThird)
+IS_TRUE(State.User__CurrentOpinionBotResponse)
 
 <PROMPTS>
 Prompt new_topic [ ] {
@@ -17,6 +17,6 @@ State.User__CurrentOpinionTopic = {
 	@helper.get_opinion(@val(Flags.OPINION__last_said))
 }
 
-State.User__CurrentOpinionThird = {
+State.User__CurrentOpinionBotResponse = {
 	@constant(False)
 }

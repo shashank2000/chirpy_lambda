@@ -4,9 +4,9 @@ import json
 
 logger = logging.getLogger('chirpylogger')
 
-f = open('chirpy/symbolic_data/opinions/opionable_labeled_final.json')
-activities = json.load(f)
-f.close()
+PATH = 'chirpy/symbolic_data/opinions/opionable_labeled_final.json'
+with open(PATH, 'r') as f:
+    activities = json.load(f)
 
 def get_topic_type(topic: str):
     return f"What other {activities[topic]} do you like?"

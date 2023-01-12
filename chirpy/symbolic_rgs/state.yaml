@@ -17,7 +17,7 @@ PERSONALISSUE__confirming_further_discussion: False
 PERSONALISSUE__responded_with_question: False
 User__CurrentOpinionTopic: _get_opinion
 User__CurrentOpinionFollowUp: False
-User__CurrentOpinionThird: False
+User__CurrentOpinionBotResponse: False
 User__OpinionYes: False
 User__OpinionNo: False
 User__Name : null

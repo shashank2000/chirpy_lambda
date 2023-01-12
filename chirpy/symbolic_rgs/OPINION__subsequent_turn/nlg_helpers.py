@@ -4,9 +4,9 @@ import json
 
 logger = logging.getLogger('chirpylogger')
 
-f = open('chirpy/symbolic_data/opinions/opinions_final.json')
-data = json.load(f)
-f.close()
+PATH = 'chirpy/symbolic_data/opinions/opinions_final.json'
+with open(PATH, 'r') as f:
+    data = json.load(f)
 
 # def get_random_opinion():
 #     topics = list(data.keys())

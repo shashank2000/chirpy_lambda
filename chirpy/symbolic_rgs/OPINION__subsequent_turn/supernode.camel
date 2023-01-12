@@ -4,7 +4,7 @@ IS_TRUE(State.User__CurrentOpinionFollowUp)
 <PROMPTS>
 Prompt thats_interesting [
 ] {
-	@one_of(
+	- @one_of(
 		"That's interesting, why is that?",
 		"That's interesting, could you tell me a bit more?",
 		"Oh, that's understandable! What makes you feel that way?",
@@ -28,10 +28,15 @@ Subnode negative_response [
 
 }
 
+Subnode default [
+] {
+	"I didn't quite catch that, sorry."
+}
+
 <SET_STATE_AFTER>
 State.User__CurrentOpinionFollowUp = {
 	@constant(False)
 }
-State.User__CurrentOpinionThird = {
+State.User__CurrentOpinionBotResponse = {
 	@constant(True)
 }
