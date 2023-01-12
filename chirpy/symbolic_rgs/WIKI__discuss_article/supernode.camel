@@ -2,7 +2,10 @@
 not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__discuss_article)
 
 <ENTRY_LOCALS>
-Locals.sections = @helper.get_sections(@val(Utilities.cur_entity), @val(State.WIKI__suggested_sections), @val(State.WIKI__discussed_sections), @val(State.WIKI__last_discussed_section))
+Locals.suggested_sections = @val(State.WIKI__suggested_sections[@val(Utilities.cur_entity), @constant([])])
+Locals.discussed_sections = @val(State.WIKI__discussed_sections[@val(Utilities.cur_entity), @constant([])])
+Locals.last_discussed_section = @val(State.WIKI__last_discussed_section[@val(Utilities.cur_entity), @constant(None)])
+Locals.sections = @helper.get_sections(@val(Utilities.cur_entity), @val(Locals.suggested_sections), @val(Locals.discussed_sections), @val(Locals.last_discussed_section))
 Locals.chosen_sections_titles = @helper.choose_from_sections(@val(Locals.sections))
 Locals.entitys_section_choices = @helper.entitys_section_choices(@val(Utilities.cur_entity), @val(Locals.chosen_sections_titles))
 
