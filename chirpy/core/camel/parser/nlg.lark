@@ -21,9 +21,9 @@ LIST : _OB _CB
 
 OPERATORS: "|" | "+" | "-"
 
-CONSTANT: STRING | "{}"
+CONSTANT: STRING | "{}" | "[]"
 
-key: "[" nlg "]"
+key: ("[" nlg "]") | ("[" nlg _COMMA nlg "]")
 
 val : "@val" _OP variable key* (OPERATORS PARAM_ARG_NAME)* _CP
 
