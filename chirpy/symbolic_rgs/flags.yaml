@@ -19,6 +19,11 @@
 - GlobalFlag__LastBotTurnWasOpenEnded
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
+- CELEB__user_mentioned_celeb
+- CELEB__discuss_tv
+- CELEB__discuss_movie
+- CELEB__discuss_song
+- CELEB__known_work
 - PERSONALISSUE__personal_sharing_negative
 - PERSONALISSUE__gratitude
 - PERSONALISSUE__is_continued_sharing

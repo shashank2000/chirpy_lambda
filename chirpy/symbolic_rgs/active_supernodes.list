@@ -1,10 +1,14 @@
 # comments start with
 
-PERSONALISSUES__intro
-PERSONALISSUES__subsequent_turn
-FOOD__factoid
-#FOOD__factoid_gpt
-FOOD__intro
+CELEB__intro
+CELEB__discuss
+CELEB__unknown
+CELEB__generic
+# PERSONALISSUES__intro
+# PERSONALISSUES__subsequent_turn
+# FOOD__factoid
+# FOOD__intro
+# FOOD__factoid_gpt
 GLOBAL__openended
 GLOBALS
 LAUNCH
