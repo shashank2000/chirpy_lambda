@@ -129,7 +129,8 @@ class NeuralGeneration(NLGNode):
 
 @dataclass
 class Key(NLGNode):
-    name: NLGNode
+    name : NLGNode
+    default_value : Optional[NLGNode]
     def generate(self, context):
         return self.name.generate(context)
 
@@ -141,7 +142,10 @@ class Val(NLGNode):
     def generate(self, context):
         value = self.variable.generate(context)
         for key in self.keys:
-            value = value[key.generate(context)]
+            if key.default_value:
+                value = value.get(key.generate(context), key.default_value.generate(context))
+            else:
+                value = value[key.generate(context)]
         for operator, operation in self.operations:
             if operator == '|':
                 value = get_pipe(operation)(value)
