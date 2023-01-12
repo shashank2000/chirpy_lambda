@@ -91,6 +91,15 @@ class Context:
 		namespace = getattr(self, variable.namespace.lower())
 		namespace[variable.name] = value
 
+	def setDictionary(self, variable, keys, value):
+		if len(keys) == 0:
+			return self.set(variable, value)
+		namespace = getattr(self, variable.namespace.lower())
+		dictionary = namespace[variable.name]
+		for key in keys[:-1]:
+			dictionary = dictionary[key.generate(self)]
+		dictionary[keys[-1].generate(self)] = value
+
 	def compute_entry_locals(self):
 		self.supernode.entry_locals.evaluate(self)
 		logger.debug(f"Finished evaluating entry locals: {'; '.join((k + ': ' + str(v)) for (k, v) in self.locals.items())}")
