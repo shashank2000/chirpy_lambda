@@ -108,6 +108,6 @@ Subnode default [ ] {
 	- @val(Locals.opinion)
 }
 
-<SET_STATE>
+<SET_STATE_AFTER>
 Flags.WIKI__understand_user_better = @constant(False)
 Flags.WIKI__discuss_article = @constant(True)
