@@ -1,4 +1,5 @@
 <ENTRY_CONDITIONS>
+not IS_NONE(State.User__LikeMovie) and
 IS_NONE(State.User__FavoriteMovie)
 
 <PROMPTS>
@@ -25,9 +26,14 @@ Locals.intro_statement = {
 }
 
 <SET_STATE>
+
 State.User__FavoriteMovie = @val(Utilities.cur_entity | name)
 State.User__FavoriteMovieTalkable = @val(Utilities.cur_entity | talkable | lower)
-State.User__FavoriteMovieMainActor = @helper.get_movie_actor(@val(Utilities.cur_entity | name))
+State.User__FavoriteMovieMainActor = @lookup(
+        database_name="movie_info",
+        key={@val(State.User__FavoriteMovie)},
+        column="main_actor"
+)
 State.User__FavoriteMovieDirector = @helper.get_movie_director(@val(Utilities.cur_entity | name))
 State.User__FavoriteMovieGenre = @helper.get_movie_genre(@val(Utilities.cur_entity | name))
 

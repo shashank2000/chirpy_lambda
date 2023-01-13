@@ -1,4 +1,5 @@
 <ENTRY_CONDITIONS>
+not IS_NONE(State.User__LikeMovie) and
 IS_NONE(State.User__PreferredMovieGenre)
 
 <PROMPTS>
