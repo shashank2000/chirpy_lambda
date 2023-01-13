@@ -25,6 +25,7 @@ User__PetAge: null
 User__PetType: null
 User__PetTypeTalkable: null
 User__PetBreedTalkable: null
+User__PetBreed: null
 User__PetFavoriteActivity: null
 User__PetFavoriteActivityTalkable: null
 

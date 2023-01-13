@@ -19,14 +19,14 @@ Prompt pet_type_no_name [
 
 
 <SET_STATE>
-State.User__PetType = @val(Utilities.cur_entity)
+State.User__PetType = @val(Utilities.cur_entity | name | lower)
 State.User__PetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
 
 <SUBNODES>
 
 Subnode valid_type [
   (not IS_NONE(State.User__PetType)) and 
-    EXISTS(database_name="animal_gpt", key={@val(State.User__PetTypeTalkable)})
+    EXISTS(database_name="animal_gpt", key={@val(State.User__PetType)})
 ] {
 	 - "That's awesome!"
   - "I love"
@@ -37,7 +37,7 @@ Subnode valid_type [
   - ": "
   -@lookup(
         database_name="animal_gpt",
-        key={@val(State.User__PetTypeTalkable)},
+        key={@val(State.User__PetType)},
         column="factoid"
    )
 }

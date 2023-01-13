@@ -29,7 +29,7 @@ Subnode valid_activity [
 ] {
   - "That sounds like a great time!"
   - "I should try to "
-  - @val(State.User__PetFavoriteActivity)
+  - @val(State.User__PetFavoriteActivity | name | lower)
   - " with my pet too!"
 }
 

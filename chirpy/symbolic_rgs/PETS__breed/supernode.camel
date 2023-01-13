@@ -17,13 +17,13 @@ Prompt pet_type_no_name [
   IS_NONE(State.User__PetName)
 ] {
     "What breed is your "
-    - @val(State.User__PetTypeTalkable)
+    - @val(State.User__PetType)
     - "?"
 }
 
 
 <SET_STATE>
-State.User__PetBreed = @val(Utilities.cur_entity)
+State.User__PetBreed = @val(Utilities.cur_entity | name | lower)
 # TODO: "dutch rabbit" goes to "netherlands", so need to think about what next
 State.User__PetBreedTalkable = @val(Utilities.cur_entity | talkable | lower)
 
@@ -31,11 +31,11 @@ State.User__PetBreedTalkable = @val(Utilities.cur_entity | talkable | lower)
 
 Subnode valid_type_and_key_exists [
   (not IS_NONE(State.User__PetBreed)) and 
-    EXISTS(database_name="animal_gpt", key={@val(State.User__PetBreedTalkable)})
+    EXISTS(database_name="animal_gpt", key={@val(State.User__PetBreed)})
 ] {
   - @lookup(
         database_name="animal_gpt",
-        key={@val(State.User__PetBreed | name)},
+        key={@val(State.User__PetBreed)},
         column="factoid"
   )
 }
