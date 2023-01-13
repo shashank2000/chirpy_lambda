@@ -3,7 +3,7 @@ import os
 
 from chirpy.databases.databases import database_lookup, database_exists
 
-ANIMAL_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'animal_gpt_2.json')
+ANIMAL_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/animal_gpt_2.json')
 
 import logging
 

@@ -3,8 +3,8 @@ import os
 
 from chirpy.databases.databases import database_lookup, database_exists
 
-FOOD_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'foods.json')
-FOOD_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'food_gpt_partial.json')
+FOOD_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/foods.json')
+FOOD_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/food_gpt_partial.json')
 
 import logging
 
