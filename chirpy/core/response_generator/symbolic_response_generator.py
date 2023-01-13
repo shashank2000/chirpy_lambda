@@ -100,7 +100,11 @@ class SymbolicResponseGenerator:
         Else, returns the current supernode if it exists.
         """
         for supernode in self.get_supernodes():
-            if supernode.entry_conditions_takeover.evaluate(context):
+            if (
+                supernode.entry_conditions_takeover.evaluate(context) or 
+                supernode.entity_groups.evaluate(context) or 
+                supernode.entity_groups_regex.evaluate(context)
+            ):
                 return supernode
         return self.get_current_supernode_with_fallback(context)
 
@@ -142,7 +146,6 @@ class SymbolicResponseGenerator:
         state.utterance = utterance
         if not self.state_manager.is_first_turn():
             context = Context.get_context(state, self.state_manager)
-            context.update_with_background_flags(self.get_supernodes())
             supernode = self.get_takeover_or_current_supernode(context)
             context = Context.get_context(state, self.state_manager, supernode)
             
@@ -157,7 +160,7 @@ class SymbolicResponseGenerator:
             context.compute_locals()
             supernode.set_state.evaluate(context)
             
-            subnode = supernode.subnodes.select(context)
+            subnode = supernode.subnodes.select(context, extra_subnodes=self.paths_to_supernodes['GLOBALS'].subnodes if supernode.name != "GLOBALS" else None)
             response = subnode.generate(context) + " "
             logger.primary_info(f'Received {response} from subnode {subnode}.')
             assert response is not None

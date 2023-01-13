@@ -10,6 +10,7 @@ from chirpy.core.response_generator_datatypes import ResponseGeneratorResult
 from chirpy.core.experiment import Experiments
 from chirpy.core.flags import SIZE_THRESHOLD
 from chirpy.core.util import print_dict_linebyline, get_ngrams
+from chirpy.symbolic_rgs import state_initialization
 import jsonpickle
 import random
 import logging

@@ -13,7 +13,3 @@ def get_flags(context):
         ADD_NLU_FLAG('PERSONALISSUE__noncommittal')
     if personal_issues_helpers.is_short_response(context.utterance):
         ADD_NLU_FLAG('PERSONALISSUE__short_response')
-
-@nlu_processing
-def get_background_flags(context):
-    return

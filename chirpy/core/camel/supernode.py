@@ -5,6 +5,7 @@ from chirpy.core.camel.predicate import Predicate, TruePredicate, FalsePredicate
 from chirpy.core.camel.prompt import PromptList
 from chirpy.core.camel.subnode import SubnodeList
 from chirpy.core.camel.assignment import AssignmentList
+from chirpy.core.camel.entities import EntityGroupList, EntityGroupRegexList
 from dataclasses import dataclass, field, fields
 from typing import List, Any
 
@@ -22,6 +23,8 @@ class Supernode:
 	entry_conditions_takeover : Predicate = field(default_factory=FalsePredicate)
 	set_state : AssignmentList = field(default_factory=AssignmentList)
 	set_state_after : AssignmentList = field(default_factory=AssignmentList)
+	entity_groups : EntityGroupList = field(default_factory=EntityGroupList)
+	entity_groups_regex : EntityGroupRegexList = field(default_factory=EntityGroupRegexList)
 	
 	@classmethod
 	def load(cls, camel_tree, name):
@@ -49,12 +52,7 @@ class Supernode:
 	def get_flags(self, context):
 		flags = self.nlu.get_flags(context)
 		return flags
-	
-	def get_background_flags(self, context):
-		# background_flags: flags to update even if this supernode was not chosen
-		flags = self.nlu.get_background_flags(context)
-		return flags		
-		
+				
 	def __str__(self):
 		return f"<{self.name}>"
 

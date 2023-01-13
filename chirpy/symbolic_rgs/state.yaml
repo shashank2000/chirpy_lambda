@@ -32,9 +32,11 @@ PERSONALISSUE__need_confirmation_for_further_discussion: False
 PERSONALISSUE__confirming_further_discussion: False
 PERSONALISSUE__responded_with_question: False
 PERSONALISSUE__LastTurnUsedNeuralGeneration: False
-
-
-# Launch
 User__Name : null
 User__NameGivenUp : False
 LAUNCH__NumTimesAskedName : 0
+User__CurrentOpinionTopic: _get_opinion
+User__CurrentOpinionFollowUp: False
+User__CurrentOpinionBotResponse: False
+User__OpinionYes: False
+User__OpinionNo: False

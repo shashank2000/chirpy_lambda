@@ -5,7 +5,7 @@ import json
 import pickle
 import tqdm
 
-openai.api_key = "<REPLACE WITH KEY>"
+openai.api_key = "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"
 
 
 def generate(prompt, **kwargs):
@@ -16,6 +16,14 @@ def generate(prompt, **kwargs):
     return completion.choices[0].text
 
 
+def create_indiv_prompts(celeb_info):
+    all_p = []
+
+    for ce in celeb_info:
+        all_p.append({"celeb": ce, "prompt": GENERATION_PROMPT.format(name=ce)})
+    return all_p
+
+
 def create_prompts(celeb_info, list_celebs=[]):
     all_p = []
 
@@ -24,9 +32,9 @@ def create_prompts(celeb_info, list_celebs=[]):
 
     for ce in celeb_info:
         for k in celeb_info[ce]:
-            if k not in ['pronoun', 'total_pg', 'films', 'tv', 'characters']:
+            if k not in ['pronoun', 'total_pg', 'characters', 'songs']:
                 for w in celeb_info[ce][k]:
-                    if w[1] > 10000:
+                    if w[1] > 50000:
                         p_dict = {"celeb": ce}
                         p_dict.update({"work_name": w[0]})
                         if k in ["films", "tv"]:
@@ -42,18 +50,21 @@ GENERATION_PROMPT = "Give a relatable opinion about {name}."
 
 if __name__ == "__main__":
     # all_celebs = json.load(open("filtered_celeb.json"))
-    sub_celebs = ["Shawn Mendes", "Olivia Rodrigo", "Shakira", "Rihanna", "The Weeknd", "Keanu Reeves",
-                  "Rachel McAdams", "Jude Law", "James McAvoy", "Michael Fassbender", "Jesse Eisenberg", "Adam Levine"]
-    all_celebs = pickle.load(open("../list_celebs.p", "rb"))
-    all_celeb_info = json.load(open("../all_celeb_info.json"))
+    # sub_celebs = ["Shawn Mendes", "Olivia Rodrigo", "Shakira", "Rihanna", "The Weeknd", "Keanu Reeves",
+    #               "Rachel McAdams", "Jude Law", "James McAvoy", "Michael Fassbender", "Jesse Eisenberg", "Adam Levine"]
+    # all_celebs = pickle.load(open("list_celebs.p", "rb"))
+    # all_celeb_info = json.load(open("all_celeb_info.json"))
 
-    all_prompts = create_prompts(all_celeb_info)
+    all_celebs = json.load(open("missing_celebs.json"))
+
+    all_prompts = create_prompts(all_celebs)
+    # all_prompts = create_indiv_prompts(all_celebs)
     print(all_prompts[:5])
     err_cts = 0
 
     cts = 0
     while cts < len(all_prompts):
-        celeb_opinion_file = open("../celeb_opinions_work.jsonl", "a+")
+        celeb_opinion_file = open("celeb_opinions_works_new.jsonl", "a+")
         try:
             for p in tqdm.tqdm(all_prompts[cts:]):
                 output = generate(p['prompt'])
