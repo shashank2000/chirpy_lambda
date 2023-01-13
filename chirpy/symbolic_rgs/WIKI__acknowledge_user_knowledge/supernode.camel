@@ -43,7 +43,7 @@ Locals.commiseration_acknowledgement = {
     "Yes, it is a bit disappointing."
 	)
 }
-Locals.opinion = @helper.get_opinion(@val(Utilities.cur_entity), @val(Flags.WIKI__NEUTRAL_SENTIMENT), @val(Flags.WIKI__POS_SENTIMENT))
+Locals.opinion = @helper.get_opinion(@val(State.WIKI__Entity), @val(Flags.WIKI__NEUTRAL_SENTIMENT), @val(Flags.WIKI__POS_SENTIMENT))
 
 <SET_STATE>
 
