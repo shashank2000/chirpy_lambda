@@ -152,7 +152,7 @@ class NotPredicate(Predicate):
 class ExistsPredicate(Predicate):
 	database_name : str
 	database_key : NLGNode
-	def evaluate(self, context, label):
+	def evaluate(self, context, label=""):
 		return exists(self.database_name.generate(context), self.database_key.generate(context))
 
 	def get_score(self):
