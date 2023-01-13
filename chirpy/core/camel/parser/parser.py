@@ -15,7 +15,7 @@ logger = logging.getLogger('chirpylogger')
 	
 class SupernodeMaker(Transformer):
 	def variable(self, tok): return variable.Variable(str(tok[0]), str(tok[1]))
-	def key(self, tok): return nlg.Key(tok[0])
+	def key(self, tok): return nlg.Key(tok[0], tok[1] if len(tok) > 1 else None)
 	
 	def nlg__variable(self, tok): return self.variable(tok)
 	def condition__variable(self, tok): return self.variable(tok)
