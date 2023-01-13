@@ -33,7 +33,7 @@ Subnode has_no_pet [
 
 Subnode default [
 ] {
-  - "Sorry, I didn't quite catch that! I'd love to learn more about your experience with animals, so let's start again :)"
+  - "Sorry, I didn't quite catch that! I'd love to learn more about your experience with animals, so let's start again."
 }
 
 

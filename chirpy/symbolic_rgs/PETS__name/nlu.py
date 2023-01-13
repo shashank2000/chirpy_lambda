@@ -20,7 +20,6 @@ NAMES = load_text_file(NAMES_FILEPATH)
 NAMES = [n.lower() for n in NAMES]
 # logger.primary_info(f"Found {len(NAMES)} names.")
 
-# tentatively copied over from LAUNCH
 def could_be_name(utterance):
 	if len(utterance.split()) == 1:
 		# If utterance is not in our high-frequency spoken unigrams (except for mark), then it may be a name
@@ -28,7 +27,6 @@ def could_be_name(utterance):
 			return True
 	return False
 
-# tentatively copied over from LAUNCH
 def get_name_from_utterance(context, remove_no=False) -> Optional[str]:
 	"""
 
