@@ -7,45 +7,45 @@ import openai
 
 logger = logging.getLogger('chirpylogger')
 
-openai.api_key = "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"
+# openai.api_key =
+#
+# def generate(prompt, **kwargs):
+#     completion = openai.Completion.create(engine="text-davinci-003", prompt=prompt, max_tokens=256, temperature=0.7,
+#                                           **kwargs)
+#     return completion.choices[0]
 
-def generate(prompt, **kwargs):
-    completion = openai.Completion.create(engine="text-davinci-003", prompt=prompt, max_tokens=256, temperature=0.7,
-                                          **kwargs)
-    return completion.choices[0]
-
-
-@nlg_helper
-def get_movie_actor(movie: str):
-    output = generate(
-        f"""
-            Give the main actor's name in the movie: {movie} in the format: actor_name.
-            """
-    )['text']
-
-    return output.strip()
-
-
-@nlg_helper
-def get_movie_director(movie: str):
-    output = generate(
-        f"""
-            Give the director's name in the movie: {movie} in the format: director_name.
-            """
-    )['text']
-
-    return output.strip()
-
-
-@nlg_helper
-def get_movie_genre(movie: str):
-    output = generate(
-        f"""
-            What is the genre of the movie: {movie} in the format: genre_name.
-            """
-    )['text']
-
-    return output.strip()
+#
+# @nlg_helper
+# def get_movie_actor(movie: str):
+#     output = generate(
+#         f"""
+#             Give the main actor's name in the movie: {movie} in the format: actor_name.
+#             """
+#     )['text']
+#
+#     return output.strip()
+#
+#
+# @nlg_helper
+# def get_movie_director(movie: str):
+#     output = generate(
+#         f"""
+#             Give the director's name in the movie: {movie} in the format: director_name.
+#             """
+#     )['text']
+#
+#     return output.strip()
+#
+#
+# @nlg_helper
+# def get_movie_genre(movie: str):
+#     output = generate(
+#         f"""
+#             What is the genre of the movie: {movie} in the format: genre_name.
+#             """
+#     )['text']
+#
+#     return output.strip()
 
 # INTRO_STATEMENTS = [
 #     "Ah yes, [FOOD] [copula] one of my favorite things to eat up here in the cloud.",

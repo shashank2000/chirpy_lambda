@@ -34,8 +34,16 @@ State.User__FavoriteMovieMainActor = @lookup(
         key={@val(State.User__FavoriteMovie)},
         column="main_actor"
 )
-State.User__FavoriteMovieDirector = @helper.get_movie_director(@val(Utilities.cur_entity | name))
-State.User__FavoriteMovieGenre = @helper.get_movie_genre(@val(Utilities.cur_entity | name))
+State.User__FavoriteMovieDirector = @lookup(
+        database_name="movie_info",
+        key={@val(State.User__FavoriteMovie)},
+        column="director"
+)
+State.User__FavoriteMovieGenre = @lookup(
+        database_name="movie_info",
+        key={@val(State.User__FavoriteMovie)},
+        column="genre"
+)
 
 
 <SUBNODES>
@@ -59,11 +67,10 @@ Subnode make_director_comment [
 
 Subnode default [
 ] {
-  - @val(Locals.intro_statement)
-  - @neural_generation(prefix={
-     - "I especially love how"
-     - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
-  })
+    - @one_of(
+        {"I haven't seen that movie yet! I'll check it out."},
+        {"I haven't seen that movie yet! Thanks for telling me about it! I will check it out."}
+    )
 }
 
 <SET_STATE_AFTER>

@@ -24,12 +24,22 @@ Locals.intro_statement = {
 
 <SET_STATE>
 State.User__PreferredMovieActor = @val(Utilities.cur_entity | name)
-State.User__PreferredMovieActorMovie = @helper.get_movie_from_actor(@val(Utilities.cur_entity | name))
-State.User__PreferredMovieActorMovieDesc = @helper.get_movie_desc(@val(State.User__PreferredMovieActorMovie))
+State.User__PreferredMovieActorMovie = @lookup(
+        database_name="actor_info",
+        key={@val(State.User__PreferredMovieActor)},
+        column="movie_name"
+)
+State.User__PreferredMovieActorMovieDesc = @lookup(
+        database_name="movie_info",
+        key={@val(State.User__PreferredMovieActorMovie)},
+        column="plot"
+)
 
 <SUBNODES>
-Subnode make_actor_comment [
-  not IS_NONE(State.User__PreferredMovieActorMovie)
+Subnode make_actor_movie_desc_comment [
+  not IS_NONE(State.User__PreferredMovieActorMovie) and
+  not IS_NONE(State.User__PreferredMovieActorMovieDesc)
+
 ] {
   - @val(Locals.intro_statement)
   - "You should see"
@@ -38,6 +48,26 @@ Subnode make_actor_comment [
   - @val(State.User__PreferredMovieActorMovie)
   - "."
   - @val(State.User__PreferredMovieActorMovieDesc)
+}
+
+Subnode make_actor_movie_comment [
+  not IS_NONE(State.User__PreferredMovieActorMovie)
+
+] {
+  - @val(Locals.intro_statement)
+  - "I loved"
+  - @val(State.User__PreferredMovieActor)
+  - "in"
+  - @val(State.User__PreferredMovieActorMovie)
+  - "."
+}
+
+Subnode default [
+] {
+  - "I haven't seen a movie by"
+  - @val(State.User__PreferredMovieActor)
+  - "."
+  - "Thanks for telling me about them."
 }
 
 

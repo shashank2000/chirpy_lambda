@@ -2,8 +2,7 @@
 LAUNCH
 MOVIE__intro
 MOVIE__favourite
-#MOVIE__preferences_actor
-#MOVIE__preferences_genre
+MOVIE__preferences_actor
 CELEB__intro
 CELEB__discuss
 CELEB__unknown
