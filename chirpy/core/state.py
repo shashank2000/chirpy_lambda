@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from collections import defaultdict
 
 import pytz
 from typing import *
@@ -46,6 +47,12 @@ class BaseSymbolicState:
     data: Dict[str, Any] = field(default_factory=dict)
     turns_history: Dict[str, int] = field(default_factory=dict)
     last_response : ResponseGeneratorResult = field(default_factory=lambda: None)
+<<<<<<< HEAD
+=======
+    entry_locals: Dict[str, Any] = field(default_factory=dict)
+    # last_spoken_entities: [SUPERNODE.NAME : value of current_entity when SUPERNODE last ran ]
+    last_spoken_entities : DefaultDict[str, Any] = field(default_factory=lambda: defaultdict(lambda: None))
+>>>>>>> 424fae1 (Added current_entity_store property to context. state has a last_spoken_entities property that stores the value of cur_entity when SUPERNODE was last ran)
     
     def check(self, key):
         assert key in ALL_STATE_KEYS, f"Key not found: {key}"
