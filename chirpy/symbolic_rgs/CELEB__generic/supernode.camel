@@ -5,7 +5,7 @@ not IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(State.CELEB__generic_
 Prompt celeb_when []
 {
     - "When did you start following"
-    - @val(State.User__FavoriteCelebrityName)
+    - @val(State.User__FavoriteCelebrity | talkable)
     - "?"
 }
 

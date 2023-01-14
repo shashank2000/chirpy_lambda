@@ -28,7 +28,7 @@ Prompt fav_celeb_tv [IS_TRUE(State.CELEB__discuss_tv)] {
         },
         {
         - "What about you? Is there a TV show with"
-        - @val(State.User__FavoriteCelebrityName)
+        - @val(State.User__FavoriteCelebrity | talkable)
         - "that you enjoy?"
         }
     )
@@ -37,7 +37,7 @@ Prompt fav_celeb_tv [IS_TRUE(State.CELEB__discuss_tv)] {
 
 Prompt fav_celeb_song_1 [IS_TRUE(State.CELEB__discuss_song)] {
     - "How about you? Is there a song by"
-    - @val(State.User__FavoriteCelebrityName)
+    - @val(State.User__FavoriteCelebrity | talkable)
     - "that you absolutely love?"
 }
 
@@ -72,7 +72,7 @@ Subnode unknown_tv [
 Subnode unknown_song [
     not IS_TRUE(Flags.CELEB__known_work) and IS_TRUE(State.CELEB__discuss_song)
 ] {
-    - "Sorry, I don't think I have listened to that song."
+    - "Hmm, I don't think I have listened to that song."
 }
 
 <SET_STATE_AFTER>
