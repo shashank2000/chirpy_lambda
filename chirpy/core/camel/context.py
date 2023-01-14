@@ -96,7 +96,7 @@ class Context:
         return self.state.turns_history
 
     @property
-    def currententitystore(self):
+    def currenttopic(self):
         return self.state.last_spoken_entities
 
     def set(self, variable, value):
