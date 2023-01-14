@@ -4,6 +4,7 @@ not IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(State.CELEB__generic_
 <PROMPTS>
 Prompt celeb_when []
 {
+    - "You know, I was almost in a movie once, but they picked Scarlett Johansson instead."
     - "When did you start following"
     - @val(State.User__FavoriteCelebrity | talkable)
     - "?"
