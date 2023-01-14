@@ -8,10 +8,6 @@ Prompt ask_if_user_likes_movies [ ] {
 }
 
 
-<CONTINUE_CONDITIONS>
-not IS_NONE(Flags.MOVIE__user_likes_movie)
-
-
 <LOCALS>
 Locals.statement_agreement = {
   - @one_of(
@@ -25,10 +21,6 @@ Locals.statement_okay = {
     { "I see," },
     { "No worries," }
   )
-}
-
-Locals.placeholder = {
-  - "placeholder"
 }
 
 

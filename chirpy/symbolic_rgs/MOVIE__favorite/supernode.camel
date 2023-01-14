@@ -3,6 +3,7 @@ not IS_NONE(State.User__LikeMovie) and
 IS_NONE(State.User__FavoriteMovie)
 
 
+
 <PROMPTS>
 Prompt ask_favorite_movie [ ] {
   - "I'm curious. What's your favorite movie?"
