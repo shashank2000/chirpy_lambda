@@ -39,7 +39,6 @@ try:
     from typing import Dict
     import traceback
     
-    import DoesntExist
     
     from chirpy.annotators.corenlp import CorenlpModule
     from chirpy.annotators.navigational_intent.navigational_intent import NavigationalIntentModule
