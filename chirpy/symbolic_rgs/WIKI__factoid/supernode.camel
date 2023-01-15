@@ -1,3 +1,6 @@
+<ENTRY_CONDITIONS>
+IS_NONE(State.WIKI__Entity)
+
 <PROMPTS>
 Prompt what_to_talk_about [ ] {
 	"What topic do you want to learn more about?"
@@ -18,7 +21,7 @@ Subnode factoid [
 		{"Oh yeah"}
 	)
 	- "I love talking about"
-	- @val(Utilities.cur_entity | talkable)
+	- @val(State.WIKI__Entity)
 	- .
 	- @val(Locals.factoid)
 	- .

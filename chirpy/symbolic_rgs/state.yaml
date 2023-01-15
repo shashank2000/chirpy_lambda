@@ -45,6 +45,7 @@ WIKI__Entity: null
 WIKI__AskedWhenInterested: False
 WIKI__AskedWhatInterested: False
 WIKI__AskedWhyInterested: False
+WIKI__currently_chosen_sections: []
 WIKI__suggested_sections: {}
 WIKI__discussed_sections: {}
 WIKI__last_discussed_section: {}
