@@ -164,10 +164,8 @@ class SymbolicResponseGenerator:
             next_supernode = self.get_launch_supernode()
             response = ""
             
-        state.entry_locals = {}
         context = Context.get_context(state, self.state_manager, next_supernode)
         context.compute_entry_locals()
-        state.entry_locals = context.locals
         prompt = next_supernode.prompts.select(context)
         prompt_response = prompt.generate(context)
         prompt.assignments.evaluate(context)
