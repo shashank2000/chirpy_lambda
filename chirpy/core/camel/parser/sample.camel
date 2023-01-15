@@ -12,10 +12,10 @@ Prompt origin_year_factoid_prompt [
     IS_NOT_NONE(State.User__FavoriteFoodFactoidOrigin)
 ] {
     - "Did you know that"
-    - @val(State.User__FavoriteFood | talkable
+    - @val(State.User__FavoriteFood
     - @inflect(
         inflect_token="was", 
-        inflect_entity=State.User__FavoriteFood | talkable | lower
+        inflect_entity=State.User__FavoriteFood | lower
       )
     - "first made in"
     - @val(State.User__FavoriteFoodFactoidOrigin)
@@ -23,7 +23,7 @@ Prompt origin_year_factoid_prompt [
     - @val(State.User__FavoriteFoodFactoidYear)
     - "?"
     - "I can't believe people have been eating"
-    - @val(State.User__FavoriteFood | talkable)
+    - @val(State.User__FavoriteFood)
     - "for so long!"
 }
 

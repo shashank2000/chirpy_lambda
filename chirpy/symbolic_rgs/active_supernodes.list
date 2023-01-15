@@ -7,10 +7,8 @@ PETS__hypothetical
 PETS__age
 PETS__breed
 PETS__activity
-
 MOVIE__intro
 MOVIE__aspect
-
 PERSONALISSUES__intro
 PERSONALISSUES__subsequent_turn
 FOOD__factoid

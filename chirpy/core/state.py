@@ -10,6 +10,7 @@ from chirpy.core.response_generator_datatypes import ResponseGeneratorResult
 from chirpy.core.experiment import Experiments
 from chirpy.core.flags import SIZE_THRESHOLD
 from chirpy.core.util import print_dict_linebyline, get_ngrams
+from chirpy.symbolic_rgs import state_initialization
 import jsonpickle
 import random
 import logging
@@ -65,10 +66,19 @@ class BaseSymbolicState:
         self.check(key)
         self.data[key] = new_value
         
+    def __contains__(self, key, new_value):
+        return key in ALL_STATE_KEYS
+        
     def update(self, data):
         for key in data:
             self.check(key)
         self.data.update(data)
+
+    def to_serializable(self):
+        result = {}
+        for k, v in self.data.items():
+            result[k] = str(v)
+        return result
         
 # @dataclass
 # class BaseSymbolicConditionalState:

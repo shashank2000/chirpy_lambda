@@ -1,20 +1,20 @@
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from typing import List, Any, Optional, Tuple
 from concurrent import futures
-import random 
-
-
+from dataclasses import dataclass
 import inflect
+import random
+from typing import List, Any, Optional, Tuple
+
 engine = inflect.engine()
 
-from chirpy.core.entity_linker.entity_linker_classes import WikiEntity
+from chirpy.annotators.blenderbot import BlenderBot
 from chirpy.core.camel.variable import Variable
 from chirpy.core.camel.pipes import get_pipe
+from chirpy.core.entity_linker.entity_linker_classes import WikiEntity
 from chirpy.core.util import infl 
-from chirpy.annotators.blenderbot import BlenderBot
 from chirpy.core.response_generator.neural_helpers import get_neural_fallback_handoff, neural_response_filtering
 from chirpy.core.response_generator.neural_helpers import is_two_part, NEURAL_DECODE_CONFIG, get_random_fallback_neural_response
+from chirpy.databases.databases import lookup
 
 import os
 
@@ -128,11 +128,24 @@ class NeuralGeneration(NLGNode):
         return get_neural_response(context, prefix=self.prefix.generate(context))
 
 @dataclass
+class Key(NLGNode):
+    name : NLGNode
+    default_value : Optional[NLGNode]
+    def generate(self, context):
+        return self.name.generate(context)
+
+@dataclass
 class Val(NLGNode):
     variable : Variable
+    keys : List[Key]
     operations : List[Tuple[str, str]]
     def generate(self, context):
         value = self.variable.generate(context)
+        for key in self.keys:
+            if key.default_value:
+                value = value.get(key.generate(context), key.default_value.generate(context))
+            else:
+                value = value[key.generate(context)]
         for operator, operation in self.operations:
             if operator == '|':
                 value = get_pipe(operation)(value)
@@ -189,15 +202,28 @@ class String(NLGNode):
     def __repr__(self):
         return '"' + self.string + '"'
         
+SENTENCE_END_PUNCTUATION = ['.', '?', '!']
 PUNCTUATION = ['.', ',', '?', '!', ':', ';']
         
+
+
 
 def spacingaware_join(x):
     result = ""
     for idx, item in enumerate(x):
-        assert isinstance(item, str), f"Item {item} (from {x}) is not a string"
+        if not isinstance(item, str):
+            if isinstance(item, WikiEntity):
+                item = item.talkable
+            elif isinstance(item, [int, float]):
+                item = item.talkable
+            else:
+                raise TypeError(f"Item {item} (from {x}) is type {type(item)} and can't be converted to String")
+            assert isinstance(item, str), f"Conversion function failed for value {item} of type {type}!"
+            
         if idx != 0 and not any(item.startswith(punct) for punct in PUNCTUATION):
             result += " "
+        if idx != 0 and len(item) and x[idx-1] in SENTENCE_END_PUNCTUATION:
+            item = item.capitalize()
         result += item
     return result
 
@@ -206,3 +232,16 @@ class NLGList(NLGNode):
     items : List[NLGNode]
     def generate(self, context):
         return spacingaware_join([x.generate(context) for x in self.items])
+
+@dataclass
+class DatabaseLookup(NLGNode):
+    database_name : NLGNode
+    key : NLGNode
+    column : NLGNode
+
+    def generate(self, context):
+        result = lookup(
+            self.database_name.generate(context),
+            self.key.generate(context)
+        )
+        return result[self.column.generate(context)]

@@ -24,11 +24,13 @@ NO_ANSWER_THRESHOLD = 0.70 # TODO: set good threshold
 YES = {"yes", "ok", "sure", "yeah", "of course", "by all means", "sure", "agree", "definitely", "correct"
         "certainly", "absolutely", "indeed", "right", "affirmative", "in the affirmative", "agreed", "roger",
         "aye aye", "yeah", "yep", "yup", "ya", "uh-huh", "okay", "OK", "okey-dokey", "okey-doke", "yea", "aye",
-        "course", "true", "that would be great", "that would be good", "sound good", "sounds good", "sound great", "sounds great"}
+        "course", "true", "that would be great", "that would be good", "sound good", "sounds good", "sound great",
+        "sounds great", "love", "like", "don't hate", "fine"}
 NEGATE_YES = {"of course not", "absolutely not", "certainly not", "definitely not", "not correct", "not true", "i'm okay",
-              "i'm good", "no okay", "that's okay", "it's okay"}
+              "i'm good", "no okay", "that's okay", "it's okay", "don't love", "don't like"}
 NO = {"no", "nope", "nah", "not really", "incorrect", "under no circumstances","by no means", "not at all",
-        "negative", "never", "not on your life", "no way", "no way Jose", "nay", "don't think so", "disagree", "rather not"}
+      "negative", "never", "not on your life", "no way", "no way Jose", "nay", "don't think so", "disagree",
+      "rather not", "hate", "dislike"} 
 
 class DialogActAnnotator(Annotator):
     name='dialogact'
