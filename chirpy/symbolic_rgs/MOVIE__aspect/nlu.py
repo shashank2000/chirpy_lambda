@@ -7,10 +7,14 @@ logger = logging.getLogger('chirpylogger')
 
 @nlu_processing
 def get_flags(context):
-    pos_val = context.flags['GlobalFlag__YES']
-    ADD_NLU_FLAG('MOVIE__user_likes_movie', pos_val)
+    dialog_act = context.state_manager.current_state.dialogact
+    if dialog_act['top_1'] == 'opinion':
+        ADD_NLU_FLAG('MOVIE__user_mentioned_reason', True)
+    ADD_NLU_FLAG('MOVIE__last_utterance', context.utterance)
 
 
 @nlu_processing
 def get_background_flags(context):
     return
+
+

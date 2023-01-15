@@ -27,10 +27,6 @@ Locals.statement_okay = {
   )
 }
 
-Locals.placeholder = {
-  - "placeholder"
-}
-
 
 <SET_STATE>
 State.User__LikeMovie = @helper.set_whether_user_likes_movie(@val(Flags.MOVIE__user_likes_movie))

@@ -5,7 +5,7 @@ const Supernode = (props) => {
 		<a className="node-container" onClick={props.onClickHandler}>
 			<div className={`node ${(props.supernodeName == props.selectedSupernode) ? "open" : ""}`} key={props.supernodeName}>
 				<span className={`node-name ${props.supernodeData.available ? "available" : "unavailable"}`}>
-					{props.supernodeName}
+					{props.supernodeName} ({props.supernodeData.score})
 				</span>
 				{props.supernodeData.available && 
 					<span className="node-label node-available">available</span>
