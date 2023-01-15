@@ -108,8 +108,6 @@ def setup_logger(logger_settings, session_id=None):
         chirpy_logger.setLevel(logging.DEBUG)
 
     # Create the stream handler and attach it to the root logger
-    #print("allow_multiline = ", logger_settings.logtoscreen_allow_multiline )
-    #print("rich formatting = ", logger_settings.allow_rich_formatting)
     if logger_settings.logtoscreen_allow_multiline and logger_settings.allow_rich_formatting:
         root_logger.addHandler(ChirpyHandler(log_time_format="[%H:%M:%S.%f]",
                                              level=logger_settings.logtoscreen_level,
@@ -139,7 +137,7 @@ def setup_logger(logger_settings, session_id=None):
 
     # Add the color PRIMARY_INFO level to chirpy logger
     add_new_level(chirpy_logger, 'PRIMARY_INFO', PRIMARY_INFO_NUM)
-    add_new_level(chirpy_logger, 'BLUEJAY', 2)
+    add_new_level(chirpy_logger, 'BLUEJAY', PRIMARY_INFO_NUM)
 
     return chirpy_logger
 

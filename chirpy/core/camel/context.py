@@ -88,14 +88,6 @@ class Context:
 	def supernodeturns(self):
 		return self.state.turns_history
 
-	def update_with_background_flags(self, supernodes):
-			"""Update context's flags with all background flags from all supernodes."""
-			_flags = {}
-			for supernode in supernodes:
-					bg_flags = supernode.get_background_flags(self)
-					_flags.update(bg_flags)
-			self.flags.update(_flags)
-
 	def set(self, variable, value):
 		namespace = getattr(self, variable.namespace.lower())
 		namespace[variable.name] = value

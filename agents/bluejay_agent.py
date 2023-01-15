@@ -16,8 +16,9 @@ args = parser.parse_args()
 
 try:
     from chirpy.core.logging_utils import setup_logger, update_logger, get_bluejay_logger_settings
-except:
-    print("Error")
+except Exception as e:
+    print("Error", e)
+    raise e
 
 logger = logging.getLogger('chirpylogger')
 root_logger = logging.getLogger()
@@ -30,12 +31,14 @@ try:
     from collections import defaultdict
     
     import datetime
+    import json
     import jsonpickle
     import os
     import uuid
     import time
     from typing import Dict
     import traceback
+    
     
     from chirpy.annotators.corenlp import CorenlpModule
     from chirpy.annotators.navigational_intent.navigational_intent import NavigationalIntentModule
@@ -56,7 +59,8 @@ try:
     from chirpy.core.handler import Handler
     
 except Exception as e:
-    logger.bluejay(f"Error: %s %s", exc_info=True, stack_info=True)
+    logger.bluejay(f"error: {traceback.format_exc()}", exc_info=True)
+    logger.bluejay('<<<END TURN>>>')
     raise e
     #exit()
 import os
@@ -219,6 +223,7 @@ class LocalAgent():
         return last_state
 
     def create_handler(self):
+        logger.warning(f"Annotator timeout is {NLP_PIPELINE_TIMEOUT}")
         return Handler(
             annotator_classes = [
                 QuestionAnnotator,
@@ -232,8 +237,7 @@ class LocalAgent():
             annotator_timeout = NLP_PIPELINE_TIMEOUT
         )
 
-    def process_utterance(self, user_utterance):
-
+    def process_utterance(self, user_utterance, kwargs=None):
         # create handler (pass in RGs + annotators)
         handler = self.create_handler()
 
@@ -261,14 +265,6 @@ class LocalAgent():
         return response, deserialized_current_state
 
 
-def lambda_handler():
-    local_agent = LocalAgent()
-    user_input = ""
-    while user_input != "bye":
-        user_input = input()
-        response, deserialized_current_state = local_agent.process_utterance(user_input)
-        print(response)
-        
 from chirpy.core import flags
 
 
@@ -280,6 +276,8 @@ class RemoteNonPersistentAgent(LocalAgent):
         self.user_id = user_id
         self.new_session = new_session
         self.last_state_creation_time = last_state_creation_time
+
+RESET_KEYWORD = '!!reset'
 
 def lambda_handler(args):
     if args.test_script:
@@ -298,15 +296,20 @@ def lambda_handler(args):
             user_input = input('> ')
         logger.warning(f"received input {user_input}")
         try:
-            response, deserialized_current_state = local_agent.process_utterance(user_input)
+            logger.bluejay('before end turn')
+            if user_input.startswith(RESET_KEYWORD):
+                local_agent = RemoteNonPersistentAgent('a', 'b', False, 0)
+            kwargs = {}
+            if '///' in user_input:
+                user_input, kwargs = user_input.split('///')
+                kwargs = json.loads(kwargs)
+            response, deserialized_current_state = local_agent.process_utterance(user_input, kwargs=kwargs)
             logger.bluejay('<<<END TURN>>>')
             print(response)
         except Exception as e:
-            print("Error")
             logger.bluejay(f"error: {traceback.format_exc()}", exc_info=True)
             logger.bluejay('<<<END TURN>>>')
             exit()
-        #print(response)
 
 
 remote_url_config = {

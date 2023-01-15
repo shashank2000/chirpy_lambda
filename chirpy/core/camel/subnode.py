@@ -63,9 +63,11 @@ def choose_subnodes(subnodes):
 class SubnodeList:
 	groups : List[SubnodeGroup]
 	
-	def select(self, context):
+	def select(self, context, extra_subnodes=None):
 		all_possible_subnodes = []
 		subnodes = [group.select(context, all_possible_subnodes) for group in self.groups]
+		if extra_subnodes:
+			subnodes += [group.select(context, all_possible_subnodes) for group in extra_subnodes.groups]
 		possible_subnodes = [subnode for subnode in subnodes if subnode is not None]
 		
 		logger.primary_info(f"Possible subnodes are: {all_possible_subnodes}")

@@ -28,30 +28,25 @@ def reload_chirpy(code):
 	)
 	
 	process.stdout.readline()
-	#process.stdout.readline()
-
-	# process = pexpect.spawnu(f'python3 agents/bluejay_agent.py -c {code}', cwd='../..')
-	# print('sending line')
-	# process.sendline('\n')
-	# time.sleep(5)
-	# process.expect('')
-	# print(process.before)
-	# print(process.after)
 	
-def execute_chirpy(input_line, reset=False):
-	code = "cat"
+def execute_chirpy(input_line, reset=False, **kwargs):
+	if len(kwargs):
+		input_line += "///" + json.dumps(kwargs)
 	if process is None or str(reset).lower() == 'true':
 		print("Detected chirpy died, restarting...")
-		reload_chirpy(code)
+		reload_chirpy(CODE)
 	else:
-		input = (input_line)
 		process.stdin.write(input_line + '\n')
 		process.stdin.flush()
 	output = process.stdout.readline()
 	# open the logs
+	
 	with open(f'/tmp/logs/output_{CODE}.log', 'r') as f:
 		data = f.read()
-		logs = data.split('<<<END TURN>>>')[-2]
+		if '<<<END TURN>>>' in data:
+			logs = data.split('<<<END TURN>>>')[-2]
+		else:
+			logs = '[BLUEJAY]\nerror: Error: Unable to parse logs.'
 	
 	full_logs = logs.split('\n\n')
 	logs = [log for log in full_logs if 'BLUEJAY' in log[:20]]		
@@ -130,6 +125,7 @@ def augment_result(result):
 def main():
 	input_line = request.args.get('input', 'hi')
 	reset = request.args.get('reset', False)
+	kwargs = json.loads(request.args.get('kwargs', '{}'))
 	output, logs, full_logs, error = execute_chirpy(input_line, reset=reset)
 	result = {
 		"text": output,
