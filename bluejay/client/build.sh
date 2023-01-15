@@ -4,3 +4,5 @@ rm -rf ../bluejay/static/css
 mv build/static/css ../bluejay/static/css
 rm -rf ../bluejay/static/js
 mv build/static/js ../bluejay/static/js
+git add ../bluejay/static/css/
+git add ../bluejay/static/js/

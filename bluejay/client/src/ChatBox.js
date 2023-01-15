@@ -28,12 +28,20 @@ const ChatBox = (props) => {
   	);
 	}
   }
+
   return (
 	<div className="chat-container">
 	  <div className="messages">{out}</div>
 	  <div id="type-bar">
 		<form onSubmit={props.onInput}>
 		  <input type="text" className="input" value={props.message} onChange={e => props.setMessage(e.target.value)} placeholder="hi"/>
+          <select className="subnode-picker" value={props.nextSupernode} onChange={e => {
+              props.setNextSupernode(e.target.value);
+          }}>
+            {props.allSupernodes.map((supernodeName) => {
+                return <option value={supernodeName} key={supernodeName}>{supernodeName}</option>;
+            })}
+          </select>
 		</form>
 	  </div>
    </div> 

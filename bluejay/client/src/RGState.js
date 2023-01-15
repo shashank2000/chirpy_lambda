@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-const RGStatePanel = (props) => {
-	console.log(props.currMessage.rg_state);
-	
+const RGStatePanel = (props) => {	
 	return (
 		<div className="panel">
 			<h3>RG State</h3>
