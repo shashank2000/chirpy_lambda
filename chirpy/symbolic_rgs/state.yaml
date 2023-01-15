@@ -44,6 +44,9 @@ User__PetBreedTalkable: null
 User__PetBreed: null
 User__PetFavoriteActivity: null
 User__PetFavoriteActivityTalkable: null
+User__LikeMovie: null
+User__FavoriteMovie: null
+User__FavoriteMovieReason: null
 
 # Launch
 User__Name : null

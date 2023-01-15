@@ -52,3 +52,6 @@
 - PETS__user_has_rabbit
 - OPINION__last_said
 - OPINION__YES
+- MOVIE__user_likes_movie
+- MOVIE__user_mentioned_reason
+- MOVIE__last_utterance
