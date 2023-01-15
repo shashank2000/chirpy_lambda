@@ -4,5 +4,3 @@ from chirpy.response_generators.movie.expression_lists import YES, NO
 import logging
 import re
 logger = logging.getLogger('chirpylogger')
-
-
