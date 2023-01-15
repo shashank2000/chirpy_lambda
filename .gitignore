@@ -9,7 +9,6 @@ aws_regex_test.log
 rendered/
 *.pyc
 .mypy_cache
-.vscode
 .idea
 .DS_Store
 
