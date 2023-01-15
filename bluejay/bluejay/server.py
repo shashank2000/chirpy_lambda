@@ -28,15 +28,6 @@ def reload_chirpy(code):
 	)
 	
 	process.stdout.readline()
-	#process.stdout.readline()
-
-	# process = pexpect.spawnu(f'python3 agents/bluejay_agent.py -c {code}', cwd='../..')
-	# print('sending line')
-	# process.sendline('\n')
-	# time.sleep(5)
-	# process.expect('')
-	# print(process.before)
-	# print(process.after)
 	
 def execute_chirpy(input_line, reset=False, **kwargs):
 	if len(kwargs):
