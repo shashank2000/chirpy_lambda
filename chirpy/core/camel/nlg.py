@@ -140,7 +140,6 @@ class Val(NLGNode):
                 value += int(operation)
             elif operator == '-':
                 value -= int(operation)
-        logger.warning(f'value: {value}')
         return value
         
 @dataclass

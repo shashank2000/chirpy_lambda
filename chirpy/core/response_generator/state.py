@@ -63,7 +63,6 @@ class BaseSymbolicState:
     def __setitem__(self, key, new_value):
         assert key in ALL_STATE_KEYS, f"Key not found: {key}"
         self.data[key] = new_value
-        logger.warning('ALL_STATE_KEYS: %s' %ALL_STATE_KEYS)
 
     def __contains__(self, key, new_value):
         return key in ALL_STATE_KEYS
@@ -72,7 +71,6 @@ class BaseSymbolicState:
         for key in data:
             assert key in ALL_STATE_KEYS, f"Key not found: {key}"
         self.data.update(data)
-        logger.warning('ALL_STATE_KEYS: %s' %ALL_STATE_KEYS)
         
 @dataclass
 class BaseSymbolicConditionalState:

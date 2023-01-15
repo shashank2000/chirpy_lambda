@@ -34,7 +34,6 @@ class Supernode:
 		return supernode
 		
 	def __post_init__(self):
-		print(f'set_state: {self.set_state}')
 		name = self.name
 		self.nlu = import_module(f'chirpy.symbolic_rgs.{name}.nlu')
 		self.nlg_helpers = import_module(f'chirpy.symbolic_rgs.{name}.nlg_helpers')		
