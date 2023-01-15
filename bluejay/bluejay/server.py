@@ -4,6 +4,7 @@ from subprocess import Popen, PIPE, STDOUT
 import pexpect
 import time
 import json
+import os
 from collections import defaultdict, OrderedDict
 
 app = Flask(__name__)
@@ -89,12 +90,8 @@ def augment_result(result):
             "score": 0,
         }
     )
-    subnodes = defaultdict(
-        lambda: {"entry_conditions": [], "available": False, "chosen": False}
-    )
-    prompts = defaultdict(
-        lambda: {"entry_conditions": [], "available": False, "chosen": False}
-    )
+    subnodes = defaultdict(lambda: {"entry_conditions": [], "available": False, "chosen": False})
+    prompts = defaultdict(lambda: {"entry_conditions": [], "available": False, "chosen": False})
 
     for key, value in logs.items():
         if "predicate_supernode_entry_conditions" in key:
@@ -151,9 +148,7 @@ def augment_result(result):
         rg_state = json.loads(logs["rg_state"])
         rg_state = {k: {"value": v, "falsy": v in FALSY} for k, v in rg_state.items()}
         print(rg_state)
-        result["rg_state"] = OrderedDict(
-            sorted(rg_state.items(), key=lambda kv: kv[1]["falsy"])
-        )
+        result["rg_state"] = OrderedDict(sorted(rg_state.items(), key=lambda kv: kv[1]["falsy"]))
 
     result["stop"] = "stop" in logs
 
@@ -163,6 +158,8 @@ def main():
     input_line = request.args.get("input", "hi")
     reset = request.args.get("reset", False)
     kwargs = json.loads(request.args.get("kwargs", "{}"))
+    if kwargs:
+        input_line += "////" + json.dumps(kwargs)
     output, logs, full_logs, error = execute_chirpy(input_line, reset=reset)
     result = {
         "text": output,
@@ -179,6 +176,17 @@ def main():
 def reset():
     reload_chirpy(code="cat")
     return "Reset."
+
+
+@app.route("/api/supernodes")
+def get_supernodes():
+    BASE_PATH = os.path.dirname(os.path.realpath(__file__))
+    active_supernodes_path = os.path.join(BASE_PATH, "..", "..", "chirpy", "symbolic_rgs", "active_supernodes.list")
+    with open(active_supernodes_path, "r") as f:
+        out = [x.strip() for x in f]
+    out = [x for x in out if not x.startswith("#")]
+    out = [x for x in out if x]
+    return {"supernodes": out}
 
 
 @app.route("/")

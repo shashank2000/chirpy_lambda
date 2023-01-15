@@ -3,7 +3,10 @@
 from enum import IntEnum
 from requests.exceptions import JSONDecodeError
 import requests
-import unittest
+import json
+import os
+
+import pytest
 
 
 class ImportanceLevel(IntEnum):
@@ -22,10 +25,10 @@ class Chirpy:
         self.attributes = {}
         self.reset_hard()
 
-    def run(self, utterance, reset=False):
+    def run(self, utterance, reset=False, **kwargs):
         result = requests.get(
             "http://localhost:8765/api/ping",
-            params={"input": utterance, "reset": reset},
+            params={"input": utterance, "reset": reset, "kwargs": json.dumps(kwargs)},
         )
         self.attributes = result.json()
 
@@ -53,8 +56,8 @@ NAME = "Chris"
 
 
 class BaseIntegrationTest:
-    def startup_bot(self, launch_script=False):
+    def startup_bot(self, launch_script=False, **kwargs):
         CHIRPY.reset_soft()
         if launch_script:
-            CHIRPY.run(NAME)
+            CHIRPY.run(NAME, **kwargs)
         return CHIRPY

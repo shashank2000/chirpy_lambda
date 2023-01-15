@@ -245,6 +245,16 @@ nav img {
   padding: 1em;
 }
 
+form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+select {
+    height: 2em;
+}
 
 input {
   display: block;
@@ -255,7 +265,7 @@ input {
       0 0 8px rgba(0,0,0,0.1); 
   padding: 7px;
   background: rgba(255,255,255,0.5);
-  margin: 0 auto;
+  margin-right: 1em;
   text-transform: lowercase;
   font-size: 1.0em;
   border-radius: 5px;
@@ -323,6 +333,9 @@ p.subnode.global {
   box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   padding: 1em;
+  max-height: 50vh;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .control-panel .button {

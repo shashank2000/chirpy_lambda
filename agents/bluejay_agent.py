@@ -3,6 +3,7 @@ ENDTURN = "<<<END TURN>>>"
 
 import argparse
 import logging
+from logging.handlers import RotatingFileHandler
 import uuid
 
 # This needs to happen as early as possible for logging purposes
@@ -66,7 +67,7 @@ try:
 
 except Exception as e:
     logger.bluejay(f"error: {traceback.format_exc()}", exc_info=True)
-    logger.bluejay(f)
+    logger.bluejay(ENDTURN)
     raise e
     # exit()
 import os
@@ -88,9 +89,7 @@ NLP_PIPELINE_TIMEOUT = 3 if flags.use_timeouts else flags.inf_timeout  # seconds
 LATENCY_EXPERIMENT = False
 LATENCY_BINS = [0, 1, 1.5, 2, 2.5]
 
-DEFAULT_REPROMPT = (
-    "Sorry, I don't think I understood. Could you repeat that please?".strip()
-)
+DEFAULT_REPROMPT = "Sorry, I don't think I understood. Could you repeat that please?".strip()
 
 logger = logging.getLogger("chirpylogger")
 apology_string = (
@@ -130,15 +129,9 @@ class StateTable:
             return None
 
     def persist(self, state: Dict):
-        logger.primary_info(
-            "Using StateTable to persist state! Persisting to table {}".format(
-                self.table_name
-            )
-        )
+        logger.primary_info("Using StateTable to persist state! Persisting to table {}".format(self.table_name))
         logger.primary_info("session_id: {}".format(state["session_id"]))
-        logger.primary_info(
-            "creation_date_time: {}".format(state["creation_date_time"])
-        )
+        logger.primary_info("creation_date_time: {}".format(state["creation_date_time"]))
 
         try:
             assert "session_id" in state
@@ -159,9 +152,7 @@ class UserTable:
         self.table_name = "UserTable"
 
     def fetch(self, user_id):
-        logger.debug(
-            f"user_table fetching last state for user {user_id} from table {self.table_name}"
-        )
+        logger.debug(f"user_table fetching last state for user {user_id} from table {self.table_name}")
         if user_id is None:
             return None
         try:
@@ -171,15 +162,12 @@ class UserTable:
             while item is None and time.time() < start_time + timeout:
                 item = user_store[user_id]
             if item is None:
-                logger.error(
-                    f"Timed out when fetching user attributes\nfor user_id {user_id} from table {self.table_name}."
-                )
+                logger.error(f"Timed out when fetching user attributes\nfor user_id {user_id} from table {self.table_name}.")
             else:
                 return item
         except:
             logger.error(
-                "Exception when fetching user attributes from table: "
-                + self.table_name,
+                "Exception when fetching user attributes from table: " + self.table_name,
                 exc_info=True,
             )
             return None
@@ -226,9 +214,7 @@ class LocalAgent:
 
     def get_state_attributes(self, user_utterance):
         state_attributes = {}
-        state_attributes["creation_date_time"] = str(
-            datetime.datetime.utcnow().isoformat()
-        )
+        state_attributes["creation_date_time"] = str(datetime.datetime.utcnow().isoformat())
         pipeline = os.environ.get("PIPELINE")
         state_attributes["pipeline"] = pipeline if pipeline is not None else ""
         commit_id = os.environ.get("COMMITID")
@@ -236,9 +222,7 @@ class LocalAgent:
         state_attributes["session_id"] = self.session_id
         state_attributes["user_id"] = self.user_id
         state_attributes["text"] = user_utterance
-        state_attributes = {
-            k: jsonpickle.encode(v) for k, v in state_attributes.items()
-        }
+        state_attributes = {k: jsonpickle.encode(v) for k, v in state_attributes.items()}
         return state_attributes
 
     def get_user_attributes(self):
@@ -250,9 +234,7 @@ class LocalAgent:
 
     def get_last_state(self):  # figure out new session and session_id
         if not self.new_session:
-            last_state = self.state_table.fetch(
-                self.session_id, self.last_state_creation_time
-            )
+            last_state = self.state_table.fetch(self.session_id, self.last_state_creation_time)
         else:
             last_state = None
         return last_state
@@ -280,7 +262,7 @@ class LocalAgent:
         user_attributes = self.get_user_attributes()
         last_state = self.get_last_state()
 
-        turn_result = handler.execute(current_state, user_attributes, last_state)
+        turn_result = handler.execute(current_state, user_attributes, last_state, kwargs=kwargs)
         response = turn_result.response
         if response == None:
             logger.bluejay("stop: True")
@@ -299,9 +281,7 @@ class LocalAgent:
             self.new_session = False
 
         self.last_state_creation_time = current_state["creation_date_time"]
-        deserialized_current_state = {
-            k: jsonpickle.decode(v) for k, v in turn_result.current_state.items()
-        }
+        deserialized_current_state = {k: jsonpickle.decode(v) for k, v in turn_result.current_state.items()}
 
         return response, deserialized_current_state
 
@@ -341,13 +321,17 @@ def lambda_handler(args):
             logger.bluejay("before end turn")
             if user_input.startswith(RESET_KEYWORD):
                 local_agent = RemoteNonPersistentAgent("a", "b", False, 0)
+                root_logger = logging.getLogger()
+                logger.warning(f"Handlers are {root_logger.handlers}")
+                file_handlers = [h for h in root_logger.handlers if isinstance(h, RotatingFileHandler)]
+                assert len(file_handlers)
+                file_handlers[0].doRollover()
+                logger.bluejay("begin reset...")
             kwargs = {}
             if KWARGS_SEPARATOR in user_input:
                 user_input, kwargs = user_input.split(KWARGS_SEPARATOR)
                 kwargs = json.loads(kwargs)
-            response, deserialized_current_state = local_agent.process_utterance(
-                user_input, kwargs=kwargs
-            )
+            response, deserialized_current_state = local_agent.process_utterance(user_input, kwargs=kwargs)
             logger.bluejay(ENDTURN)
             print(response)
         except Exception as e:

@@ -4,6 +4,7 @@ the more complicated LoggerFactory that came with Cobot.
 """
 
 import logging
+from logging.handlers import RotatingFileHandler
 import sys
 import colorama
 from dataclasses import dataclass
@@ -102,9 +103,7 @@ def setup_logger(logger_settings, session_id=None):
     # See the "integration tests" internal documentation for explanation.
     if logger_settings.integ_test:
         if logger_settings.logtofile_level:
-            assert (
-                logger_settings.logtoscreen_level == logger_settings.logtofile_level
-            ), (
+            assert logger_settings.logtoscreen_level == logger_settings.logtofile_level, (
                 f"For integration testing, "
                 f"logtoscreen_level={logger_settings.logtoscreen_level} must equal logtofile_level={logger_settings.logtofile_level}"
             )
@@ -115,10 +114,7 @@ def setup_logger(logger_settings, session_id=None):
         chirpy_logger.setLevel(logging.DEBUG)
 
     # Create the stream handler and attach it to the root logger
-    if (
-        logger_settings.logtoscreen_allow_multiline
-        and logger_settings.allow_rich_formatting
-    ):
+    if logger_settings.logtoscreen_allow_multiline and logger_settings.allow_rich_formatting:
         root_logger.addHandler(
             ChirpyHandler(
                 log_time_format="[%H:%M:%S.%f]",
@@ -144,11 +140,9 @@ def setup_logger(logger_settings, session_id=None):
 
     # Create the file handler and attach it to the root logger
     if logger_settings.logtofile_path:
-        file_handler = logging.FileHandler(logger_settings.logtofile_path, mode="w")
+        file_handler = RotatingFileHandler(logger_settings.logtofile_path, mode="w")
         file_handler.setLevel(logger_settings.logtofile_level)
-        file_formatter = ChirpyFormatter(
-            allow_multiline=True, use_color=False, session_id=session_id
-        )
+        file_formatter = ChirpyFormatter(allow_multiline=True, use_color=False, session_id=session_id)
         file_handler.setFormatter(file_formatter)
         root_logger.addHandler(file_handler)
 

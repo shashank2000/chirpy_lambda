@@ -12,14 +12,17 @@ from chirpy.core.priority_ranking_strategy import PriorityRankingStrategy
 from chirpy.core.user_attributes import UserAttributes
 from chirpy.core.dialog_manager import DialogManager
 from typing import List, Type, Optional, Dict
-from chirpy.annotators.navigational_intent.navigational_intent import NavigationalIntentOutput
+from chirpy.annotators.navigational_intent.navigational_intent import (
+    NavigationalIntentOutput,
+)
 
-logger = logging.getLogger('chirpylogger')
+logger = logging.getLogger("chirpylogger")
 
 # NOTE: disable immediate stopping via dialogact to increase precision.
 # High-probability "closing" prediction via dialogact will be handled by CLOSING_CONFIRMATION RG.
 CLOSING_HIGH_CONFIDENCE_THRESHOLD = 1
-DEFAULT_MAX_SESSION_HISTORY_COUNT = 50 # TODO: find me a better home
+DEFAULT_MAX_SESSION_HISTORY_COUNT = 50  # TODO: find me a better home
+
 
 @dataclass
 class TurnResult:
@@ -30,34 +33,37 @@ class TurnResult:
 
     @classmethod
     def from_namespaces(cls, current_state: State, user_attributes: UserAttributes):
-        return cls(current_state.response,
-                   current_state.should_end_session,
+        return cls(
+            current_state.response,
+            current_state.should_end_session,
             current_state.serialize(),
-            user_attributes.serialize())
+            user_attributes.serialize(),
+        )
 
-class Handler():
+
+class Handler:
     @measure
-    def __init__(
-        self,
-        annotator_classes: List[Type[Annotator]],
-        annotator_timeout = 3
-    ):
-        """
-        """
+    def __init__(self, annotator_classes: List[Type[Annotator]], annotator_timeout=3):
+        """ """
         self.annotator_classes = annotator_classes
         self.annotator_timeout = annotator_timeout
-
 
     def should_end_conversation(self, text):
         """Determines whether we should immediately end the conversation, rather than running the bot"""
         if StopTemplate().execute(text) is not None:
-            logger.primary_info('Received utterance matching StopTemplate, so ending conversation')
+            logger.primary_info("Received utterance matching StopTemplate, so ending conversation")
             return True
         else:
             return False
 
     @measure
-    def execute(self, current_state:dict, user_attributes:dict, last_state:Optional[dict]=None, test_args=None) -> TurnResult:
+    def execute(
+        self,
+        current_state: dict,
+        user_attributes: dict,
+        last_state: Optional[dict] = None,
+        kwargs=None,
+    ) -> TurnResult:
         current_state = State.deserialize(current_state)
         user_attributes = UserAttributes.deserialize(user_attributes)
         if last_state:
@@ -73,43 +79,47 @@ class Handler():
             ranking_strategy = PriorityRankingStrategy(state_manager)
             dialog_manager = DialogManager(state_manager, ranking_strategy)
 
-            if test_args:
-                state_manager.current_state.test_args = test_args
-
-                if test_args.selected_prompt_rg:
-                    logger.info("Updating the probability distribution of the prompt ranking strategy.")
-                dialog_manager.ranking_strategy.save_test_args(test_args)
-
-                if test_args.experiment_values:
-                    logger.info("Overriding experiment values as given by test_argss")
-                    for experiment, value in test_args.experiment_values.items():
-                        state_manager.current_state.experiments.override_experiment_value(experiment, value)
-
-            logger.info('Running the NLP pipeline...')
+            logger.info("Running the NLP pipeline...")
 
             # run the NLP pipeline. this saves the annotations to state_manager.current_state
             annotation_dag.run_multithreaded_DAG(last_state)
-            logger.info('Finished running the NLP pipeline.')
+            logger.info("Finished running the NLP pipeline.")
 
             # If is_question=True, set navigational intent to none
             # We used to do this inside navigational intent module, but the NLP pipeline dependencies (question -> nav intent -> entity linker) caused problems
-            if hasattr(state_manager.current_state, 'question') and state_manager.current_state.question is not None:
-                is_question = state_manager.current_state.question['is_question']
-                if is_question and not state_manager.current_state.text.startswith('why would'):
-                    logger.primary_info(f"user utterance is marked as is_question, so setting navigational_intent to none")
+            if (
+                hasattr(state_manager.current_state, "question")
+                and state_manager.current_state.question is not None
+            ):
+                is_question = state_manager.current_state.question["is_question"]
+                if is_question and not state_manager.current_state.text.startswith("why would"):
+                    logger.primary_info(
+                        f"user utterance is marked as is_question, so setting navigational_intent to none"
+                    )
                     state_manager.current_state.navigational_intent = NavigationalIntentOutput()
 
             closing_probability = 0
-            if hasattr(state_manager.current_state, 'dialogact') and state_manager.current_state.dialogact is not None:
-                closing_probability = state_manager.current_state.dialogact['probdist']['closing']
+            if (
+                hasattr(state_manager.current_state, "dialogact")
+                and state_manager.current_state.dialogact is not None
+            ):
+                closing_probability = state_manager.current_state.dialogact["probdist"]["closing"]
 
-            if closing_probability > CLOSING_HIGH_CONFIDENCE_THRESHOLD: # If closing detected with high confidence, end conversation immediately
-                logger.primary_info('Stopping the conversation since "dialogact" is "closing" with probability {}'.format(closing_probability))
+            # If closing detected with high confidence, end conversation immediately
+            if closing_probability > CLOSING_HIGH_CONFIDENCE_THRESHOLD:
+                logger.primary_info(
+                    'Stopping the conversation since "dialogact" is "closing" with probability {}'.format(
+                        closing_probability
+                    )
+                )
                 response, should_end_session = None, True
 
             else:
-                response, should_end_session = dialog_manager.execute_turn()  # str, bool
+                logger.warning(f"Kwargs (handler) are {kwargs}")
+                response, should_end_session = dialog_manager.execute_turn(kwargs=kwargs)
 
-        setattr(state_manager.current_state, 'response', response)
-        setattr(state_manager.current_state, 'should_end_session', should_end_session)
-        return TurnResult.from_namespaces(state_manager.current_state, state_manager.user_attributes)
+        setattr(state_manager.current_state, "response", response)
+        setattr(state_manager.current_state, "should_end_session", should_end_session)
+        return TurnResult.from_namespaces(
+            state_manager.current_state, state_manager.user_attributes
+        )

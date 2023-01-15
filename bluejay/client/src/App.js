@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchResult } from './fetch';
+import { fetchResult, fetchSupernodes } from './fetch';
 import ChatBox from './ChatBox';
 import RGStatePanel from './RGState';
 import SubnodePanel from './Subnode';
@@ -32,11 +32,14 @@ const ControlPanel = (props) => {
 const Main = (props) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [nextSupernode, setNextSupernode] = useState("");
   const [activeMessage, setActiveMessage] = useState({});
   const [firstRender, setFirstRender] = useState(true);
   const [handling, setHandling] = useState(false);
   const [unhandledMessages, setUnhandledMessages] = useState([]);
   
+
+  const [allSupernodes, setAllSupernodes] = useState([""]); 
 
   const addMessage = async (msg) => {
     const reset = messages.length == 0;
@@ -50,7 +53,7 @@ const Main = (props) => {
     
     const submitted = msg;
     setMessage("");
-    const data = await fetchResult(submitted, reset);
+    const data = await fetchResult(submitted, reset, { "prioritized_supernode" : nextSupernode });
     if (data) {
       setMessages([...messages, {
           "text": msg,
@@ -97,9 +100,15 @@ const Main = (props) => {
     messages.length = 0;
   };
   
+  const populateSupernodes = async () => {
+       const { supernodes } = await fetchSupernodes();
+       setAllSupernodes(["", ...supernodes]);
+  }
+  
   useEffect(() => {
     if (firstRender) {
-      reset();
+      populateSupernodes();
+      reset();      
       setFirstRender(false);
     }
     
@@ -117,6 +126,9 @@ const Main = (props) => {
       <ChatBox 
         messages={messages} 
         message={message}
+        nextSupernode={nextSupernode}
+        setNextSupernode={setNextSupernode}
+        allSupernodes={allSupernodes}
         setMessage={setMessage}
         onInput={onFormSubmit}
         activateMessage={activateMessage}

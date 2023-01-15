@@ -9,6 +9,12 @@ class TestStartup(BaseIntegrationTest):
 
     @pytest.mark.parametrize("stop_word", ["stop", "stop talking"])
     def test_stop_means_stop(self, stop_word):
+        bot = self.startup_bot(launch_script=True)
+        bot.run(stop_word)
+        assert bot.stop
+
+    @pytest.mark.parametrize("stop_word", ["stop", "stop talking"])
+    def test_stop_on_launch(self, stop_word):
         bot = self.startup_bot()
         bot.run(stop_word)
         assert bot.stop
