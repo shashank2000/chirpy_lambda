@@ -29,12 +29,7 @@ nbdime
 ipython-sql
 
 # needed for unittests
-textblob
-flask_restful
-vaderSentiment
-#rasa_core
-nose
-parameterized
+pytest
 
 # haojun need editdisance for fuzzy search
 editdistance
