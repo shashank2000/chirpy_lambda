@@ -28,30 +28,25 @@ def reload_chirpy(code):
 	)
 	
 	process.stdout.readline()
-	#process.stdout.readline()
-
-	# process = pexpect.spawnu(f'python3 agents/bluejay_agent.py -c {code}', cwd='../..')
-	# print('sending line')
-	# process.sendline('\n')
-	# time.sleep(5)
-	# process.expect('')
-	# print(process.before)
-	# print(process.after)
 	
-def execute_chirpy(input_line, reset=False):
-	code = "cat"
+def execute_chirpy(input_line, reset=False, **kwargs):
+	if len(kwargs):
+		input_line += "///" + json.dumps(kwargs)
 	if process is None or str(reset).lower() == 'true':
 		print("Detected chirpy died, restarting...")
-		reload_chirpy(code)
+		reload_chirpy(CODE)
 	else:
-		input = (input_line)
 		process.stdin.write(input_line + '\n')
 		process.stdin.flush()
 	output = process.stdout.readline()
 	# open the logs
+	
 	with open(f'/tmp/logs/output_{CODE}.log', 'r') as f:
 		data = f.read()
-		logs = data.split('<<<END TURN>>>')[-2]
+		if '<<<END TURN>>>' in data:
+			logs = data.split('<<<END TURN>>>')[-2]
+		else:
+			logs = '[BLUEJAY]\nerror: Error: Unable to parse logs.'
 	
 	full_logs = logs.split('\n\n')
 	logs = [log for log in full_logs if 'BLUEJAY' in log[:20]]		
@@ -64,8 +59,14 @@ def execute_chirpy(input_line, reset=False):
 		tag = tag.strip()
 		value = value.strip()
 		log_outputs[tag] = value
+		
+	if 'error' in log_outputs:
+		output = "Error"
+		error = log_outputs['error']
+	else:
+		error = ""
 	
-	return output, log_outputs, full_logs
+	return output, log_outputs, full_logs, error
 	#return line
 	
 FALSY = ['False', '0', 'None']
@@ -124,11 +125,13 @@ def augment_result(result):
 def main():
 	input_line = request.args.get('input', 'hi')
 	reset = request.args.get('reset', False)
-	output, logs, full_logs = execute_chirpy(input_line, reset=reset)
+	kwargs = json.loads(request.args.get('kwargs', '{}'))
+	output, logs, full_logs, error = execute_chirpy(input_line, reset=reset)
 	result = {
 		"text": output,
 		"logs": logs,
 		"full_logs": full_logs,
+		"error": error,
 	}
 	augment_result(result)
 		
@@ -149,7 +152,7 @@ if __name__ == '__main__':
 	if len(sys.argv) > 2:
 		while True:
 			input_line = input('> ')
-			output, logs, full_logs = execute_chirpy(input_line)
+			output, logs, full_logs, error = execute_chirpy(input_line)
 			result = {
 				"text": output,
 				"logs": logs,
@@ -159,5 +162,6 @@ if __name__ == '__main__':
 			print('output::', output)
 			print('logs::', json.dumps(logs, indent=2))
 			print('result::', json.dumps(result, indent=2))
+			print('error::', error)
 	else:
 		app.run(host='0.0.0.0', port=8765, debug=True)

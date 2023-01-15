@@ -42,7 +42,6 @@ def get_rich_color(text):
 def add_emoji(text, check_text = None):
 	if not check_text:
 		check_text = text
-	#print(check_text, COLOR_SETTINGS.values())
 	for component_name, settings in COLOR_SETTINGS.items():
 		if component_name in check_text and settings.get('emoji'):
 			return settings['emoji'] + ' ' + text
@@ -204,7 +203,6 @@ class ChirpyHandler(RichHandler):
 			message = "[" + color + "]" + message
 			message = message.replace('\n', "[/" + color + "]\n", 1)
 		if self.DICT_OPEN_TAG in message:
-			print("dict open tag")
 			start = message.find(self.DICT_OPEN_TAG)
 			end = message.find(self.DICT_CLOSE_TAG)
 			dict_text = message[start + len(self.DICT_OPEN_TAG):end]
@@ -309,9 +307,7 @@ class ChirpyHandler(RichHandler):
 		"""
 		path_color = get_rich_color(record.pathname)
 		path = Path(record.pathname).name
-		#print("adding emoji")
 		path = add_emoji(path, record.pathname)
-		#print("path is now", path)
 		if record.levelname.lower() in LEVEL_LINE_COLORS:
 			path_color = LEVEL_LINE_COLORS[record.levelname.lower()]
 		level = self.get_level_text(record)

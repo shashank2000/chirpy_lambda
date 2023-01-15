@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from chirpy.core.camel.assignment import AssignmentList
 from chirpy.core.camel.predicate import Predicate
 from chirpy.core.camel.nlg import NLGNode
+from chirpy.core.camel.attribute import AttributeList
 
 import json
 import random
@@ -17,6 +18,7 @@ class Subnode:
 	entry_conditions : Predicate
 	response : NLGNode
 	set_state : AssignmentList
+	attributes : AttributeList
 	
 	def generate(self, context):
 		logger.primary_info(f"Subnode {self.name} is generating.")
@@ -43,20 +45,37 @@ class SubnodeGroup:
 		
 		# return a possible subnode
 		return random.choice(possible_subnodes)
+		
+def choose_subnodes(subnodes):
+	def get_score_of_subnode(subnode):
+		score = 0
+		if subnode.attributes['force_activation']:
+			score += 100
+		return score
+	subnodes = [(subnode, get_score_of_subnode(subnode)) for subnode in subnodes]
+	subnodes = sorted(subnodes, key=lambda x: x[1], reverse=True)
+	logger.primary_info(f"Subnodes with scores: {subnodes}")
+	
+	return subnodes[0][0]
+
 
 @dataclass
 class SubnodeList:
 	groups : List[SubnodeGroup]
 	
-	def select(self, context):
+	def select(self, context, extra_subnodes=None):
 		all_possible_subnodes = []
 		subnodes = [group.select(context, all_possible_subnodes) for group in self.groups]
+		if extra_subnodes:
+			subnodes += [group.select(context, all_possible_subnodes) for group in extra_subnodes.groups]
 		possible_subnodes = [subnode for subnode in subnodes if subnode is not None]
 		
 		logger.primary_info(f"Possible subnodes are: {all_possible_subnodes}")
 		logger.bluejay(f"subnodes: {json.dumps({node.name: {'available': True} for node in all_possible_subnodes})}")
 		assert len(possible_subnodes), "No subnode found!"
-		chosen_subnode = possible_subnodes[0]
+		
+		chosen_subnode = choose_subnodes(possible_subnodes)
+		
 		logger.bluejay(f"subnodes_chosen: {chosen_subnode.name}")
 
 		# return the first possible subnode
