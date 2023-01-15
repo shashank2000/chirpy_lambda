@@ -163,11 +163,11 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
         return { 'parent_section': None, 'sections': filtered_first_level_section_titles, 'repeat': last_discussed_section is not None }
     
     logger.primary_info(f"No more useful sections left for entity: {entity.name}")
-    return { 'parent_section': None, 'sections': [], 'repeat': False } # TODO: Make sure this doesn't create a bug
+    return { 'parent_section': None, 'sections': [], 'repeat': None } # TODO: Make sure this doesn't create a bug
 
 
 @nlg_helper
-def choose_from_sections(sections: List[WikiSection]):
+def choose_from_sections(sections: List[WikiSection]) -> List[WikiSection]:
     """
     Returns two sections that don't contain "and" or a single section that contains an "and".
     Note that we construct this function this way, so as to avoid downstream phrases like:
@@ -177,7 +177,6 @@ def choose_from_sections(sections: List[WikiSection]):
     :return:
     """
     # TODO-later: Make this a multi armed bandit for recommendations
-    # TODO merge sections with the same name
     logger.primary_info(f"Wiki sections being chosen from: {[s.title for s in sections]}")
     chosen_sections = []
     try:
@@ -250,7 +249,6 @@ def get_selected_section(entity: WikiEntity, suggested_sections: List[WikiSectio
                 option = options[0].title
                 break
     else:
-        #Check if any section title directly matches (TODO: remove replicated code in any_section_title_matches)
         for section in sections:
             if any(editdistance.eval(u_token, eu_token) < 2 for u_token in utterance.split(' ')
                     for eu_token in section.title.lower().split(' ')):
@@ -288,9 +286,6 @@ def get_section_summary(section: Optional[WikiSection], state_manager: StateMana
         return None
     # Check if there is high fuzzy overlap between prompted options and user utterance, if so, pick that section
     #Prepared apology response
-    # TODO: Check what this does
-    # apology_state = deepcopy(state)
-    # apology_state.entity_state[entity.name].finished_talking = True
     section_summary = section.summarize(state_manager, max_sents=3)
     section_summary = wiki_utils.check_section_summary(None, section_summary, section)
     return section_summary

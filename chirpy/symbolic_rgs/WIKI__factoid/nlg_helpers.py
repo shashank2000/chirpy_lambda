@@ -165,7 +165,7 @@ def get_infilling_statement(entity: WikiEntity, state_manager: StateManager, fir
 
         input_data = {
             'tuples': tuple((q[0], tuple(q[1])) for q in specific_responses),
-            'sentences': tuple(s.strip().strip('.') for s in sentences), # TODO tuple(s.strip().strip('.') for s in sentences),
+            'sentences': tuple(s.strip().strip('.') for s in sentences),
             'max_length': 40
         }
 

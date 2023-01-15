@@ -139,8 +139,11 @@ Subnode discuss_section [
 
 Subnode default [
 ] {
-	- "I wish I knew more about this." # TODO
-}
+	- @neural_generation(prefix="")
+} <
+	State.WIKI__Entity = @constant(None)
+	Flags.WIKI__discuss_article = @constant(False)
+>
 
 <SET_STATE_AFTER>
 State.WIKI__suggested_sections[@val(State.WIKI__Entity)] = @helper.concat(@val(Locals.suggested_sections), @val(State.WIKI__currently_chosen_sections))
