@@ -213,7 +213,7 @@ def spacingaware_join(x):
     for idx, item in enumerate(x):
         if not isinstance(item, str):
             if isinstance(item, WikiEntity):
-                item = item.name
+                item = item.talkable_name
             elif isinstance(item, [int, float]):
                 item = item.talkable
             else:

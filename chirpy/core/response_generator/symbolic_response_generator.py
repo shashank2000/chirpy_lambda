@@ -151,7 +151,7 @@ class SymbolicResponseGenerator:
             context = Context.get_context(state, self.state_manager, supernode)
             
             cancelled_supernodes = set()
-            
+
             while not supernode.continue_conditions.evaluate(context):
                 cancelled_supernodes.add(supernode.name)
                 logger.primary_info(f"FOOD_Intro can't start, switching to supernode {supernode}")
@@ -160,7 +160,7 @@ class SymbolicResponseGenerator:
 
             context.compute_locals()
             supernode.set_state.evaluate(context)
-            
+
             subnode = supernode.subnodes.select(context)
             response = subnode.generate(context) + " "
             logger.primary_info(f'Received {response} from subnode {subnode}.')
@@ -186,7 +186,7 @@ class SymbolicResponseGenerator:
         prompt.assignments.evaluate(context)
         logger.primary_info(f"Received {prompt_response} from prompt {prompt}.") 
         state.cur_supernode = next_supernode.name
-                
+
         return ResponseGeneratorResult(text=response + prompt_response,
                                        priority=ResponsePriority.STRONG_CONTINUE, 
                                        needs_prompt=False,
