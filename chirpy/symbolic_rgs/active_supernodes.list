@@ -1,22 +1,6 @@
 # comments start with
 
-
 LAUNCH
-CELEB__intro
-CELEB__discuss
-CELEB__unknown
-CELEB__generic
-OPINION__intro
-OPINION__subsequent_turn
-OPINION__third_turn
-PERSONALISSUES__intro
-PERSONALISSUES__subsequent_turn
-FOOD__factoid
-FOOD__intro
-FOOD__factoid_gpt
-WIKI__acknowledge_user_knowledge
-WIKI__check_user_knowledge
 WIKI__factoid
 WIKI__discuss_article
-GLOBAL__openended
-GLOBALS
+# GLOBALS

@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__discuss_article)
+not IS_NONE(State.WIKI__Entity) # and IS_TRUE(Flags.WIKI__discuss_article)
 
 <ENTRY_LOCALS>
 Locals.suggested_sections = @val(State.WIKI__suggested_sections[@val(State.WIKI__Entity), @constant([])])
