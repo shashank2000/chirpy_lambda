@@ -80,7 +80,7 @@ class Context:
             state=state,
             flags=flags,
             utilities=get_utilities(state_manager, supernode),
-            locals=state.entry_locals,
+            locals={},
             utterance=state.utterance,
             state_manager=state_manager,
             kwargs=defaultdict(lambda: False, kwargs) if kwargs is not None else defaultdict(lambda: False),
