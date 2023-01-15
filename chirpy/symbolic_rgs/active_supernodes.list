@@ -1,5 +1,21 @@
 # comments start with
 
+PETS__intro
+PETS__name
+PETS__type
+PETS__hypothetical
+PETS__age
+PETS__breed
+PETS__activity
+PERSONALISSUES__intro
+PERSONALISSUES__subsequent_turn
+FOOD__factoid
+FOOD__factoid_gpt
+FOOD__intro
+FOOD__factoid
+GLOBAL__openended
+GLOBALS
+LAUNCH
 
 LAUNCH
 CELEB__intro

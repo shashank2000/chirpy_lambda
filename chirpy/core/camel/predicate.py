@@ -5,6 +5,7 @@ import json
 
 from chirpy.core.camel.variable import Variable
 from chirpy.core.camel.nlg import NLGNode
+from chirpy.databases.databases import exists
 import logging
 
 logger = logging.getLogger("chirpylogger")
@@ -173,7 +174,7 @@ class ExistsPredicate(Predicate):
     database_name: str
     database_key: NLGNode
 
-    def evaluate(self, context):
+    def evaluate(self, context, label=""):
         print("tok", self.database_name)
         return exists(
             self.database_name.generate(context), self.database_key.generate(context)
