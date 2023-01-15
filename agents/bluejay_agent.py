@@ -1,3 +1,6 @@
+KWARGS_SEPARATOR = "////"
+ENDTURN = "<<<END TURN>>>"
+
 import argparse
 import logging
 import uuid
@@ -63,7 +66,7 @@ try:
 
 except Exception as e:
     logger.bluejay(f"error: {traceback.format_exc()}", exc_info=True)
-    logger.bluejay("<<<END TURN>>>")
+    logger.bluejay(f)
     raise e
     # exit()
 import os
@@ -281,7 +284,7 @@ class LocalAgent:
         response = turn_result.response
         if response == None:
             logger.bluejay("stop: True")
-            logger.bluejay("<<<END TURN>>>")
+            logger.bluejay(ENDTURN)
             exit()
         try:
             # create new state? -> what do we need here?
@@ -339,17 +342,17 @@ def lambda_handler(args):
             if user_input.startswith(RESET_KEYWORD):
                 local_agent = RemoteNonPersistentAgent("a", "b", False, 0)
             kwargs = {}
-            if "///" in user_input:
-                user_input, kwargs = user_input.split("///")
+            if KWARGS_SEPARATOR in user_input:
+                user_input, kwargs = user_input.split(KWARGS_SEPARATOR)
                 kwargs = json.loads(kwargs)
             response, deserialized_current_state = local_agent.process_utterance(
                 user_input, kwargs=kwargs
             )
-            logger.bluejay("<<<END TURN>>>")
+            logger.bluejay(ENDTURN)
             print(response)
         except Exception as e:
             logger.bluejay(f"error: {traceback.format_exc()}", exc_info=True)
-            logger.bluejay("<<<END TURN>>>")
+            logger.bluejay(ENDTURN)
             exit()
 
 
