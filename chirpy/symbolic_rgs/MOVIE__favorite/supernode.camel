@@ -1,14 +1,17 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.User__LikeMovie) and
+IS_TRUE(State.User__LikeMovie) and
 IS_NONE(State.User__FavoriteMovie)
+
 
 <PROMPTS>
 Prompt favorite_movie [ ] {
     "What's your favorite movie?"
 }
 
+
 <CONTINUE_CONDITIONS>
 IS_TRUE(Flags.MOVIE__user_mentioned_movie)
+
 
 <LOCALS>
 Locals.intro_statement = {
@@ -25,8 +28,8 @@ Locals.intro_statement = {
     )
 }
 
-<SET_STATE>
 
+<SET_STATE>
 State.User__FavoriteMovie = @val(Utilities.cur_entity | name)
 State.User__FavoriteMovieTalkable = @val(Utilities.cur_entity | talkable | lower)
 State.User__FavoriteMovieMainActor = @lookup(
@@ -44,6 +47,9 @@ State.User__FavoriteMovieGenre = @lookup(
         key={@val(State.User__FavoriteMovie)},
         column="genre"
 )
+State.Trigger__AspectNode = {
+    @helper.triggerAspect()
+}
 
 
 <SUBNODES>
@@ -73,8 +79,8 @@ Subnode default [
     )
 }
 
-<SET_STATE_AFTER>
-Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
-  @constant(True)
-}
+# <SET_STATE_AFTER>
+# Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+#   @constant(True)
+# }
 

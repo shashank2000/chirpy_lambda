@@ -1,10 +1,12 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.User__LikeMovie) and
-IS_NONE(State.User__PreferredMovieActor)
+IS_TRUE(State.User__LikeMovie) and
+IS_NONE(State.User__PreferredMovieActor) and
+not IS_NONE(State.Trigger__AspectNode) and
+not IS_TRUE(State.Trigger__AspectNode)
 
 <PROMPTS>
 Prompt actor_preferences [ ] {
-    "I'm interested in your preferences for Movies. What actor do you enjoy watching?"
+    "I'm interested in your preferences for movies. Movies by which actor do you enjoy watching?"
 }
 
 <CONTINUE_CONDITIONS>

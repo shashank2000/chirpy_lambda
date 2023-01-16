@@ -1,6 +1,7 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.User__FavoriteMovie)
+IS_TRUE(State.User__FavoriteMovie)
 and IS_NONE(State.User__FavoriteMovieReason)
+and IS_TRUE(State.Trigger__AspectNode)
 
 
 <PROMPTS>
@@ -26,6 +27,9 @@ Locals.placeholder = {
 <SET_STATE>
 State.User__FavoriteMovieReason = {
     @helper.get_user_reasons(@val(Flags.MOVIE__last_utterance))
+}
+State.Trigger__AspectNode = {
+    @helper.untriggerAspect()
 }
 
 
