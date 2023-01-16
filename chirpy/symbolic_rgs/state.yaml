@@ -61,8 +61,8 @@ User__FavoriteSong: null
 #User__FavoriteMusicGenreIsInstrumental: null
 MUSIC__supernode_starts_responding: false
 MUSIC__exit_supernode: false
-MUSIC__exists_music_keyword: false
-MUSIC__bot_triggers_supernode: false
+#MUSIC__exists_music_keyword: false
+#MUSIC__bot_triggers_supernode: false
 MUSIC__intro_was_triggered: false
 MUSIC__fav_instr_was_triggered: false
 MUSIC__fav_singer_was_triggered: false

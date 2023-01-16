@@ -1,7 +1,7 @@
 <ENTRY_CONDITIONS>
 IS_FALSE(State.MUSIC__intro_was_triggered) and
 IS_FALSE(State.MUSIC__exit_supernode) and
-(IS_TRUE(State.MUSIC__exists_music_keyword) or IS_TRUE(State.MUSIC__bot_triggers_supernode))
+# (IS_TRUE(State.MUSIC__exists_music_keyword) or IS_TRUE(State.MUSIC__bot_triggers_supernode))
 
 <PROMPTS>
 Prompt user_did_not_mention_music [
@@ -18,15 +18,15 @@ Prompt user_did_not_mention_music [
     )
 }
 
-Prompt user_mentioned_music [
-    IS_TRUE(State.MUSIC__exists_music_keyword)
-] {
-    - "I love how you mentioned music! I've been listening to a lot of new songs lately, and I'd love to hear what you think."
-    - @one_of(
-        "Do you like music?",
-        "Do you listen to music often?"
-    )
-}
+# Prompt user_mentioned_music [
+#     IS_TRUE(State.MUSIC__exists_music_keyword)
+# ] {
+#     - "I love how you mentioned music! I've been listening to a lot of new songs lately, and I'd love to hear what you think."
+#     - @one_of(
+#         "Do you like music?",
+#         "Do you listen to music often?"
+#     )
+# }
 
 <SUBNODES>
 Subnode listens_frequently [
