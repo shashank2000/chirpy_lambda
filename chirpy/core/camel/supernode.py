@@ -1,6 +1,7 @@
 import json
 import random
 import os
+import traceback
 
 from chirpy.core.camel.parser import parse
 from chirpy.core.camel.predicate import Predicate, TruePredicate, FalsePredicate
@@ -31,9 +32,7 @@ class Supernode:
     set_state: AssignmentList = field(default_factory=AssignmentList)
     set_state_after: AssignmentList = field(default_factory=AssignmentList)
     entity_groups: EntityGroupList = field(default_factory=EntityGroupList)
-    entity_groups_regex: EntityGroupRegexList = field(
-        default_factory=EntityGroupRegexList
-    )
+    entity_groups_regex: EntityGroupRegexList = field(default_factory=EntityGroupRegexList)
 
     @classmethod
     def load(cls, camel_tree, name):
@@ -64,9 +63,33 @@ class Supernode:
         flags = self.nlu.get_flags(context)
         return flags
 
+    def get_subnode_response(self, context, extra_subnodes=None):
+        tried_subnodes = []
+        while True:
+            subnode = self.subnodes.select(
+                context,
+                extra_subnodes=extra_subnodes,
+                not_ok_subnodes=tried_subnodes,
+            )
+            try:
+                response = subnode.generate(context) + " "
+                logger.primary_info(f"Received {response} from subnode {subnode}.")
+                assert response is not None
+                return subnode, response
+            except Exception as e:
+                logger.warning(f"Error in subnode:\n{traceback.format_exc()}")
+                logger.bluejay(f"subnode_error//{subnode.name}: {traceback.format_exc()}", exc_info=True)
+                tried_subnodes.append(subnode)
+                continue
+
     def get_score(self, context):
         if len(self.prompts) == 0:
             return 0
+        logger.warning(f"Kwargs are {context.kwargs}, self.name is {self.name}")
+        if context.kwargs["prioritized_supernode"] == self.name:
+            return int(1e10)
+        if self.name == "LAUNCH":
+            return 100
         return self.entry_conditions.get_score() + 1
 
     def __str__(self):
@@ -86,9 +109,7 @@ class SupernodeList:
 
     @property
     def supernodes(self):
-        logger.warning(
-            f"Paths to supernodes are {type(x) for x in self.paths_to_supernodes.values()}"
-        )
+        logger.warning(f"Paths to supernodes are {type(x) for x in self.paths_to_supernodes.values()}")
         return list(self.paths_to_supernodes.values())
 
     def __getitem__(self, supernode_name):
@@ -98,16 +119,10 @@ class SupernodeList:
         possible_supernodes = [
             (supernode, supernode.get_score(context))
             for supernode in self.supernodes
-            if supernode.entry_conditions.evaluate(
-                context, label=f"supernode_entry_conditions//{supernode.name}"
-            )
+            if supernode.entry_conditions.evaluate(context, label=f"supernode_entry_conditions//{supernode.name}")
         ]
         logger.primary_info(
-            f"Possible supernodes are: "
-            + "; ".join(
-                f"{supernode} (score={score})"
-                for supernode, score in possible_supernodes
-            )
+            f"Possible supernodes are: " + "; ".join(f"{supernode} (score={score})" for supernode, score in possible_supernodes)
         )
         logger.bluejay(
             f"supernodes: {json.dumps({supernode.name : {'score': score} for supernode, score in possible_supernodes})}"
@@ -131,3 +146,4 @@ def __main__():
 
 if __name__ == "__main__":
     __main__()
+()

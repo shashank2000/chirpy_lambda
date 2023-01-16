@@ -16,9 +16,8 @@ PERSONALISSUES__subsequent_turn
 FOOD__factoid
 FOOD__factoid_gpt
 FOOD__intro
-FOOD__factoid
-GLOBAL__openended
 GLOBALS
+GLOBAL__openended
 LAUNCH
 
 LAUNCH
@@ -35,8 +34,10 @@ OPINION__subsequent_turn
 OPINION__third_turn
 PERSONALISSUES__intro
 PERSONALISSUES__subsequent_turn
-FOOD__factoid
-FOOD__intro
-FOOD__factoid_gpt
-GLOBAL__openended
-GLOBALS
+PETS__activity
+PETS__age
+PETS__breed
+PETS__hypothetical
+PETS__intro
+PETS__name
+PETS__type
