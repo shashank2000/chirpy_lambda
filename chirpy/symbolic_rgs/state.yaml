@@ -10,19 +10,43 @@ User__FavoriteFoodTalkable: null
 User__FavoriteFoodTexture: null
 User__FavoriteSport: null
 User__FavoritePlace: null
+User__FavoriteCelebrity: null
+User__FavoriteCelebrityName: null
+User__FavoriteCelebrityWorkType: null
+User__FavoriteCelebrityMovie: null
+User__FavoriteCelebrityTV: null
+User__FavoriteCelebritySong: null
+User__FavoriteCelebrityCharacter: null
+User__FavoriteCelebrityPronoun: null
+User__FavoriteCelebrityCurrWork: null
+CELEB__discuss_visited: False
+CELEB__unknown_visited: False
+CELEB__generic_visited: False
+CELEB__visited: False
+CELEB__discuss_movie: False
+CELEB__discuss_tv: False
+CELEB__discuss_song: False
 PERSONALISSUE__supernode_is_responding: False
 PERSONALISSUE__user_has_personal_issue: False
 PERSONALISSUE__need_confirmation_for_further_discussion: False
 PERSONALISSUE__confirming_further_discussion: False
 PERSONALISSUE__responded_with_question: False
 PERSONALISSUE__LastTurnUsedNeuralGeneration: False
-
-
-# Launch
-User__Name : null
-User__NameGivenUp : False
-LAUNCH__NumTimesAskedName : 0
-
+User__HasPet: null
+User__PetName: null
+User__HypotheticalPetType: null
+User__HypotheticalPetTypeTalkable: null
+User__PetNameGivenUp: null
+User__PetAge: null
+User__PetType: null
+User__PetTypeTalkable: null
+User__PetBreedTalkable: null
+User__PetBreed: null
+User__PetFavoriteActivity: null
+User__PetFavoriteActivityTalkable: null
+User__LikeMovie: null
+User__FavoriteMovie: null
+User__FavoriteMovieReason: null
 User__FavoriteInstrument: null
 User__NoFavoriteInstrument: false
 User__FavoriteInstrumentAdvanced: null
@@ -35,15 +59,27 @@ User__FavoriteSong: null
 #User__FavoriteSongSinger: null
 #User__FavoriteMusicGenre: null
 #User__FavoriteMusicGenreIsInstrumental: null
-
 MUSIC__supernode_starts_responding: false
 MUSIC__exit_supernode: false
-MUSIC__exists_music_keyword: true
+MUSIC__exists_music_keyword: false
 MUSIC__bot_triggers_supernode: false
-
 MUSIC__intro_was_triggered: false
 MUSIC__fav_instr_was_triggered: false
 MUSIC__fav_singer_was_triggered: false
 #MUSIC__fav_song_was_triggered: false
 #MUSIC__fav_genre_was_triggered: false
+
+
+# Launch
+User__Name : null
+User__NameGivenUp : False
+LAUNCH__NumTimesAskedName : 0
+User__CurrentOpinionTopic: _get_opinion
+User__CurrentOpinionFollowUp: False
+User__CurrentOpinionBotResponse: False
+User__OpinionYes: False
+User__OpinionNo: False
+
+
+
 

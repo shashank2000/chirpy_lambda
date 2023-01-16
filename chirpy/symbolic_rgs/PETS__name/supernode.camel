@@ -1,0 +1,28 @@
+<ENTRY_CONDITIONS>
+(IS_TRUE(State.User__HasPet)) and IS_NONE(State.User__PetName)
+
+<PROMPTS>
+Prompt pet_name [ ] {
+    "What's your pet's name?"
+}
+
+<SET_STATE>
+State.User__PetName = @val(Flags.PETS__proposed_name)
+State.User__PetNameGivenUp = @val(Flags.PETS__no_disclose_name)
+
+<SUBNODES>
+Subnode has_name [
+  not IS_NONE(State.User__PetName)
+] {
+  - @val(State.User__PetName)
+  - "is a great name!"
+}
+
+Subnode default [
+] {
+  - "That is a really cool name!"
+} <
+   State.User__PetName = @constant(None)
+>
+
+<SET_STATE_AFTER>

@@ -1,0 +1,26 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(State.CELEB__generic_visited)
+
+<PROMPTS>
+Prompt celeb_when []
+{
+    - "When did you start following"
+    - @val(State.User__FavoriteCelebrityName)
+    - "?"
+}
+
+<SUBNODES>
+Subnode give_celeb_opinion [] {
+    - @one_of(
+        {"I see!"},
+        {"Gotcha!"}
+    )
+    - @lookup(
+        database_name="celeb_opinion",
+        key={@val(State.User__FavoriteCelebrityName)},
+        column="opinion"
+   )
+}
+
+<SET_STATE_AFTER>
+State.CELEB__generic_visited = @constant(True)

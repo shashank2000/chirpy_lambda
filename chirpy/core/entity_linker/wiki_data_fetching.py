@@ -197,14 +197,3 @@ def get_entities_by_wiki_name(wiki_names: List[str]) -> Dict[str, WikiEntity]:
             logger.warning(f"Unable to fetch wiki_name from ES '{ARTICLES_INDEX_NAME}' index \n wiki_name ='{wiki_name}'")
 
     return entname2ent
-
-
-# if __name__ == "__main__":
-#
-#     # Demo:
-#
-#     entities = get_entities_by_anchortext(['France', 'Japan'])
-#     print(entities)
-#
-#     entities = get_entities_by_wiki_name(['france', 'japanese'])
-#     print(entities)
