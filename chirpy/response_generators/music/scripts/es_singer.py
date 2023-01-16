@@ -24,21 +24,51 @@ FIELDS_FILTER = ['doc_title', 'doc_id', 'categories', 'pageview', 'linkable_span
 logger = logging.getLogger('chirpylogger')
 
 
+def gen_list_of_terms():
+    times = ['20th', '21st']
+    nations = ['American', 'British', 'English', 'Indian', 'Japanese', 'French', 'Spanish', 'Italian', 'Australian',
+               'German', 'Mexican', 'Swedish', 'Danish', 'South Korean']
+    professions = ['singers', 'rappers', 'musicians']
+    template = "{tms}-century {nation} {prof}"
+    all_temps = []
+    for t in times:
+        for n in nations:
+            for p in professions:
+                all_temps.append(template.format(tms=t, nation=n, prof=p))
+    for n in nations:
+        for p in professions:
+            all_temps.append(n + " " + p)
+
+    all_temps.extend(['K-pop singers', 'J-pop singers', 'K-pop music groups'])
+    return all_temps
+
 def scrape_es():
     es = get_elasticsearch()
-    all_temps = ['string instrument']
-    all_musical_instruments = []
-    for t in all_temps:
-        query = {'query': {'bool': {"must": [{'terms': {'wikidata_categories_all.keyword': [t]}}]}},
+    # https://en.wikipedia.org/wiki/Category:Singing
+    all_temps_categories = gen_list_of_terms()
+    all_temps_wiki_categories = ['singer', 'vocalist', 'musician', 'musical group']
+    all_singers = set()
+    for t in all_temps_categories:
+        query = {'query': {'bool': {"must": [{'terms': {'categories.keyword': [t]}}]}},
                  'sort': {'pageview': 'desc'}}
         results = query_es_index(es, ARTICLES_INDEX_NAME, query, size=MAX_ES_SEARCH_SIZE,
                                  timeout=ANCHORTEXT_QUERY_TIMEOUT,
                                  filter_path=['hits.hits._source.{}'.format(field) for field in FIELDS_FILTER])
         for s in results:
-            all_musical_instruments.append(s['_source']['doc_title'])
+            all_singers.add(s['_source']['doc_title'])
 
-    return all_musical_instruments
+    for t in all_temps_wiki_categories:
+        query = {'query': {'bool': {"must": [{'terms': {'wikidata_categories_all.keyword': [t]}}]}},
+                'sort': {'pageview': 'desc'}}
+        results = query_es_index(es, ARTICLES_INDEX_NAME, query, size=MAX_ES_SEARCH_SIZE,
+                                 timeout=ANCHORTEXT_QUERY_TIMEOUT,
+                                 filter_path=['hits.hits._source.{}'.format(field) for field in FIELDS_FILTER])
+        for s in results:
+            all_singers.add(s['_source']['doc_title'])
+
+    print(len(all_singers))    # 15146 entities
+    return all_singers
 
 if __name__ == "__main__":
-    all_musical_instruments = scrape_es()
-    pickle.dump(all_musical_instruments, open("scraped_musical_instruments.p", "wb+"))
+    all_singers = scrape_es()
+    pickle.dump(all_singers, open("scraped_singers.p", "wb+"))
