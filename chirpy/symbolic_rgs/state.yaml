@@ -66,6 +66,7 @@ User__FavoriteMovieDirector: null
 User__FavoriteMovieGenre: null
 
 User__PreferredMovieActor: null
+User__PreferredMovieActorCaseSensitive: null
 User__PreferredMovieActorMovie: null
 User__PreferredMovieActorMovieDesc: null
 

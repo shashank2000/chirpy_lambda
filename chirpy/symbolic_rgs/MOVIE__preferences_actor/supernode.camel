@@ -6,7 +6,7 @@ not IS_TRUE(State.Trigger__AspectNode)
 
 <PROMPTS>
 Prompt actor_preferences [ ] {
-    "I'm interested in your preferences for movies. Movies by which actor do you enjoy watching?"
+    "Having said that, I'm also interested in your preferences for movies. Movies by which actor do you enjoy watching?"
 }
 
 <CONTINUE_CONDITIONS>
@@ -19,7 +19,7 @@ Locals.intro_statement = {
         {"Oh yeah"}
     )
     - ,
-    - @val(Utilities.cur_entity | talkable | lower)
+    - @val(Utilities.cur_entity | name)
     - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
     - "an amazing actor."
 }

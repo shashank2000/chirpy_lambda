@@ -78,9 +78,3 @@ Subnode default [
         {"I haven't seen that movie yet! Thanks for telling me about it! I will check it out."}
     )
 }
-
-# <SET_STATE_AFTER>
-# Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
-#   @constant(True)
-# }
-
