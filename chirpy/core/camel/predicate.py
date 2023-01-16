@@ -168,10 +168,21 @@ class NotPredicate(Predicate):
 @dataclass
 class ExistsPredicate(Predicate):
     database_name: str
-    database_key: NLGNode
+    database_key: List[NLGNode]
 
     def evaluate(self, context, label=""):
-        return exists(self.database_name.generate(context), self.database_key.generate(context))
+        database_name = self.database_name.generate(context)
+        keys = [key.generate(context) for key in self.database_key]
+        result = exists(database_name, *keys)
+        if label:
+            log = {
+                "val": result,
+                "variable_name": database_name + ", " + ", ".join(keys),
+                "verb": "EXISTS",
+                "result": result,
+            }
+            logger.bluejay(f"predicate_{label}//{self.database_name}: {json.dumps(log)}")
+        return result
 
     def get_score(self):
         return 1.0

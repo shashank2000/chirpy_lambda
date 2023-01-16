@@ -4,11 +4,22 @@ import os
 import traceback
 
 from chirpy.core.camel.parser import parse
-from chirpy.core.camel.predicate import Predicate, TruePredicate, FalsePredicate
+from chirpy.core.camel.predicate import (
+    Predicate,
+    TruePredicate,
+    FalsePredicate,
+    VariablePredicate,
+    AndPredicate,
+    NotPredicate,
+    OrPredicate,
+    ExistsPredicate,
+)
+from chirpy.core.camel.nlg import NeuralGeneration, Val
 from chirpy.core.camel.prompt import PromptList
 from chirpy.core.camel.subnode import SubnodeList
 from chirpy.core.camel.assignment import AssignmentList
 from chirpy.core.camel.entities import EntityGroupList, EntityGroupRegexList
+from chirpy.core.camel.details import DetailList
 from dataclasses import dataclass, field, fields
 from typing import List, Dict, Any
 
@@ -23,6 +34,7 @@ logger = logging.getLogger("chirpylogger")
 class Supernode:
     name: str
     subnodes: SubnodeList
+    details: DetailList = field(default_factory=DetailList)
     entry_conditions: Predicate = field(default_factory=TruePredicate)
     entry_locals: AssignmentList = field(default_factory=AssignmentList)
     prompts: PromptList = field(default_factory=PromptList)
@@ -56,7 +68,7 @@ class Supernode:
     def load_from_path(cls, path):
         BASE_PATH = os.path.join(os.path.dirname(__file__), "../../symbolic_rgs", path)
         with open(os.path.join(BASE_PATH, "supernode.camel"), "r") as f:
-            camel_tree = parse(f.read())
+            camel_tree = parse(f.read(), BASE_PATH)
         return cls.load(camel_tree, name=path)
 
     def get_flags(self, context):
@@ -82,14 +94,43 @@ class Supernode:
                 tried_subnodes.append(subnode)
                 continue
 
+    def uses_current_topic(self, condition=None):
+        if condition is None:
+            condition = self.entry_conditions
+        if isinstance(condition, VariablePredicate) and condition.variable.name == "CurrentTopic":
+            return True
+        if isinstance(condition, ExistsPredicate) and any(
+            isinstance(node, Val) and node.variable.name == "CurrentTopic" for node in condition.database_key
+        ):
+            return True
+        if isinstance(condition, NotPredicate):
+            return uses_current_topic(condition.predicate)
+        if isinstance(condition, (AndPredicate, OrPredicate)):
+            return uses_current_topic(condition.pred1) or uses_current_topic(condition.pred2)
+        return False
+
     def get_score(self, context):
         if len(self.prompts) == 0:
+            return 0
+        if self.details["can_only_prompt_once_for"] is not None:
+            logger.warning(f"{self.details['can_only_prompt_once_for'].generate(context)}")
+        if (
+            self.details["can_only_prompt_once_for"] is not None
+            and self.details["can_only_prompt_once_for"].generate(context).name
+            in context.state.node_to_already_prompted[self.name]
+        ):
+            logger.warning(
+                f"{self.name} can't prompt again because {self.details['can_only_prompt_once_for']} is in {context.state.node_to_already_prompted[self.name]}."
+            )
             return 0
         logger.warning(f"Kwargs are {context.kwargs}, self.name is {self.name}")
         if context.kwargs["prioritized_supernode"] == self.name:
             return int(1e10)
         if self.name == "LAUNCH":
             return 100
+        if self.uses_current_topic():
+            return 10
+
         return self.entry_conditions.get_score() + 1
 
     def __str__(self):
@@ -131,6 +172,10 @@ class SupernodeList:
         logger.warning(f"Supernodes are {supernodes}, scores={scores}")
         next_supernode = random.choices(supernodes, weights=scores)[0]
         logger.bluejay(f"supernode_chosen: {next_supernode.name}")
+        if not next_supernode.uses_current_topic():
+            logger.warning(f"Next supernode doesn't use current topic! Setting context.state.CurrentTopic = None.")
+            context.state["CurrentTopic"] = None
+            logger.warning(f"Current state: {context}")
         return next_supernode
 
 
@@ -146,4 +191,5 @@ def __main__():
 
 if __name__ == "__main__":
     __main__()
+()
 ()

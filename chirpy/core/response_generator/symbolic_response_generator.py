@@ -134,20 +134,9 @@ class SymbolicResponseGenerator:
     def update_current_entity_store(self, state, context):
         if not context.supernode:
             return
-<<<<<<< HEAD
         state.last_spoken_entities[context.supernode.name] = context.utilities["cur_entity"]
 
     def update_context(self, update_dict, flags, state_update_dict):
-=======
-        state.current_entity_store[context.supernode.name] = context.utilities["cur_entity"]
-                
-    def update_context(
-        self,
-        update_dict, 
-        flags, 
-        state_update_dict
-    ):
->>>>>>> 8675a3e (Renamed state attr to current_entity_store)
         for value_name, value in update_dict.items():
             assert value_name.count(".") == 1, "Must have a namespace and a var name."
             namespace_name, value_name = value_name.split(".")
@@ -163,6 +152,13 @@ class SymbolicResponseGenerator:
 
     def get_launch_supernode(self):
         return self.supernodes["LAUNCH"]
+
+    def update_attributes(self, state, supernode, context):
+        if supernode.details["can_only_prompt_once_for"]:
+            variable = supernode.details["can_only_prompt_once_for"]
+            ent_name = variable.generate(context).name
+            state.node_to_already_prompted[supernode.name].add(ent_name)
+            logger.warning(f"Can no longer prompt for: {state.node_to_already_prompted}")
 
     def get_response(self, state, utterance, kwargs=None) -> ResponseGeneratorResult:
         logger.warning("Begin response for SymbolicResponseGenerator.")
@@ -188,14 +184,14 @@ class SymbolicResponseGenerator:
             subnode, response = supernode.get_subnode_response(context, extra_subnodes=extra_subnodes)
 
             self.update_turns_history(state, supernode)
-            self.update_current_entity_store(state, context)
-            context.utilities['response_text'] = response
+            self.update_attributes(state, supernode, context)
+            context.utilities["response_text"] = response
 
             subnode.set_state.evaluate(context)
 
             supernode.set_state_after.evaluate(context)
-            context.log_state()
             next_supernode = self.get_next_supernode(context)
+            context.log_state()
         else:
             next_supernode = self.get_launch_supernode()
             response = ""

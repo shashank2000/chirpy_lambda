@@ -49,8 +49,8 @@ class BaseSymbolicState:
     turns_history: Dict[str, int] = field(default_factory=dict)
     last_response: ResponseGeneratorResult = field(default_factory=lambda: None)
     last_spoken_entities: DefaultDict[str, Any] = field(default_factory=lambda: defaultdict(lambda: None))
-    # current_entity_store: [SUPERNODE.NAME : value of current_entity when SUPERNODE last ran ]
     current_entity_store: DefaultDict[str, Any] = field(default_factory=lambda: defaultdict(lambda: None))
+    node_to_already_prompted: DefaultDict[str, set] = field(default_factory=lambda: defaultdict(lambda: set()))
 
     def check(self, key):
         assert key in ALL_STATE_KEYS, f"Key not found: {key}"
