@@ -88,6 +88,8 @@ class Supernode:
         logger.warning(f"Kwargs are {context.kwargs}, self.name is {self.name}")
         if context.kwargs["prioritized_supernode"] == self.name:
             return int(1e10)
+        if self.name == "LAUNCH":
+            return 100
         return self.entry_conditions.get_score() + 1
 
     def __str__(self):

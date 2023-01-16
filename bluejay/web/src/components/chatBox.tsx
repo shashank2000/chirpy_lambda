@@ -10,7 +10,7 @@ export interface ChatBoxProps {
   activeMessage?: Message;
   messages: Message[];
   activateMessage: (message: Message) => void;
-  rerolloutToIdx: (idx: number) => void;
+  copyToIdx: (idx: number) => void;
   onInput: React.FormEventHandler<HTMLFormElement>;
   message: string;
   setMessage: (message: string) => void;
@@ -25,6 +25,7 @@ export function ChatBox({
   messages,
   activateMessage,
   rerolloutToIdx,
+  copyToIdx,
   onInput,
   message,
   setMessage,
@@ -78,6 +79,16 @@ export function ChatBox({
               (rerollout to here)
             </Link>
           )}
+          
+          {message.source != 'user' && (
+              <Link
+                className="rerollout"
+                href="/#"
+                onClick={() => copyToIdx(idx)}
+              >
+                (copy to here)
+              </Link>
+            )}
         </div>
       );
     }

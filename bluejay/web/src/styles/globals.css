@@ -315,6 +315,7 @@ nav img {
 .rerollout {
   display: block;
   padding-left: 0.35em;
+  padding-right: 0.35em;
   color: #ccc;
   opacity: 0;
 }

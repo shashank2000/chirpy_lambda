@@ -96,6 +96,16 @@ export default function Home() {
     setUnhandledMessages(userMessages);
     messages.length = 0;
   };
+  
+  const copyToIdx = async (idx: number) => {
+      console.log('Copying to', idx);
+      const userMessages = messages
+        .slice(0, idx + 1)
+        .filter((m) => (m.text && m.text != "undefined"))
+        .map((m) => (m.source == "user" ? "🤗" : "🦜") + " "+ m.text.replace("> ", "") + (m.error ? "\n\n⚠️⚠️⚠️ERROR⚠️⚠️⚠️\n" + m.error : ""))
+        .join("\n");
+      navigator.clipboard.writeText(userMessages);
+    };
 
   const populateSupernodes = async () => {
     const result = await fetchSupernodes();
@@ -151,6 +161,7 @@ export default function Home() {
           activateMessage={activateMessage}
           activeMessage={activeMessage}
           rerolloutToIdx={rerolloutToIdx}
+          copyToIdx={copyToIdx}
           nextSupernode={nextSupernode}
           setNextSupernode={setNextSupernode}
           allSupernodes={allSupernodes}
