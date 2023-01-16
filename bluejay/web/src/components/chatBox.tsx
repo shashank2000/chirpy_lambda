@@ -3,6 +3,9 @@ import React from 'react';
 
 import { Message } from '@/types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 export interface ChatBoxProps {
   activeMessage?: Message;
   messages: Message[];
@@ -37,7 +40,7 @@ export function ChatBox({
       out.push(
         <div className="message-spin" key={idx}>
           <span className="reset-notice"> {message.text} </span>
-          <i className="fa fa-spinner fa-spin"></i>
+          <FontAwesomeIcon icon={faSpinner} className="fa-spin"/>
         </div>
       );
     } else if (message.text) {
@@ -82,7 +85,7 @@ export function ChatBox({
   return (
     <div className="chat-container">
       <div className="messages" ref={messagesRef}>
-        {out}
+        {out} 
       </div>
       <div id="type-bar">
         <form onSubmit={onInput}>
@@ -93,6 +96,7 @@ export function ChatBox({
             onChange={(e) => setMessage(e.target.value)}
             placeholder="hi"
           />
+          
           <select
             className="subnode-picker"
             value={nextSupernode}
