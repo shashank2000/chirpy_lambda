@@ -1,40 +1,88 @@
 # Bluejay Web Client
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [Next.js](https://nextjs.org/) project.
 
 ## Getting Started
 
-First, run the development server:
+### VSCode Extensions
+
+- In VSCode, open the extensions menu in the left sidebar
+- Search and install “ESLint”
+- Search and install “Prettier - Code formatter”
+
+### Project Installation
+
+Go to the `bluejay/web` directory:
 
 ```bash
-npm run dev
-# or
+cd bluejay/web
+```
+
+If you don't have `yarn` installed, install it:
+
+```bash
+npm install -g yarn
+```
+
+Then, install the project's dependencies:
+
+```bash
+yarn install
+```
+
+Finally, run the development server:
+
+```bash
 yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Build and Deploy on Vercel
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Go to the `bluejay/web` directory:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+cd bluejay/web
+```
 
-## Learn More
+Make sure all the dependencies are installed:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+yarn install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Then, go back to the root directory of the `chirpycardinal` repository:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+cd ../..
+```
 
-## Deploy on Vercel
+Install the Vercel CLI:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm install -g vercel
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Login to Vercel:
+
+```bash
+vercel login
+```
+
+Deploy the `bluejay/web` directory:
+
+```bash
+vercel --prod
+```
+
+When prompted, answer the following:
+
+```
+? Set up and deploy “chirpycardinal”? [Y/n] y
+? Which scope do you want to deploy to? stanfordnlp
+? Link to existing project? [y/N] y
+? What’s the name of your existing project? chirpycardinal-22-23
+```
