@@ -10,7 +10,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
-CORS(app)
+CORS(app, origins='https://bluejay.vercel.app')
 
 process = None
 import sys
