@@ -1,3 +1,4 @@
+import os
 import re
 
 import jsonpickle
@@ -53,4 +54,49 @@ def convert_to_alexa_asr(sentence: str):
     return alexa_asr_sentence
 
 if __name__ == '__main__':
+    remote_url_config = {
+        "corenlp": {
+            "url": "http://localhost:4080"
+        },
+        "dialogact": {
+            "url": "http://localhost:4081"
+        },
+        "g2p": {
+            "url": "http://localhost:4082"
+        },
+        # "gpt2ed": {
+        #     "url": "http://localhost:4083"
+        # },
+        "question": {
+            "url": "http://localhost:4084"
+        },
+        "entitylinker": {
+            "url": "http://localhost:4086"
+        },
+        "blenderbot": {
+            "url": "http://localhost:4087"
+        },
+        # "responseranker": {
+        #     "url": "http://localhost:4088"
+        # },
+        "stanfordnlp": {
+            "url": "http://localhost:4089"
+        },
+        # "infiller": {
+        #     "url": "WILL HARDCODE THIS" # TODO (eric): REPLACE THIS WITH SOMETHING MEANINGFUL
+        # } if args.use_colbert else { # chirpy2022 project
+        #     "url": "http://localhost:4090"
+        # }
+    }
+
+    # initializing environment variables for the session based off of remote config urls
+    for callable, config in remote_url_config.items():
+        os.environ[f'{callable}_URL'] = config['url']
+    print(f"{os.environ.get('blenderbot_URL', 'oh no')}")
+
+    os.environ['ES_PORT'] = '443'
+    os.environ['ES_SCHEME'] = 'https'
     app.run(host="127.0.0.1", port=5001)
+
+
+
