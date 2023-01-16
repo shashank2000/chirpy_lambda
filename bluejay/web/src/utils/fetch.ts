@@ -4,7 +4,7 @@ export async function fetchResult(
   kwargs: object = {}
 ) {
   const response = await fetch(
-    '/api/ping?' +
+    'http://localhost:8765/api/ping?' +
       new URLSearchParams({
         input: String(input),
         reset: String(reset),
@@ -20,7 +20,7 @@ export async function fetchResult(
 }
 
 export async function fetchSupernodes() {
-  const response = await fetch('/api/supernodes');
+  const response = await fetch('http://localhost:8765/api/supernodes');
   if (response.status == 500) {
     alert('Server error.');
     return;

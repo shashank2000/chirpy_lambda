@@ -132,6 +132,7 @@ export default function Home() {
     <>
       <Head>
         <title>Bluejay</title>
+        <script src="https://kit.fontawesome.com/fbadad80a0.js" crossOrigin="anonymous"></script>
       </Head>
       <nav>
         <Image src="/bluejay.png" alt="Bluejay" width={35} height={35} />
