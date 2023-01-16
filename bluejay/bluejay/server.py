@@ -6,9 +6,11 @@ import time
 import json
 import os
 from collections import defaultdict, OrderedDict
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
+CORS(app)
 
 process = None
 import sys

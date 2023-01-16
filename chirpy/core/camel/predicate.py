@@ -65,9 +65,7 @@ class AndPredicate(Predicate):
     pred2: Predicate
 
     def evaluate(self, context, label=""):
-        return self.pred1.evaluate(context, label) and self.pred2.evaluate(
-            context, label
-        )
+        return self.pred1.evaluate(context, label) and self.pred2.evaluate(context, label)
 
     def get_score(self):
         return max(self.pred1.get_score(), self.pred2.get_score())
@@ -79,9 +77,7 @@ class OrPredicate(Predicate):
     pred2: Predicate
 
     def evaluate(self, context, label=""):
-        return self.pred1.evaluate(context, label) or self.pred2.evaluate(
-            context, label
-        )
+        return self.pred1.evaluate(context, label) or self.pred2.evaluate(context, label)
 
     def get_score(self):
         return max(self.pred1.get_score(), self.pred2.get_score())
@@ -175,10 +171,7 @@ class ExistsPredicate(Predicate):
     database_key: NLGNode
 
     def evaluate(self, context, label=""):
-        print("tok", self.database_name)
-        return exists(
-            self.database_name.generate(context), self.database_key.generate(context)
-        )
+        return exists(self.database_name.generate(context), self.database_key.generate(context))
 
     def get_score(self):
         return 1.0

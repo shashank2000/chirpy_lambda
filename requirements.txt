@@ -56,3 +56,7 @@ rich
 
 # For CAMEL parsing
 lark
+
+# for bluejay
+flask
+flask-cors

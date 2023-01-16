@@ -1,5 +1,5 @@
 const fetchResult = async (input, reset = false, kwargs = { }) => {
-	let response = await fetch("/api/ping?" + new URLSearchParams({
+	let response = await fetch("http://localhost:8765/api/ping?" + new URLSearchParams({
 	  	input ,
 	  	reset ,
         kwargs : JSON.stringify(kwargs)
@@ -13,7 +13,7 @@ const fetchResult = async (input, reset = false, kwargs = { }) => {
 };
 
 const fetchSupernodes = async () => {
-    let response = await fetch("/api/supernodes");
+    let response = await fetch("http://localhost:8765/api/supernodes");
     if (response.status == 500) {
       alert("Server error.");
       return;
