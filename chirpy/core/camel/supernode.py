@@ -174,6 +174,8 @@ class SupernodeList:
         logger.bluejay(f"supernode_chosen: {next_supernode.name}")
         if not next_supernode.uses_current_topic():
             logger.warning(f"Next supernode doesn't use current topic! Setting context.state.CurrentTopic = None.")
+            # Clear supernode's node_to_already_prompted set upon topic switch
+            context.state.node_to_already_prompted[context.supernode.name].clear()
             context.state["CurrentTopic"] = None
             logger.warning(f"Current state: {context}")
         return next_supernode

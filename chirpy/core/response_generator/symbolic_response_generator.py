@@ -156,7 +156,11 @@ class SymbolicResponseGenerator:
     def update_attributes(self, state, supernode, context):
         if supernode.details["can_only_prompt_once_for"]:
             variable = supernode.details["can_only_prompt_once_for"]
-            ent_name = variable.generate(context).name
+            generated_variable = variable.generate(context)
+            if not generated_variable:
+                # If no topic was found, we cannot record anything
+                return
+            ent_name = generated_variable.name
             state.node_to_already_prompted[supernode.name].add(ent_name)
             logger.warning(f"Can no longer prompt for: {state.node_to_already_prompted}")
 
