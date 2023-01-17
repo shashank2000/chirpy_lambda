@@ -116,6 +116,7 @@ class Supernode:
             logger.warning(f"{self.details['can_only_prompt_once_for'].generate(context)}")
         if (
             self.details["can_only_prompt_once_for"] is not None
+            and self.details["can_only_prompt_once_for"].generate(context) is not None
             and self.details["can_only_prompt_once_for"].generate(context).name
             in context.state.node_to_already_prompted[self.name]
         ):
