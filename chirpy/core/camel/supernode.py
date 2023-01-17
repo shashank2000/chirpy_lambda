@@ -104,9 +104,9 @@ class Supernode:
         ):
             return True
         if isinstance(condition, NotPredicate):
-            return uses_current_topic(condition.predicate)
+            return self.uses_current_topic(condition.predicate)
         if isinstance(condition, (AndPredicate, OrPredicate)):
-            return uses_current_topic(condition.pred1) or uses_current_topic(condition.pred2)
+            return self.uses_current_topic(condition.pred1) or self.uses_current_topic(condition.pred2)
         return False
 
     def get_score(self, context):
