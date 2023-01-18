@@ -1,4 +1,9 @@
-# User
+# Topics
+
+CurrentTopic: null
+
+# Nodes
+
 User__FavoriteFood: null
 User__FavoriteFoodAttribute: null
 User__FavoriteFoodFactoidOrigin: null
@@ -20,10 +25,6 @@ User__FavoriteCelebritySong: null
 User__FavoriteCelebrityCharacter: null
 User__FavoriteCelebrityPronoun: null
 User__FavoriteCelebrityCurrWork: null
-CELEB__discuss_visited: False
-CELEB__unknown_visited: False
-CELEB__generic_visited: False
-CELEB__visited: False
 CELEB__discuss_movie: False
 CELEB__discuss_tv: False
 CELEB__discuss_song: False
@@ -50,9 +51,9 @@ User__FavoriteMovie: null
 User__FavoriteMovieReason: null
 
 # Launch
-User__Name : null
-User__NameGivenUp : False
-LAUNCH__NumTimesAskedName : 0
+User__Name: null
+User__NameGivenUp: False
+LAUNCH__NumTimesAskedName: 0
 User__CurrentOpinionTopic: _get_opinion
 User__CurrentOpinionFollowUp: False
 User__CurrentOpinionBotResponse: False

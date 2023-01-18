@@ -96,6 +96,10 @@ class Context:
     def supernodeturns(self):
         return self.state.turns_history
 
+    @property
+    def currenttopics(self):
+        return self.state.current_entity_store
+
     def set(self, variable, value):
         namespace = getattr(self, variable.namespace.lower())
         namespace[variable.name] = value

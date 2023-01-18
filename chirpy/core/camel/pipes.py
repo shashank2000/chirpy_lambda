@@ -1,24 +1,34 @@
 PIPES = {}
 
+
 def pipe(func):
-	PIPES[func.__name__] = func
-	
+    PIPES[func.__name__] = func
+
+
 def get_pipe(pipe_name):
-	return PIPES[pipe_name]
+    return PIPES[pipe_name]
+
 
 @pipe
-def talkable(ent : "WikiEntity"):
-	return ent.talkable_name
-	
+def talkable(ent: "WikiEntity"):
+    if ent is None:
+        return ""
+    return ent.talkable_name
+
+
 @pipe
-def name(ent : "WikiEntity"):
-	return ent.name
-	
+def name(ent: "WikiEntity"):
+    if ent is None:
+        return ""
+    return ent.name
+
+
 @pipe
-def lower(s : str):
-	return s.lower()	
-	
+def lower(s: str):
+    return s.lower()
+
+
 @pipe
-def increment(i : int):
-	assert isinstance(i, int)
-	return i + 1
+def increment(i: int):
+    assert isinstance(i, int)
+    return i + 1
