@@ -116,9 +116,11 @@ class Supernode:
             logger.warning(f"{self.details['can_only_prompt_once_for'].generate(context)}")
         if (
             self.details["can_only_prompt_once_for"] is not None
-            and self.details["can_only_prompt_once_for"].generate(context) is not None
-            and self.details["can_only_prompt_once_for"].generate(context).name
-            in context.state.node_to_already_prompted[self.name]
+            and ((self.details["can_only_prompt_once_for"].generate(context) is not None
+                  and self.details["can_only_prompt_once_for"].generate(context).name
+                  in context.state.node_to_already_prompted[self.name])
+                 or (self.details["can_only_prompt_once_for"].generate(context) is None
+                     and None in context.state.node_to_already_prompted[self.name]))
         ):
             logger.warning(
                 f"{self.name} can't prompt again because {self.details['can_only_prompt_once_for']} is in {context.state.node_to_already_prompted[self.name]}."
