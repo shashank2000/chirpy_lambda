@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_NONE(State.User__FavoriteCelebrity) and IS_FALSE(Flags.CELEB__move_on_to_new_topic)
 and IS_FALSE(Flags.CELEB__have_asked_about_celeb)
