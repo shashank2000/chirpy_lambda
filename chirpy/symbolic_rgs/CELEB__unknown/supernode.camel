@@ -1,7 +1,6 @@
 <ENTRY_CONDITIONS>
 (IS_NONE(State.User__FavoriteCelebrity) and IS_TRUE(Flags.CELEB__have_asked_about_celeb)) 
 or (IS_FALSE(Flags.CELEB__known_work) and (IS_TRUE(State.CELEB__discuss_movie) or IS_TRUE(State.CELEB__discuss_tv) or IS_TRUE(State.CELEB__discuss_song)))
-and IS_FALSE(Flags.CELEB__have_asked_about_celeb)
 
 <PROMPTS>
 Prompt unknown_celeb [
