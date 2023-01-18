@@ -2,7 +2,9 @@
 Script that generates a JSON file with the GPT-3 generated text. 
 Steps:
 1. Create an input file with the prompts (or prompt "entities") you'd like to run through GPT-3
-2. Run this script ie python generate_gpt_json.py --prompts_file prompts.txt --output_file output.json --prompt_prefix "Give me a fun fact about "
+2. Run this script ie 
+python generate_gpt_json.py --prompts_file prompts.txt --output_file output.json --prompt_prefix "Give me a fun fact about "
+--column_name "fun_fact"
 3. The output file will contain the generated text from GPT-3, one entry for each leaf of the dictionary provided in step 1
 '''
 
@@ -25,7 +27,7 @@ def generate(prompt, prompt_prefix, **kwargs):
     return completion.choices[0]["text"][2:]
 
 
-def generate_json_output(prompts_file, output_file, prompt_prefix=""):
+def generate_json_output(prompts_file, output_file, prompt_prefix="", column_name=""):
     # read prompts from JSON file prompts_file
     with open(prompts_file, "r") as f:
         prompts = json.load(f)
@@ -36,9 +38,11 @@ def generate_json_output(prompts_file, output_file, prompt_prefix=""):
         if isinstance(prompts[key], list):
             # loop through the list
             for key2 in tqdm(prompts[key]):
-                output[key2] = generate(key2, prompt_prefix)
+                val = generate(key2, prompt_prefix)
+                output[key2] = {column_name: val} if column_name else val
         else:
-            output[key] = generate(prompts[key], prompt_prefix)
+            val = generate(prompts[key], prompt_prefix)
+            output[key] = {column_name: val} if column_name else val
     
     # write output to JSON file output_file
     print(output)
@@ -51,5 +55,11 @@ if __name__ == "__main__":
     parser.add_argument("--prompts_file", type=str, required=True)
     parser.add_argument("--output_file", type=str, required=True)
     parser.add_argument("--prompt_prefix", type=str, default="")
+    parser.add_argument("--column_name", type=str, default="")
     args = parser.parse_args()
-    generate_json_output(args.prompts_file, args.output_file, prompt_prefix=args.prompt_prefix)
+    generate_json_output(
+        args.prompts_file, 
+        args.output_file, 
+        prompt_prefix=args.prompt_prefix, 
+        column_name=args.column_name
+    )

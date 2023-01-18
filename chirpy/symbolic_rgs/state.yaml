@@ -33,6 +33,23 @@ PERSONALISSUE__need_confirmation_for_further_discussion: False
 PERSONALISSUE__confirming_further_discussion: False
 PERSONALISSUE__responded_with_question: False
 PERSONALISSUE__LastTurnUsedNeuralGeneration: False
+User__HasPet: null
+User__PetName: null
+User__HypotheticalPetType: null
+User__HypotheticalPetTypeTalkable: null
+User__PetNameGivenUp: null
+User__PetAge: null
+User__PetType: null
+User__PetTypeTalkable: null
+User__PetBreedTalkable: null
+User__PetBreed: null
+User__PetFavoriteActivity: null
+User__PetFavoriteActivityTalkable: null
+User__LikeMovie: null
+User__FavoriteMovie: null
+User__FavoriteMovieReason: null
+
+# Launch
 User__Name : null
 User__NameGivenUp : False
 LAUNCH__NumTimesAskedName : 0
