@@ -1,5 +1,11 @@
 PIPES = {}
 
+class PseudoEntity:
+    def __init__(self, data):
+        self.name = data
+        self.talkable_name = ""
+    def lower(self):
+        return ""
 
 def pipe(func):
     PIPES[func.__name__] = func
@@ -14,6 +20,14 @@ def talkable(ent: "WikiEntity"):
     if ent is None:
         return ""
     return ent.talkable_name
+
+
+@pipe
+def topseudoentity(data):
+    '''Converts data to an object obj where obj.name = data or None if data is None'''
+    if data is None:
+        return None
+    return PseudoEntity(data)
 
 
 @pipe

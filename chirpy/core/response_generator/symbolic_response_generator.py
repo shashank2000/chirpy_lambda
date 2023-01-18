@@ -165,11 +165,8 @@ class SymbolicResponseGenerator:
                 # during this current topic
                 state.node_to_already_prompted[supernode.name].add(None)
                 return
-            if isinstance(generated_variable, WikiEntity):
-                ent_name = generated_variable.name
-                state.node_to_already_prompted[supernode.name].add(ent_name)
-            else:
-                state.node_to_already_prompted[supernode.name].add(generated_variable)
+            ent_name = generated_variable.name
+            state.node_to_already_prompted[supernode.name].add(ent_name)
             logger.warning(f"Can no longer prompt for: {state.node_to_already_prompted}")
 
     def get_response(self, state, utterance, kwargs=None) -> ResponseGeneratorResult:

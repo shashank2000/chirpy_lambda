@@ -38,7 +38,7 @@ User__HasPet: null
 User__PetName: null
 User__HypotheticalPetType: null
 User__HypotheticalPetTypeTalkable: null
-User__PetNameGivenUp: null
+User__PetNameGivenUp: False
 User__PetAge: null
 User__PetType: null
 User__PetTypeTalkable: null

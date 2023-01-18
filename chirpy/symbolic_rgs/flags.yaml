@@ -41,6 +41,8 @@
 - PERSONALISSUE__short_response
 - LAUNCH__NoDiscloseName
 - LAUNCH__ProposedName
+- PETS__move_on_to_new_topic
+- PETS__ask_hypothetical_breed
 - PETS__user_mentioned_pet
 - PETS__user_owns_pet
 - PETS__user_owns_no_pet

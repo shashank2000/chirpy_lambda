@@ -1,8 +1,10 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
-(IS_TRUE(Flags.PETS__user_has_dog) or
-IS_TRUE(Flags.PETS__user_has_cat) or
-IS_TRUE(Flags.PETS__user_has_rabbit)) and 
-(not IS_NONE(State.User__PetType))
+(IS_TRUE(Flags.PETS__user_has_dog)
+ or IS_TRUE(Flags.PETS__user_has_cat)
+ or IS_TRUE(Flags.PETS__user_has_rabbit)) 
+and not IS_NONE(State.User__PetType)
 
 <PROMPTS>
 Prompt pet_type_with_name [ 
@@ -23,6 +25,7 @@ Prompt pet_type_no_name [
 
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__PetBreed = @val(Utilities.cur_entity | name | lower)
 # TODO: "dutch rabbit" goes to "netherlands", so need to think about what next
 State.User__PetBreedTalkable = @val(Utilities.cur_entity | talkable | lower)
@@ -30,8 +33,7 @@ State.User__PetBreedTalkable = @val(Utilities.cur_entity | talkable | lower)
 <SUBNODES>
 
 Subnode valid_type_and_key_exists [
-  (not IS_NONE(State.User__PetBreed)) and 
-    EXISTS(database_name="animal_gpt", key={@val(State.User__PetBreed)})
+  EXISTS(database_name="animal_gpt", key={@val(State.User__PetBreed)})
 ] {
   - @lookup(
         database_name="animal_gpt",
@@ -51,11 +53,7 @@ Subnode valid_type [
 
 Subnode default [
 ] {
-  - "A great choice! I'd love to own a "
-  - @val(State.User__PetBreedTalkable)
-  - " one day."
+  - "A great choice! I'd love to own a similar pet some day."
 } <
-   State.User__HypotheticalPetType = @constant(None)
+   Flags.PETS__ask_hypothetical_breed = @constant(True)
 >
-
-<SET_STATE_AFTER>
