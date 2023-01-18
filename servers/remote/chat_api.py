@@ -11,7 +11,7 @@ app = Flask(__name__)
 from flask_cors import CORS
 CORS(app, origins='*')
 
-@app.route('/conversation', methods=['POST'])
+@app.route('/', methods=['POST'])
 def conversational_turn():
     json_args = request.get_json(force=True)
     #TODO: Error handling?
