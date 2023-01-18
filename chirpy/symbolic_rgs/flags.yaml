@@ -3,7 +3,7 @@
 - GlobalFlag__REQUEST_REPEAT
 - GlobalFlag__YES
 - GlobalFlag__NO
-- GlobalFlag__QUESTION 
+- GlobalFlag__QUESTION
 - GlobalFlag__COMPLAINT
 - GlobalFlag__DONT_KNOW
 - GlobalFlag__DIDNT_KNOW
@@ -28,7 +28,8 @@
 - GlobalFlag__SpecifiedEntity
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
-- CELEB__user_mentioned_celeb
+- CELEB__have_asked_about_celeb
+- CELEB__move_on_to_new_topic
 - CELEB__discuss_tv
 - CELEB__discuss_movie
 - CELEB__discuss_song

@@ -1,5 +1,6 @@
 <ENTRY_CONDITIONS>
-IS_NONE(State.User__FavoriteCelebrity) and (not IS_TRUE(State.CELEB__visited))
+IS_NONE(State.User__FavoriteCelebrity) and IS_FALSE(Flags.CELEB__move_on_to_new_topic)
+and IS_FALSE(Flags.CELEB__have_asked_about_celeb)
 
 <PROMPTS>
 Prompt favorite_celeb []
@@ -24,6 +25,7 @@ Locals.intro_statement = {
 }
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteCelebrity = @val(Utilities.cur_entity)
 State.User__FavoriteCelebrityName = @helper.get_celeb_name(@val(Utilities.cur_entity))
 State.User__FavoriteCelebrityWorkType = @helper.get_celeb_work_type(@val(Utilities.cur_entity))
@@ -95,8 +97,7 @@ Subnode unknown_celeb [
 
 
 <SET_STATE_AFTER>
-State.CELEB__visited = {@constant(True)}
-State.CELEB__unknown_visited = @val(Flags.CELEB__user_mentioned_celeb)
+Flags.CELEB__have_asked_about_celeb = {@constant(True)}
 State.CELEB__discuss_movie = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"movie"})
 State.CELEB__discuss_song = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"song"})
 State.CELEB__discuss_tv = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"TV show"})

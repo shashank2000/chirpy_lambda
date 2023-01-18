@@ -1,7 +1,7 @@
 <ENTRY_CONDITIONS>
-((IS_NONE(State.User__FavoriteCelebrity) and IS_TRUE(State.CELEB__visited)) or
-(not IS_TRUE(Flags.CELEB__known_work) and (IS_TRUE(State.CELEB__discuss_movie) or IS_TRUE(State.CELEB__discuss_tv) or IS_TRUE(State.CELEB__discuss_song))))
-and (not IS_TRUE(State.CELEB__unknown_visited))
+(IS_NONE(State.User__FavoriteCelebrity) and IS_TRUE(Flags.CELEB__have_asked_about_celeb)) 
+or (IS_FALSE(Flags.CELEB__known_work) and (IS_TRUE(State.CELEB__discuss_movie) or IS_TRUE(State.CELEB__discuss_tv) or IS_TRUE(State.CELEB__discuss_song)))
+and IS_FALSE(Flags.CELEB__have_asked_about_celeb)
 
 <PROMPTS>
 Prompt unknown_celeb [
@@ -39,8 +39,7 @@ Subnode make_celeb_work_comment [
 }
 
 <SET_STATE_AFTER>
-State.CELEB__visited = {@constant(True)}
-State.CELEB__unknown_visited = {@constant(True)}
+Flags.CELEB__move_on_to_new_topic = {@constant(True)}
 State.CELEB__discuss_movie = {@constant(False)}
 State.CELEB__discuss_tv = {@constant(False)}
 State.CELEB__discuss_song = {@constant(False)}
