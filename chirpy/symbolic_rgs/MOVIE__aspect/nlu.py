@@ -1,4 +1,3 @@
-from chirpy.response_generators.movie import movie_helpers
 from chirpy.core.response_generator.nlu import nlu_processing
 import logging
 
