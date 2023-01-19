@@ -133,11 +133,6 @@ class SymbolicResponseGenerator:
         assert supernode.name in state.turns_history
         state.turns_history[supernode.name] = self.state_manager.current_state.turn_num
 
-    def update_current_entity_store(self, state, context):
-        if not context.supernode:
-            return
-        state.last_spoken_entities[context.supernode.name] = context.utilities["cur_entity"]
-
     def update_context(self, update_dict, flags, state_update_dict):
         for value_name, value in update_dict.items():
             assert value_name.count(".") == 1, "Must have a namespace and a var name."
@@ -199,6 +194,7 @@ class SymbolicResponseGenerator:
             subnode.set_state.evaluate(context)
 
             supernode.set_state_after.evaluate(context)
+            state.prev_flags = context.flags
             next_supernode = self.get_next_supernode(context)
             context.log_state()
         else:
