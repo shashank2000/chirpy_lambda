@@ -262,10 +262,7 @@ class LinkedSpan(object):
         output += '</table>'
         if len(self.entname2ent) > self.MAX_SHOW:
             output += f'\n+ {len(self.entname2ent)-self.MAX_SHOW} more candidate entities'
-
-        # print('LINKED SPAN HTML:')
-        # print(output)
-
+            
         return output
 
     def __repr__(self):

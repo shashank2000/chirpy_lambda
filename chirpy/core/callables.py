@@ -331,11 +331,15 @@ def run_multithreaded_DAG(module_instances: List[Annotator],
             for module in unexecuted_modules + list(future_to_module.values()):
                 module_name = MODULE_NAMES.get(module.name, module.name)
                 try:
-                    default_response = module.get_default_response()
-                    result[module_name] = default_response
-                    # Add the result to state_manager so that it can be used by subsequent annotators
-                    module.save_to_state(default_response)
-                    logger.primary_info(f"Using default response for {module_name}: {result[module_name]}")
+                    if module_name == 'blenderbot':
+                        future = [f for f in future_to_module if future_to_module[f] == module]
+                        module.save_to_state(future)
+                    else:
+                        default_response = module.get_default_response()
+                        result[module_name] = default_response
+                        # Add the result to state_manager so that it can be used by subsequent annotators
+                        module.save_to_state(default_response)
+                        logger.primary_info(f"Using default response for {module_name}: {result[module_name]}")
                     succeeded_modules.add(module_name)
                 except:
                     logger.error(f"ServiceModule encountered an error when running {module_name}'s "

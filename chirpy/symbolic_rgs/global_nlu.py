@@ -1,4 +1,5 @@
 from chirpy.core.response_generator.nlu import *
+from chirpy.response_generators.personal_issues import personal_issues_helpers
 import logging
 import re
 import string
@@ -54,7 +55,7 @@ WHATS_YOUR_NAME = [r'[\w\s\']*your name[\w\s]*', r'[\w\s\']*you called[\w\s]*']
 WHO_MADE_YOU = [r'[\w\s\']*who are you$', r'[\w\s\']*who are you alexa$', r'[\w\s\']*who you are$', r'[\w\s\']*who you are alexa$', r'[\w\s\']*who built you$', r'[\w\s\']*who made you$', r'[\w\s\']*who are you made by$', r'[\w\s\']*what are you$', r'[\w\s\']*tell me about yourself[\w\s]*', r'[\w\s\']*tell me about you$', r'[\w\s\']*tell me about you alexa$']
 WHERE_ARE_YOU = [r'[\w\s\']*where[\w\s\']*you[\w\s]*live', r'[\w\s\']*where[\w\s\']*you[\w\s\']*from', r'[\w\s\']*where are you( |$)[\w\s\']*']
 
-RED_QUESTION_TYPES = ['financial']
+RED_QUESTION_TYPES = ['financial', 'legal', 'medical']
 RQ_TYPE_TO_TOKENS = {kind : load_redquestion_list(kind) for kind in RED_QUESTION_TYPES}
 
 def preprocess(token : str):
@@ -107,6 +108,10 @@ def get_flags(context):
 	for virtual_assistant in ['siri', 'cortana']:
 		if utterance_contains_word(utterance, virtual_assistant):
 			ADD_NLU_FLAG("GlobalFlag__VirtualAssistantCompetitor")
+	
+	# Personal issue
+	if personal_issues_helpers.is_personal_issue(context.state_manager, context.utterance):
+		ADD_NLU_FLAG('PERSONALISSUE__personal_sharing_negative')
 	
 	# Red question
 	# <=3 word utterances are not asking for advice (bold assumption!)

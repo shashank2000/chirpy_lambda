@@ -1,0 +1,45 @@
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__HasPet) and IS_FALSE(Flags.PETS__move_on_to_new_topic)
+
+<PROMPTS>
+Prompt has_pet [ ] {
+    "Do you have a pet?"
+}
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.PETS__user_mentioned_pet)
+
+
+<SET_STATE>
+# TODO: user may potentially say pet type here, should be able to handle it here - not sure how 
+
+<SUBNODES>
+
+Subnode has_pet [
+   IS_TRUE(Flags.PETS__user_owns_pet)
+] {
+   - "Isn't it awesome to own a pet!"
+} <
+    State.User__HasPet = @constant(True)
+>
+
+Subnode has_no_pet [
+   IS_TRUE(Flags.PETS__user_owns_no_pet)
+] {
+   - "Oh interesting! That makes me think --"
+} <
+    State.User__HasPet = @constant(False)
+>
+
+Subnode move_on_from_pets [
+   IS_TRUE(Flags.PETS__move_on_to_new_topic)
+] {
+   "I did not quite catch that. Maybe we should talk about something else."
+}
+
+Subnode default [
+] {
+  - "Sorry, I didn't quite catch that! I'd love to learn more about your experience with animals, so let's start again."
+}
+
+

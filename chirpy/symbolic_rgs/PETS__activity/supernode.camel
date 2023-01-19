@@ -1,0 +1,55 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_TRUE(State.User__HasPet)
+
+<PROMPTS>
+Prompt pet_activity_with_name [
+  not IS_NONE(State.User__PetName)
+] {
+    - "What's your favorite thing to do with"
+    - @val(State.User__PetName)
+    - "?"
+}
+
+Prompt pet_activity_with_name [
+  not IS_NONE(State.User__PetFavoriteActivity)
+] {
+    - "Is there anything you like to do with your pet?"
+}
+
+
+Prompt pet_activity_no_name [ 
+  IS_NONE(State.User__PetName)
+] {
+    - "What is your favorite thing to do with your pet?"
+}
+
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__PetFavoriteActivity = @val(Utilities.cur_entity)
+# might be something like "go to the beach", which mean talkable would fail
+
+<SUBNODES>
+
+
+Subnode valid_activity [
+  not IS_NONE(State.User__PetFavoriteActivity)
+] {
+  - "That sounds like a great time!"
+  - "I should try to "
+  - @val(State.User__PetFavoriteActivity | name | lower)
+  - " with my pet too!"
+}
+
+Subnode default [
+] {
+  - "That sounds like a great time!"
+} 
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+

@@ -17,30 +17,44 @@ def concat(items_a, items_b):
 
 @nlg_helper
 def append(items, new_item):
-    items.append(new_item)
-    return items
+    return items + [new_item]
 
 
 
 # Prompt Helpers (equivalent to the discuss article treelet)
 
-def is_plural(sections):
-    return len(sections) >= 2
+def is_plural(items: List):
+    return len(items) >= 2
 
 
 @nlg_helper
-def them_it(sections):
-    return "either of them" if is_plural(sections) else "it"
+def them_it(items: List):
+    return "either of them" if is_plural(items) else "it"
 
 
 @nlg_helper
-def is_are(sections):
-    return "are" if is_plural(sections) else "is"
+def is_are(items: List):
+    return "are" if is_plural(items) else "is"
+
+
+@nlg_helper
+def any_of(items: List):
+    return "any of" if is_plural(items) else ""
+
+
+@nlg_helper
+def of_entity(entity: WikiEntity, section_choices: str):
+    return f"of {entity.talkable_name}" if entity.talkable_name not in section_choices else ""
+
+
+@nlg_helper
+def to_entitys(entity: WikiEntity):
+    return f"{entity.talkable_name}'s"
 
 
 @nlg_helper
 def section_string(entity: WikiEntity, parent_section: WikiSection):
-    entitys = f"{entity.talkable_name}'s"
+    entitys = to_entitys(entity)
     return parent_section.title if entity.talkable_name in parent_section.title else f"{entitys} {parent_section.title}"
 
 
@@ -104,24 +118,23 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
             subsections = list(
                 filter(lambda section: section.is_descendant_of(last_discussed_section), valid_sections))
             if subsections:
-                return { 'parent_section': last_discussed_section, 'sections': subsections }
-                # text = self.choose(subsection_prompts(entity.talkable_name, last_discussed_section.title, chosen_section_titles, repeat=repeat or False))
+                return { 'parent_section': last_discussed_section, 'sections': subsections, 'repeat': False }
             logger.info(f"No more unused subsections of level 1 section {last_discussed_section.title}. Not suggesting more subsections")
 
         if last_discussed_section.level() == 2:
-            parent_section = last_discussed_section.ancestor_titles[-1]
+            parent_section_title = last_discussed_section.ancestor_titles[-1]
+            parent_section = list(filter(lambda section: section.title == parent_section_title, sections))[0]
 
             # Get all siblings of the section
             siblings = list(
-                filter(lambda section: section.ancestor_titles and section.ancestor_titles[-1] == parent_section,
+                filter(lambda section: section.ancestor_titles and section.ancestor_titles[-1] == parent_section_title,
                         sections))
 
             # Don't suggest any more siblings if 2 have already been discussed, as a simplifying assumption
             valid_siblings = list(set(siblings) & set(valid_sections))
             if len(set(siblings) & set(discussed_sections)) < 2 and valid_siblings:
-                return { 'parent_section': parent_section, 'sections': valid_siblings }
-                # text = self.choose(subsection_prompts(entity.talkable_name, parent_section, chosen_section_titles, repeat=repeat or True))
-            logger.info(f"One more sibling of {parent_section} has already been discussed. Not suggesting more sibling subsections.")
+                return { 'parent_section': parent_section, 'sections': valid_siblings, 'repeat': True }
+            logger.info(f"One more sibling of {parent_section_title} has already been discussed. Not suggesting more sibling subsections.")
     
     first_level_sections = list(filter(lambda section: section.level() == 1, valid_sections))
 
@@ -131,8 +144,7 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
     if first_level_sections:
         logger.primary_info(
             f"Choosing from {[s.title for s in first_level_sections]} 1st level sections")
-        return { 'parent_section': None, 'sections': first_level_sections }
-        # text = self.choose(section_prompt_text(entity.talkable_name, [s.title for s in chosen_sections], repeat=have_response or repeat or last_discussed_section is not None))
+        return { 'parent_section': None, 'sections': first_level_sections, 'repeat': last_discussed_section is not None }
     logger.info("No more unused 1st level sections left to choose from")
 
     # All valid sections are 2nd level now
@@ -148,15 +160,14 @@ def get_sections(entity: WikiEntity, suggested_sections: List[WikiSection], disc
                                                             reason_for_filtering='either the section overview or their children have been discussed at least three times in the past')
     
     if filtered_first_level_section_titles:
-        return { 'parent_section': None, 'sections': filtered_first_level_section_titles }
-        # text = self.choose(section_prompt_text(entity.talkable_name, chosen_first_level_section_titles, repeat=have_response or repeat or last_discussed_section is not None))
+        return { 'parent_section': None, 'sections': filtered_first_level_section_titles, 'repeat': last_discussed_section is not None }
     
     logger.primary_info(f"No more useful sections left for entity: {entity.name}")
-    return { 'parent_section': None, 'sections': [] } # TODO: Make sure this doesn't create a bug
+    return { 'parent_section': None, 'sections': [], 'repeat': None } # TODO: Make sure this doesn't create a bug
 
 
 @nlg_helper
-def choose_from_sections(sections: List[WikiSection]):
+def choose_from_sections(sections: List[WikiSection]) -> List[WikiSection]:
     """
     Returns two sections that don't contain "and" or a single section that contains an "and".
     Note that we construct this function this way, so as to avoid downstream phrases like:
@@ -166,7 +177,6 @@ def choose_from_sections(sections: List[WikiSection]):
     :return:
     """
     # TODO-later: Make this a multi armed bandit for recommendations
-    # TODO merge sections with the same name
     logger.primary_info(f"Wiki sections being chosen from: {[s.title for s in sections]}")
     chosen_sections = []
     try:
@@ -197,17 +207,17 @@ def choose_from_sections(sections: List[WikiSection]):
 
 
 @nlg_helper
-def entitys_section_choices(entity: WikiEntity, chosen_sections: List[str], parent_section: Optional[WikiSection]):
+def get_section_choices(entity: WikiEntity, chosen_sections: List[str], parent_section: Optional[WikiSection]):
     chosen_sections_titles = [s.title for s in chosen_sections]
-    _, entitys_section_choices = construct_entitys_section_choices(entity.talkable_name, chosen_sections_titles, 'or' if parent_section else 'and')
-    return wiki_utils.clean_wiki_text(entitys_section_choices)
+    section_choices, entitys_section_choices = construct_entitys_section_choices(entity.talkable_name, chosen_sections_titles, 'or' if parent_section else 'and')
+    return { 'section_choices': wiki_utils.clean_wiki_text(section_choices), 'entitys_section_choices': wiki_utils.clean_wiki_text(entitys_section_choices) }
 
 
 
 # Subnode Helpers (equivalent to the discuss section treelet)
 
 @nlg_helper
-def entitys_section(entity: WikiEntity, section: WikiSection):
+def get_entitys_section(entity: WikiEntity, section: WikiSection):
     if entity.name not in section.title:
         return f"{entity.name}'s {section.title}"
     else:
@@ -239,7 +249,6 @@ def get_selected_section(entity: WikiEntity, suggested_sections: List[WikiSectio
                 option = options[0].title
                 break
     else:
-        #Check if any section title directly matches (TODO: remove replicated code in any_section_title_matches)
         for section in sections:
             if any(editdistance.eval(u_token, eu_token) < 2 for u_token in utterance.split(' ')
                     for eu_token in section.title.lower().split(' ')):
@@ -277,9 +286,6 @@ def get_section_summary(section: Optional[WikiSection], state_manager: StateMana
         return None
     # Check if there is high fuzzy overlap between prompted options and user utterance, if so, pick that section
     #Prepared apology response
-    # TODO: Check what this does
-    # apology_state = deepcopy(state)
-    # apology_state.entity_state[entity.name].finished_talking = True
     section_summary = section.summarize(state_manager, max_sents=3)
     section_summary = wiki_utils.check_section_summary(None, section_summary, section)
     return section_summary
