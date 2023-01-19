@@ -166,16 +166,16 @@ class SupernodeList:
             if supernode.entry_conditions.evaluate(context, label=f"supernode_entry_conditions//{supernode.name}")
         ]
         supernode_names = [possible_supernode[0].name for possible_supernode in possible_supernodes]
-        if "LAUNCH" in supernode_names:
-            logger.primary_info(
-                f"LAUNCH is available, so going with that supernode"
-            )
-            return self["LAUNCH"]
         if "PERSONALISSUES__subsequent_turn" in supernode_names:
             logger.primary_info(
                 f"PERSONALISSUES__subsequent_turn is available, so going with that supernode"
             )
             return self["PERSONALISSUES__subsequent_turn"]
+        if "LAUNCH" in supernode_names:
+            logger.primary_info(
+                f"LAUNCH is available, so going with that supernode"
+            )
+            return self["LAUNCH"]
         logger.primary_info(
             f"Possible supernodes are: " + "; ".join(f"{supernode} (score={score})" for supernode, score in possible_supernodes)
         )
