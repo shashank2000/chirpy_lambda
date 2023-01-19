@@ -26,6 +26,7 @@
 - GlobalFlag__RedQuestion__Medical
 - GlobalFlag__AreYouRecording
 - GlobalFlag__SpecifiedEntity
+- GlobalFlag__personal_sharing_negative
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
 - CELEB__have_asked_about_celeb
@@ -34,11 +35,16 @@
 - CELEB__discuss_movie
 - CELEB__discuss_song
 - CELEB__known_work
-- PERSONALISSUE__personal_sharing_negative
 - PERSONALISSUE__gratitude
 - PERSONALISSUE__is_continued_sharing
 - PERSONALISSUE__noncommittal
 - PERSONALISSUE__short_response
+- PERSONALISSUE__respond_to_personal_issue
+- PERSONALISSUE__user_has_personal_issue
+- PERSONALISSUE__need_confirmation_for_further_discussion
+- PERSONALISSUE__confirming_further_discussion
+- PERSONALISSUE__responded_with_question
+- PERSONALISSUE__LastTurnUsedNeuralGeneration
 - LAUNCH__NoDiscloseName
 - LAUNCH__ProposedName
 - PETS__move_on_to_new_topic

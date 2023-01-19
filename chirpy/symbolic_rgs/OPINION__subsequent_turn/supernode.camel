@@ -19,13 +19,15 @@ Prompt thats_interesting [
 Subnode positive_response [
 	IS_TRUE(Prevflags.OPINION__YES)
 ] {
-	@helper.get_opinion_response("positive", @val(State.CurrentTopic | name))
+	- ""
+	- @helper.get_opinion_response("positive", @val(State.CurrentTopic | name))
 }
 
 Subnode negative_response [
 	IS_TRUE(Prevflags.OPINION__NO)
 ] {
-	@helper.get_opinion_response("negative", @val(State.CurrentTopic | name))
+	- ""
+	- @helper.get_opinion_response("negative", @val(State.CurrentTopic | name))
 }
 
 Subnode default [
