@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity) and not IS_TRUE(Flags.WIKI__understand_user_better)
+not IS_NONE(State.WIKI__Entity) and IS_FALSE(Flags.WIKI__understand_user_better) and IS_FALSE(Flags.WIKI__discuss_article)
 
 <PROMPTS>
 Prompt check_user_knowledge [ ] {
@@ -53,15 +53,17 @@ Subnode yes_response [
 		{"Nice!"}
 	)
 } <
-	Flags.WIKI__understand_user_better = @constant(True)
+   Flags.WIKI__understand_user_better = @constant(True)
+   Flags.WIKI__learn_more = @constant(False)
 >
 
 Subnode no_response [
 	IS_TRUE(Flags.GlobalFlag__NO)
 ] {
-	- "That's alright, we can talk about something else."
+	- "That's alright, let me tell you more about it."
 } <
-  State.WIKI__Entity = @constant(None)
+   Flags.WIKI__understand_user_better = @constant(True)
+   Flags.WIKI__learn_more = @constant(True)
 >
 
 Subnode default [
