@@ -5,7 +5,3 @@ from chirpy.core.camel.context import Context
 @nlu_processing
 def get_flags(context: Context):
     wiki_helpers.add_flags(context, ADD_NLU_FLAG)
-
-@nlu_processing
-def get_background_flags(context):
-    return
