@@ -1,5 +1,6 @@
 from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.core.regex.word_lists import YES, NO
+from chirpy.annotators.corenlp import Sentiment
 
 def substr_search(ans):
     # loop through elements of YES,
@@ -22,6 +23,8 @@ def get_flags(context):
     else:
         ADD_NLU_FLAG('PETS__user_mentioned_pet', False)
         return
+    if context.state_manager.current_state.corenlp['sentiment'] in (Sentiment.NEGATIVE, Sentiment.STRONG_NEGATIVE):
+        ADD_NLU_FLAG("PETS__move_on_to_new_topic")
     ADD_NLU_FLAG('PETS__user_mentioned_pet', True)
 
 

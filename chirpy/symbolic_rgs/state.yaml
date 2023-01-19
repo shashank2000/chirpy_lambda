@@ -38,7 +38,7 @@ User__HasPet: null
 User__PetName: null
 User__HypotheticalPetType: null
 User__HypotheticalPetTypeTalkable: null
-User__PetNameGivenUp: null
+User__PetNameGivenUp: False
 User__PetAge: null
 User__PetType: null
 User__PetTypeTalkable: null
@@ -55,8 +55,6 @@ User__Name: null
 User__NameGivenUp: False
 LAUNCH__NumTimesAskedName: 0
 User__CurrentOpinionTopic: _get_opinion
-User__CurrentOpinionFollowUp: False
-User__CurrentOpinionBotResponse: False
 User__OpinionYes: False
 User__OpinionNo: False
 WIKI__Entity: null

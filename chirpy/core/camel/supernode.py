@@ -116,9 +116,11 @@ class Supernode:
             logger.warning(f"{self.details['can_only_prompt_once_for'].generate(context)}")
         if (
             self.details["can_only_prompt_once_for"] is not None
-            and self.details["can_only_prompt_once_for"].generate(context) is not None
-            and self.details["can_only_prompt_once_for"].generate(context).name
-            in context.state.node_to_already_prompted[self.name]
+            and ((self.details["can_only_prompt_once_for"].generate(context) is not None
+                  and self.details["can_only_prompt_once_for"].generate(context).name
+                  in context.state.node_to_already_prompted[self.name])
+                 or (self.details["can_only_prompt_once_for"].generate(context) is None
+                     and None in context.state.node_to_already_prompted[self.name]))
         ):
             logger.warning(
                 f"{self.name} can't prompt again because {self.details['can_only_prompt_once_for']} is in {context.state.node_to_already_prompted[self.name]}."
@@ -163,6 +165,11 @@ class SupernodeList:
             for supernode in self.supernodes
             if supernode.entry_conditions.evaluate(context, label=f"supernode_entry_conditions//{supernode.name}")
         ]
+        if "LAUNCH" in [possible_supernode[0].name for possible_supernode in possible_supernodes]:
+            logger.primary_info(
+                f"LAUNCH is available, so going with that supernode"
+            )
+            return self["LAUNCH"]
         logger.primary_info(
             f"Possible supernodes are: " + "; ".join(f"{supernode} (score={score})" for supernode, score in possible_supernodes)
         )

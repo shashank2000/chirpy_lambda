@@ -46,6 +46,8 @@ from importlib import import_module
 
 from concurrent import futures
 
+from chirpy.core.entity_linker.entity_linker_classes import WikiEntity
+
 logger = logging.getLogger("chirpylogger")
 
 import os
@@ -158,7 +160,10 @@ class SymbolicResponseGenerator:
             variable = supernode.details["can_only_prompt_once_for"]
             generated_variable = variable.generate(context)
             if not generated_variable:
-                # If no topic was found, we cannot record anything
+                # If no topic was found, we record None, so we won't go back
+                # to this supernode if the person responds with another None response
+                # during this current topic
+                state.node_to_already_prompted[supernode.name].add(None)
                 return
             ent_name = generated_variable.name
             state.node_to_already_prompted[supernode.name].add(ent_name)
