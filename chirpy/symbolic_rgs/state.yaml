@@ -55,7 +55,5 @@ User__Name: null
 User__NameGivenUp: False
 LAUNCH__NumTimesAskedName: 0
 User__CurrentOpinionTopic: _get_opinion
-User__CurrentOpinionFollowUp: False
-User__CurrentOpinionBotResponse: False
 User__OpinionYes: False
 User__OpinionNo: False

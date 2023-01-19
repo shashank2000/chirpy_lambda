@@ -1,3 +1,9 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+not IS_NONE(State.User__CurrentOpinionTopic)
+and IS_FALSE(Flags.OPINION__knows_person_likes_activity)
+
 <PROMPTS>
 Prompt do_you_like_prompt [
 ] {
@@ -14,6 +20,9 @@ Prompt do_you_like_prompt [
 	- "?"
 }
 
+<SET_STATE>
+State.CurrentTopic = @val(State.User__CurrentOpinionTopic | topseudoentity)
+
 <SUBNODES>
 Subnode opinion_intro_response [
 ] {
@@ -21,12 +30,6 @@ Subnode opinion_intro_response [
 }
 
 <SET_STATE_AFTER>
-State.User__CurrentOpinionFollowUp = {
-	@constant(True)
-}
-State.User__OpinionYes = {
-	@val(Flags.OPINION__YES)
-}
-State.User__OpinionNo = {
-	@val(Flags.GlobalFlag__NO)
-}
+Flags.OPINION__asked_for_opinion = @constant(True)
+State.User__OpinionYes = @val(Flags.OPINION__YES)
+State.User__OpinionNo = @val(Flags.GlobalFlag__NO)

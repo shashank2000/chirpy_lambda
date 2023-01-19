@@ -1,5 +1,8 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
-IS_TRUE(State.User__CurrentOpinionFollowUp)
+not IS_NONE(State.CurrentTopic)
+and IS_TRUE(Flags.OPINION__asked_for_opinion)
 
 <PROMPTS>
 Prompt thats_interesting [
@@ -16,15 +19,13 @@ Prompt thats_interesting [
 Subnode positive_response [
 	IS_TRUE(State.User__OpinionYes)
 ] {
-	- ""
-	- @helper.get_opinion_response("positive", @val(State.User__CurrentOpinionTopic))
+	@helper.get_opinion_response("positive", @val(State.CurrentTopic | name))
 }
 
 Subnode negative_response [
 	IS_TRUE(State.User__OpinionNo)
 ] {
-	- ""
-	- @helper.get_opinion_response("negative", @val(State.User__CurrentOpinionTopic))
+	@helper.get_opinion_response("negative", @val(State.CurrentTopic | name))
 
 }
 
@@ -34,9 +35,6 @@ Subnode default [
 }
 
 <SET_STATE_AFTER>
-State.User__CurrentOpinionFollowUp = {
-	@constant(False)
-}
-State.User__CurrentOpinionBotResponse = {
-	@constant(True)
-}
+Flags.OPINION__responded_to_opinion =	@constant(True)
+State.User__OpinionYes = @constant(False)
+State.User__OpinionNo = @constant(False)

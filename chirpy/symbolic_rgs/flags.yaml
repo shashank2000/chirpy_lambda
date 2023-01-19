@@ -53,6 +53,9 @@
 - PETS__user_has_dog
 - PETS__user_has_cat
 - PETS__user_has_rabbit
+- OPINION__asked_for_opinion
+- OPINION__responded_to_opinion
+- OPINION__knows_person_likes_activity
 - OPINION__last_said
 - OPINION__YES
 - MOVIE__user_likes_movie
