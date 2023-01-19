@@ -34,7 +34,7 @@ def get_utilities(state_manager, supernode):
 
 def get_global_flags(context):
     # response types
-    global_flags = get_intent_flags(context.state_manager, context.utterance)
+    global_flags = get_intent_flags(context, context.state_manager, context.utterance)
 
     # map from string to None / template
     abrupt_initiative_templates = {
