@@ -12,11 +12,11 @@ GLOBAL__openended
 LAUNCH
 MOVIE__aspect
 MOVIE__intro
-# OPINION__intro
-# OPINION__subsequent_turn
-# OPINION__third_turn
-# PERSONALISSUES__intro
-# PERSONALISSUES__subsequent_turn
+OPINION__intro
+OPINION__subsequent_turn
+OPINION__third_turn
+PERSONALISSUES__intro
+PERSONALISSUES__subsequent_turn
 PETS__activity
 PETS__age
 PETS__breed
