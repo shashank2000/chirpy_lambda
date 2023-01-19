@@ -1,40 +1,40 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity) and not IS_TRUE(Flags.WIKI__understand_user_better) and not IS_TRUE(Flags.WIKI__discuss_article)
+not IS_NONE(State.CurrentTopic) and not IS_TRUE(Flags.WIKI__understand_user_better) and not IS_TRUE(Flags.WIKI__discuss_article)
 
 <PROMPTS>
 Prompt check_user_knowledge [ ] {
 	- @one_of(
 		{
 			- "Do you know a lot about"
-			- @val(State.WIKI__Entity | talkable)
+			- @val(State.CurrentTopic | talkable)
 		}, {
 			- "Do you happen to know a lot about"
-			- @val(State.WIKI__Entity | talkable)
+			- @val(State.CurrentTopic | talkable)
 		}, {
 			- "Are you pretty familiar with"
-			- @val(State.WIKI__Entity | talkable)
+			- @val(State.CurrentTopic | talkable)
 		}, {
 			- "Are you especially knowledgeable about"
-			- @val(State.WIKI__Entity | talkable)
+			- @val(State.CurrentTopic | talkable)
 		},
 		{
-			- @inflect(inflect_token="is", inflect_entity=State.WIKI__Entity)
-			- @val(State.WIKI__Entity | talkable)
-			- @helper.inflect_some_one_thing(@val(State.WIKI__Entity))
+			- @inflect(inflect_token="is", inflect_entity=State.CurrentTopic)
+			- @val(State.CurrentTopic | talkable)
+			- @helper.inflect_some_one_thing(@val(State.CurrentTopic))
 			- "you know a lot about"
 		}
 		, {
 			- "Would you say that"
-			- @val(State.WIKI__Entity | talkable)
-			- @inflect(inflect_token="is", inflect_entity=State.WIKI__Entity)
-			- @inflect(inflect_token="something", inflect_entity=State.WIKI__Entity)
+			- @val(State.CurrentTopic | talkable)
+			- @inflect(inflect_token="is", inflect_entity=State.CurrentTopic)
+			- @inflect(inflect_token="something", inflect_entity=State.CurrentTopic)
 			- "you know a lot about"
 		}, {
 			- "Do you know a great deal about"
-			- @val(State.WIKI__Entity | talkable)
+			- @val(State.CurrentTopic | talkable)
 		}, {
 			- "Would I be correct in guessing that you know a lot about"
-			- @val(State.WIKI__Entity | talkable)
+			- @val(State.CurrentTopic | talkable)
 		}
 	)
 	- "?"
@@ -45,7 +45,7 @@ Prompt check_user_knowledge [ ] {
 <SET_STATE>
 
 <SUBNODES>
-Subnode yes_response [
+Subnode yes_response:force_activation [
 	IS_TRUE(Flags.GlobalFlag__YES)
 ] {
 	- @one_of(
@@ -56,12 +56,12 @@ Subnode yes_response [
 	Flags.WIKI__understand_user_better = @constant(True)
 >
 
-Subnode no_response [
+Subnode no_response:force_activation [
 	IS_TRUE(Flags.GlobalFlag__NO)
 ] {
 	- "That's alright, we can talk about something else."
 } <
-  State.WIKI__Entity = @constant(None)
+  State.CurrentTopic = @constant(None)
 >
 
 Subnode default [

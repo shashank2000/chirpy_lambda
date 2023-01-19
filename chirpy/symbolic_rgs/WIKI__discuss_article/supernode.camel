@@ -1,18 +1,18 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__discuss_article)
+not IS_NONE(State.CurrentTopic) and IS_TRUE(Flags.WIKI__discuss_article)
 
 <ENTRY_LOCALS>
-Locals.suggested_sections = @val(State.WIKI__suggested_sections[@val(State.WIKI__Entity), @constant([])])
-Locals.discussed_sections = @val(State.WIKI__discussed_sections[@val(State.WIKI__Entity), @constant([])])
-Locals.last_discussed_section = @val(State.WIKI__last_discussed_section[@val(State.WIKI__Entity), @constant(None)])
+Locals.suggested_sections = @val(State.WIKI__suggested_sections[@val(State.CurrentTopic), @constant([])])
+Locals.discussed_sections = @val(State.WIKI__discussed_sections[@val(State.CurrentTopic), @constant([])])
+Locals.last_discussed_section = @val(State.WIKI__last_discussed_section[@val(State.CurrentTopic), @constant(None)])
 
-Locals.get_sections_result = @helper.get_sections(@val(State.WIKI__Entity), @val(Locals.suggested_sections), @val(Locals.discussed_sections), @val(Locals.last_discussed_section))
+Locals.get_sections_result = @helper.get_sections(@val(State.CurrentTopic), @val(Locals.suggested_sections), @val(Locals.discussed_sections), @val(Locals.last_discussed_section))
 Locals.parent_section = @val(Locals.get_sections_result["parent_section"])
 Locals.sections = @val(Locals.get_sections_result["sections"])
 Locals.repeat = @val(Locals.get_sections_result["repeat"])
 
 State.WIKI__currently_chosen_sections = @helper.choose_from_sections(@val(Locals.sections))
-Locals.get_section_choices_result = @helper.get_section_choices(@val(State.WIKI__Entity), @val(State.WIKI__currently_chosen_sections), @val(Locals.parent_section))
+Locals.get_section_choices_result = @helper.get_section_choices(@val(State.CurrentTopic), @val(State.WIKI__currently_chosen_sections), @val(Locals.parent_section))
 Locals.section_choices = @val(Locals.get_section_choices_result["section_choices"])
 Locals.entitys_section_choices = @val(Locals.get_section_choices_result["entitys_section_choices"])
 
@@ -42,7 +42,7 @@ Prompt discuss_article_section [
 		}, {
 			- "Personally, I think the"
 			- @val(Locals.section_choices)
-			- @helper.of_entity(@val(State.WIKI__Entity), @val(Locals.section_choices))
+			- @helper.of_entity(@val(State.CurrentTopic), @val(Locals.section_choices))
 			- @helper.is_are(@val(State.WIKI__currently_chosen_sections))
 			- "quite remarkable. Are you interested in talking about"
 			- @helper.any_of(@val(State.WIKI__currently_chosen_sections))
@@ -50,7 +50,7 @@ Prompt discuss_article_section [
 		}, {
 			- "The"
 			- @val(Locals.section_choices)
-			- @helper.of_entity(@val(State.WIKI__Entity), @val(Locals.section_choices))
+			- @helper.of_entity(@val(State.CurrentTopic), @val(Locals.section_choices))
 			- @helper.is_are(@val(State.WIKI__currently_chosen_sections))
 			- "really interesting. Would you like to talk about"
 			- @helper.any_of(@val(State.WIKI__currently_chosen_sections))
@@ -95,19 +95,19 @@ Prompt discuss_article_subsection [
 	- @one_of(
 		{
 			- "Well, since we are on the topic of"
-			- @helper.section_string(@val(State.WIKI__Entity), @val(Locals.parent_section))
+			- @helper.section_string(@val(State.CurrentTopic), @val(Locals.parent_section))
 			- "do you have any interest in talking about"
 			- @val(Locals.entitys_section_choices)
 			- "?"
 		}, {
 			- "Well, since we are talking about"
-			- @helper.section_string(@val(State.WIKI__Entity), @val(Locals.parent_section))
+			- @helper.section_string(@val(State.CurrentTopic), @val(Locals.parent_section))
 			- "are you interested in hearing about"
 			- @val(Locals.entitys_section_choices)
 			- "?"
 		}, {
 			- "Speaking of"
-			- @helper.section_string(@val(State.WIKI__Entity), @val(Locals.parent_section))
+			- @helper.section_string(@val(State.CurrentTopic), @val(Locals.parent_section))
 			- "are you interested in hearing about"
 			- @val(Locals.entitys_section_choices)
 			- "?"
@@ -116,23 +116,35 @@ Prompt discuss_article_subsection [
 }
 
 <LOCALS>
-Locals.suggested_sections = @val(State.WIKI__suggested_sections[@val(State.WIKI__Entity), @constant([])])
-Locals.discussed_sections = @val(State.WIKI__discussed_sections[@val(State.WIKI__Entity), @constant([])])
+Locals.suggested_sections = @val(State.WIKI__suggested_sections[@val(State.CurrentTopic), @constant([])])
+Locals.discussed_sections = @val(State.WIKI__discussed_sections[@val(State.CurrentTopic), @constant([])])
 
-Locals.selected_section = @helper.get_selected_section(@val(State.WIKI__Entity), @val(Locals.suggested_sections), @val(State.WIKI__currently_chosen_sections), @val(Utilities.response_text), @val(Flags.GlobalFlag__YES))
+Locals.selected_section = @helper.get_selected_section(@val(State.CurrentTopic), @val(Locals.suggested_sections), @val(State.WIKI__currently_chosen_sections), @val(Utilities.response_text), @val(Flags.GlobalFlag__YES))
 Locals.section_summary = @helper.get_section_summary(@val(Locals.selected_section), @val(Utilities.state_manager))
 
 <SET_STATE>
 
 <SUBNODES>
-Subnode discuss_section [
+Subnode exit:force_activation [
+	IS_TRUE(Flags.GlobalFlag__NO)
+] {
+	- @one_of(
+		"Okay, no worries.",
+		"Sure that's fine."
+	)
+} <
+	State.CurrentTopic = @constant(None)
+	Flags.WIKI__discuss_article = @constant(False)
+>
+
+Subnode discuss_section:force_activation [
 	not IS_NONE(Locals.selected_section) and not IS_NONE(Locals.section_summary)
 ] {
 	- @one_of(
 		"So, about",
 		"Great, so regarding"
 	)
-	- @helper.get_entitys_section(@val(State.WIKI__Entity), @val(Locals.selected_section))
+	- @helper.get_entitys_section(@val(State.CurrentTopic), @val(Locals.selected_section))
 	- ","
 	- @val(Locals.section_summary)
 } <
@@ -143,12 +155,12 @@ Subnode default [
 ] {
 	- @neural_generation(prefix="")
 } <
-	State.WIKI__Entity = @constant(None)
+	State.CurrentTopic = @constant(None)
 	Flags.WIKI__discuss_article = @constant(False)
 >
 
 <SET_STATE_AFTER>
-State.WIKI__suggested_sections[@val(State.WIKI__Entity)] = @helper.concat(@val(Locals.suggested_sections), @val(State.WIKI__currently_chosen_sections))
-State.WIKI__discussed_sections[@val(State.WIKI__Entity)] = @helper.append(@val(Locals.discussed_sections), @val(Locals.selected_section))
-State.WIKI__last_discussed_section[@val(State.WIKI__Entity)] = @val(Locals.selected_section)
+State.WIKI__suggested_sections[@val(State.CurrentTopic)] = @helper.concat(@val(Locals.suggested_sections), @val(State.WIKI__currently_chosen_sections))
+State.WIKI__discussed_sections[@val(State.CurrentTopic)] = @helper.append(@val(Locals.discussed_sections), @val(Locals.selected_section))
+State.WIKI__last_discussed_section[@val(State.CurrentTopic)] = @val(Locals.selected_section)
 State.WIKI__currently_chosen_sections = @constant([])

@@ -57,7 +57,6 @@ LAUNCH__NumTimesAskedName: 0
 User__CurrentOpinionTopic: _get_opinion
 User__OpinionYes: False
 User__OpinionNo: False
-WIKI__Entity: null
 WIKI__AskedWhenInterested: False
 WIKI__AskedWhatInterested: False
 WIKI__AskedWhyInterested: False

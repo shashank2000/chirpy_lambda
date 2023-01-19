@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__understand_user_better)
+not IS_NONE(State.CurrentTopic) and IS_TRUE(Flags.WIKI__understand_user_better)
 
 <PROMPTS>
 [
@@ -8,7 +8,7 @@ not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__understand_user_better)
 			"When did you start having an interest in",
 			"When did you start being interested in"
 		)
-		- @val(State.WIKI__Entity | talkable)
+		- @val(State.CurrentTopic | talkable)
 		- "?"
 	} <
 		State.WIKI__AskedWhenInterested = @constant(True)
@@ -19,7 +19,7 @@ not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__understand_user_better)
 			"What got you interested in",
 			"What made you interested in"
 		)
-		- @val(State.WIKI__Entity | talkable)
+		- @val(State.CurrentTopic | talkable)
 		- "?"
 	} <
 		State.WIKI__AskedWhatInterested = @constant(True)
@@ -27,7 +27,7 @@ not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__understand_user_better)
 
 	Prompt why [ ] {
 		- "Why are you interested in"
-		- @val(State.WIKI__Entity | talkable)
+		- @val(State.CurrentTopic | talkable)
 		- "?"
 	} <
 		State.WIKI__AskedWhyInterested = @constant(True)
@@ -43,12 +43,12 @@ Locals.commiseration_acknowledgement = {
     "Yes, it is a bit disappointing."
 	)
 }
-Locals.opinion = @helper.get_opinion(@val(State.WIKI__Entity), @val(Flags.WIKI__NEUTRAL_SENTIMENT), @val(Flags.WIKI__POS_SENTIMENT))
+Locals.opinion = @helper.get_opinion(@val(State.CurrentTopic), @val(Flags.WIKI__NEUTRAL_SENTIMENT), @val(Flags.WIKI__POS_SENTIMENT))
 
 <SET_STATE>
 
 <SUBNODES>
-Subnode dont_know [
+Subnode dont_know:force_activation [
 	IS_TRUE(Flags.GlobalFlag__DONT_KNOW)
 ] {
 	- @one_of(
@@ -58,7 +58,7 @@ Subnode dont_know [
 	- @val(Locals.opinion)
 }
 
-Subnode no [
+Subnode no:force_activation [
 	IS_TRUE(Flags.GlobalFlag__NO)
 ] {
 	- @one_of(
@@ -68,7 +68,7 @@ Subnode no [
 	- @val(Locals.opinion)
 }
 
-Subnode positive_opinion [
+Subnode positive_opinion:force_activation [
 	IS_TRUE(Flags.WIKI__POS_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
 ] {
 	- @one_of(
@@ -79,21 +79,21 @@ Subnode positive_opinion [
 	- @val(Locals.opinion)
 }
 
-Subnode negative_opinion [
+Subnode negative_opinion:force_activation [
 	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
 ] {
 	- "That's an interesting take."
 	- @val(Locals.opinion)
 }
 
-Subnode negative_no_opinion [
+Subnode negative_no_opinion:force_activation [
 	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_FALSE(Flags.WIKI__OPINION)
 ] {
 	- @val(Locals.commiseration_acknowledgement)
 	- @val(Locals.opinion)
 }
 
-Subnode neutral_opinion [
+Subnode neutral_opinion:force_activation [
 	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
 ] {
 	- @one_of(
@@ -103,7 +103,7 @@ Subnode neutral_opinion [
 	- @val(Locals.opinion)
 }
 
-Subnode default [ ] {
+Subnode default:force_activation [ ] {
 	- @neural_generation(prefix="")
 	- @val(Locals.opinion)
 }
