@@ -1,5 +1,6 @@
 <ENTRY_CONDITIONS>
 IS_TRUE(Flags.PERSONALISSUE__respond_to_personal_issue)
+and NOT IS_NONE(State.CurrentTopic)
 
 <PROMPTS>
 Prompt personal_issue_subsequent_turn [
@@ -306,4 +307,4 @@ Subnode possible_continue [
 >
 
 <SET_STATE_AFTER>
-State.PERSONALISSUE__responded_with_question = @helper.response_contains_question(@val(Utilities.response_text))
+Flags.PERSONALISSUE__responded_with_question = @helper.response_contains_question(@val(Utilities.response_text))

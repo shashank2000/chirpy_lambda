@@ -68,7 +68,6 @@ Subnode are_you_recording:force_activation [
 Subnode personal_issue_intro:force_activation [
 	NOT IS_IN(Utilities.cur_supernode, [
 		"PERSONALISSUES__subsequent_turn", 
-		"OPINION__intro",
 		"OPINION__subsequent_turn",
 		"OPINION__third_turn",
 		"WIKI__TODO_ADD_SUPERNODE", 
@@ -91,6 +90,7 @@ Subnode personal_issue_intro:force_activation [
     "I'd be willing to listen if you're willing to continue sharing."
   )
 } <
+	State.CurrentTopic = @nlg_val(@constant("PERSONALISSUESTOPIC") | topseudoentity)
 	Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
 >
 
