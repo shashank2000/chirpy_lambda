@@ -126,7 +126,7 @@ class WikiResponseGenerator(ResponseGenerator):
                 response_types.add(ResponseType.KNOW_MORE)
 
         if is_personal_disclosure(self, utterance): response_types.add(ResponseType.PERSONAL_DISCLOSURE)
-        if user_disagees(self, utterance):
+        if user_disagrees(self, utterance):
             response_types.add(ResponseType.DISAGREEMENT)
         else: # check is necessary to prevent false positives
             if user_agrees(self, utterance): response_types.add(ResponseType.AGREEMENT)

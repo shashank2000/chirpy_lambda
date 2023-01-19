@@ -73,7 +73,7 @@ def is_no_to_sections(rg, utterance):
 def user_agrees(context: Context, utterance: str):
     return AgreementTemplate().execute(utterance) is not None
 
-def user_disagees(context: Context, utterance: str):
+def user_disagrees(context: Context, utterance: str):
     return DisagreementTemplate().execute(utterance) is not None
 
 def original_til_templates(apologize: bool, original_til: str):
@@ -111,7 +111,7 @@ def add_flags(context: Context, add_nlu_flag) -> set[str]:
             add_nlu_flag('WIKI__KNOW_MORE')
 
     if is_personal_disclosure(context, utterance): add_nlu_flag('WIKI__PERSONAL_DISCLOSURE')
-    if user_disagees(context, utterance):
+    if user_disagrees(context, utterance):
         add_nlu_flag('WIKI__DISAGREEMENT')
     else: # check is necessary to prevent false positives
         if user_agrees(context, utterance): add_nlu_flag('WIKI__AGREEMENT')

@@ -73,7 +73,7 @@ def sanitize_section_title(section, entity: WikiEntity):
     return section
 
 
-def construct_entitys_section_choices(entity: str, sections: List[str], conj='and'):
+def construct_entity_section_choices(entity: str, sections: List[str], conj='and'):
     """
     Constructs the exact phrasing for section_choices and entitys_section_choices,
     so that we avoid phrases like "Philosophy's history of philosophy" or "Singing's singing animals"
@@ -209,7 +209,7 @@ def choose_from_sections(sections: List[WikiSection]) -> List[WikiSection]:
 @nlg_helper
 def get_section_choices(entity: WikiEntity, chosen_sections: List[str], parent_section: Optional[WikiSection]):
     chosen_sections_titles = [s.title for s in chosen_sections]
-    section_choices, entitys_section_choices = construct_entitys_section_choices(entity.talkable_name, chosen_sections_titles, 'or' if parent_section else 'and')
+    section_choices, entitys_section_choices = construct_entity_section_choices(entity.talkable_name, chosen_sections_titles, 'or' if parent_section else 'and')
     return { 'section_choices': wiki_utils.clean_wiki_text(section_choices), 'entitys_section_choices': wiki_utils.clean_wiki_text(entitys_section_choices) }
 
 
