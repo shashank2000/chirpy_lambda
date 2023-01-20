@@ -109,18 +109,35 @@ class Supernode:
             return self.uses_current_topic(condition.pred1) or self.uses_current_topic(condition.pred2)
         return False
 
+    def uses_flags(self, condition=None):
+        if condition is None:
+            condition = self.entry_conditions
+        if isinstance(condition, VariablePredicate) and condition.verb == "IS_TRUE" and condition.variable.namespace == "Flags":
+            return True
+        if isinstance(condition, AndPredicate):
+            return self.uses_current_topic(condition.pred1) or self.uses_current_topic(condition.pred2)
+        if isinstance(condition, OrPredicate):
+            if condition.a_activate and self.uses_current_topic(condition.pred1):
+                return True
+            if condition.b_activate and self.uses_current_topic(condition.pred2):
+                return True
+        return False
+
     def get_score(self, context):
         if len(self.prompts) == 0:
             return 0
         if self.details["can_only_prompt_once_for"] is not None:
             logger.warning(f"{self.details['can_only_prompt_once_for'].generate(context)}")
-        if (
-            self.details["can_only_prompt_once_for"] is not None
-            and ((self.details["can_only_prompt_once_for"].generate(context) is not None
-                  and self.details["can_only_prompt_once_for"].generate(context).name
-                  in context.state.node_to_already_prompted[self.name])
-                 or (self.details["can_only_prompt_once_for"].generate(context) is None
-                     and None in context.state.node_to_already_prompted[self.name]))
+        if self.details["can_only_prompt_once_for"] is not None and (
+            (
+                self.details["can_only_prompt_once_for"].generate(context) is not None
+                and self.details["can_only_prompt_once_for"].generate(context).name
+                in context.state.node_to_already_prompted[self.name]
+            )
+            or (
+                self.details["can_only_prompt_once_for"].generate(context) is None
+                and None in context.state.node_to_already_prompted[self.name]
+            )
         ):
             logger.warning(
                 f"{self.name} can't prompt again because {self.details['can_only_prompt_once_for']} is in {context.state.node_to_already_prompted[self.name]}."
@@ -132,7 +149,7 @@ class Supernode:
         if self.name == "LAUNCH":
             return 100
         if self.uses_current_topic():
-            return 10 + self.entry_conditions.get_score() + 1
+            return 1e3 + self.entry_conditions.get_score() + 1
 
         return self.entry_conditions.get_score() + 1
 
@@ -167,14 +184,10 @@ class SupernodeList:
         ]
         supernode_names = [possible_supernode[0].name for possible_supernode in possible_supernodes]
         if "PERSONALISSUES__subsequent_turn" in supernode_names:
-            logger.primary_info(
-                f"PERSONALISSUES__subsequent_turn is available, so going with that supernode"
-            )
+            logger.primary_info(f"PERSONALISSUES__subsequent_turn is available, so going with that supernode")
             return self["PERSONALISSUES__subsequent_turn"]
         if "LAUNCH" in supernode_names:
-            logger.primary_info(
-                f"LAUNCH is available, so going with that supernode"
-            )
+            logger.primary_info(f"LAUNCH is available, so going with that supernode")
             return self["LAUNCH"]
         logger.primary_info(
             f"Possible supernodes are: " + "; ".join(f"{supernode} (score={score})" for supernode, score in possible_supernodes)
@@ -186,8 +199,8 @@ class SupernodeList:
         logger.warning(f"Supernodes are {supernodes}, scores={scores}")
         next_supernode = random.choices(supernodes, weights=scores)[0]
         logger.bluejay(f"supernode_chosen: {next_supernode.name}")
-        if not next_supernode.uses_current_topic():
-            logger.warning(f"Next supernode doesn't use current topic! Setting context.state.CurrentTopic = None.")
+        if not next_supernode.uses_current_topic() and not next_supernode.uses_flags():
+            logger.warning(f"Next supernode doesn't use current topic or flags! Setting context.state.CurrentTopic = None.")
             # Clear supernode's node_to_already_prompted set upon topic switch
             context.state.node_to_already_prompted[context.supernode.name].clear()
             context.state["CurrentTopic"] = None

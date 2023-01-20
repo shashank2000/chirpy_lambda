@@ -7,6 +7,10 @@ class TestStartup(BaseIntegrationTest):
         bot = self.startup_bot(launch_script=True)
         assert bot.text
 
+    def test_name_recognized(self):
+        bot = self.startup_bot(launch_script=True)
+        assert bot.text
+
     @pytest.mark.parametrize("stop_word", ["stop", "stop talking"])
     def test_stop_means_stop(self, stop_word):
         bot = self.startup_bot(launch_script=True)

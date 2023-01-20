@@ -2,7 +2,7 @@ from chirpy.core.entity_linker.entity_linker import WikiEntity
 from chirpy.core.response_generator import nlg_helper, ResponseType
 from chirpy.core.state_manager import StateManager
 
-from chirpy.response_generators.wiki2 import wiki_utils, wiki_response_generator, wiki_infiller, blacklists
+from chirpy.response_generators.wiki2 import wiki_utils
 from chirpy.response_generators.wiki2.response_templates import response_components
 
 from chirpy.annotators.blenderbot import BlenderBot
@@ -16,9 +16,10 @@ import random
 import math
 import os
 
-logger = logging.getLogger('chirpylogger')
+logger = logging.getLogger("chirpylogger")
 
 es = wiki_utils.es
+
 
 @nlg_helper
 def get_intro_paragraph(entity):
@@ -27,4 +28,3 @@ def get_intro_paragraph(entity):
         logger.info("No overview found")
         return None
     return overview
-

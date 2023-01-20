@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity) and IS_FALSE(Flags.WIKI__understand_user_better) and IS_FALSE(Flags.WIKI__discuss_article)
+not IS_NONE(State.CurrentTopic) and IS_FALSE(Flags.WIKI__understand_user_better) and IS_FALSE(Flags.WIKI__discuss_article)
 
 <PROMPTS>
 Prompt check_user_knowledge [ ] {

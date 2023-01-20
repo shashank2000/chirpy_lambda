@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 not IS_NONE(State.CurrentTopic) and IS_TRUE(Flags.WIKI__discuss_article)
 
@@ -43,7 +45,7 @@ Prompt discuss_article_section [
 			- "Personally, I think the"
 			- @val(Locals.section_choices)
 			- @helper.of_entity(@val(State.CurrentTopic), @val(Locals.section_choices))
-			- @helper.is_are(@val(State.WIKI__currently_chosen_sections))
+			- @val(State.WIKI__currently_chosen_sections | is_are)
 			- "quite remarkable. Are you interested in talking about"
 			- @helper.any_of(@val(State.WIKI__currently_chosen_sections))
 			- "that?"
@@ -51,7 +53,7 @@ Prompt discuss_article_section [
 			- "The"
 			- @val(Locals.section_choices)
 			- @helper.of_entity(@val(State.CurrentTopic), @val(Locals.section_choices))
-			- @helper.is_are(@val(State.WIKI__currently_chosen_sections))
+			- @val(State.WIKI__currently_chosen_sections | is_are )
 			- "really interesting. Would you like to talk about"
 			- @helper.any_of(@val(State.WIKI__currently_chosen_sections))
 			- "that?"
@@ -75,15 +77,15 @@ Prompt discuss_article_section_repeat [
 		}, {
       - "I think"
 			- @val(Locals.entitys_section_choices)
-			- @helper.is_are(@val(State.WIKI__currently_chosen_sections))
+			- @val(State.WIKI__currently_chosen_sections | is_are )
 			- "pretty interesting too."
 			- "Wanna hear about"
-			- @helper.them_it(@val(State.WIKI__currently_chosen_sections))
+			- @val(State.WIKI__currently_chosen_sections | them_it )
 			- "?"
 		}, {
 			- @val(Locals.entitys_section_choices)
-      - "are rather fascinating. Do you want to hear more about"
-			- @helper.them_it(@val(State.WIKI__currently_chosen_sections))
+            - "are rather fascinating. Do you want to hear more about"
+			- @val(State.WIKI__currently_chosen_sections | them_it)
 			- "?"
 		}
 	)
