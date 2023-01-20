@@ -4,11 +4,11 @@ import random
 import os
 from os.path import abspath, dirname
 
-logger = logging.getLogger('chirpylogger')
+logger = logging.getLogger("chirpylogger")
 
 # CELEBS = ["taylor swift", "ryan reynolds", "nathan fillion", "matthew mcconaughey"]
-CELEBS = json.load(open(os.path.join(abspath(dirname(__file__)), 'reverse_filtered_celeb.json')))
-OPINIONS = json.load(open(os.path.join(abspath(dirname(__file__)), 'celeb_work_opinions.json')))
+CELEBS = json.load(open(os.path.join(abspath(dirname(__file__)), "reverse_filtered_celeb.json")))
+OPINIONS = json.load(open(os.path.join(abspath(dirname(__file__)), "celeb_work_opinions.json")))
 
 
 def is_known_celeb(entity_name):
@@ -18,7 +18,6 @@ def is_known_celeb(entity_name):
 
 
 def is_known_film_tv_song(entity_name):
-    print(entity_name)
     return entity_name in OPINIONS
 
 
@@ -31,7 +30,7 @@ def find_celeb_opinion(work_name, celeb_name):
 
 def find_celeb_pronoun(entity_name):
     if entity_name.lower() in CELEBS:
-        return CELEBS[entity_name.lower()]['pronoun']
+        return CELEBS[entity_name.lower()]["pronoun"]
     return "them"
 
 
@@ -41,9 +40,9 @@ def find_celeb_type(entity_name):
     et_name = entity_name.lower()
     if et_name not in CELEBS:
         return "other"
-    pg_cts_songs = sum([x[1] for x in CELEBS[et_name]['songs']])
-    pg_cts_films = sum([x[1] for x in CELEBS[et_name]['films']])
-    pg_cts_tv = sum(x[1] for x in CELEBS[et_name]['tv'])
+    pg_cts_songs = sum([x[1] for x in CELEBS[et_name]["songs"]])
+    pg_cts_films = sum([x[1] for x in CELEBS[et_name]["films"]])
+    pg_cts_tv = sum(x[1] for x in CELEBS[et_name]["tv"])
     if pg_cts_songs > max(pg_cts_films, pg_cts_tv):
         return "song"
     elif pg_cts_films > max(pg_cts_tv, pg_cts_songs):
@@ -64,5 +63,5 @@ def sample_celeb_work(celeb, type_work):
     # randomly sample weighted by page views
     random_sel_work = random.choices(all_celeb_work, weights=all_probs, k=1)[0][0]
     if "(" in random_sel_work:
-        random_sel_work = random_sel_work[:random_sel_work.index("(")]
+        random_sel_work = random_sel_work[: random_sel_work.index("(")]
     return random_sel_work.strip()
