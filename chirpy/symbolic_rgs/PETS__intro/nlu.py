@@ -26,11 +26,3 @@ def get_flags(context):
     if context.state_manager.current_state.corenlp['sentiment'] in (Sentiment.NEGATIVE, Sentiment.STRONG_NEGATIVE):
         ADD_NLU_FLAG("PETS__move_on_to_new_topic")
     ADD_NLU_FLAG('PETS__user_mentioned_pet', True)
-
-
-
-
-
-@nlu_processing
-def get_background_flags(context):
-    return

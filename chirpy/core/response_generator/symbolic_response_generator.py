@@ -184,6 +184,12 @@ class SymbolicResponseGenerator:
 
             context.compute_locals()
             supernode.set_state.evaluate(context)
+
+            tmp_helpers = supernode.nlg_helpers
+            supernode.nlg_helpers = self.supernodes["GLOBALS"].nlg_helpers
+            self.supernodes["GLOBALS"].locals.evaluate(context)
+            supernode.nlg_helpers = tmp_helpers
+
             extra_subnodes = self.supernodes["GLOBALS"].subnodes if supernode.name != "GLOBALS" else None
             subnode, response = supernode.get_subnode_response(context, extra_subnodes=extra_subnodes)
 

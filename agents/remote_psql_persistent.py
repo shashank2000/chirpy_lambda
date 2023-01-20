@@ -11,6 +11,8 @@ from agents.remote_non_persistent import RemoteNonPersistentAgent
 import psycopg2
 import psycopg2.extras
 
+import pudb
+
 def db_connect():
     return psycopg2.connect(dbname="session_store", user=os.environ['POSTGRES_USER'], password=os.environ["POSTGRES_PASSWORD"], host=os.environ["POSTGRES_HOST"])
 
@@ -33,28 +35,29 @@ class StateTable:
     def __init__(self):
         self.table_name = 'prod_turns_kvstore'
 
-    def fetch(self, session_id, creation_date_time):
+    def fetch(self, session_id):
         logger.info(
-            f"state_table fetching last state for session {session_id}, creation_date_time {creation_date_time} from table {self.table_name}")
+            f"state_table fetching last state for session {session_id} from table {self.table_name}")
         if session_id is None:
             return None
         try:
             item = None
             start_time = time.time()
             timeout = 2  # second
-            while (item is None and time.time() < start_time + timeout):
-                with get_db_cursor() as curs:
-                    curs.execute(f"SELECT state from {self.table_name} where session_id=%(session_id)s AND creation_date_time=%(creation_date_time)s",
-                                 {'session_id':session_id, 'creation_date_time': creation_date_time})
+            # while (item is None and time.time() < start_time + timeout):
+            # pudb.set_trace()
+            with get_db_cursor() as curs:
+                curs.execute(f"SELECT state from {self.table_name} where session_id=%(session_id)s",
+                             {'session_id':session_id})
+                fetched_entry = curs.fetchone()
+                while fetched_entry is not None:
+                    item = fetched_entry[0]
+                    item = {k: json.dumps(v) for k, v in item.items()}
                     fetched_entry = curs.fetchone()
-                if fetched_entry is None or len(fetched_entry) == 0:
-                    item = None
-                    continue
-                item = fetched_entry[0]
-                item = {k: json.dumps(v) for k, v in item.items()}
+
             if item is None:
                 logger.error(
-                    f"Timed out when fetching last state\nfor session {session_id}, creation_date_time {creation_date_time} from table {self.table_name}.")
+                    f"Timed out when fetching last state\nfor session {session_id} from table {self.table_name}.")
             else:
                 return item
 
@@ -122,6 +125,7 @@ class UserTable():
         This will take the provided user_preferences object and persist it to Postgres.
         """
         try:
+            logger.primary_info('Attempting to use UserTable to persist user attributes! Persisting to table {}'.format(self.table_name))
             assert 'user_id' in user_attributes
             if 'name' in user_attributes:
             	decoded_name = json.loads(user_attributes['name'])
@@ -144,17 +148,22 @@ class RemotePersistentAgent(RemoteNonPersistentAgent):
         self.state_table = StateTable()
         self.user_table = UserTable()
 
-    def process_utterance(self, user_utterance):
+    def is_new_user(self, user_id):
+        return len(self.user_table.fetch(user_id)) == 0
 
+    def process_utterance(self, user_utterance):
+        # pudb.set_trace()
         handler = self.create_handler()
         current_state = self.get_state_attributes(user_utterance)
         user_attributes = self.get_user_attributes()
+        # if self.last_state_creation_time and self.last_state_creation_time != "None":
+        #     current_state["creation_date_time"] = self.last_state_creation_time
         last_state = self.get_last_state()
 
         turn_result = handler.execute(current_state, user_attributes, last_state)
         response = turn_result.response
         try:
-            if user_attributes != turn_result.user_attributes:
+            if user_attributes != turn_result.user_attributes or self.is_new_user(user_attributes["user_id"]):
                 self.user_table.persist(turn_result.user_attributes)
             self.state_table.persist(turn_result.current_state)
 
