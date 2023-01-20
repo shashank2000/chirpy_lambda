@@ -9,6 +9,17 @@ Prompt launch [
 	"Hi, this is an Alexa Prize Socialbot. I'd love to get to know you a bit better before we chat! Is it all right if I ask for your name?"
 }
 
+Prompt ask_for_name_again [ 
+	not IS_EQUAL(Utilities.cur_turn_num, @constant(0))
+] {
+	@one_of(
+		"I would like to get to know you.",
+		"It would be nice to know your name.",
+		"I hope that's not too much to ask.",
+		"",
+	)
+}
+
 <SET_STATE>
 
 State.User__Name = @val(Flags.LAUNCH__ProposedName)

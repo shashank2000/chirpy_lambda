@@ -6,12 +6,14 @@ PUNCTUATION: /[?.,;]/
 nlg : "{" ("-"? nlg)* "}"
 	| PUNCTUATION
 	| val
+	| nlg_val
 	| neural_generation
 	| helper
 	| inflect
 	| inflect_engine
 	| one_of
 	| constant
+	| lookup
 	| ESCAPED_STRING
 	| "\"" "\""
 	
@@ -20,7 +22,13 @@ LIST : _OB _CB
 
 OPERATORS: "|" | "+" | "-"
 
-val : "@val" _OP variable (OPERATORS PARAM_ARG_NAME)* _CP
+CONSTANT: STRING | "{}" | "[]"
+
+key: ("[" nlg "]") | ("[" nlg _COMMA nlg "]")
+
+val : "@val" _OP variable key* (OPERATORS PARAM_ARG_NAME)* _CP
+
+nlg_val : "@nlg_val" _OP nlg (OPERATORS PARAM_ARG_NAME)* _CP
 
 neural_generation : "@neural_generation" _OP "prefix" _EQ nlg _CP
 
@@ -30,6 +38,8 @@ inflect : "@inflect" _OP "inflect_token" _EQ nlg _COMMA "inflect_entity" _EQ var
 
 inflect_engine : "@inflect_engine" _OP "type" _EQ nlg _COMMA "str" _EQ nlg _CP
 
+lookup : "@lookup" _OP "database_name" _EQ ESCAPED_STRING _COMMA "key" _EQ nlg _COMMA "column" _EQ ESCAPED_STRING _CP
+
 one_of : "@one_of" _OP (nlg (_COMMA nlg)* _COMMA?)? _CP
 
-constant : "@constant" _OP STRING _CP
+constant : "@constant" _OP CONSTANT _CP

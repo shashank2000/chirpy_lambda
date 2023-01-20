@@ -1,3 +1,9 @@
+# Topics
+
+CurrentTopic: null
+
+# Nodes
+
 User__FavoriteFood: null
 User__FavoriteFoodAttribute: null
 User__FavoriteFoodFactoidOrigin: null
@@ -13,15 +19,36 @@ User__FavoritePlace: null
 User__FavoritePlaceTalkable: null
 User__FavoritePlaceComment: null
 User__FavoritePlaceFoodComment: null
-PERSONALISSUE__supernode_is_responding: False
-PERSONALISSUE__user_has_personal_issue: False
-PERSONALISSUE__need_confirmation_for_further_discussion: False
-PERSONALISSUE__confirming_further_discussion: False
-PERSONALISSUE__responded_with_question: False
-PERSONALISSUE__LastTurnUsedNeuralGeneration: False
-
+User__FavoriteCelebrity: null
+User__FavoriteCelebrityName: null
+User__FavoriteCelebrityWorkType: null
+User__FavoriteCelebrityMovie: null
+User__FavoriteCelebrityTV: null
+User__FavoriteCelebritySong: null
+User__FavoriteCelebrityCharacter: null
+User__FavoriteCelebrityPronoun: null
+User__FavoriteCelebrityCurrWork: null
+CELEB__discuss_movie: False
+CELEB__discuss_tv: False
+CELEB__discuss_song: False
+User__HasPet: null
+User__PetName: null
+User__HypotheticalPetType: null
+User__HypotheticalPetTypeTalkable: null
+User__PetNameGivenUp: False
+User__PetAge: null
+User__PetType: null
+User__PetTypeTalkable: null
+User__PetBreedTalkable: null
+User__PetBreed: null
+User__PetFavoriteActivity: null
+User__PetFavoriteActivityTalkable: null
+User__LikeMovie: null
+User__FavoriteMovie: null
+User__FavoriteMovieReason: null
 
 # Launch
-User__Name : null
-User__NameGivenUp : False
-LAUNCH__NumTimesAskedName : 0
+User__Name: null
+User__NameGivenUp: False
+LAUNCH__NumTimesAskedName: 0
+User__CurrentOpinionTopic: _get_opinion

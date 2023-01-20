@@ -3,11 +3,15 @@ IS_NONE(State.User__FavoriteFood)
 
 <PROMPTS>
 Prompt favorite_food [ ] {
-    "What's your favorite food?"
+    - @one_of(
+      {"I was wondering if you could help me. I'm trying to be a more adventurous eater, but I'm not sure what new recipes I should try out. Do you have any recommendations for what I should cook at home?"},
+      {"I think one of the best ways to get to know a person is via their stomach. What's one of your favorite things to eat?"},
+      {"I think the key to a good mood is eating well. What's a food that always makes you feel good?"}
+    )
 }
 
 <CONTINUE_CONDITIONS>
-IS_TRUE(Flags.FOOD__user_mentioned_food)
+EXISTS(database_name="food", key={@val(Utilities.cur_entity | name | lower)})
 
 <LOCALS>
 Locals.intro_statement = {
@@ -16,7 +20,7 @@ Locals.intro_statement = {
         {"Oh yeah"}
     )
     - ,
-    - @val(Utilities.cur_entity | talkable | lower)
+    - @val(Utilities.cur_entity)
     - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
     - @one_of(
         "one of my favorite things to eat up here in the cloud.",
@@ -25,21 +29,24 @@ Locals.intro_statement = {
 }
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+
 State.User__FavoriteFood = @val(Utilities.cur_entity)
-State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity | talkable | lower)
-State.User__FavoriteFoodFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity | name))
-State.User__FavoriteFoodFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity | name))
-State.User__FavoriteFoodIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity | name))
 State.User__FavoriteFoodIngredientOf = @helper.get_food_ingredient_of(@val(Utilities.cur_entity | name))
-State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity | name))
+
+# State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity | talkable | lower)
+# State.User__FavoriteFoodFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity | name))
+# State.User__FavoriteFoodFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity | name))
+# State.User__FavoriteFoodIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity | name))
+# State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity | name))
 
 <SUBNODES>
 Subnode make_ingredient_attribute_comment [
-  not IS_NONE(State.User__FavoriteFoodIngredient)
+  EXISTS(database_name="food", key={@val(State.CurrentTopic | name | lower)}, {"ingredient"})
 ] {
   - @val(Locals.intro_statement)
   - "Personally, I especially like the"
-  - @val(State.User__FavoriteFoodIngredient)
+  - @lookup(database_name="food", key={@val(State.CurrentTopic | name | lower)}, column="ingredient")
   - ,
   - "I think it gives"
   - @inflect(inflect_token="them", inflect_entity=Utilities.cur_entity)
@@ -47,7 +54,7 @@ Subnode make_ingredient_attribute_comment [
 }
 
 Subnode make_texture_attribute_comment [
-   not IS_NONE(State.User__FavoriteFoodTexture)
+   EXISTS(database_name="food", key={@val(State.CurrentTopic | name | lower)}, {"texture"})
 ] {
    - @val(Locals.intro_statement)
    - "Personally, I especially like the"
@@ -59,16 +66,16 @@ Subnode make_texture_attribute_comment [
    - .
 }
 
-Subnode make_food_is_an_ingredient_comment [
-   not IS_NONE(State.User__FavoriteFoodIngredientOf)
-] {
-   - @val(Locals.intro_statement)
-   - "In my opinion, I think"
-   - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
-   - "especially good as part of"
-   - @inflect_engine(type="a", str=@val(State.User__FavoriteFoodIngredientOf))
-   - .
-}
+# Subnode make_food_is_an_ingredient_comment [
+#    not IS_NONE(State.User__FavoriteFoodIngredientOf)
+# ] {
+#    - @val(Locals.intro_statement)
+#    - "In my opinion, I think"
+#    - @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
+#    - "especially good as part of"
+#    - @inflect_engine(type="a", str=@val(State.User__FavoriteFoodIngredientOf))
+#    - .
+# }
 
 Subnode default [
 ] {

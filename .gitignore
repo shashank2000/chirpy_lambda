@@ -9,7 +9,6 @@ aws_regex_test.log
 rendered/
 *.pyc
 .mypy_cache
-.vscode
 .idea
 .DS_Store
 
@@ -47,7 +46,12 @@ alexa.zip
 convpara/*
 
 chirpy/core/es_config.json
+env.list
+portforward.sh
+newest_transcript.txt
 
 env.list
 chirpy/symbolic_rgs/PLACES__intro/sandbox.ipynb
 chirpy/symbolic_rgs/PLACES__intro/worldcities.csv
+test_script.txt
+.nova/*

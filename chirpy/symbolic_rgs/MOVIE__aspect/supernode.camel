@@ -1,0 +1,45 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+not IS_NONE(State.User__FavoriteMovie)
+and IS_NONE(State.User__FavoriteMovieReason)
+
+
+<PROMPTS>
+Prompt ask_user_opinion [ ] {
+    - "What"
+    - @one_of(
+        "do", "did"
+    )
+    - "you like about the movie?"
+}
+
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.MOVIE__user_mentioned_reason)
+
+<SET_STATE>
+State.CurrentTopic = @val(State.User__FavoriteMovie)
+State.User__FavoriteMovieReason = {
+    @helper.get_user_reasons(@val(Flags.MOVIE__last_utterance))
+}
+
+
+<SUBNODES>
+Subnode reason_specified [
+    not IS_NONE(State.User__FavoriteMovieReason)
+] {
+    - "Thank you for sharing!"
+    - @one_of(
+        "I can't agree more with what you've just said. In particular, the",
+        "I completely agree with you that the"
+    )
+    - @val(State.User__FavoriteMovieReason)
+    - "of the movie was phenomenal."
+}
+
+Subnode reason_specified_but_not_listed [
+    IS_NONE(State.User__FavoriteMovieReason)
+] {
+    - "Thank you for sharing! I totally agree with you."
+}

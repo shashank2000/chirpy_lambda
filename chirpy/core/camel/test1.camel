@@ -1,13 +1,23 @@
 <ENTRY_CONDITIONS>
 IS_NONE(State.User__FavoriteFood) and IS_NONE(State.User__FavoriteFood)
 
+<ENTRY_LOCALS>
+Locals.question_intro = {
+	- @one_of(
+		{"I was wondering."},
+		{"I have a question."},
+	)
+}
+
 <PROMPTS>
 Prompt favorite_food [ ] {
-	"What's your favorite food?"
+	- @val(Locals.question_intro)
+	- "What's your top food?"
 }
 
 [
 	Prompt favorite_food_a [ ] {
+		- @val(Locals.question_intro)
 		"What's your favorite food?"
 	}
 
@@ -32,6 +42,22 @@ Locals.intro_statement = {
 		"such an amazing choice. It's one of my favorite foods up here in the cloud."
 	)
 }
+Locals.dictionary = @constant({})
+Locals.dictionary["hello"] = @constant("helloworld")
+Locals.hello = @val(Locals.dictionary["hello"])
+
+Locals.dictionary["hi"] = @constant({})
+Locals.dictionary["hi"][{
+   - "hello"
+   - "nlg"
+}] = {
+   - "hi"
+   - "world"
+}
+Locals.hi = @val(Locals.dictionary["hi"]["hello nlg"])
+
+Locals.dictionary[@val(Utilities.cur_entity)] = @val(Utilities.cur_entity | talkable | lower)
+Locals.cur = @val(Locals.dictionary[@val(Utilities.cur_entity)])
 
 <SET_STATE>
 State.User__FavoriteFood = @val(Utilities.cur_entity)
@@ -47,6 +73,9 @@ Subnode make_ingredient_attribute_comment [
 	IS_NOT_NONE(State.User__FavoriteFoodIngredient)
 ] {
 	- @val(Locals.intro_statement)
+	- @val(Locals.hello)
+  - @val(Locals.hi)
+  - @val(Locals.cur)
 	- "Personally, I especially like the"
 	- @val(State.User__FavoriteFoodIngredient)
 	- ,

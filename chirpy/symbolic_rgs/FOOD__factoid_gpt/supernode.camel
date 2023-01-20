@@ -1,0 +1,28 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+EXISTS(database_name="food_gpt", key={
+    @val(State.CurrentTopic | name)
+})
+
+<PROMPTS>
+Prompt default [ ] {
+   @lookup(
+        database_name="food_gpt",
+        key={@val(State.CurrentTopic | name)},
+        column="factoid"
+   )
+}
+
+<SUBNODES>
+Subnode food_open_ended_neural_fallback [ ] {
+   - @neural_generation(prefix="")
+}
+
+<SET_STATE_AFTER>
+
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+   @constant(True)
+}
+
+

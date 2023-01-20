@@ -1,6 +1,7 @@
-%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB)
-%import .nlg ( nlg )
+%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB, _COMMA, _EQ)
+%import .nlg ( nlg, key )
 %import .condition ( condition )
+%import common.ESCAPED_STRING
 
 // ignore whitespace
 
@@ -12,22 +13,34 @@ COMMENT: "#" /[^\n]/*
 %ignore COMMENT
 
 // assignment
-assignment : variable "=" nlg
+assignment : variable key* "=" nlg
 condition_assignment : variable "=" condition
 
 // CAMEL syntax
 
-document: entry_conditions_section? \
+document: details_section? \
+          entry_conditions_section? \
+          entry_locals_section? \
           prompt_section? \
           continue_conditions_section? \
           locals_section? \
           entry_conditions_takeover_section? \
           set_state_section? \
           subnodes_section \
-          set_state_after_section?
+          set_state_after_section? \
+          entity_groups_section? \
+          entity_groups_regex_section?
+
+// Section: Attribute
+details_section: detail*
+?detail: can_only_prompt_once_for_detail
+can_only_prompt_once_for_detail: "can_only_prompt_once_for" _EQ variable
 
 // Section: Entry Conditions
 entry_conditions_section : "<ENTRY_CONDITIONS>" condition?
+
+// Section: Locals (before prompt)
+entry_locals_section : "<ENTRY_LOCALS>" assignment* condition_assignment*
 
 // Section: Prompt
 prompt_section : "<PROMPTS>" prompt_group*
@@ -38,7 +51,7 @@ PROMPT_NAME: /[a-zA-Z_1-9]+/
 // Section: Continue Conditions
 continue_conditions_section : "<CONTINUE_CONDITIONS>" condition?
 
-// Section: Locals
+// Section: Locals (after prompt)
 locals_section : "<LOCALS>" assignment* condition_assignment*
 
 // entry conditions takeover
@@ -50,10 +63,20 @@ set_state_section : "<SET_STATE>" assignment*
 // Section: Subnodes
 subnodes_section : "<SUBNODES>" subnode_group+
 subnode_group : "[" subnode+ "]" | subnode
-subnode: "Subnode" SUBNODE_NAME _OB condition? _CB nlg ("<" assignment* ">")?
+subnode: "Subnode" SUBNODE_NAME (":" attribute_list)? _OB condition? _CB nlg ("<" assignment* ">")?
+attribute_list : ATTRIBUTE ("," ATTRIBUTE)*
 SUBNODE_NAME: /[a-zA-Z_1-9]+/
+ATTRIBUTE: /[a-z_=0-9]+/                          // might want to allow subnode_name:key=value in the future
 
 
 // Section: Set State After
 set_state_after_section : "<SET_STATE_AFTER>" assignment*
+
+// entry groups section
+entity_groups_section : "<ENTITY_GROUPS>" _OB (entity_group (_COMMA entity_group)* _COMMA?)? _CB
+entity_group: ESCAPED_STRING
+
+// entry groups regex section
+entity_groups_regex_section : "<ENTITY_GROUPS_REGEX>" _OB (entity_group_regex (_COMMA entity_group_regex)* _COMMA?)? _CB
+entity_group_regex: ESCAPED_STRING
 

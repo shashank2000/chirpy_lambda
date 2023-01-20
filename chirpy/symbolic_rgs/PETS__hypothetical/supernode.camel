@@ -1,0 +1,57 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+((IS_FALSE(State.User__HasPet)
+  and IS_NONE(State.User__HypotheticalPetType))
+ or IS_TRUE(Flags.PETS__ask_hypothetical_breed))
+and IS_FALSE(Flags.PETS__move_on_to_new_topic)
+
+<PROMPTS>
+Prompt favorite_pet [ ] {
+    "If you could own any animal in the world as your pet, what would you choose?"
+}
+
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__HypotheticalPetType = @val(Utilities.cur_entity)
+State.User__HypotheticalPetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
+
+<SUBNODES>
+Subnode valid_hypothetical_type [
+  (not IS_NONE(State.User__HypotheticalPetType)) and
+   EXISTS(database_name="animal_gpt", key={@val(State.User__HypotheticalPetTypeTalkable)})
+] {
+  - "That's awesome!"
+  - "I love"
+  - @val(State.User__HypotheticalPetTypeTalkable)
+  - "."
+  - "I'd personally want a pet kookabura".
+  - "Fun fact, "
+  # database lookup for fun fact, we don't want plural form
+  -@lookup(
+        database_name="animal_gpt",
+        key={@val(State.User__HypotheticalPetTypeTalkable)},
+        column="factoid"
+   )
+}
+
+Subnode default [
+] {
+  - "That's awesome!"
+  - "I'd personally want a pet kookabura".
+  - "Fun fact about kookaburas, "
+  @lookup(
+        database_name="animal_gpt",
+        key="kookabura",
+        column="factoid"
+  )
+} <
+  Flags.PETS__move_on_to_new_topic = @constant(True)
+>
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+

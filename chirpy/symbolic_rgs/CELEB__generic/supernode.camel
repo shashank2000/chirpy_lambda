@@ -1,0 +1,29 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+not IS_NONE(State.CurrentTopic) and EXISTS(database_name="celeb_opinion", key={@val(State.CurrentTopic | name | lower)})
+and IS_FALSE(Flags.CELEB__move_on_to_new_topic)
+
+<PROMPTS>
+Prompt celeb_when []
+{
+    - "When did you start following"
+    - @val(State.CurrentTopic | name | lower)
+    - "?"
+}
+
+<SUBNODES>
+Subnode give_celeb_opinion [] {
+    - @one_of(
+        {"I see!"},
+        {"Gotcha!"}
+    )
+    - @lookup(
+        database_name="celeb_opinion",
+        key={@val(State.CurrentTopic | name | lower)},
+        column="opinion"
+   )
+}
+
+<SET_STATE_AFTER>
+Flags.CELEB__move_on_to_new_topic = {@constant(True)}

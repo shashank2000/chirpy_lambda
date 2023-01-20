@@ -1,0 +1,105 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__FavoriteCelebrity) and IS_FALSE(Flags.CELEB__move_on_to_new_topic)
+and IS_FALSE(Flags.CELEB__have_asked_about_celeb)
+
+<PROMPTS>
+Prompt favorite_celeb []
+{
+    - "Who's a celebrity you like to follow?"
+}
+
+
+<LOCALS>
+Locals.intro_statement = {
+    - @one_of(
+        {"Wow, same!"},
+        {"Me too!"},
+        {"Very cool!"}
+    )
+    - @one_of(
+        {"I like"},
+        {"I love"}
+    )
+    - @helper.get_celeb_name(@val(Utilities.cur_entity))
+    - {"a lot as well!"}
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__FavoriteCelebrity = @val(Utilities.cur_entity)
+State.User__FavoriteCelebrityName = @helper.get_celeb_name(@val(Utilities.cur_entity))
+State.User__FavoriteCelebrityWorkType = @helper.get_celeb_work_type(@val(Utilities.cur_entity))
+State.User__FavoriteCelebrityMovie = @helper.sample_celeb_movie(@val(Utilities.cur_entity))
+State.User__FavoriteCelebrityTV = @helper.sample_celeb_tv(@val(Utilities.cur_entity))
+State.User__FavoriteCelebritySong = @helper.sample_celeb_song(@val(Utilities.cur_entity))
+State.User__FavoriteCelebrityCharacter = @helper.sample_celeb_character(@val(Utilities.cur_entity))
+State.User__FavoriteCelebrityPronoun = @helper.get_celeb_pronoun(@val(Utilities.cur_entity))
+
+<SUBNODES>
+Subnode make_celeb_movie_comment [
+    not IS_NONE(State.User__FavoriteCelebrityMovie) and IS_EQUAL(State.User__FavoriteCelebrityWorkType, "movie")
+] {
+    - @val(Locals.intro_statement)
+    - "I particularly liked"
+    - @helper.pronoun_obj(@val(State.User__FavoriteCelebrityPronoun))
+    - "in"
+    - @val(State.User__FavoriteCelebrityMovie)
+    - "!"
+}
+
+Subnode make_celeb_song_comment [
+    not IS_NONE(State.User__FavoriteCelebritySong) and IS_EQUAL(State.User__FavoriteCelebrityWorkType, "song")
+] {
+    - @val(Locals.intro_statement)
+    - @one_of(
+        {"I absolutely enjoy listening to"},
+        {"One of my favorite songs is"}
+    )
+    - @val(State.User__FavoriteCelebritySong)
+    - "."
+}
+
+Subnode make_celeb_tv_comment [
+    not IS_NONE(State.User__FavoriteCelebrityTV) and IS_EQUAL(State.User__FavoriteCelebrityWorkType, "TV show")
+] {
+    - @val(Locals.intro_statement)
+    - "I binged"
+    - @helper.pronoun_possessive_adjs(@val(State.User__FavoriteCelebrityPronoun))
+    - @val(State.User__FavoriteCelebrityTV)
+    - "in one sitting!"
+}
+
+Subnode make_celeb_character_comment [
+    not IS_NONE(State.User__FavoriteCelebrityCharacter)
+] {
+    - @val(Locals.intro_statement)
+    - "I have always enjoyed"
+    - @helper.pronoun_possessive_adjs(@val(State.User__FavoriteCelebrityPronoun))
+    - "portrayal of"
+    - @val(State.User__FavoriteCelebrityCharacter)
+    - "."
+}
+
+Subnode default [
+    not IS_NONE(State.User__FavoriteCelebrity)
+] {
+    - @val(Locals.intro_statement)
+    - @neural_generation(prefix={
+        - "I think"
+    })
+}
+
+Subnode unknown_celeb [
+    IS_NONE(State.User__FavoriteCelebrity)
+] {
+    - "Oh, I don't think I have heard of them!"
+}
+
+
+<SET_STATE_AFTER>
+Flags.CELEB__have_asked_about_celeb = {@constant(True)}
+State.CELEB__discuss_movie = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"movie"})
+State.CELEB__discuss_song = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"song"})
+State.CELEB__discuss_tv = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"TV show"})

@@ -1,0 +1,39 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+(not IS_NONE(State.User__PetName)) and
+(IS_NONE(State.User__PetAge))
+
+<PROMPTS>
+Prompt favorite_pet [ ] {
+    - "How old is"
+    - @val(State.User__PetName)
+    - "?"
+}
+
+
+<SET_STATE>
+State.CurrentTopic = @val(Flags.PETS__age | topseudoentity)
+State.User__PetAge = @val(Flags.PETS__age)
+
+<SUBNODES>
+Subnode has_age [
+  not IS_NONE(State.User__PetAge)
+] {
+  - "Nice! "
+  - "I'm sure "
+  - @val(State.User__PetAge)
+  - "year old"
+  - @val(State.User__PetName)
+  - "is so much fun to have around."
+} 
+
+Subnode unknown_age [
+  IS_NONE(State.User__PetAge)
+] {
+  "I did not catch that age."
+}
+
+<SET_STATE_AFTER>
+
+

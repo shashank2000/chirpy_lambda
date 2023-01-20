@@ -1,0 +1,752 @@
+{
+    "aardvark": {
+        "factoid": "Aardvarks are nocturnal creatures, and their diet consists largely of ants and termites, which they dig for with their powerful claws. They have an incredible sense of smell that allows them to locate their food underground and even detect danger from predators."
+    },
+    "albatross": {
+        "factoid": "?Albatrosses are capable of flying over vast distances - they have been known to fly more than 10,000 miles in a single trip!"
+    },
+    "alligator": {
+        "factoid": "Alligators can hold their breath underwater for up to 30 minutes!"
+    },
+    "alpaca": {
+        "factoid": "Alpacas can run up to 35 miles per hour, making them one of the fastest domesticated animals!"
+    },
+    "ant": {
+        "factoid": "Ants have the longest lifespan of any insect, with some species living for up to 30 years!"
+    },
+    "anteater": {
+        "factoid": "Anteaters have incredibly long tongues, which can reach up to two feet in length and are covered in tiny hooks. They use their tongues to capture ants and termites from as far as 15 cm away!"
+    },
+    "antelope": {
+        "factoid": "Antelope are the fastest land mammal in the world and can run up to speeds of 60 miles per hour!"
+    },
+    "ape": {
+        "factoid": "Apes are incredibly intelligent animals - some species have been known to use tools, play games, and even learn sign language!"
+    },
+    "armadillo": {
+        "factoid": "Armadillos can hold their breath for up to 6 minutes underwater!"
+    },
+    "baboon": {
+        "factoid": "Baboons have a diverse array of vocalizations, including barks, grunts, screams, and even a special \"smile\" sound."
+    },
+    "badger": {
+        "factoid": "Badgers are known to be fiercely territorial and will fight to the death to protect their territory."
+    },
+    "barracuda": {
+        "factoid": "Barracudas are among the fastest swimming fish in the ocean, reaching speeds of up to 27 mph (43 km/h)."
+    },
+    "bat": {
+        "factoid": "nBatman is one of the few superheroes who does not possess any superhuman powers - making him a true symbol of human strength and resilience."
+    },
+    "bear": {
+        "factoid": "Bears can run up to 35 mph and can swim at speeds of up to 6 mph!"
+    },
+    "beaver": {
+        "factoid": "Beavers are the largest rodents in North America, and can be up to four feet long and weigh up to 60 pounds!"
+    },
+    "bee": {
+        "factoid": "eeping?Beekeeping is one of the oldest forms of agriculture, with evidence of beekeeping dating back to 7000 BC."
+    },
+    "bison": {
+        "factoid": "Bison are the largest land mammal in North America and can weigh up to 2,000 pounds!"
+    },
+    "boar": {
+        "factoid": "Boars can run up to 35 miles per hour!"
+    },
+    "buffalo": {
+        "factoid": "Buffalo are surprisingly fast swimmers and can reach speeds of up to 6 mph in the water."
+    },
+    "butterfly": {
+        "factoid": "Butterflies have four stages of metamorphosis: egg, larvae, pupa, and adult."
+    },
+    "camel": {
+        "factoid": "Camel humps are actually just giant stores of fat, and not filled with water as many people think."
+    },
+    "capybara": {
+        "factoid": "Capybaras are the world's largest rodents and can grow up to 4 feet long and weigh up to 140 pounds!"
+    },
+    "caribou": {
+        "factoid": "Caribou are the only deer species in which both females and males grow antlers!"
+    },
+    "cassowary": {
+        "factoid": "Cassowaries are part of the same family as emus and ostriches, and are the second heaviest bird in the world after the ostrich. They can run up to 31 mph and are excellent swimmers. Cassowaries are also the only bird in the world with a claw on its middle toe, which can be up to 4 inches long and is used for self-defense."
+    },
+    "cat": {
+        "factoid": "Cats have five toes on their front paws, but only four on their back paws."
+    },
+    "caterpillar": {
+        "factoid": "Caterpillars have around 4,000 muscles, while humans have only around 650."
+    },
+    "cattle": {
+        "factoid": "Cattle have the ability to recognize up to 30 individuals and can remember them for up to 2 years!"
+    },
+    "chamois": {
+        "factoid": "Chamois are very agile and can climb steep slopes with ease, even those covered with snow. They have been known to jump up to 6 feet in the air!"
+    },
+    "cheetah": {
+        "factoid": "Cheetahs are the world's fastest land animals! They can reach speeds of up to 75 mph (120 km/h), and can accelerate from 0 to 60 mph (96 km/h) in just three seconds."
+    },
+    "chicken": {
+        "factoid": "Chickens can remember up to 100 different faces of people and animals!"
+    },
+    "chimpanzee": {
+        "factoid": "Chimpanzees are one of the few animals that can recognize themselves in a mirror."
+    },
+    "chinchilla": {
+        "factoid": "Chinchillas are one of the oldest known rodents, having been around for over 30 million years!"
+    },
+    "chough": {
+        "factoid": "Choughs have been known to perform acrobatic aerial displays and somersaults, often in pairs. They have also been seen surfing on the wind and even flying upside down!"
+    },
+    "clam": {
+        "factoid": "howder?Clam chowder is the official state soup of Rhode Island, and there are two distinct styles of clam chowder - New England style and Manhattan style."
+    },
+    "cobra": {
+        "factoid": "Cobras can spit venom up to three feet away with incredible accuracy. This venom can cause serious damage, including pain, blindness, and tissue damage."
+    },
+    "cockroach": {
+        "factoid": "Cockroaches can live up to one week without its head! They can also run up to three miles an hour."
+    },
+    "cod": {
+        "factoid": "s?Coders often have trouble turning off their problem-solving brain. This can lead to them finding creative solutions to everyday problems!"
+    },
+    "cormorant": {
+        "factoid": "Cormorants have been known to dive up to depths of 250 feet in search of food!"
+    },
+    "coyote": {
+        "factoid": "Coyotes are known for their vocalizations, which can include howls, yips, barks, and even a \"wow-OO-wow\" sound. They can also make a variety of sounds in different pitches and volumes to communicate with each other."
+    },
+    "crab": {
+        "factoid": "Crabs can walk sideways! They have an asymmetrical body shape which allows them to move in this strange but efficient way."
+    },
+    "crane": {
+        "factoid": "liesCrane flies have an incredible lifespan! Depending on the species, they can live anywhere from one day to several months, with some living up to a year!"
+    },
+    "crocodile": {
+        "factoid": "Crocodiles have the strongest bite force of any animal in the world\u2014up to 3,700 pounds per square inch."
+    },
+    "crow": {
+        "factoid": "Crows have the ability to recognize individual human faces and remember them for years!"
+    },
+    "curlew": {
+        "factoid": "Curlews are the largest wading bird in the UK and the second largest in the world. They have long, curved bills which they use to probe mud for food, such as worms and insects. They also have a distinctive call which is often heard echoing across the countryside."
+    },
+    "deer": {
+        "factoid": "Deer can jump as high as 10 feet and as far as 30 feet in a single bound."
+    },
+    "dinosaur": {
+        "factoid": "Dinosaurs lived on Earth for over 165 million years."
+    },
+    "dog": {
+        "factoid": "Dogs have three eyelids. The third eyelid, called the nictitating membrane or \u201chaw,\u201d helps keep the eye moist and protected."
+    },
+    "dogfish": {
+        "factoid": "Dogfish are the smallest species of shark and can live up to 25 years in the wild. They are known for their fierce hunting abilities and can swim up to 25 miles per hour."
+    },
+    "dolphin": {
+        "factoid": "Dolphins have an incredibly advanced system of communication, using a variety of clicks, whistles and body language to communicate with one another."
+    },
+    "donkey": {
+        "factoid": "Donkeys are very social animals and have a strong sense of family. They have an excellent memory and can recognize people and other donkeys they have known for years."
+    },
+    "dotterel": {
+        "factoid": "Dotterels are one of the few bird species that perform a courtship dance, where they run around in circles with their wings raised and their tails fanned out."
+    },
+    "dove": {
+        "factoid": "oap?Dove soap is the first beauty bar to be certified by the Royal Pharmaceutical Society of Great Britain as a medically-suitable cleanser."
+    },
+    "dragonfly": {
+        "factoid": "Dragonflies are some of the fastest insects in the world and can fly up to speeds of 35 miles per hour!"
+    },
+    "duck": {
+        "factoid": "ggs?Duck eggs are said to have a richer flavor and a higher nutritional value than chicken eggs. They also have a thicker shell than regular chicken eggs, which makes them less likely to break during handling."
+    },
+    "dugong": {
+        "factoid": "Dugongs are the closest living relative of the elephant, and they can live up to 70 years in the wild!"
+    },
+    "dunlin": {
+        "factoid": "Dunlins are one of the most widespread shorebirds in the world, and they can be found on every continent except Antarctica!"
+    },
+    "eagle": {
+        "factoid": "Eagles have the largest eyes of any bird, weighing approximately 28 grams (1 ounce). They are also able to see in ultraviolet light, which helps them to spot prey more easily."
+    },
+    "echidna": {
+        "factoid": "Echidnas are one of only two mammals in the world that lay eggs!"
+    },
+    "eel": {
+        "factoid": "Eels have the ability to produce electric shocks to stun prey and defend themselves against predators."
+    },
+    "eland": {
+        "factoid": "Eland are the largest species of antelope, and can weigh up to 920 kilograms (2,030 lbs). They are also capable of jumping up to 2.5 meters (8.2 feet) in the air!"
+    },
+    "elephant": {
+        "factoid": "Elephants are the only animal that can't jump!"
+    },
+    "elephant-seal": {
+        "factoid": "Elephant seals can hold their breath underwater for more than two hours!"
+    },
+    "elk": {
+        "factoid": "Elk have the largest antlers of any land mammal, and can weigh up to 700 pounds!"
+    },
+    "emu": {
+        "factoid": "Emus are the second-largest living bird by height, after ostriches. They are also the fastest birds on the ground, reaching speeds of up to 48 kilometers per hour!"
+    },
+    "falcon": {
+        "factoid": "Falconry is believed to be the oldest form of hunting with trained animals, with records of it dating back to the 5th century BC. It is also still practiced today in many countries around the world."
+    },
+    "ferret": {
+        "factoid": "Ferrets are related to weasels, otters, minks, and skunks and have been domesticated for over 2000 years!"
+    },
+    "finch": {
+        "factoid": "irdsFinches are very social birds and can often be seen in large flocks in the wild. They are also very good at learning complex vocalizations and can be taught to mimic human speech."
+    },
+    "fish": {
+        "factoid": "Fish can hear better than humans and can detect sound frequencies up to 1,000 Hz!"
+    },
+    "flamingo": {
+        "factoid": "Flamingos can fly up to 55 miles per hour and can migrate over 1,000 miles!"
+    },
+    "fly": {
+        "factoid": "ishing?Fly fishing dates back thousands of years, with the earliest evidence of fly fishing being found in Egyptian tomb paintings depicting people fishing with flies."
+    },
+    "fox": {
+        "factoid": "Foxes can jump up to two and a half meters in the air!"
+    },
+    "frog": {
+        "factoid": "Frogs can see in almost every direction, with some species having 360-degree vision!"
+    },
+    "gaur": {
+        "factoid": "A fun fact about gaur is that they are the largest species of wild cattle in the world and can weigh up to 2,200 pounds!"
+    },
+    "gazelle": {
+        "factoid": "Gazelles are the only antelopes capable of jumping more than 3 meters in the air!"
+    },
+    "gerbil": {
+        "factoid": "Gerbils have a special ability to climb walls, thanks to the tiny hairs on their feet that act like suction cups!"
+    },
+    "giant-panda": {
+        "factoid": "Giant pandas are the only bears with a diet that is mostly vegetarian; their diet consists of 99% bamboo."
+    },
+    "giraffe": {
+        "factoid": "Giraffes have the same number of vertebrae in their necks as humans - 7!"
+    },
+    "gnat": {
+        "factoid": "Gnats are among the most diverse group of insects, with over 1,000 species in North America alone!"
+    },
+    "gnu": {
+        "factoid": "Gnu are the largest species of antelope on the African continent, and can reach speeds of up to 55 mph when running!"
+    },
+    "goat": {
+        "factoid": "Goats were one of the first animals to be domesticated by humans, around 10,000 years ago!"
+    },
+    "goose": {
+        "factoid": "rries?Gooseberries are related to currants, and were once believed to cure insomnia."
+    },
+    "goldfinch": {
+        "factoid": "Goldfinches are the only species of finch that can raise its tail feathers and sing at the same time. This is known as a \"song flight.\""
+    },
+    "goldfish": {
+        "factoid": "Goldfish can have up to 3,000 unique memories and can recognize their owners."
+    },
+    "gorilla": {
+        "factoid": "Gorillas can laugh when they are tickled!"
+    },
+    "goshawk": {
+        "factoid": "Goshawks are known for their impressive aerial acrobatics, performing steep dives and sharp turns while hunting. They can reach speeds of up to 95 mph during dives!"
+    },
+    "grasshopper": {
+        "factoid": "Grasshoppers can jump 20 times the length of their body, which is the equivalent of a human jumping over a house!"
+    },
+    "grouse": {
+        "factoid": "Grouse are well known for their mating dance, which involves a series of spectacular jumps and wing-flapping displays. The males will also puff up their feathers to attract females."
+    },
+    "guanaco": {
+        "factoid": "Guanacos are the wild ancestor of the domestic llama. They are also the national animal of Chile, with an estimated population of around 750,000. In the wild, Guanacos are very social animals and live in herds. Female guanacos are very protective of their young and will fiercely defend them from predators."
+    },
+    "guinea-fowl": {
+        "factoid": "Guinea-fowl make a wide variety of noises, including clucking, cackling, and even hissing. They are also known for their loud call, which sounds like \"buck-wheat\" or \"chuck-wheat\"."
+    },
+    "guinea-pig": {
+        "factoid": "Guinea pigs have the ability to make a wide range of noises, including purrs, chirps, whistles and even a unique \"popcorn\" sound when they are excited."
+    },
+    "gull": {
+        "factoid": "Gulls have a unique way of communicating with each other - they use a range of different calls, including a laughing sound, to determine the location of food or a predator."
+    },
+    "hamster": {
+        "factoid": "Hamsters have an incredible sense of smell that is up to 100 times stronger than humans!"
+    },
+    "hare": {
+        "factoid": "Hares are the fastest land animal in North America, capable of running up to 45 miles per hour!"
+    },
+    "hawk": {
+        "factoid": "Hawks are able to fly at speeds of up to 200 miles per hour!"
+    },
+    "hedgehog": {
+        "factoid": "Hedgehogs can run up to 6 mph, and they are strong swimmers!"
+    },
+    "heron": {
+        "factoid": "Herons are expert fishermen, using their long bills to spear or snatch their prey with remarkable accuracy."
+    },
+    "herring": {
+        "factoid": "Herring are some of the oldest fish species on record, with fossil records of them dating back over 50 million years!"
+    },
+    "hippopotamus": {
+        "factoid": "Hippopotamuses are the third largest land animals after elephants and rhinos!"
+    },
+    "hornet": {
+        "factoid": "Hornets are the largest members of the wasp family and can reach sizes up to 2 inches in length!"
+    },
+    "horse": {
+        "factoid": "acing?Horse racing is the second most attended spectator sport in the world, with over 100 million people attending races each year."
+    },
+    "human": {
+        "factoid": "ehavior?Humans are the only species that blush when embarrassed."
+    },
+    "hummingbird": {
+        "factoid": "Hummingbirds can fly backwards and hover in mid-air!"
+    },
+    "hyena": {
+        "factoid": "Hyenas are the most social of all the large carnivores and can form groups of up to 100 individuals."
+    },
+    "ibex": {
+        "factoid": "A fun fact about ibex is that they have the ability to climb sheer cliffs and steep slopes, using their sharp hooves and flexible ankles to navigate the rocky terrain."
+    },
+    "ibis": {
+        "factoid": "Ibis are known for their excellent eyesight and can spot food up to 1 mile away! They also have excellent balance, allowing them to stand and sleep on one leg for extended periods of time."
+    },
+    "jackal": {
+        "factoid": "esA jackalope is a mythical creature said to be a jackrabbit with antelope horns. It is thought to have originated in the American West and is often depicted in western folklore. The jackalope is a prank by hunters, who often mount antelope horns on a jackrabbit carcass."
+    },
+    "jaguar": {
+        "factoid": "Jaguars are the only big cats in the Americas and are the third-largest cats in the world after lions and tigers."
+    },
+    "jay": {
+        "factoid": "Jay Z is an avid art collector and his collection is estimated to be worth over $70 million."
+    },
+    "jellyfish": {
+        "factoid": "Jellyfish have been on Earth for over 650 million years, making them the oldest multi-organ animal on the planet!"
+    },
+    "kangaroo": {
+        "factoid": "Kangaroos can't walk backwards!"
+    },
+    "kingfisher": {
+        "factoid": "Kingfishers are famous for their colorful plumage and can be found on every continent except Antarctica. They have incredibly good eyesight and can detect fish from up to 30 feet away!"
+    },
+    "koala": {
+        "factoid": "Koalas have two thumbs on each front paw, which helps them grasp onto branches!"
+    },
+    "komodo-dragon": {
+        "factoid": "Komodo dragons have one of the strongest bites in the animal kingdom! It has been estimated that their bite has a force of up to 1,300 newtons, which is roughly the equivalent of the bite of a large crocodile."
+    },
+    "kookabura": {
+        "factoid": "Kookaburras are the only bird species in the world to have a call that sounds like human laughter. This is why they are sometimes referred to as the \"laughing bird\"."
+    },
+    "kouprey": {
+        "factoid": "The kouprey is a rare type of wild ox found in Southeast Asia, and it is believed to be a living relic of the aurochs, an extinct ancestor of domestic cattle. It is also the national animal of Cambodia!"
+    },
+    "kudu": {
+        "factoid": "Kudus are the only antelope with a distinctive \u201cbeard\u201d on their throat. The beard is actually a tuft of long, white hairs that can be up to 8 inches long!"
+    },
+    "lapwing": {
+        "factoid": "A lapwing is a type of wading bird with a unique courtship display. During their courtship, the male and female lapwing will fly high up into the air and then dive down rapidly, with the male making a loud, high-pitched call as they plunge."
+    },
+    "lark": {
+        "factoid": "untings?Lark buntings are known to form large flocks of up to several thousand individuals during migration, making them one of the most abundant passerine birds in North America."
+    },
+    "lemur": {
+        "factoid": "Lemurs are the only primates native to Madagascar and are the most threatened mammal group in the world, with over 100 species listed as critically endangered."
+    },
+    "leopard": {
+        "factoid": "Leopards are the most agile of the big cats and can leap up to 20 feet in a single bound!"
+    },
+    "lion": {
+        "factoid": "Lionfish are considered to be the fastest growing invasive species in the world. They can double their population in as little as 15 months."
+    },
+    "llama": {
+        "factoid": "Llamas can often be seen spitting at each other as a way of expressing dominance or to settle disputes."
+    },
+    "lobster": {
+        "factoid": "Lobsters can live as long as 100 years in the wild!"
+    },
+    "locust": {
+        "factoid": "Locusts are often known for their large swarms, but did you know that each individual locust can jump up to 20 times its own body length?"
+    },
+    "loris": {
+        "factoid": "Lorises are the only primates that use venom to defend themselves from predators!"
+    },
+    "louse": {
+        "factoid": "Lice can survive up to 48 hours away from a host, and can jump up to 6 inches!"
+    },
+    "lyrebird": {
+        "factoid": "The lyrebird has the ability to mimic any sound it hears, including other birds, animals, and even human speech and music. It has been recorded imitating the sound of a camera shutter, a chainsaw, and a car alarm!"
+    },
+    "magpie": {
+        "factoid": "Magpies are known to recognize and remember human faces, making them one of the most intelligent birds in the world!"
+    },
+    "mallard": {
+        "factoid": "ucks?Mallard ducks are the most widespread and abundant duck species in the world. They inhabit every continent except Antarctica."
+    },
+    "manatee": {
+        "factoid": "Manatees are considered to be the only living species in the order Sirenia, and they are also sometimes referred to as sea cows."
+    },
+    "mandrill": {
+        "factoid": "Mandrills are the largest primates in the world and can weigh up to 35 kg (77 lbs). They are also the most colorful primates, with their bright blue and red faces and their yellow, green and red buttocks!"
+    },
+    "mantis": {
+        "factoid": "hrimpMantis shrimp have an incredible vision system, with up to 16 different types of photoreceptors in their eyes! This is more than any other known animal."
+    },
+    "marten": {
+        "factoid": "Martens are the only animals in the Mustelidae family that have semi-retractable claws, which allows them to climb and grip onto tree trunks and branches."
+    },
+    "meerkat": {
+        "factoid": "Meerkats can rotate their ears independently of each other to better locate predators and prey."
+    },
+    "mink": {
+        "factoid": "Mink are excellent swimmers and can hold their breath underwater for up to 6 minutes. They are also strong climbers and can climb trees, up walls, and even across wires."
+    },
+    "mole": {
+        "factoid": "alamanders?Mole salamanders are actually quite good swimmers and can hold their breath for up to 45 minutes underwater!"
+    },
+    "mongoose": {
+        "factoid": "Mongooses are fast and agile animals that can run up to 30 miles per hour and jump 6 feet in the air. They also have a great sense of smell and use it to find food and detect danger."
+    },
+    "monkey": {
+        "factoid": "Monkeys can make more than 30 different sounds to communicate with one another!"
+    },
+    "moose": {
+        "factoid": "Moose are the largest species of deer in the world and can weigh up to 1,500 pounds!"
+    },
+    "mouse": {
+        "factoid": "Mice can jump up to 12 inches high, which is the equivalent of a human jumping over a 3-story building!"
+    },
+    "mosquito": {
+        "factoid": "Mosquitoes are considered to be the deadliest animal on Earth, responsible for over 1 million deaths per year."
+    },
+    "mule": {
+        "factoid": "eerMule deer are known for their large ears, which can measure up to 7 inches long!"
+    },
+    "narwhal": {
+        "factoid": "Narwhals have a spiral tusk that can grow up to 10 feet in length \u2013 making it the largest tusk of any living animal!"
+    },
+    "newt": {
+        "factoid": "Newts have the ability to regrow lost limbs and organs, making them one of the only vertebrates with this amazing regenerative ability."
+    },
+    "nightingale": {
+        "factoid": "A fun fact about nightingales is that they can sing over 1000 different songs! They are also known for their beautiful, melodic songs which can be heard in the early evening and at night."
+    },
+    "octopus": {
+        "factoid": "Octopuses have three hearts. Two of the hearts pump blood to their organs and the third pumps blood through their gills."
+    },
+    "okapi": {
+        "factoid": "Okapi are one of the few mammals that can use their tongues to clean their eyes!"
+    },
+    "opossum": {
+        "factoid": "Opossums are the only marsupial found in North America. They have many fascinating adaptations, such as being able to play dead when threatened. When scared, they will sometimes \"play possum\" and go limp, drool excessively, and close their eyes as if they are dead."
+    },
+    "oryx": {
+        "factoid": "Oryxes are incredibly fast and can run up to 60 miles per hour!"
+    },
+    "ostrich": {
+        "factoid": "Ostriches have the largest eyes of any land animal, measuring up to 5 centimeters (2 inches) across."
+    },
+    "otter": {
+        "factoid": "Otters hold hands while they sleep, so they don't drift apart."
+    },
+    "owl": {
+        "factoid": "onkeysOwl monkeys are the only nocturnal monkeys in the world. They are also one of the few primates that are monogamous and mate for life."
+    },
+    "ox": {
+        "factoid": "rdOxford is home to the oldest university in the English-speaking world, the University of Oxford, which was established in 1096."
+    },
+    "oyster": {
+        "factoid": "Oysters can change genders throughout their lives and have the ability to reproduce both sexually and asexually!"
+    },
+    "panther": {
+        "factoid": "hameleons?Panther chameleons have the ability to change their color to match their surroundings. They can go from shades of green, yellow, orange, red, brown, and even blue."
+    },
+    "parrot": {
+        "factoid": "Parrots are social animals and can learn to recognize and respond to their own names!"
+    },
+    "partridge": {
+        "factoid": "Partridge are one of the only species of bird that can change its color according to the season. In the summer, they are brown and gray, but in the winter, they can turn white to blend in with the snow."
+    },
+    "peafowl": {
+        "factoid": "Peafowl can live for up to 20 years in the wild, and even longer in captivity."
+    },
+    "pelican": {
+        "factoid": "Pelicans are among the oldest living bird species in the world, with fossil records dating back to 30 million years ago."
+    },
+    "penguin": {
+        "factoid": "A fun fact about penguins is that they are able to jump up to 6 feet in the air!"
+    },
+    "pheasant": {
+        "factoid": "Pheasants have an incredible sense of hearing and can detect predators from more than a mile away!"
+    },
+    "pig": {
+        "factoid": "Pigs have an excellent sense of direction and can remember the layout of their surroundings for up to three years."
+    },
+    "pigeon": {
+        "factoid": "Pigeons can recognize individual human faces, and have been trained to sort photographs by gender."
+    },
+    "polar-bear": {
+        "factoid": "Polar bears have black skin under their white fur, which helps them absorb heat from the sun and stay warm in the Arctic."
+    },
+    "pony": {
+        "factoid": "Ponies are actually considered a small horse, not a separate species!"
+    },
+    "porcupine": {
+        "factoid": "Porcupines are excellent swimmers! They are able to stay submerged for up to five minutes, and can even use their quills to help them move through the water."
+    },
+    "porpoise": {
+        "factoid": "Porpoises are the only cetacean (marine mammal) that has a triangular shaped dorsal fin!"
+    },
+    "prairie-dog": {
+        "factoid": "Prairie dogs are highly social animals and live in large colonies called \"towns\" that can span multiple acres and contain hundreds of individuals."
+    },
+    "quail": {
+        "factoid": "Quail eggs are considered a delicacy in many parts of the world. They are believed to have more nutrients than chicken eggs and are often served in high-end restaurants."
+    },
+    "quelea": {
+        "factoid": "Quelea is the world's most numerous bird species, with an estimated global population of over 1.5 billion birds."
+    },
+    "quetzal": {
+        "factoid": "atlQuetzalcoatl was the Mesoamerican god of Wind, Wisdom, and Learning, and was one of the most important gods in the Aztec pantheon. He was often depicted as a feathered serpent and was associated with the morning star. He was also the patron god of the Aztec city of Tollan, which was believed to be the place of origin of all the gods."
+    },
+    "rabbit": {
+        "factoid": "Rabbits are capable of making more than 20 different sounds to communicate with each other!"
+    },
+    "raccoon": {
+        "factoid": "Raccoons are excellent problem solvers and can even open complex locks to find food - they are known to be very clever animals!"
+    },
+    "rail": {
+        "factoid": "ravelRail travel is the safest form of transportation in the world. According to the International Union of Railways, you are about 20 times less likely to die in a train accident than in a car accident."
+    },
+    "ram": {
+        "factoid": "?Ramen has its own museum in Yokohama, Japan, which features a variety of ramen related exhibits, including a \"Ramen Robot\" that makes instant noodles in three minutes."
+    },
+    "rat": {
+        "factoid": "Rats are very social animals and can recognize other rats, even when they are disguised in different clothes!"
+    },
+    "raven": {
+        "factoid": "Ravens are incredibly intelligent animals. They are known to play games, use tools, and even recognize themselves in a mirror."
+    },
+    "red-deer": {
+        "factoid": "Red deer are the largest land mammal in the UK and can reach speeds up to 40mph."
+    },
+    "red-panda": {
+        "factoid": "Red pandas are actually more closely related to raccoons than to giant pandas!"
+    },
+    "reindeer": {
+        "factoid": "Reindeer are the only species of deer in which both the male and female grow antlers."
+    },
+    "rhinoceros": {
+        "factoid": "Rhinoceroses can sleep standing up!"
+    },
+    "rook": {
+        "factoid": "Rooks are incredibly intelligent birds and are known to solve complex problems. They have even been seen using tools to solve puzzles and open boxes!"
+    },
+    "salamander": {
+        "factoid": "Salamanders can regenerate lost body parts such as tails, limbs, and even parts of their brains."
+    },
+    "salmon": {
+        "factoid": "Salmon can leap up to 12 feet in the air when swimming upstream!"
+    },
+    "sand-dollar": {
+        "factoid": "Sand dollars are a type of sea urchin and can actually move around by using their spines!"
+    },
+    "sandpiper": {
+        "factoid": "Sandpipers can drink salt water and filter out the salt using a special gland in their bill!"
+    },
+    "sardine": {
+        "factoid": "Sardines are a type of small, oily fish that are usually canned in oil, water or tomato sauce. They are high in protein, omega-3 fatty acids, and vitamin B-12, and can help reduce cholesterol levels. Fun fact: sardines are one of the most sustainable seafood options available!"
+    },
+    "scorpion": {
+        "factoid": "Scorpions can glow in the dark under a black light! This is due to their unique body chemistry, which causes them to fluoresce when exposed to ultraviolet light."
+    },
+    "sea-lion": {
+        "factoid": "Sea lions can dive up to depths of 1,800 feet and stay submerged for more than 17 minutes!"
+    },
+    "sea-urchin": {
+        "factoid": "Sea urchins have been around for at least 450 million years, making them some of the oldest living animals on Earth."
+    },
+    "seahorse": {
+        "factoid": "Seahorses are the only species of animal where the male, not the female, gives birth to babies!"
+    },
+    "seal": {
+        "factoid": "Seal pups can swim within hours of being born!"
+    },
+    "shark": {
+        "factoid": "Sharks have been around for over 400 million years, making them one of the oldest living species on Earth."
+    },
+    "sheep": {
+        "factoid": "Sheep can recognize the faces of up to 50 other sheep and remember them for years!"
+    },
+    "shrew": {
+        "factoid": "Shrews are the smallest mammal in the world, with the Etruscan Shrew weighing in at less than 2 grams!"
+    },
+    "skunk": {
+        "factoid": "Skunks have a powerful defense mechanism to ward off predators - they can spray a foul-smelling musk up to 10 feet away!"
+    },
+    "snail": {
+        "factoid": "Snails have thousands of tiny teeth which they use to scrape food from surfaces."
+    },
+    "snake": {
+        "factoid": "Snakes can go for months without eating, relying instead on stored body fat to survive."
+    },
+    "sparrow": {
+        "factoid": "Sparrows are considered one of the most common birds in the world, and can be found in virtually every habitat. They are also able to recognize human faces and remember them for years."
+    },
+    "spider": {
+        "factoid": "onkeysSpider monkeys are the only New World monkeys with prehensile tails. They use their tails like a fifth limb to grab onto branches and swing from tree to tree."
+    },
+    "spoonbill": {
+        "factoid": "Spoonbills are one of the few bird species that use their bill to feel for food in the water. They use their unique bill to detect the movement of small fish, crustaceans, and other aquatic prey, which they then snap up with a quick jab."
+    },
+    "squid": {
+        "factoid": "Squid have the ability to change color and texture in order to camouflage themselves in their environment."
+    },
+    "squirrel": {
+        "factoid": "Squirrels can rotate their ankles 180 degrees, allowing them to climb down trees head first!"
+    },
+    "starling": {
+        "factoid": "Starlings are incredibly social birds who live in large flocks, and they are one of the most common birds in the world. They are also very talented mimics and can learn to imitate other birds, animals and even human speech."
+    },
+    "stingray": {
+        "factoid": "Stingrays can jump out of the water and glide up to 16 feet (5 meters). They use this ability to evade predators or to get food that is out of reach."
+    },
+    "stinkbug": {
+        "factoid": "Stinkbugs have the ability to emit a foul-smelling odor when disturbed or threatened. This odor is produced by glands located on the underside of the thorax."
+    },
+    "stork": {
+        "factoid": "Storks are believed to bring babies to new parents, but this is actually a myth. Storks do not deliver babies!"
+    },
+    "swallow": {
+        "factoid": "il butterflies?Swallowtail butterflies use a unique defense mechanism called \"puddling\", which is when they congregate on the ground in large numbers to drink minerals and salts from soil or animal droppings."
+    },
+    "swan": {
+        "factoid": "Swans are able to fly up to 60 mph and can migrate up to 3,000 miles in a year."
+    },
+    "tapir": {
+        "factoid": "Tapirs are the only surviving members of an ancient group of animals called the Perissodactyla, which includes horses, rhinos, and other extinct animals like the woolly rhinoceros."
+    },
+    "tarsier": {
+        "factoid": "Tarsiers are the only primates that are exclusively carnivorous, and they hunt and eat their prey with their extremely long tongues!"
+    },
+    "termite": {
+        "factoid": "Termites are highly social insects, living in large colonies with a complex social structure. They use a form of communication known as \u201ctrophallaxis\u201d which involves sharing a liquid food source with other termites."
+    },
+    "tiger": {
+        "factoid": "Tigers are the largest species of big cat in the world and can weigh up to 660 pounds!"
+    },
+    "toad": {
+        "factoid": "sh?Toadfish have an extraordinary sense of hearing. They have a network of sensory organs located around their bodies that are so sensitive they can detect the movement of small prey in the water even when they are buried in the sand."
+    },
+    "trout": {
+        "factoid": "Trout can taste the difference between colors and will go after brightly-colored lures."
+    },
+    "turkey": {
+        "factoid": "A fun fact about turkey is that the average turkey can run up to 20 miles per hour!"
+    },
+    "turtle": {
+        "factoid": "Turtles can hold their breath for up to 7 hours while they sleep under water!"
+    },
+    "vicu\u00f1a": {
+        "factoid": "Vicu\u00f1as are the smallest member of the camelid family and are found in the Andean highlands of Peru, Bolivia, Ecuador, and Argentina. They are a wild and protected species, and their wool is considered to be the most luxurious and expensive in the world. Vicu\u00f1as are able to survive in the harsh and extreme weather of the high altitudes, and can even use their long eyelashes to keep the sun out of their eyes."
+    },
+    "viper": {
+        "factoid": "Vipers are one of the only families of snakes that have true fangs, which are hollow and curved and used to inject venom into their prey."
+    },
+    "vulture": {
+        "factoid": "Vultures have an incredible sense of smell and can detect the scent of carrion (dead animals) from up to 1.8 miles away!"
+    },
+    "wallaby": {
+        "factoid": "Wallabies can jump up to 3 meters high and can reach speeds of 50 km/hour when leaping."
+    },
+    "walrus": {
+        "factoid": "Walruses have the longest tusks of any living mammal. The tusks can grow up to three feet long and are used for fighting, defense, and foraging for food."
+    },
+    "wasp": {
+        "factoid": "Wasps are a vital part of the ecosystem, as they help control insect populations by preying on them. Wasps can also be beneficial pollinators, as they are important for fertilizing flowers while they search for nectar."
+    },
+    "water-buffalo": {
+        "factoid": "Water-buffalo are the largest members of the bovine family and can weigh up to 2,200 pounds!"
+    },
+    "weasel": {
+        "factoid": "Weasels are one of the few animals that can turn their heads almost 180 degrees!"
+    },
+    "whale": {
+        "factoid": "harksWhale sharks are the largest fish species in the world and can grow up to 12 metres (40 feet) in length. They are filter feeders, meaning they eat plankton, krill, and small fish."
+    },
+    "wolf": {
+        "factoid": "piders?Wolf spiders are capable of running up to 1.5 meters per second, making them some of the fastest spiders in the world!"
+    },
+    "wolverine": {
+        "factoid": "Wolverines have been known to take down prey much larger than themselves, including moose, elk, and even bears."
+    },
+    "wombat": {
+        "factoid": "oop?Wombat poop is cube-shaped! This is due to the wombat's unique digestive system, which allows them to absorb more nutrients from their food."
+    },
+    "woodcock": {
+        "factoid": "Woodcock are able to fly up to speeds of 50mph, making them one of the fastest birds in the air!"
+    },
+    "woodpecker": {
+        "factoid": "Woodpeckers can hammer at up to 12 times per second and up to 20,000 times a day!"
+    },
+    "worm": {
+        "factoid": "les?Wormholes are sometimes referred to as \"Einstein-Rosen bridges,\" named after the two scientists who first proposed their existence."
+    },
+    "wren": {
+        "factoid": "Wrens are some of the most vocal songbirds, often singing around dawn and dusk. They are known for their loud, complex songs that are made up of a combination of trills, chirps, and buzzes."
+    },
+    "yak": {
+        "factoid": "aYakima is home to the Yakima Valley, which is known for being the nation's top hop-growing region and producing some of the best hops in the world."
+    },
+    "zebra": {
+        "factoid": "Zebras have unique stripes that act as camouflage, and no two zebras have the same stripe pattern."
+    },
+    "labrador": {
+        "factoid": "Labradors are the most popular breed in the United States and the United Kingdom."
+    },
+    "german shepherd": {
+        "factoid": "German Shepherds are versatile and are commonly used as working dogs."
+    },
+    "golden retriever": {
+        "factoid": "Golden Retrievers are known for their intelligence and loyalty."
+    },
+    "bulldog": {
+        "factoid": "Bulldogs are gentle and loyal companions."
+    },
+    "beagle": {
+        "factoid": "Beagles are friendly, curious, and active dogs."
+    },
+    "lionhead rabbit": {
+        "factoid": "Lionheads sport a unique mane around their head and neck!"
+    },
+    "holland lop": {
+        "factoid": "Hollands are the smallest breed of lop-eared rabbits!"
+    },
+    "mini rex": {
+        "factoid": "Mini Rexes have a unique, velvety coat!"
+    },
+    "english angora": {
+        "factoid": "Angoras are known for their thick, luxurious fur!"
+    },
+    "dutch rabbit": {
+        "factoid": "Dutch rabbits are known for their distinct coloring!"
+    },
+    "maine coon": {
+        "factoid": "Maine Coons are the largest breed of domesticated cats and are known for their intelligence and playful personalities."
+    },
+    "persian": {
+        "factoid": "Persians have a luxurious, long coat that requires daily grooming to keep it looking its best."
+    },
+    "siamese": {
+        "factoid": "Siamese cats are known for their distinct blue eyes and their vocal personalities."
+    },
+    "british shorthair": {
+        "factoid": "British Shorthairs are known for their gentle and relaxed temperaments."
+    },
+    "ragdoll": {
+        "factoid": "Ragdoll cats are known for their affectionate, laid-back personalities and their tendency to go limp when held."
+    }
+}
