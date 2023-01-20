@@ -15,8 +15,3 @@ def get_age_from_utterrance(context):
 def get_flags(context):
     age = get_age_from_utterrance(context)
     ADD_NLU_FLAG("PETS__age", age)
-
-
-@nlu_processing
-def get_background_flags(context):
-    return

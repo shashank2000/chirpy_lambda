@@ -1,4 +1,3 @@
-from chirpy.response_generators.movie import movie_helpers
 from chirpy.core.response_generator.nlu import nlu_processing
 import logging
 
@@ -11,10 +10,3 @@ def get_flags(context):
     if dialog_act['top_1'] == 'opinion':
         ADD_NLU_FLAG('MOVIE__user_mentioned_reason', True)
     ADD_NLU_FLAG('MOVIE__last_utterance', context.utterance)
-
-
-@nlu_processing
-def get_background_flags(context):
-    return
-
-

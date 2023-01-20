@@ -1,6 +1,8 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
-IS_TRUE(Flags.PETS__user_owns_pet) and
-IS_NONE(State.User__PetType)
+IS_TRUE(State.User__HasPet)
+and IS_NONE(State.User__PetType)
 
 <PROMPTS>
 Prompt pet_type_with_name [ 
@@ -19,14 +21,14 @@ Prompt pet_type_no_name [
 
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__PetType = @val(Utilities.cur_entity | name | lower)
 State.User__PetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
 
 <SUBNODES>
 
 Subnode valid_type [
-  (not IS_NONE(State.User__PetType)) and 
-    EXISTS(database_name="animal_gpt", key={@val(State.User__PetType)})
+  EXISTS(database_name="animal_gpt", key={@val(State.User__PetType)})
 ] {
 	 - "That's awesome!"
   - "I love"
@@ -42,11 +44,14 @@ Subnode valid_type [
    )
 }
 
+Subnode pet_unknown [
+  IS_NONE(State.User__PetType)
+] {
+  "I don't know that type of pet! What a tragedy."
+} 
+
 Subnode default [
 ] {
   - "A great choice! Animals are great. Did you know that "
-  # fun fact about giraffes
   - "Giraffes have the same number of bones in their necks as humans do in their arms."
 } 
-
-<SET_STATE_AFTER>

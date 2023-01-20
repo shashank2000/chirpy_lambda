@@ -86,14 +86,11 @@ if __name__ == '__main__':
         "g2p": {
             "url": "http://localhost:4082"
         },
-        "gpt2ed": {
-            "url": "http://localhost:4083"
-        },
+        # "gpt2ed": {
+        #     "url": "http://localhost:4083"
+        # },
         "question": {
             "url": "http://localhost:4084"
-        },
-        "convpara": {
-            "url": "http://localhost:4085"
         },
         "entitylinker": {
             "url": "http://localhost:4086"
@@ -101,17 +98,17 @@ if __name__ == '__main__':
         "blenderbot": {
             "url": "http://localhost:4087"
         },
-        "responseranker": {
-            "url": "http://localhost:4088"
-        },
+        # "responseranker": {
+        #     "url": "http://localhost:4088"
+        # },
         "stanfordnlp": {
             "url": "http://localhost:4089"
         },
-        "infiller": {
-            "url": "WILL HARDCODE THIS" # TODO (eric): REPLACE THIS WITH SOMETHING MEANINGFUL
-        } if args.use_colbert else { # chirpy2022 project
-            "url": "http://localhost:4090"
-        }
+        # "infiller": {
+        #     "url": "WILL HARDCODE THIS" # TODO (eric): REPLACE THIS WITH SOMETHING MEANINGFUL
+        # } if args.use_colbert else { # chirpy2022 project
+        #     "url": "http://localhost:4090"
+        # }
     }
 
     # initializing environment variables for the session based off of remote config urls

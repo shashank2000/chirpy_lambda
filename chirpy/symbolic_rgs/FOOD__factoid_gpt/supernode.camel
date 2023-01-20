@@ -1,15 +1,15 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
-(not IS_NONE(State.User__FavoriteFood)) and (
-    EXISTS(database_name="food_gpt", key={
-        @val(State.User__FavoriteFood | name)
-    })
-)
+EXISTS(database_name="food_gpt", key={
+    @val(State.CurrentTopic | name)
+})
 
 <PROMPTS>
 Prompt default [ ] {
    @lookup(
         database_name="food_gpt",
-        key={@val(State.User__FavoriteFood | name)},
+        key={@val(State.CurrentTopic | name)},
         column="factoid"
    )
 }

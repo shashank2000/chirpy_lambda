@@ -53,13 +53,13 @@ class SubnodeGroup:
 
 
 def choose_subnodes(subnodes):
-    def get_score_of_subnode(subnode):
-        score = 0
+    def get_score_of_subnode(subnode, idx):
+        score = idx
         if subnode.attributes["force_activation"]:
             score += 100
         return score
 
-    subnodes = [(subnode, get_score_of_subnode(subnode)) for subnode in subnodes]
+    subnodes = [(subnode, get_score_of_subnode(subnode, idx)) for idx, subnode in enumerate(reversed(subnodes))]
     subnodes = sorted(subnodes, key=lambda x: x[1], reverse=True)
     logger.primary_info(f"Subnodes with scores: {subnodes}")
 

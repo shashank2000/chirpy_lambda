@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-IS_NONE(State.User__HasPet)
+IS_NONE(State.User__HasPet) and IS_FALSE(Flags.PETS__move_on_to_new_topic)
 
 <PROMPTS>
 Prompt has_pet [ ] {
@@ -30,6 +30,12 @@ Subnode has_no_pet [
 } <
     State.User__HasPet = @constant(False)
 >
+
+Subnode move_on_from_pets [
+   IS_TRUE(Flags.PETS__move_on_to_new_topic)
+] {
+   "I did not quite catch that. Maybe we should talk about something else."
+}
 
 Subnode default [
 ] {

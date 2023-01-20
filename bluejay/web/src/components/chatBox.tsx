@@ -1,16 +1,16 @@
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import React from 'react';
 
 import { Message } from '@/types';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 export interface ChatBoxProps {
   activeMessage?: Message;
   messages: Message[];
   activateMessage: (message: Message) => void;
   rerolloutToIdx: (idx: number) => void;
+  copyToIdx: (idx: number) => void;
   onInput: React.FormEventHandler<HTMLFormElement>;
   message: string;
   setMessage: (message: string) => void;
@@ -25,6 +25,7 @@ export function ChatBox({
   messages,
   activateMessage,
   rerolloutToIdx,
+  copyToIdx,
   onInput,
   message,
   setMessage,
@@ -40,7 +41,7 @@ export function ChatBox({
       out.push(
         <div className="message-spin" key={idx}>
           <span className="reset-notice"> {message.text} </span>
-          <FontAwesomeIcon icon={faSpinner} className="fa-spin"/>
+          <FontAwesomeIcon icon={faSpinner} className="fa-spin" />
         </div>
       );
     } else if (message.text) {
@@ -78,6 +79,16 @@ export function ChatBox({
               (rerollout to here)
             </Link>
           )}
+
+          {message.source != 'user' && (
+            <Link
+              className="rerollout"
+              href="/#"
+              onClick={() => copyToIdx(idx)}
+            >
+              (copy to here)
+            </Link>
+          )}
         </div>
       );
     }
@@ -85,7 +96,7 @@ export function ChatBox({
   return (
     <div className="chat-container">
       <div className="messages" ref={messagesRef}>
-        {out} 
+        {out}
       </div>
       <div id="type-bar">
         <form onSubmit={onInput}>
@@ -96,7 +107,7 @@ export function ChatBox({
             onChange={(e) => setMessage(e.target.value)}
             placeholder="hi"
           />
-          
+
           <select
             className="subnode-picker"
             value={nextSupernode}
