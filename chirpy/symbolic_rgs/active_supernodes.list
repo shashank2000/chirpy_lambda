@@ -12,6 +12,7 @@ GLOBAL__openended
 LAUNCH
 MOVIE__aspect
 MOVIE__intro
+NEGNAV
 OPINION__intro
 OPINION__subsequent_turn
 OPINION__third_turn

@@ -196,3 +196,6 @@ class ExistsPredicate(Predicate):
 
     def get_score(self):
         return 1.0
+
+
+0.0
