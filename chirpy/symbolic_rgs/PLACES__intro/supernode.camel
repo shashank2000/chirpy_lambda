@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_NONE(State.User__FavoritePlace)
 
@@ -26,6 +28,7 @@ Locals.intro_statement = {
 }
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoritePlace = @val(Utilities.cur_entity)
 State.User__FavoritePlaceTalkable = @val(Utilities.cur_entity | talkable | lower)
 State.User__FavoritePlaceComment = @helper.get_city_comment(@val(Utilities.cur_entity | name))
