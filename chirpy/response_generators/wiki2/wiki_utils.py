@@ -506,10 +506,8 @@ def ngram_recall(generations: List[str], original:str, n:int):
     return len(generated_ngrams & original_ngrams)/len(original_ngrams)
 
 
-def get_sentseg_fn(rg):
-    def seg(text):
-        return NLTKSentenceSegmenter(rg.state_manager).execute(text)
-    return seg
+def get_sentseg_fn(input_data):
+    return re.split('[.\n]', input_data)
 
 
 @measure
@@ -542,14 +540,10 @@ def overview_entity(entity: str, sentseg_fn: Callable[[str], list], max_words: i
         section = next(section for section in RONAN_SECTIONS if section['title_keyword'] == '')
     else:
         query = {
-            "query": {"bool" : {"filter" : [
-                {'term': {'doc_title' : entity}},
-                {"script" : {
-                    "script" : {
-                        "source": "doc['title_keyword'].value == ''",
-                        "lang": "painless"
-                        }
-                }}]}
+            "query": {
+                "match": {
+                    "doc_title": entity.name
+                }
             }
         }
         result = es.search(index='enwiki-20201201-sections', body=query, size=1) # pylint: disable=e1123

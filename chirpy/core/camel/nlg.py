@@ -243,9 +243,9 @@ def spacingaware_join(x):
     for idx, item in enumerate(x):
         if not isinstance(item, str):
             if isinstance(item, WikiEntity):
-                item = item.talkable_name
-            elif isinstance(item, [int, float]):
-                item = str(item)
+                item = item.talkable
+            elif isinstance(item, (int, float)):
+                item = item.talkable
             else:
                 raise TypeError(f"Item {item} (from {x}) is type {type(item)} and can't be converted to String")
             assert isinstance(item, str), f"Conversion function failed for value {item} of type {type}!"
