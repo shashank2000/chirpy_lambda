@@ -1,11 +1,14 @@
 PIPES = {}
 
+
 class PseudoEntity:
     def __init__(self, data):
         self.name = data
         self.talkable_name = ""
+
     def lower(self):
         return ""
+
 
 def pipe(func):
     PIPES[func.__name__] = func
@@ -24,7 +27,7 @@ def talkable(ent: "WikiEntity"):
 
 @pipe
 def topseudoentity(data):
-    '''Converts data to an object obj where obj.name = data or None if data is None'''
+    """Converts data to an object obj where obj.name = data or None if data is None"""
     if data is None:
         return None
     return PseudoEntity(data)
@@ -46,3 +49,13 @@ def lower(s: str):
 def increment(i: int):
     assert isinstance(i, int)
     return i + 1
+
+
+@pipe
+def is_are(l: list):
+    return "is" if len(l) == 1 else "are"
+
+
+@pipe
+def them_it(l: list):
+    return "it" if len(l) == 1 else "them"
