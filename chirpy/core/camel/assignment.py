@@ -10,6 +10,7 @@ class Assignment:
 	variable : Variable
 	keys : List[Key]
 	value : Union[NLGNode, Predicate]
+	is_predicate : bool = False
 
 @dataclass
 class AssignmentList:
@@ -17,5 +18,8 @@ class AssignmentList:
 	
 	def evaluate(self, context):
 		for assignment in self.assignments:
-			context.setDictionary(assignment.variable, assignment.keys, assignment.value.generate(context))
+			if assignment.is_predicate:
+				context.set(assignment.variable, assignment.value.evaluate(context))
+			else:
+				context.setDictionary(assignment.variable, assignment.keys, assignment.value.generate(context))
 		

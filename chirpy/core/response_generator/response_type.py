@@ -1,4 +1,5 @@
 from chirpy.core.response_generator.regex_templates import *
+from chirpy.response_generators.wiki2 import wiki_helpers
 from chirpy.core.regex.templates import *
 from chirpy.core.response_generator.nlu import nlu_processing
 from enum import IntEnum, auto
@@ -86,7 +87,7 @@ def global_response_type_dict(rg, utterance):
 
 
 @nlu_processing
-def get_intent_flags(state_manager, utterance):
+def get_intent_flags(context, state_manager, utterance):
     if (
         state_manager.current_state.navigational_intent.neg_intent or
         DisinterestedTemplate().execute(utterance) is not None
@@ -128,3 +129,5 @@ def get_intent_flags(state_manager, utterance):
         ADD_NLU_FLAG("GlobalFlag__NOTHING")
     if BackChannelingTemplate().execute(utterance) is not None:
         ADD_NLU_FLAG("GlobalFlag__BACKCHANNEL")
+
+    wiki_helpers.add_flags(context, ADD_NLU_FLAG)

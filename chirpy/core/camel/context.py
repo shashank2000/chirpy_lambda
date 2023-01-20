@@ -27,13 +27,14 @@ def get_utilities(state_manager, supernode):
         "cur_entity": current_entity,
         "cur_supernode": supernode.name if supernode else "",
         "cur_turn_num": state_manager.current_state.turn_num,
+        "state_manager": state_manager,
         "response_text": "",
     }
 
 
 def get_global_flags(context):
     # response types
-    global_flags = get_intent_flags(context.state_manager, context.utterance)
+    global_flags = get_intent_flags(context, context.state_manager, context.utterance)
 
     # map from string to None / template
     abrupt_initiative_templates = {
@@ -94,6 +95,10 @@ class Context:
     @property
     def supernodeturns(self):
         return self.state.turns_history
+
+    @property
+    def prevflags(self):
+        return self.state.prev_flags
 
     def set(self, variable, value):
         namespace = getattr(self, variable.namespace.lower())

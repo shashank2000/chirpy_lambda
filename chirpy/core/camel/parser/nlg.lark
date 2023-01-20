@@ -6,6 +6,7 @@ PUNCTUATION: /[?.,;]/
 nlg : "{" ("-"? nlg)* "}"
 	| PUNCTUATION
 	| val
+	| nlg_val
 	| neural_generation
 	| helper
 	| inflect
@@ -26,6 +27,8 @@ CONSTANT: STRING | "{}" | "[]"
 key: ("[" nlg "]") | ("[" nlg _COMMA nlg "]")
 
 val : "@val" _OP variable key* (OPERATORS PARAM_ARG_NAME)* _CP
+
+nlg_val : "@nlg_val" _OP nlg (OPERATORS PARAM_ARG_NAME)* _CP
 
 neural_generation : "@neural_generation" _OP "prefix" _EQ nlg _CP
 

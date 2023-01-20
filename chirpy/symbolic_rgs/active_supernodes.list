@@ -1,6 +1,9 @@
 # comments start with
 
-FOOD__factoid
+CELEB__intro
+CELEB__discuss
+CELEB__generic
+CELEB__unknown
 FOOD__factoid
 FOOD__factoid_gpt
 FOOD__intro
@@ -12,7 +15,6 @@ MOVIE__intro
 OPINION__intro
 OPINION__subsequent_turn
 OPINION__third_turn
-PERSONALISSUES__intro
 PERSONALISSUES__subsequent_turn
 PETS__activity
 PETS__age
@@ -21,3 +23,8 @@ PETS__hypothetical
 PETS__intro
 PETS__name
 PETS__type
+WIKI__acknowledge_user_knowledge
+WIKI__check_user_knowledge
+WIKI__discuss_article
+WIKI__get_intro_paragraph
+

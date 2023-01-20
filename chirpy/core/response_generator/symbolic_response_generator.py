@@ -46,6 +46,8 @@ from importlib import import_module
 
 from concurrent import futures
 
+from chirpy.core.entity_linker.entity_linker_classes import WikiEntity
+
 logger = logging.getLogger("chirpylogger")
 
 import os
@@ -148,6 +150,20 @@ class SymbolicResponseGenerator:
     def get_launch_supernode(self):
         return self.supernodes["LAUNCH"]
 
+    def update_attributes(self, state, supernode, context):
+        if supernode.details["can_only_prompt_once_for"]:
+            variable = supernode.details["can_only_prompt_once_for"]
+            generated_variable = variable.generate(context)
+            if not generated_variable:
+                # If no topic was found, we record None, so we won't go back
+                # to this supernode if the person responds with another None response
+                # during this current topic
+                state.node_to_already_prompted[supernode.name].add(None)
+                return
+            ent_name = generated_variable.name
+            state.node_to_already_prompted[supernode.name].add(ent_name)
+            logger.warning(f"Can no longer prompt for: {state.node_to_already_prompted}")
+
     def get_response(self, state, utterance, kwargs=None) -> ResponseGeneratorResult:
         logger.warning("Begin response for SymbolicResponseGenerator.")
         if kwargs is None:
@@ -168,17 +184,25 @@ class SymbolicResponseGenerator:
 
             context.compute_locals()
             supernode.set_state.evaluate(context)
+
+            tmp_helpers = supernode.nlg_helpers
+            supernode.nlg_helpers = self.supernodes["GLOBALS"].nlg_helpers
+            self.supernodes["GLOBALS"].locals.evaluate(context)
+            supernode.nlg_helpers = tmp_helpers
+
             extra_subnodes = self.supernodes["GLOBALS"].subnodes if supernode.name != "GLOBALS" else None
             subnode, response = supernode.get_subnode_response(context, extra_subnodes=extra_subnodes)
 
             self.update_turns_history(state, supernode)
+            self.update_attributes(state, supernode, context)
             context.utilities["response_text"] = response
 
             subnode.set_state.evaluate(context)
 
             supernode.set_state_after.evaluate(context)
-            context.log_state()
+            state.prev_flags = context.flags
             next_supernode = self.get_next_supernode(context)
+            context.log_state()
         else:
             next_supernode = self.get_launch_supernode()
             response = ""
