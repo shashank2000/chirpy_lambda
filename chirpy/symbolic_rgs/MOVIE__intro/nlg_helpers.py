@@ -6,10 +6,10 @@ import re
 
 logger = logging.getLogger("chirpylogger")
 
-
 def set_favorite_movie(cur_entity):
     if not cur_entity:
         return None
     if EntityGroupsForExpectedType.film.matches(cur_entity):
         return cur_entity
     return None
+

@@ -126,7 +126,7 @@ class WikiResponseGenerator(ResponseGenerator):
                 response_types.add(ResponseType.KNOW_MORE)
 
         if is_personal_disclosure(self, utterance): response_types.add(ResponseType.PERSONAL_DISCLOSURE)
-        if user_disagees(self, utterance):
+        if user_disagrees(self, utterance):
             response_types.add(ResponseType.DISAGREEMENT)
         else: # check is necessary to prevent false positives
             if user_agrees(self, utterance): response_types.add(ResponseType.AGREEMENT)
@@ -462,13 +462,13 @@ class WikiResponseGenerator(ResponseGenerator):
             acknowledgements = ack_results['completions']
 
         if acknowledgements is not None:
-            acknowledgements = filter_responses(self, acknowledgements, cur_entity.name)
+            acknowledgements = filter_responses(self.state_manager, acknowledgements, cur_entity.name)
             logger.primary_info(f"Got acknowledgements: {acknowledgements}")
 
         self.set_cache('infiller', infiller_results)
 
         responses = infiller_results['completions']
-        responses = filter_responses(self, responses, cur_entity.name)
+        responses = filter_responses(self.state_manager, responses, cur_entity.name)
 
         logger.primary_info(f"Got responses: {responses}")
         if len(responses) == 0:
@@ -571,7 +571,7 @@ class WikiResponseGenerator(ResponseGenerator):
             acknowledgements = ack_results['completions']
 
         if acknowledgements is not None:
-            acknowledgements = filter_responses(self, acknowledgements, cur_entity.name)
+            acknowledgements = filter_responses(self.state_manager, acknowledgements, cur_entity.name)
             logger.primary_info(f"Got acknowledgements: {acknowledgements}")
 
         self.set_cache('infiller', infiller_results)
@@ -588,7 +588,7 @@ class WikiResponseGenerator(ResponseGenerator):
         #     responses = [replace_entity_placeholder(response, pronouns) for response in responses]
         #     logger.primary_info(f"Responses after pronouns treatment: {responses}")
 
-        responses = filter_responses(self, responses, cur_entity.name)
+        responses = filter_responses(self.state_manager, responses, cur_entity.name)
 
         logger.primary_info(f"Got responses: {responses}")
 

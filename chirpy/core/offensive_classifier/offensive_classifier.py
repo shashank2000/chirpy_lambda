@@ -53,7 +53,8 @@ WHITELIST_PHRASES = set(['kill bill', 'beavis and butt head', 'beavis and butt-h
                          'the good the bad and the ugly', 'pee wee herman', 'the ugly dachshund', 'xxx tentacion',
                          'lil uzi vert', 'lil uzi', 'young blood', 'chicken pot pie', 'pot roast', 'pop tarts',
                          'they suck', 'he\'s sexy', 'she\'s sexy', 'vegas strip', 'hell comes to frogtown',
-                         'dick van dyke', 'blood and bullets', 'blood prison', 'dick powell', 'comic strip', 'comic strips'])
+                         'dick van dyke', 'blood and bullets', 'blood prison', 'dick powell', 'comic strip', 'comic strips', 
+                         'naked eye'])
 
 class OffensiveClassifier(object):
     """A class to load, and check text against, our preprocessed offensive phrases file"""
