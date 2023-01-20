@@ -1,4 +1,3 @@
-from chirpy.response_generators.movie import movie_helpers
 from chirpy.core.response_generator import nlg_helper
 from chirpy.core.camel.context import Context
 
@@ -30,3 +29,8 @@ def get_user_reasons(response):
         return reasons[0]
     else:
         return None
+
+
+@nlg_helper
+def untriggerAspect():
+    return False

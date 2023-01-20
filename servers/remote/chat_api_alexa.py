@@ -1,51 +1,38 @@
 import os
 import re
 
+from agents.alexa.event import Event
+
 import jsonpickle
 from flask import Flask, request
 import uuid
 
 #from agent.agents.remote_non_persistent import RemoteNonPersistentAgent as Agent
-from agents.remote_psql_persistent import RemotePersistentAgent as Agent
+from agents.alexa.remote_alexa_agent import RemoteAlexaAgent
 app = Flask(__name__)
 from flask_cors import CORS
 CORS(app, origins='*')
 
 @app.route('/', methods=['POST'])
 def conversational_turn():
-
     json_args = request.get_json(force=True)
-    #TODO: Error handling?
-    user_utterance = str(json_args.get('user_utterance', None) or '')
+    event = Event(json_args)
+
+    user_utterance = event.get(path="request.intent.slots.text.value", default_val='')
     alexa_asr_user_utterance = convert_to_alexa_asr(user_utterance)
-    session_uuid = str(json_args.get('session_uuid', None) or str(uuid.uuid4()))
-    user_uuid = str(json_args.get('user_uuid', None) or str(uuid.uuid4()))
-    new_session = (str(json_args.get('new', "True")).lower() != "false")
-    last_state_creation_time = str(json_args.get('last_state_creation_time', None))
 
-    # payload = json_args.get('payload', None) or {}
-    # client = str(json_args.get('client', ''))
-    # client_user_id = str(json_args.get('client_user_id', ''))
-    # client_information = json_args.get('client_information', {})
-    # if 'creation_date_time' in payload:
-    #     new_session = False
-    #     last_state_creation_time = payload['creation_date_time']
-    # else:
-    #     new_session = True
-    #     last_state_creation_time = None
-
-    agent = Agent(session_id = session_uuid,
-                                           user_id = user_uuid,
-                                           new_session=new_session,
-                                           last_state_creation_time = last_state_creation_time)
+    agent = RemoteAlexaAgent(event)
     response, deserialized_current_state = agent.process_utterance(alexa_asr_user_utterance)
 
     #TODO: Consider returning the deserialized current state
     json_response = {
-        'session_uuid': session_uuid,
-        'user_uuid': user_uuid,
-        'bot_utterance': response,
-        'creation_date_time': deserialized_current_state['creation_date_time']
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "PlainText",
+                "text": response
+            }
+        }
     }
     return json_response
 
