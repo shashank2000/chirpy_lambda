@@ -31,5 +31,5 @@ Subnode opinion_intro_response [
 
 <SET_STATE_AFTER>
 Flags.OPINION__asked_for_opinion = @constant(True)
-State.User__OpinionYes = @val(Flags.OPINION__YES)
-State.User__OpinionNo = @val(Flags.GlobalFlag__NO)
+Flags.OPINION__YES = @val(Flags.OPINION__YES)
+Flags.OPINION__NO = @val(Flags.GlobalFlag__NO)

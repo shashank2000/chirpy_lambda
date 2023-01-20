@@ -171,6 +171,23 @@ class Val(NLGNode):
                 value -= int(operation)
         return value
 
+@dataclass
+class NLGVal(NLGNode):
+    nlg_variable: NLGNode
+    operations: List[Tuple[str, str]]
+
+    def generate(self, context):
+        value = self.nlg_variable.generate(context)
+        for operator, operation in self.operations:
+            if operator == "|":
+                value = get_pipe(operation)(value)
+            elif operator == "+":
+                value += int(operation)
+            elif operator == "-":
+                value -= int(operation)
+        return value
+
+
 
 @dataclass
 class NLGHelper:

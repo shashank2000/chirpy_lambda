@@ -28,12 +28,6 @@ User__FavoriteCelebrityCurrWork: null
 CELEB__discuss_movie: False
 CELEB__discuss_tv: False
 CELEB__discuss_song: False
-PERSONALISSUE__supernode_is_responding: False
-PERSONALISSUE__user_has_personal_issue: False
-PERSONALISSUE__need_confirmation_for_further_discussion: False
-PERSONALISSUE__confirming_further_discussion: False
-PERSONALISSUE__responded_with_question: False
-PERSONALISSUE__LastTurnUsedNeuralGeneration: False
 User__HasPet: null
 User__PetName: null
 User__HypotheticalPetType: null

@@ -98,6 +98,18 @@ class SupernodeMaker(Transformer):
             operations = [(op[0].value, op[1].value) for op in operations]
         return nlg.Val(tok[0], keys, operations)
 
+    def nlg__nlg_val(self, tok):
+        operations = []
+        if len(tok) > 1:
+            operators_start = 1
+            # tokens are [operator, pipe function, operator, pipe function, ...]
+            extra_args = tok[operators_start:]
+            iterator = iter(extra_args)
+            # pairs extra_args into [(operator, pipe function), (operator, pipe function), ...]
+            operations = list(zip(iterator, iterator))
+            operations = [(op[0].value, op[1].value) for op in operations]
+        return nlg.NLGVal(tok[0], operations)
+
     def nlg__neural_generation(self, tok):
         return nlg.NeuralGeneration(tok[0])
 
@@ -195,7 +207,7 @@ class SupernodeMaker(Transformer):
         return assignment.Assignment(tok[0], tok[1:-1], tok[-1])
 
     def condition_assignment(self, tok):
-        return assignment.Assignment(tok[0], tok[1], True)
+        return assignment.Assignment(tok[0], [], tok[1], True)
 
     ## DETAILS
     def details_section(self, tok):

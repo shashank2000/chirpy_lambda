@@ -30,7 +30,5 @@ def get_user_reasons(response):
     else:
         return None
 
-
-@nlg_helper 
 def untriggerAspect():
     return False

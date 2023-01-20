@@ -3,13 +3,21 @@ IS_TRUE(Flags.OPINION__responded_to_opinion) and not IS_NONE(State.CurrentTopic)
 
 <PROMPTS>
 Prompt new_topic [ ] {
-	@helper.get_topic_type(@val(State.User__CurrentOpinionTopic))
+	@helper.get_topic_type(@val(State.CurrentTopic | name))
 }
 
-<LOCALS>
-Locals.responded_with_valid_topic = @helper.opinion_exists(@val(Flags.OPINION__last_said))
+<SET_STATE>
+Flags.OPINION__knows_person_likes_activity = @helper.opinion_exists(@val(Flags.OPINION__last_said))
 
 <SUBNODES>
+Subnode general_response [
+	IS_TRUE(Flags.OPINION__knows_person_likes_activity)
+] {
+	- "I'd like to hear more about that activity!"
+} <
+	Flags.GlobalFlag__LastBotTurnWasOpenEnded = @constant(True)
+>
+
 Subnode general_response [
 ] {
 	- "That's interesting."
@@ -17,4 +25,3 @@ Subnode general_response [
 
 <SET_STATE_AFTER>
 State.User__CurrentOpinionTopic = @helper.get_opinion(@val(Flags.OPINION__last_said))
-Flags.OPINION__knows_person_likes_activity = @constant(Locals.responded_with_valid_topic)

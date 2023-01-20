@@ -97,8 +97,8 @@ class Context:
         return self.state.turns_history
 
     @property
-    def currenttopics(self):
-        return self.state.current_entity_store
+    def prevflags(self):
+        return self.state.prev_flags
 
     def set(self, variable, value):
         namespace = getattr(self, variable.namespace.lower())
