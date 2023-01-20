@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-not IS_NONE(State.WIKI__Entity) and IS_TRUE(Flags.WIKI__understand_user_better)and IS_TRUE(Flags.WIKI__learn_more)
+not IS_NONE(State.CurrentTopic) and IS_TRUE(Flags.WIKI__understand_user_better)and IS_TRUE(Flags.WIKI__learn_more)
 
 <PROMPTS>
 Prompt what_to_talk_about [ ] {
@@ -8,7 +8,7 @@ Prompt what_to_talk_about [ ] {
 		{"Ah, to my knowledge, "},
 		{"From what I know, "}
 	)
-	- @helper.get_intro_paragraph(@val(State.WIKI__Entity))
+	- @helper.get_intro_paragraph(@val(State.CurrentTopic))
 }
 
 <LOCALS>
@@ -17,7 +17,7 @@ Prompt what_to_talk_about [ ] {
 
 <SUBNODES>
 Subnode pos_response [
-	IS_TRUE(Flags.WIKI__POS_SENTIMENT)
+	IS_TRUE(Flags.GlobalFlag__POS_SENTIMENT)
 ] {
 	- ""
 } <
