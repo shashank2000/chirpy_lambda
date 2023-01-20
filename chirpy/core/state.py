@@ -10,6 +10,7 @@ from chirpy.core.response_generator_datatypes import ResponseGeneratorResult
 from chirpy.core.experiment import Experiments
 from chirpy.core.flags import SIZE_THRESHOLD
 from chirpy.core.util import print_dict_linebyline, get_ngrams
+from chirpy.symbolic_rgs import state_initialization
 import jsonpickle
 import random
 import logging
@@ -45,7 +46,6 @@ class BaseSymbolicState:
     data: Dict[str, Any] = field(default_factory=dict)
     turns_history: Dict[str, int] = field(default_factory=dict)
     last_response : ResponseGeneratorResult = field(default_factory=lambda: None)
-    entry_locals: Dict[str, Any] = field(default_factory=dict)
     
     def check(self, key):
         assert key in ALL_STATE_KEYS, f"Key not found: {key}"

@@ -40,6 +40,8 @@ class RemoteNonPersistentAgent(LocalAgent):
         self.last_state_creation_time = last_state_creation_time
 
 def lambda_handler(args):
+    if args.store_transcript:
+        trans_file = open("newest_transcript.txt", "w+")
     if args.test_script:
         with open(args.test_script, 'r') as f:
             test_script = [x.strip() for x in f.readlines()]
@@ -54,8 +56,12 @@ def lambda_handler(args):
             print('>', user_input)
         else:
             user_input = input('> ')
+            if args.store_transcript:
+                trans_file.write("USER > " + user_input + "\n")
         response, deserialized_current_state = local_agent.process_utterance(user_input)
         print(response)
+        if args.store_transcript and isinstance(response, str):
+            trans_file.write("AGENT > " + response + "\n")
 
 def init_argparse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -63,6 +69,7 @@ def init_argparse() -> argparse.ArgumentParser:
     )
     parser.add_argument('--use_colbert', action = 'store_true', default = False)
     parser.add_argument('-t', '--test_script', default="")
+    parser.add_argument('--store_transcript', action='store_true', default=False)
     return parser
 
 if __name__ == '__main__':
