@@ -1,3 +1,5 @@
+from chirpy.core.response_generator import nlg_helper
+
 import logging
 import random
 import json
@@ -15,6 +17,7 @@ with open(PATH, 'r') as f:
 
 response_tones = ['disagree', 'strong_disagree', 'agree']
 
+@nlg_helper
 def get_opinion_response(user_sentiment: str, topic: str):
     tone = random.choice(response_tones)
     if user_sentiment == "positive" or user_sentiment == "negative":

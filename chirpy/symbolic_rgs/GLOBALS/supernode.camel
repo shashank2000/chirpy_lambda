@@ -4,6 +4,9 @@ Prompt what_to_talk_about [ ] {
 	"What do you want to talk about?"
 }
 
+<LOCALS>
+Locals.factoid = @helper.get_factoid(@val(Utilities.cur_entity), @val(Utilities.state_manager))
+
 <SUBNODES>
 
 Subnode red_question_financial:force_activation [
@@ -65,6 +68,35 @@ Subnode are_you_recording:force_activation [
 	"I hope that helps! On another note,"
 }
 
+Subnode personal_issue_intro:force_activation [
+	NOT IS_IN(Utilities.cur_supernode, [
+		"PERSONALISSUES__subsequent_turn", 
+		"OPINION__subsequent_turn",
+		"OPINION__third_turn",
+		"WIKI__TODO_ADD_SUPERNODE", 
+		"ALIENS__TODO_ADD_SUPERNODE",
+		"CATEGORIES__TODO_ADD_SUPERNODE"
+	]) and IS_TRUE(Flags.GlobalFlag__personal_sharing_negative)
+] {
+	- "Thank you for sharing that with me."
+  - @one_of(
+    "I'm sorry to hear that.",
+    "That sounds difficult.",
+    "That's really unfortunate."
+  )
+  - @one_of(
+    "I'm here to listen if you would like to tell me more.",
+    "I would be interested to hear more if you don't mind sharing.",
+    "Feel free to continue telling me more.",
+    "Please continue telling me more if you would like to.",
+    "I'm willing to hear more if you'd like to tell me about it.",
+    "I'd be willing to listen if you're willing to continue sharing."
+  )
+} <
+	State.CurrentTopic = @nlg_val(@constant("PERSONALISSUESTOPIC") | topseudoentity)
+	Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+>
+
 Subnode weather [ 
 	IS_TRUE(Flags.GlobalFlag__Initiative__weather)
 ] {
@@ -74,8 +106,27 @@ Subnode weather [
 	State.no_entity = @constant(True)
 >
 
-Subnode fallback_neural [ ] {
-	@neural_generation(prefix="")
+Subnode factoid [
+	not IS_NONE(Locals.factoid)
+] {
+	- @one_of(
+		{"Ah yes"},
+		{"Oh yeah"}
+	)
+	- "I love talking about"
+	- @val(Utilities.cur_entity)
+	- .
+	- @val(Locals.factoid)
+	- .
+} <
+	State.CurrentTopic = @val(Utilities.cur_entity)
+>
+
+Subnode fallback_neural [
+] {
+	- @neural_generation(prefix={
+		- "I don't know much about this, but I'm happy to learn more. Even though I'm a bot, I don't know everything yet."
+	})
 }
 
 Subnode fallback [ ] {

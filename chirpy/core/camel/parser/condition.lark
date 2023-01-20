@@ -16,7 +16,7 @@
 predicate: PREDICATE _OP variable _CP
 		 | PREDICATE_TWO _OP variable _COMMA nlg _CP
 		 | PREDICATE_LIST _OP variable _COMMA _OB nlg (_COMMA nlg)* (_COMMA)? _CB _CP
-		 | EXISTS _OP "database_name" _EQ ESCAPED_STRING _COMMA "key" _EQ nlg _CP
+		 | EXISTS _OP "database_name" _EQ ESCAPED_STRING _COMMA "key" _EQ nlg (_COMMA nlg)* _CP
 		 
 bool: BOOL
 

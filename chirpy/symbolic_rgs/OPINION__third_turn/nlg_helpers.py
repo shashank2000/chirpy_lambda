@@ -16,3 +16,12 @@ def get_opinion(input=""):
         if topic in input:
             return topic
     return random.choice(list(activities.keys()))
+
+def opinion_exists(input=""):
+    for topic in activities.keys():
+        if topic in input:
+            return True
+    return False
+
+def get_topic_type(topic: str):
+    return f"What other {activities[topic]} do you like?"

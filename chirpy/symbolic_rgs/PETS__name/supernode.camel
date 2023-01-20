@@ -1,0 +1,37 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_TRUE(State.User__HasPet)
+and IS_NONE(State.User__PetName)
+and IS_FALSE(State.User__PetNameGivenUp)
+
+<PROMPTS>
+Prompt pet_name [ ] {
+    "What's your pet's name?"
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Flags.PETS__proposed_name | topseudoentity)
+State.User__PetName = @val(Flags.PETS__proposed_name)
+
+<SUBNODES>
+Subnode has_name [
+  not IS_NONE(State.User__PetName)
+] {
+  - @val(State.User__PetName)
+  - "is a great name!"
+}
+
+Subnode name_given_up [
+  IS_TRUE(Flags.PETS__no_disclose_name)
+] {
+  "No problem."
+}
+
+Subnode default [
+] {
+  - "I can't say I know that name, but it must be a really cool name!"
+}
+
+<SET_STATE_AFTER>
+State.User__PetNameGivenUp = @val(Flags.PETS__no_disclose_name)

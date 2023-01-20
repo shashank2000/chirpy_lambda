@@ -111,7 +111,7 @@ def get_flags(context):
 	
 	# Personal issue
 	if personal_issues_helpers.is_personal_issue(context.state_manager, context.utterance):
-		ADD_NLU_FLAG('PERSONALISSUE__personal_sharing_negative')
+		ADD_NLU_FLAG('GlobalFlag__personal_sharing_negative')
 	
 	# Red question
 	# <=3 word utterances are not asking for advice (bold assumption!)
