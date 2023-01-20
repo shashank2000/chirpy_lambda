@@ -171,7 +171,7 @@ class LocalAgent():
     def get_user_attributes(self):
         user_attributes = self.user_table.fetch(self.user_id)
         user_attributes['user_id'] = self.user_id
-        user_attributes['user_timezone'] = None
+        user_attributes['user_timezone'] = "Europe/London"
         user_attributes = {k: jsonpickle.encode(v) for k, v in user_attributes.items()}
         return user_attributes
 
