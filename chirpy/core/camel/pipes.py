@@ -4,7 +4,10 @@ PIPES = {}
 class PseudoEntity:
     def __init__(self, data):
         self.name = data
-        self.talkable_name = ""
+        self.talkable_name = data
+
+    def __str__(self):
+        return f"PseudoEntity<{self.name}>"
 
     def lower(self):
         return ""

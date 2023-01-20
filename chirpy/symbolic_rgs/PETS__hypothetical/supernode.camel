@@ -8,7 +8,7 @@ and IS_FALSE(Flags.PETS__move_on_to_new_topic)
 
 <PROMPTS>
 Prompt favorite_pet [ ] {
-    "If you could own any animal in the world as your pet, what would you choose?"
+    "By the way, I've been thinking about something. if you could own any animal in the world as your pet, what would you choose?"
 }
 
 
