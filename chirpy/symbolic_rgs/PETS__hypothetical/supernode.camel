@@ -26,7 +26,7 @@ Subnode valid_hypothetical_type [
   - "I love"
   - @val(State.User__HypotheticalPetTypeTalkable)
   - "."
-  - "I'd personally want a pet kookabura".
+  - "I'd personally want a pet kookabura."
   - "Fun fact, "
   # database lookup for fun fact, we don't want plural form
   -@lookup(
@@ -39,7 +39,7 @@ Subnode valid_hypothetical_type [
 Subnode default [
 ] {
   - "That's awesome!"
-  - "I'd personally want a pet kookabura".
+  - "I'd personally want a pet kookabura."
   - "Fun fact about kookaburas, "
   @lookup(
         database_name="animal_gpt",
