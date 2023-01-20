@@ -1,18 +1,15 @@
-from chirpy.core.response_generator.response_type import add_response_types, ResponseType
-from chirpy.core.camel.context import Context, get_global_flags
 import logging
 from chirpy.response_generators.wiki2.regex_templates import *
 from chirpy.annotators.corenlp import Sentiment
 from chirpy.response_generators.wiki2.response_templates.response_components import ERROR_ADMISSION, \
     APPRECIATION_DEFAULT_ACKNOWLEDGEMENTS, COMMISERATION_ACKNOWLEDGEMENTS
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from chirpy.core.camel.context import Context
+else:
+    Context = None
 
 logger = logging.getLogger('chirpylogger')
-
-ADDITIONAL_RESPONSE_TYPES = ['CONFUSED', 'WHAT_ABOUT_YOU', 'HIGH_INITIATIVE', 'POS_SENTIMENT', 'NEG_SENTIMENT',
-                             'NEUTRAL_SENTIMENT', 'KNOW_MORE', 'PERSONAL_DISCLOSURE', 'AGREEMENT', 'DISAGREEMENT',
-                             'APPRECIATIVE', 'OPINION', 'STARTS_WITH_WHAT']
-
-ResponseType = add_response_types(ResponseType, ADDITIONAL_RESPONSE_TYPES)
 
 def user_is_confused(context: Context, utterance: str):
     return (ClarificationQuestionTemplate().execute(utterance) and not context.state_manager.current_state.navigational_intent.pos_intent) \
@@ -73,7 +70,7 @@ def is_no_to_sections(rg, utterance):
 def user_agrees(context: Context, utterance: str):
     return AgreementTemplate().execute(utterance) is not None
 
-def user_disagees(context: Context, utterance: str):
+def user_disagrees(context: Context, utterance: str):
     return DisagreementTemplate().execute(utterance) is not None
 
 def original_til_templates(apologize: bool, original_til: str):
@@ -98,22 +95,22 @@ def original_til_templates(apologize: bool, original_til: str):
 
 def add_flags(context: Context, add_nlu_flag) -> set[str]:
     utterance = context.utterance
-    if user_is_confused(context, utterance): add_nlu_flag('WIKI__CONFUSED')
-    if is_neg_sentiment(context, utterance): add_nlu_flag('WIKI__NEG_SENTIMENT')
-    if is_pos_sentiment(context, utterance): add_nlu_flag('WIKI__POS_SENTIMENT')
-    if is_neutral_sentiment(context, utterance): add_nlu_flag('WIKI__NEUTRAL_SENTIMENT')
-    if is_opinion(context, utterance): add_nlu_flag('WIKI__OPINION')
-    if is_appreciative(context, utterance): add_nlu_flag('WIKI__APPRECIATIVE')
+    if user_is_confused(context, utterance): add_nlu_flag('GlobalFlag__CONFUSED')
+    if is_neg_sentiment(context, utterance): add_nlu_flag('GlobalFlag__NEG_SENTIMENT')
+    if is_pos_sentiment(context, utterance): add_nlu_flag('GlobalFlag__POS_SENTIMENT')
+    if is_neutral_sentiment(context, utterance): add_nlu_flag('GlobalFlag__NEUTRAL_SENTIMENT')
+    if is_opinion(context, utterance): add_nlu_flag('GlobalFlag__OPINION')
+    if is_appreciative(context, utterance): add_nlu_flag('GlobalFlag__APPRECIATIVE')
 
     if not context.flags['GlobalFlag__COMPLAINT'] and not context.flags['GlobalFlag__DISINTERESTED']:
         # to counter false positives, e.g. "that is not interesting"
         if user_wants_to_know_more(context, utterance):
-            add_nlu_flag('WIKI__KNOW_MORE')
+            add_nlu_flag('GlobalFlag__KNOW_MORE')
 
-    if is_personal_disclosure(context, utterance): add_nlu_flag('WIKI__PERSONAL_DISCLOSURE')
-    if user_disagees(context, utterance):
-        add_nlu_flag('WIKI__DISAGREEMENT')
+    if is_personal_disclosure(context, utterance): add_nlu_flag('GlobalFlag__PERSONAL_DISCLOSURE')
+    if user_disagrees(context, utterance):
+        add_nlu_flag('GlobalFlag__DISAGREEMENT')
     else: # check is necessary to prevent false positives
-        if user_agrees(context, utterance): add_nlu_flag('WIKI__AGREEMENT')
+        if user_agrees(context, utterance): add_nlu_flag('GlobalFlag__AGREEMENT')
     # if is_no_to_sections(self, utterance): response_types.add(ResponseType.NO)
-    if starts_with_what(context, utterance): add_nlu_flag('WIKI__STARTS_WITH_WHAT')
+    if starts_with_what(context, utterance): add_nlu_flag('GlobalFlag__STARTS_WITH_WHAT')

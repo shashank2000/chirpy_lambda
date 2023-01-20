@@ -43,7 +43,7 @@ Locals.commiseration_acknowledgement = {
     "Yes, it is a bit disappointing."
 	)
 }
-Locals.opinion = @helper.get_opinion(@val(State.CurrentTopic), @val(Flags.WIKI__NEUTRAL_SENTIMENT), @val(Flags.WIKI__POS_SENTIMENT))
+Locals.opinion = @helper.get_opinion(@val(State.CurrentTopic), @val(Flags.GlobalFlag__NEUTRAL_SENTIMENT), @val(Flags.GlobalFlag__POS_SENTIMENT))
 
 <SET_STATE>
 
@@ -69,7 +69,7 @@ Subnode no:force_activation [
 }
 
 Subnode positive_opinion:force_activation [
-	IS_TRUE(Flags.WIKI__POS_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
+	IS_TRUE(Flags.GlobalFlag__POS_SENTIMENT) and IS_TRUE(Flags.GlobalFlag__OPINION)
 ] {
 	- @one_of(
 		"Yeah, that's cool!",
@@ -80,21 +80,21 @@ Subnode positive_opinion:force_activation [
 }
 
 Subnode negative_opinion:force_activation [
-	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
+	IS_TRUE(Flags.GlobalFlag__NEG_SENTIMENT) and IS_TRUE(Flags.GlobalFlag__OPINION)
 ] {
 	- "That's an interesting take."
 	- @val(Locals.opinion)
 }
 
 Subnode negative_no_opinion:force_activation [
-	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_FALSE(Flags.WIKI__OPINION)
+	IS_TRUE(Flags.GlobalFlag__NEG_SENTIMENT) and IS_FALSE(Flags.GlobalFlag__OPINION)
 ] {
 	- @val(Locals.commiseration_acknowledgement)
 	- @val(Locals.opinion)
 }
 
 Subnode neutral_opinion:force_activation [
-	IS_TRUE(Flags.WIKI__NEG_SENTIMENT) and IS_TRUE(Flags.WIKI__OPINION)
+	IS_TRUE(Flags.GlobalFlag__NEG_SENTIMENT) and IS_TRUE(Flags.GlobalFlag__OPINION)
 ] {
 	- @one_of(
 		"I see, thanks for sharing that!",
