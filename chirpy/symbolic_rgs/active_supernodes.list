@@ -7,13 +7,7 @@ GLOBALS
 GLOBAL__openended
 LAUNCH
 MOVIE__intro
-MOVIE__favorite
-MOVIE__preferences_actor
-MOVIE__aspect
-CELEB__intro
-CELEB__discuss
-CELEB__unknown
-CELEB__generic
+PLACES__intro
 OPINION__intro
 OPINION__subsequent_turn
 OPINION__third_turn

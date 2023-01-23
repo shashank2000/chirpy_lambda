@@ -42,6 +42,7 @@
 - GlobalFlag__personal_sharing_negative
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
+- PLACES__user_mentioned_city
 - CELEB__have_asked_about_celeb
 - CELEB__move_on_to_new_topic
 - CELEB__discuss_tv
