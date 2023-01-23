@@ -2,7 +2,7 @@ from enum import IntEnum
 import logging
 
 from chirpy.core.response_priority import ResponsePriority, PromptType
-from chirpy.core.entity_linker.entity_linker_classes import WikiEntity
+from chirpy.core.entity_linker.entity_linker_classes import PseudoEntity, WikiEntity
 from chirpy.core.smooth_handoffs import SmoothHandoff
 from typing import Optional
 from chirpy.core.entity_linker.entity_groups import EntityGroup
@@ -65,9 +65,9 @@ class ResponseGeneratorResult:
                             f'type {type(priority)}. It should be type {ResponsePriority}')
         self.priority = priority
         self.needs_prompt = needs_prompt
-        if cur_entity is not None and not isinstance(cur_entity, WikiEntity):
+        if cur_entity is not None and not isinstance(cur_entity, PseudoEntity):
             raise TypeError(f'Trying to create a ResponseGeneratorResult with cur_entity={cur_entity}, which is of '
-                             f'type {type(cur_entity)}. It should be None or type {WikiEntity}')
+                             f'type {type(cur_entity)}. It should be None or type {PseudoEntity}')
         self.cur_entity = cur_entity
         self.answer_type = answer_type
         if not isinstance(answer_type, AnswerType):
@@ -152,9 +152,9 @@ class PromptResult:
             raise TypeError(f'Trying to create a PromptResult with prompt_type={prompt_type}, which is of '
                             f'type {type(prompt_type)}. It should be type {PromptType}')
         self.type = prompt_type
-        if cur_entity is not None and not isinstance(cur_entity, WikiEntity):
+        if cur_entity is not None and not isinstance(cur_entity, PseudoEntity):
             raise TypeError(f'Trying to create a PromptResult with cur_entity={cur_entity}, which is of '
-                             f'type {type(cur_entity)}. It should be None or type {WikiEntity}')
+                             f'type {type(cur_entity)}. It should be None or type {PseudoEntity}')
         self.cur_entity = cur_entity
         if expected_type is not None and not isinstance(expected_type, EntityGroup):
             raise TypeError(f'Trying to create a PromptResult with expected_type={expected_type}, which is '

@@ -10,7 +10,7 @@ engine = inflect.engine()
 from chirpy.annotators.blenderbot import BlenderBot
 from chirpy.core.camel.variable import Variable
 from chirpy.core.camel.pipes import get_pipe
-from chirpy.core.entity_linker.entity_linker_classes import WikiEntity
+from chirpy.core.entity_linker.entity_linker_classes import PseudoEntity
 from chirpy.core.util import infl
 from chirpy.core.response_generator.neural_helpers import get_neural_fallback_handoff, neural_response_filtering
 from chirpy.core.response_generator.neural_helpers import is_two_part, NEURAL_DECODE_CONFIG, get_random_fallback_neural_response
@@ -210,7 +210,7 @@ class Inflect:
     def generate(self, context):
         input = self.inflect_token.generate(context)
         val = self.inflect_entity.generate(context)
-        assert isinstance(val, WikiEntity), f"@inflect: Val {val} is not a WikiEntity"
+        assert isinstance(val, PseudoEntity), f"@inflect: Val {val} is not a PseudoEntity"
         return infl(input, val.is_plural)
 
 
@@ -259,7 +259,7 @@ def spacingaware_join(x):
     result = ""
     for idx, item in enumerate(x):
         if not isinstance(item, str):
-            if isinstance(item, WikiEntity):
+            if isinstance(item, PseudoEntity):
                 item = item.talkable_name
             elif isinstance(item, (int, float)):
                 item = item.talkable_name

@@ -3,6 +3,7 @@ import jsonpickle
 from collections import OrderedDict
 from typing import List, Dict, Optional
 from tabulate import tabulate
+from chirpy.core.camel.pipes import PseudoEntity
 import re
 import requests
 
@@ -39,7 +40,7 @@ dont_singularize_entgroup = EntityGroup(
     {'video game', 'video game series', 'board game', 'film', 'film series', 'television film', 'television program',
      'human', 'musical work', 'written work'})
 
-class WikiEntity(object):
+class WikiEntity(PseudoEntity):
     """Class to represent an entity (Wikipedia article)"""
 
     def __init__(self, name: str, doc_id: int, pageview: int, confidence: float, wikidata_categories: List[str], anchortext_counts: Dict[str, int], redirects: List[str], plural: str):
@@ -93,18 +94,6 @@ class WikiEntity(object):
         assert type_str
         return type_str.strip() in self.wikidata_categories
 
-    @property
-    def common_name(self) -> str:
-        """
-        Returns the title, with any bracketed parts removed. While self.name is the full wikipedia article title
-        (e.g. "Frozen (2013 film)"), common_name is just "Frozen".
-
-        Note: this function used to return the most common anchortext for this entity, but that had some difficulties
-        e.g. with the anchortext being an adjective e.g. "atheist" for "Atheism", plus other problems.
-        """
-        # return next(iter(self.anchortext_counts))
-        return re.sub("\(.*?\)", "", self.name).strip()
-
     def __repr__(self):
         if hasattr(self, "confidence"):
             return f"<WikiEntity: {self.name}>"
@@ -120,12 +109,6 @@ class WikiEntity(object):
         if not isinstance(other, WikiEntity):
             return False
         return self.doc_id == other.doc_id
-
-    @property
-    def is_plural(self) -> bool:
-        #logger.warning(f"Talkable name is {self.talkable_name}")
-        #logger.warning(f"Is singular is {engine.singular_noun(self.talkable_name)}")
-        return bool(engine.singular_noun(self.talkable_name))
 
 
 def is_offensive_entity(entity: WikiEntity):
