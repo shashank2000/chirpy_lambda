@@ -82,5 +82,5 @@ def scrape_es():
     return all_compositions
 
 if __name__ == "__main__":
-    all_compositions = scrape_es()
+    all_compositions = list(scrape_es())
     #pickle.dump(all_compositions, open("scraped_compositions.p", "wb+"))

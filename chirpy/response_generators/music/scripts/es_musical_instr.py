@@ -58,5 +58,5 @@ def scrape_es():
     return all_musical_instruments
 
 if __name__ == "__main__":
-    all_musical_instruments = scrape_es()
+    all_musical_instruments = list(scrape_es())
     #pickle.dump(all_musical_instruments, open("scraped_musical_instruments.p", "wb+"))

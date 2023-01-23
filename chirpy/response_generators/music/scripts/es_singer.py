@@ -49,7 +49,8 @@ def scrape_es():
     all_temps_wiki_categories = ['singer', 'vocalist', 'musician', 'musical group']
     all_singers = set()
     for t in all_temps_categories:
-        query = {'query': {'bool': {"must": [{'terms': {'categories.keyword': [t]}}]}},
+        query = {'query': {'bool': {"must": [{'terms': {'categories.keyword': [t]}},
+                                             {"range": {"pageview": {"gte": 3000}}}]}},
                  'sort': {'pageview': 'desc'}}
         results = query_es_index(es, ARTICLES_INDEX_NAME, query, size=MAX_ES_SEARCH_SIZE,
                                  timeout=ANCHORTEXT_QUERY_TIMEOUT,
@@ -66,9 +67,9 @@ def scrape_es():
         for s in results:
             all_singers.add(s['_source']['doc_title'])
 
-    print(len(all_singers))    # 15146 entities
+    print(len(all_singers))    # 3236 entities
     return all_singers
 
 if __name__ == "__main__":
-    all_singers = scrape_es()
+    all_singers = list(scrape_es())
     pickle.dump(all_singers, open("scraped_singers.p", "wb+"))
