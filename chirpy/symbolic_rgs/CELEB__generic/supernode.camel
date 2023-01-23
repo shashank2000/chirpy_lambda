@@ -1,11 +1,15 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
-not IS_NONE(State.User__FavoriteCelebrity) and not IS_TRUE(State.CELEB__generic_visited)
+not IS_NONE(State.CurrentTopic) and EXISTS(database_name="celeb_opinion", key={@val(State.CurrentTopic | name | lower)})
+and IS_FALSE(Flags.CELEB__move_on_to_new_topic)
 
 <PROMPTS>
 Prompt celeb_when []
 {
+    - "You know, I was almost in a movie once, but they picked Scarlett Johansson instead."
     - "When did you start following"
-    - @val(State.User__FavoriteCelebrityName)
+    - @val(State.CurrentTopic | talkable)
     - "?"
 }
 
@@ -17,10 +21,10 @@ Subnode give_celeb_opinion [] {
     )
     - @lookup(
         database_name="celeb_opinion",
-        key={@val(State.User__FavoriteCelebrityName)},
+        key={@val(State.CurrentTopic | name | lower)},
         column="opinion"
    )
 }
 
 <SET_STATE_AFTER>
-State.CELEB__generic_visited = @constant(True)
+Flags.CELEB__move_on_to_new_topic = {@constant(True)}

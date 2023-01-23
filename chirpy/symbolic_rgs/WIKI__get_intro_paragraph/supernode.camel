@@ -1,0 +1,25 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.CurrentTopic) and IS_TRUE(Flags.WIKI__understand_user_better)and IS_TRUE(Flags.WIKI__learn_more)
+
+<PROMPTS>
+Prompt what_to_talk_about [ ] {
+	- @one_of(
+		{"Well, from what I've read, "},
+		{"Ah, to my knowledge, "},
+		{"From what I know, "}
+	)
+	- @helper.get_intro_paragraph(@val(State.CurrentTopic))
+}
+
+<LOCALS>
+
+<SET_STATE>
+
+<SUBNODES>
+Subnode pos_response [
+	IS_TRUE(Flags.GlobalFlag__POS_SENTIMENT)
+] {
+	- ""
+} <
+	Flags.WIKI__discuss_article = @constant(True)
+>

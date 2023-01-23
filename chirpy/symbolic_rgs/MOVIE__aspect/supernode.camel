@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_TRUE(State.User__FavoriteMovie)
 and IS_NONE(State.User__FavoriteMovieReason)
@@ -17,14 +19,8 @@ Prompt ask_user_opinion [ ] {
 <CONTINUE_CONDITIONS>
 IS_TRUE(Flags.MOVIE__user_mentioned_reason)
 
-
-<LOCALS>
-Locals.placeholder = {
-  - "placeholder"
-}
-
-
 <SET_STATE>
+State.CurrentTopic = @val(State.User__FavoriteMovie)
 State.User__FavoriteMovieReason = {
     @helper.get_user_reasons(@val(Flags.MOVIE__last_utterance))
 }

@@ -1,4 +1,4 @@
-%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB, _COMMA)
+%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, NAMESPACE, variable, assignment, _OB, _CB, _COMMA, _EQ)
 %import .nlg ( nlg, key )
 %import .condition ( condition )
 %import common.ESCAPED_STRING
@@ -18,7 +18,8 @@ condition_assignment : variable "=" condition
 
 // CAMEL syntax
 
-document: entry_conditions_section? \
+document: details_section? \
+          entry_conditions_section? \
           entry_locals_section? \
           prompt_section? \
           continue_conditions_section? \
@@ -29,6 +30,11 @@ document: entry_conditions_section? \
           set_state_after_section? \
           entity_groups_section? \
           entity_groups_regex_section?
+
+// Section: Attribute
+details_section: detail*
+?detail: can_only_prompt_once_for_detail
+can_only_prompt_once_for_detail: "can_only_prompt_once_for" _EQ variable
 
 // Section: Entry Conditions
 entry_conditions_section : "<ENTRY_CONDITIONS>" condition?

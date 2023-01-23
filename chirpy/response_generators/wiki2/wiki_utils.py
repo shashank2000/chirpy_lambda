@@ -105,8 +105,13 @@ def get_wiki_sections(title=str) -> List[WikiSection]:
         List[WikiSection]: Sections of the wikipedia page
     """
 
-    query = {'query': {'bool': {'filter': [
-            {'term': {'doc_title': title}}]}}}
+    query = {
+        "query": {
+            "match": {
+                "doc_title": title
+            }
+        }
+    }
     sections = es.search(index='enwiki-20201201-sections', body=query, size=100)
     filtered_sections = filter_sections(title, sections)
     return filtered_sections
@@ -270,20 +275,16 @@ def search_wiki_sections(doc_title: str, phrases: tuple, wiki_links:tuple) -> Li
 
 def get_text_for_entity(entity):
     results = es.search(index='enwiki-20201201-sections', body={
-    'query': {
-      'bool': {
-        'filter': [
-          {'term': {'doc_title': entity}}
-        ]
-      }
-    }
+        "query": {
+            "match": {
+                "doc_title": entity
+            }
+        }
     })
     sections = results['hits']['hits']
-    # print(sections)
     sections = [(section['_source']['title'], section['_source']['text']) for section in sections]
     logger.primary_info(f"Recovered: {[section[0] for section in sections]}")
     def replaceByLength(matchobj):
-        # print("matchobj", matchobj.group(0))
         if len(matchobj.group(0).split(' ')) < 10: return matchobj.group(0)
         return ''
     sections = [(title, re.sub(r'"[^"]*"', replaceByLength, text)) for (title, text) in sections]
@@ -309,10 +310,11 @@ def check_section_summary(rg, section_summary, selected_section, allow_history_o
     if contains_offensive(section_summary):
         logger.primary_info(f"The section summary {section_summary} contains some offensivephrase")
         return None
-    if not allow_history_overlap and rg.has_overlap_with_history(section_summary, threshold=0.8):
-        logger.primary_info(f"Section chosen using title overlap: {selected_section.title} has high overlap with a past utterance. "
-                            f"Discarding it. ")
-        return None
+    # TODO: Add this back
+    # if not allow_history_overlap and rg.has_overlap_with_history(section_summary, threshold=0.8):
+    #     logger.primary_info(f"Section chosen using title overlap: {selected_section.title} has high overlap with a past utterance. "
+    #                         f"Discarding it. ")
+    #     return None
     return section_summary
 
 
@@ -504,10 +506,8 @@ def ngram_recall(generations: List[str], original:str, n:int):
     return len(generated_ngrams & original_ngrams)/len(original_ngrams)
 
 
-def get_sentseg_fn(rg):
-    def seg(text):
-        return NLTKSentenceSegmenter(rg.state_manager).execute(text)
-    return seg
+def get_sentseg_fn(input_data):
+    return re.split('[.\n]', input_data)
 
 
 @measure
@@ -540,14 +540,10 @@ def overview_entity(entity: str, sentseg_fn: Callable[[str], list], max_words: i
         section = next(section for section in RONAN_SECTIONS if section['title_keyword'] == '')
     else:
         query = {
-            "query": {"bool" : {"filter" : [
-                {'term': {'doc_title' : entity}},
-                {"script" : {
-                    "script" : {
-                        "source": "doc['title_keyword'].value == ''",
-                        "lang": "painless"
-                        }
-                }}]}
+            "query": {
+                "match": {
+                    "doc_title": entity.name
+                }
             }
         }
         result = es.search(index='enwiki-20201201-sections', body=query, size=1) # pylint: disable=e1123

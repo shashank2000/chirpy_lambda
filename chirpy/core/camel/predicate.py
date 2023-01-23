@@ -31,7 +31,7 @@ def get_func(verb):
 
 def get_score(variable):
     if variable.namespace == "Flags":
-        return 100
+        return 1e5
     elif variable.namespace == "State":
         return 1
     return 1
@@ -56,7 +56,7 @@ class VariablePredicate(Predicate):
         return result
 
     def get_score(self):
-        return get_score(self.variable)
+        return get_score(self.variable) if self.verb == "IS_TRUE" else 1
 
 
 @dataclass
@@ -77,10 +77,20 @@ class OrPredicate(Predicate):
     pred2: Predicate
 
     def evaluate(self, context, label=""):
-        return self.pred1.evaluate(context, label) or self.pred2.evaluate(context, label)
+        a = self.pred1.evaluate(context, label)
+        b = self.pred2.evaluate(context, label)
+        self.a_activate = bool(a)
+        self.b_activate = bool(b)
+        return a or b
 
     def get_score(self):
-        return max(self.pred1.get_score(), self.pred2.get_score())
+        if self.a_activate and self.b_activate:
+            return max(self.pred1.get_score(), self.pred2.get_score())
+        if self.a_activate:
+            return self.pred1.get_score()
+        if self.b_activate:
+            return self.pred2.get_score()
+        return 0
 
 
 @dataclass
@@ -168,10 +178,21 @@ class NotPredicate(Predicate):
 @dataclass
 class ExistsPredicate(Predicate):
     database_name: str
-    database_key: NLGNode
+    database_key: List[NLGNode]
 
     def evaluate(self, context, label=""):
-        return exists(self.database_name.generate(context), self.database_key.generate(context))
+        database_name = self.database_name.generate(context)
+        keys = [key.generate(context) for key in self.database_key]
+        result = exists(database_name, *keys)
+        if label:
+            log = {
+                "val": result,
+                "variable_name": database_name + ", " + ", ".join(keys),
+                "verb": "EXISTS",
+                "result": result,
+            }
+            logger.bluejay(f"predicate_{label}//{self.database_name}: {json.dumps(log)}")
+        return result
 
     def get_score(self):
         return 1.0

@@ -26,8 +26,8 @@ Locals.statement_okay = {
 
 
 <SET_STATE>
-State.User__LikeMovie = @helper.set_whether_user_likes_movie(@val(Flags.MOVIE__user_likes_movie))
-
+State.User__LikeMovie = @val(Flags.MOVIE__user_likes_movie)
+State.User__FavoriteMovie = @helper.set_favorite_movie(@val(Utilities.cur_entity))
 
 <SUBNODES>
 Subnode user_likes_movie [
@@ -41,12 +41,10 @@ Subnode user_likes_movie [
 }
 
 Subnode user_dislikes_movie [
-  not IS_TRUE(Flags.MOVIE__user_likes_movie)
+  IS_FALSE(Flags.MOVIE__user_likes_movie)
 ] {
   - @val(Locals.statement_okay)
   - "do let me know if you happen to like movies in the future!"
 } <
-  Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
-    @constant(True)
-  }
+  Flags.GlobalFlag__LastBotTurnWasOpenEnded = @constant(True)
 >

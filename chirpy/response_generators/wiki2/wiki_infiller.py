@@ -223,7 +223,7 @@ def filter_handwritten_responses(self, responses, entity_name, n_gram_size=2, n_
         filtered_responses = [responses[responses_overlap.index(min(responses_overlap))]]
     return filtered_responses
 
-def filter_responses(rg, responses, entity_name, n_gram_size=2, n_past_bot_utterances=10, threshold=0.5):
+def filter_responses(state_manager, responses, entity_name, n_gram_size=2, n_past_bot_utterances=10, threshold=0.5):
     # Remove offensive responses
     responses = [r for r in responses if not contains_offensive(r)]
 
@@ -263,7 +263,7 @@ def filter_responses(rg, responses, entity_name, n_gram_size=2, n_past_bot_utter
     responses = [r for r in responses if not any(bw in r for bw in bad_words)]
 
     # Remove responses with high history overlap
-    bot_utterances_to_consider = rg.state_manager.current_state.history[-n_past_bot_utterances:]
+    bot_utterances_to_consider = state_manager.current_state.history[-n_past_bot_utterances:]
     if len(bot_utterances_to_consider):
         bot_utterance_ngrams = [set(get_ngrams(r.lower(), n_gram_size)) if set(get_ngrams(r.lower(), n_gram_size)) else {r.lower()} for r in bot_utterances_to_consider]
         responses_ngrams = [set(get_ngrams(c.lower(), n_gram_size)) if set(get_ngrams(c.lower(), n_gram_size)) else {c.lower()} for c in responses]
