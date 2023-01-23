@@ -1,17 +1,19 @@
 # comments start with
 
-CELEB__intro
-CELEB__discuss
-CELEB__generic
-CELEB__unknown
 FOOD__factoid
 FOOD__factoid_gpt
 FOOD__intro
 GLOBALS
 GLOBAL__openended
 LAUNCH
-MOVIE__aspect
 MOVIE__intro
+MOVIE__favorite
+MOVIE__preferences_actor
+MOVIE__aspect
+CELEB__intro
+CELEB__discuss
+CELEB__unknown
+CELEB__generic
 OPINION__intro
 OPINION__subsequent_turn
 OPINION__third_turn

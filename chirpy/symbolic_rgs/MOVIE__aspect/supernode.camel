@@ -1,8 +1,9 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-not IS_NONE(State.User__FavoriteMovie)
+IS_TRUE(State.User__FavoriteMovie)
 and IS_NONE(State.User__FavoriteMovieReason)
+and IS_TRUE(State.Trigger__AspectNode)
 
 
 <PROMPTS>
@@ -11,7 +12,7 @@ Prompt ask_user_opinion [ ] {
     - @one_of(
         "do", "did"
     )
-    - "you like about the movie?"
+    - "you like about that movie?"
 }
 
 
@@ -23,6 +24,9 @@ State.CurrentTopic = @val(State.User__FavoriteMovie)
 State.User__FavoriteMovieReason = {
     @helper.get_user_reasons(@val(Flags.MOVIE__last_utterance))
 }
+State.Trigger__AspectNode = {
+    @helper.untriggerAspect()
+}
 
 
 <SUBNODES>
@@ -31,7 +35,7 @@ Subnode reason_specified [
 ] {
     - "Thank you for sharing!"
     - @one_of(
-        "I can't agree more with what you've just said. In particular, the",
+        "I can't agree more with what you've just said, that the",
         "I completely agree with you that the"
     )
     - @val(State.User__FavoriteMovieReason)

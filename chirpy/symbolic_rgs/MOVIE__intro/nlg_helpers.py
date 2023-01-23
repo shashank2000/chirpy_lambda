@@ -1,10 +1,6 @@
 from chirpy.core.response_generator import nlg_helper
 from chirpy.core.entity_linker.entity_groups import EntityGroupsForExpectedType
-
-import logging
 import re
-
-logger = logging.getLogger("chirpylogger")
 
 def set_favorite_movie(cur_entity):
     if not cur_entity:
@@ -13,3 +9,7 @@ def set_favorite_movie(cur_entity):
         return cur_entity
     return None
 
+@nlg_helper
+def set_whether_user_likes_movie(flag):
+    return flag
+    
