@@ -1,0 +1,551 @@
+{
+    "Tim Robbins": {
+        "movie_name": "The Shawshank Redemption"
+    },
+    "Marlon Brando": {
+        "movie_name": "The Godfather"
+    },
+    "Christian Bale": {
+        "movie_name": "The Dark Knight"
+    },
+    "Al Pacino": {
+        "movie_name": "The Godfather: Part II"
+    },
+    "Henry Fonda": {
+        "movie_name": "12 Angry Men"
+    },
+    "Liam Neeson": {
+        "movie_name": "Schindler's List"
+    },
+    "Viggo Mortensen": {
+        "movie_name": "The Lord of the Rings: The Return of the King"
+    },
+    "John Travolta": {
+        "movie_name": "Pulp Fiction"
+    },
+    "Clint Eastwood": {
+        "movie_name": "The Good, the Bad and the Ugly"
+    },
+    "Tom Hanks": {
+        "movie_name": "Forrest Gump"
+    },
+    "Brad Pitt": {
+        "movie_name": "Fight Club"
+    },
+    "Leonardo DiCaprio": {
+        "movie_name": "Inception"
+    },
+    "Mark Hamill": {
+        "movie_name": "Star Wars: Episode V - The Empire Strikes Back"
+    },
+    "Keanu Reeves": {
+        "movie_name": "The Matrix"
+    },
+    "Robert De Niro": {
+        "movie_name": "Goodfellas"
+    },
+    "Jack Nicholson": {
+        "movie_name": "One Flew Over the Cuckoo's Nest"
+    },
+    "Toshiro Mifune": {
+        "movie_name": "Seven Samurai"
+    },
+    "Jimmy Stewart": {
+        "movie_name": "It's a Wonderful Life"
+    },
+    "Jodie Foster": {
+        "movie_name": "The Silence of the Lambs"
+    },
+    "Alexandre Rodrigues": {
+        "movie_name": "City of God"
+    },
+    "Roberto Benigni": {
+        "movie_name": "Life Is Beautiful"
+    },
+    "Matthew McConaughey": {
+        "movie_name": "Interstellar"
+    },
+    "Arnold Schwarzenegger": {
+        "movie_name": "Terminator 2: Judgment Day"
+    },
+    "Michael J. Fox": {
+        "movie_name": "Back to the Future"
+    },
+    "Miyu Irino": {
+        "movie_name": "Spirited Away"
+    },
+    "Adrien Brody": {
+        "movie_name": "The Pianist"
+    },
+    "Anthony Perkins": {
+        "movie_name": "Psycho"
+    },
+    "Song Kang-ho": {
+        "movie_name": "Parasite"
+    },
+    "Jean Reno": {
+        "movie_name": "L\u00e9on: The Professional"
+    },
+    "Matthew Broderick": {
+        "movie_name": "The Lion King"
+    },
+    "Russell Crowe": {
+        "movie_name": "Gladiator"
+    },
+    "Edward Norton": {
+        "movie_name": "American History X"
+    },
+    "Kevin Spacey": {
+        "movie_name": "The Usual Suspects"
+    },
+    "Hugh Jackman": {
+        "movie_name": "The Prestige"
+    },
+    "Miles Teller": {
+        "movie_name": "Whiplash"
+    },
+    "Humphrey Bogart": {
+        "movie_name": "Casablanca"
+    },
+    "Tatsuya Nakadai": {
+        "movie_name": "Harakiri"
+    },
+    "Tsutomu Tatsumi": {
+        "movie_name": "Grave of the Fireflies"
+    },
+    "Omar Sy": {
+        "movie_name": "The Intouchables"
+    },
+    "Charlie Chaplin": {
+        "movie_name": "Modern Times"
+    },
+    "James Stewart": {
+        "movie_name": "Rear Window"
+    },
+    "Mario Verga": {
+        "movie_name": "Cinema Paradiso"
+    },
+    "Sigourney Weaver": {
+        "movie_name": "Alien"
+    },
+    "Guy Pearce": {
+        "movie_name": "Memento"
+    },
+    "Jamie Foxx": {
+        "movie_name": "Django Unchained"
+    },
+    "Harrison Ford": {
+        "movie_name": "Indiana Jones and the Raiders of the Lost Ark"
+    },
+    "Ben Burtt": {
+        "movie_name": "WALL\u00b7E"
+    },
+    "Sebastian Koch": {
+        "movie_name": "The Lives of Others"
+    },
+    "William Holden": {
+        "movie_name": "Sunset Blvd."
+    },
+    "Kirk Douglas": {
+        "movie_name": "Paths of Glory"
+    },
+    "Robert Downey Jr.": {
+        "movie_name": "Avengers: Infinity War"
+    },
+    "Charles Laughton": {
+        "movie_name": "Witness for the Prosecution"
+    },
+    "Shameik Moore": {
+        "movie_name": "Spider-Man: Into the Spider-Verse"
+    },
+    "Peter Sellers": {
+        "movie_name": "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb"
+    },
+    "Choi Min-sik": {
+        "movie_name": "Oldboy"
+    },
+    "F. Murray Abraham": {
+        "movie_name": "Amadeus"
+    },
+    "Anthony Gonzalez": {
+        "movie_name": "Coco"
+    },
+    "Joaquin Phoenix": {
+        "movie_name": "Joker"
+    },
+    "Tim Allen": {
+        "movie_name": "Toy Story"
+    },
+    "Mel Gibson": {
+        "movie_name": "Braveheart"
+    },
+    "Kevin Bacon": {
+        "movie_name": "The Boat"
+    },
+    "Billy Crudup": {
+        "movie_name": "Princess Mononoke"
+    },
+    "Matt Damon": {
+        "movie_name": "Good Will Hunting"
+    },
+    "Mone Kamishiraishi": {
+        "movie_name": "Your Name."
+    },
+    "Ellen Burstyn": {
+        "movie_name": "Requiem for a Dream"
+    },
+    "Gene Kelly": {
+        "movie_name": "Singin' in the Rain"
+    },
+    "Aamir Khan": {
+        "movie_name": "3 Idiots"
+    },
+    "Tatsuya Fujiwara": {
+        "movie_name": "High and Low"
+    },
+    "Zain Al Rafeea": {
+        "movie_name": "Capernaum"
+    },
+    "Jim Carrey": {
+        "movie_name": "Eternal Sunshine of the Spotless Mind"
+    },
+    "Keir Dullea": {
+        "movie_name": "2001: A Space Odyssey"
+    },
+    "Quentin Tarantino": {
+        "movie_name": "Reservoir Dogs"
+    },
+    "Hilary Swank": {
+        "movie_name": "The Hunt"
+    },
+    "Aleksey Kravchenko": {
+        "movie_name": "Come and See"
+    },
+    "Tom Cruise": {
+        "movie_name": "Top Gun: Maverick"
+    },
+    "Orson Welles": {
+        "movie_name": "Citizen Kane"
+    },
+    "Peter O'Toole": {
+        "movie_name": "Lawrence of Arabia"
+    },
+    "Cary Grant": {
+        "movie_name": "North by Northwest"
+    },
+    "Jean-Pierre Jeunet": {
+        "movie_name": "Am\u00e9lie"
+    },
+    "Jack Lemmon": {
+        "movie_name": "The Apartment"
+    },
+    "Takashi Shimura": {
+        "movie_name": "Ikiru"
+    },
+    "Malcolm McDowell": {
+        "movie_name": "A Clockwork Orange"
+    },
+    "Fred MacMurray": {
+        "movie_name": "Double Indemnity"
+    },
+    "Matthew Modine": {
+        "movie_name": "Full Metal Jacket"
+    },
+    "Lin-Manuel Miranda": {
+        "movie_name": "Hamilton"
+    },
+    "Gregory Peck": {
+        "movie_name": "To Kill a Mockingbird"
+    },
+    "Nawal Marwan": {
+        "movie_name": "Incendies"
+    },
+    "Paul Newman": {
+        "movie_name": "The Sting"
+    },
+    "Ed Asner": {
+        "movie_name": "Up"
+    },
+    "Peyman Moaadi": {
+        "movie_name": "A Separation"
+    },
+    "Fritz Lang": {
+        "movie_name": "Metropolis"
+    },
+    "Bruce Willis": {
+        "movie_name": "Die Hard"
+    },
+    "Vittorio De Sica": {
+        "movie_name": "Bicycle Thieves"
+    },
+    "George MacKay": {
+        "movie_name": "1917"
+    },
+    "Bruno Ganz": {
+        "movie_name": "Downfall"
+    },
+    "Marilyn Monroe": {
+        "movie_name": "Some Like It Hot"
+    },
+    "Anthony Hopkins": {
+        "movie_name": "The Father"
+    },
+    "Bette Davis": {
+        "movie_name": "All About Eve"
+    },
+    "Spencer Tracy": {
+        "movie_name": "Judgment at Nuremberg"
+    },
+    "Mitsuru Fukikoshi": {
+        "movie_name": "Ran"
+    },
+    "Ivana Baquero": {
+        "movie_name": "Pan's Labyrinth"
+    },
+    "Daniel Day-Lewis": {
+        "movie_name": "There Will Be Blood"
+    },
+    "RUSSELL CROWE": {
+        "movie_name": "A Beautiful Mind"
+    },
+    "Sam Neill": {
+        "movie_name": "Jurassic Park"
+    },
+    "John Cleese": {
+        "movie_name": "Monty Python and the Holy Grail"
+    },
+    "Tom Holland": {
+        "movie_name": "Spider-Man: No Way Home"
+    },
+    "Steve McQueen": {
+        "movie_name": "The Great Escape"
+    },
+    "Javier Bardem": {
+        "movie_name": "No Country for Old Men"
+    },
+    "Uma Thurman": {
+        "movie_name": "Kill Bill: Vol. 1"
+    },
+    "Kurt Russell": {
+        "movie_name": "The Thing"
+    },
+    "Albert Brooks": {
+        "movie_name": "Finding Nemo"
+    },
+    "John Hurt": {
+        "movie_name": "The Elephant Man"
+    },
+    "Natalie Portman": {
+        "movie_name": "V for Vendetta"
+    },
+    "Clark Gable": {
+        "movie_name": "Gone with the Wind"
+    },
+    "Jason Statham": {
+        "movie_name": "Lock, Stock and Two Smoking Barrels"
+    },
+    "Amy Poehler": {
+        "movie_name": "Inside Out"
+    },
+    "Grace Kelly": {
+        "movie_name": "Dial M for Murder"
+    },
+    "Billy Crystal": {
+        "movie_name": "Howl's Moving Castle"
+    },
+    "Frances McDormand": {
+        "movie_name": "Three Billboards Outside Ebbing, Missouri"
+    },
+    "Alec Guinness": {
+        "movie_name": "The Bridge on the River Kwai"
+    },
+    "Ewan McGregor": {
+        "movie_name": "Trainspotting"
+    },
+    "Nick Nolte": {
+        "movie_name": "Warrior"
+    },
+    "Hayao Miyazaki": {
+        "movie_name": "My Neighbor Totoro"
+    },
+    "Alfred Molina": {
+        "movie_name": "Children of Heaven"
+    },
+    "Ethan Hawke": {
+        "movie_name": "Before Sunrise"
+    },
+    "Benedict Cumberbatch": {
+        "movie_name": "12 Years a Slave"
+    },
+    "Daniel Radcliffe": {
+        "movie_name": "Harry Potter and the Deathly Hallows: Part 2"
+    },
+    "Jos\u00e9phine \u00a0de La Baume": {
+        "movie_name": "Klaus"
+    },
+    "Charlton Heston": {
+        "movie_name": "Ben-Hur"
+    },
+    "Ben Affleck": {
+        "movie_name": "Gone Girl"
+    },
+    "Ingmar Bergman": {
+        "movie_name": "Wild Strawberries"
+    },
+    "Buster Keaton": {
+        "movie_name": "The General"
+    },
+    "Ralph Fiennes": {
+        "movie_name": "The Grand Budapest Hotel"
+    },
+    "Joseph Cotten": {
+        "movie_name": "The Third Man"
+    },
+    "Ryan O'Neal": {
+        "movie_name": "Barry Lyndon"
+    },
+    "Yves Montand": {
+        "movie_name": "The Wages of Fear"
+    },
+    "Andrew Garfield": {
+        "movie_name": "Hacksaw Ridge"
+    },
+    "Ricardo Dar\u00edn": {
+        "movie_name": "Wild Tales"
+    },
+    "Tom Hardy": {
+        "movie_name": "Mad Max: Fury Road"
+    },
+    "Max von Sydow": {
+        "movie_name": "The Seventh Seal"
+    },
+    "Barry Humphries": {
+        "movie_name": "Mary and Max"
+    },
+    "Brie Larson": {
+        "movie_name": "Room"
+    },
+    "Jay Baruchel": {
+        "movie_name": "How to Train Your Dragon"
+    },
+    "John Goodman": {
+        "movie_name": "Monsters, Inc."
+    },
+    "Roy Scheider": {
+        "movie_name": "Jaws"
+    },
+    "Jeff Bridges": {
+        "movie_name": "The Big Lebowski"
+    },
+    "Robin Williams": {
+        "movie_name": "Dead Poets Society"
+    },
+    "Setsuko Hara": {
+        "movie_name": "Tokyo Story"
+    },
+    "Ren\u00e9e Jeanne Falconetti": {
+        "movie_name": "The Passion of Joan of Arc"
+    },
+    "Don Cheadle": {
+        "movie_name": "Hotel Rwanda"
+    },
+    "Sylvester Stallone": {
+        "movie_name": "Rocky"
+    },
+    "Charlie Sheen": {
+        "movie_name": "Platoon"
+    },
+    "Mark Ruffalo": {
+        "movie_name": "Spotlight"
+    },
+    "Brad Bird": {
+        "movie_name": "Ratatouille"
+    },
+    "River Phoenix": {
+        "movie_name": "Stand by Me"
+    },
+    "Chris Hemsworth": {
+        "movie_name": "Rush"
+    },
+    "Peter Finch": {
+        "movie_name": "Network"
+    },
+    "Subir Banerjee": {
+        "movie_name": "Pather Panchali"
+    },
+    "Emile Hirsch": {
+        "movie_name": "Into the Wild"
+    },
+    "Judy Garland": {
+        "movie_name": "The Wizard of Oz"
+    },
+    "Bill Murray": {
+        "movie_name": "Groundhog Day"
+    },
+    "Fredric March": {
+        "movie_name": "The Best Years of Our Lives"
+    },
+    "Linda Blair": {
+        "movie_name": "The Exorcist"
+    },
+    "Jack Benny": {
+        "movie_name": "To Be or Not to Be"
+    },
+    "Vincent Cassel": {
+        "movie_name": "La haine"
+    },
+    "Jean Martin": {
+        "movie_name": "The Battle of Algiers"
+    },
+    "Richard Gere": {
+        "movie_name": "Hachi: A Dog's Tale"
+    },
+    "Johnny Depp": {
+        "movie_name": "Pirates of the Caribbean: The Curse of the Black Pearl"
+    },
+    "Vikas Bhonsle": {
+        "movie_name": "Jai Bhim"
+    },
+    "Mert F\u0131rat": {
+        "movie_name": "My Father and My Son"
+    },
+    "Gael Garc\u00eda Bernal": {
+        "movie_name": "Amores Perros"
+    },
+    "Lily James": {
+        "movie_name": "Rebecca"
+    },
+    "Park Chan-wook": {
+        "movie_name": "The Handmaiden"
+    },
+    "Jean-Pierre L\u00e9aud": {
+        "movie_name": "The 400 Blows"
+    },
+    "Julie Andrews": {
+        "movie_name": "The Sound of Music"
+    },
+    "Claudette Colbert": {
+        "movie_name": "It Happened One Night"
+    },
+    "Kazunari Ninomiya": {
+        "movie_name": "Persona"
+    },
+    "Maksim Munzuk": {
+        "movie_name": "Dersu Uzala"
+    },
+    "Vin Diesel": {
+        "movie_name": "The Iron Giant"
+    },
+    "Emma Stone": {
+        "movie_name": "The Help"
+    },
+    "Will Smith": {
+        "movie_name": "Aladdin"
+    },
+    "Ben Kingsley": {
+        "movie_name": "Gandhi"
+    },
+    "Kevin Costner": {
+        "movie_name": "Dances with Wolves"
+    }
+}

@@ -45,7 +45,20 @@ User__PetFavoriteActivity: null
 User__PetFavoriteActivityTalkable: null
 User__LikeMovie: null
 User__FavoriteMovie: null
-User__FavoriteMovieReason: null
+User__FavoriteMovieTalkable: null
+User__FavoriteMovieMainActor: null
+User__FavoriteMovieDirector: null
+User__FavoriteMovieGenre: null
+
+User__PreferredMovieActor: null
+User__PreferredMovieActorCaseSensitive: null
+User__PreferredMovieActorMovie: null
+User__PreferredMovieActorMovieDesc: null
+
+User__PreferredMovieGenre: null
+User__PreferredMovieGenreMovie: null
+User__PreferredMovieGenreMovieDesc: null
+Trigger__AspectNode: null
 
 # Launch
 User__Name: null
@@ -54,6 +67,7 @@ LAUNCH__NumTimesAskedName: 0
 User__CurrentOpinionTopic: _get_opinion
 User__OpinionYes: False
 User__OpinionNo: False
+
 WIKI__AskedWhenInterested: False
 WIKI__AskedWhatInterested: False
 WIKI__AskedWhyInterested: False

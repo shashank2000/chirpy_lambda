@@ -8,6 +8,7 @@ Prompt ask_if_user_likes_movies [ ] {
 }
 
 
+
 <LOCALS>
 Locals.statement_agreement = {
   - @one_of(
