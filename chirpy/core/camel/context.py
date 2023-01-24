@@ -17,6 +17,7 @@ def get_current_entity(state_manager):
 
 
 def get_utilities(state_manager, supernode):
+    current_state = state_manager.current_state
     current_entity = get_current_entity(state_manager)
     if state_manager.last_state_response:
         last_utterance = state_manager.last_state_response
@@ -26,9 +27,11 @@ def get_utilities(state_manager, supernode):
         "last_utterance": last_utterance,
         "cur_entity": current_entity,
         "cur_supernode": supernode.name if supernode else "",
-        "cur_turn_num": state_manager.current_state.turn_num,
+        "cur_turn_num": current_state.turn_num,
         "state_manager": state_manager,
         "response_text": "",
+        "pos_intent": current_state.navigational_intent.pos_intent,
+        "neg_intent": current_state.navigational_intent.neg_intent
     }
 
 

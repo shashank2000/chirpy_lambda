@@ -1,12 +1,13 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_TRUE(State.User__LikeMovie) and
 IS_NONE(State.User__PreferredMovieActor) and
-not IS_NONE(State.Trigger__AspectNode) and
-not IS_TRUE(State.Trigger__AspectNode)
+IS_FALSE(Flags.MOVIE__ask_for_fav_aspect)
 
 <PROMPTS>
 Prompt actor_preferences [ ] {
-    "Having said that, I'm also interested in your preferences for movies. Movies by which actor do you enjoy watching?"
+    "Having said that, I'm also interested in your preferences for movies. Which actors do you enjoy watching?"
 }
 
 <CONTINUE_CONDITIONS>
@@ -25,6 +26,7 @@ Locals.intro_statement = {
 }
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__PreferredMovieActor = @val(Utilities.cur_entity | name)
 State.User__PreferredMovieActorMovie = @lookup(
         database_name="actor_info",
@@ -54,7 +56,6 @@ Subnode make_actor_movie_desc_comment [
 
 Subnode make_actor_movie_comment [
   not IS_NONE(State.User__PreferredMovieActorMovie)
-
 ] {
   - @val(Locals.intro_statement)
   - "I loved"

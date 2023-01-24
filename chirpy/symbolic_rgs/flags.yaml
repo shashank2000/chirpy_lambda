@@ -88,4 +88,4 @@
 - MOVIE__user_mentioned_movie
 - MOVIE__user_mentioned_preferred_actor
 - MOVIE__user_mentioned_preferred_genre
-
+- MOVIE__ask_for_fav_aspect

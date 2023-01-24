@@ -4,8 +4,3 @@ import random
 import openai
 
 logger = logging.getLogger('chirpylogger')
-
-
-@nlg_helper
-def triggerAspect():
-    return True

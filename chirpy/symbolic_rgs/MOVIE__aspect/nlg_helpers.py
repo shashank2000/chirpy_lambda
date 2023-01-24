@@ -26,6 +26,3 @@ def get_user_reasons(response):
         return reasons[0]
     else:
         return None
-
-def untriggerAspect():
-    return False
