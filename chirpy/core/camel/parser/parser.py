@@ -34,7 +34,7 @@ class SupernodeMaker(Transformer):
         return predicate.FalsePredicate()
 
     def condition__entity_group_condition(self, tok):
-        entityGroupName = str(tok[0].value)[1:-1]  # remove leading and ending quotes
+        entityGroupName = str(tok[0])[1:-1]  # remove leading and ending quotes
         return entities.EntityGroup(entityGroupName)
 
     def condition__predicate(self, tok):
@@ -43,7 +43,7 @@ class SupernodeMaker(Transformer):
         elif str(tok[0]) == "IS_IN":
             return predicate.VariableInPredicate(variable=tok[1], vals=tok[2:])
         elif str(tok[0]) == "ENTITY_GROUP_MATCHES":
-            return entities.EntityGroupList(tok)
+            return entities.EntityGroupList(tok[1:])
         elif str(tok[0]) == "IS_GREATER_THAN":
             return predicate.VariableGTPredicate(variable=tok[1], val=tok[2])
         elif str(tok[0]) == "IS_LESS_THAN":
