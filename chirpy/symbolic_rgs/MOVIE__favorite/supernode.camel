@@ -79,3 +79,6 @@ Subnode default [
         {"I haven't seen that movie yet! Thanks for telling me about it! I will check it out."}
     )
 }
+
+<ENTITY_GROUPS>
+["film"]
