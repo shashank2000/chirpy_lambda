@@ -52,7 +52,17 @@ Flags.CELEB__known_work = @helper.is_known_work(@val(Utilities.cur_entity))
 
 <SUBNODES>
 Subnode assess_work [
-    IS_TRUE(Flags.CELEB__known_work)
+    IS_TRUE(Flags.CELEB__known_work) and not IS_NONE(State.User__FavoriteCelebrity)
+] {
+    - @one_of(
+        {"I have heard of that one!"},
+        {"Oh, I remember that!"}
+    )
+    - @helper.find_opinion(@val(State.User__FavoriteCelebrityCurrWork), @val(State.User__FavoriteCelebrityName))
+}
+
+Subnode assess_work [
+    IS_TRUE(Flags.CELEB__known_work) and IS_NONE(State.User__FavoriteCelebrity)
 ] {
     - @one_of(
         {"I have heard of that one!"},
