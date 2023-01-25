@@ -14,7 +14,7 @@ import boto3
 import logging
 import datetime
 import pytz
-from typing import *
+from typing import List, Dict, Set, Optional, Iterable, Any, Callable, Tuple
 from chirpy.core.latency import measure
 import random
 from random import choices

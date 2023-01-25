@@ -1,11 +1,14 @@
 from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_TYPE
-from chirpy.response_generators.wiki2.wiki_utils import get_til_title
+from chirpy.databases.databases import exists
+from chirpy.response_generators.music.regex_templates.do_not_play_instrument_template import DoNotPlayInstrTemplate
 
 def get_instrument_entity(context):
-    def is_instrument(ent):
+    def is_wiki_instrument(ent):
         return ent and WikiEntityInterface.is_in_entity_group(ent, ENTITY_GROUPS_FOR_EXPECTED_TYPE.musical_instrument)
+    def is_in_instrument_database(ent):
+        return ent and exists("music_instrument", ent.name)
 
     cur_entity = context.utilities["cur_entity"]
     entity_linker_results = context.state_manager.current_state.entity_linker
@@ -16,7 +19,7 @@ def get_instrument_entity(context):
     if len(entity_linker_results.conflict_removed): entities.append(entity_linker_results.conflict_removed[0].top_ent)
 
     for e in entities:
-        if is_instrument(e):
+        if is_wiki_instrument(e) or is_in_instrument_database(e):
             return e
 
 @nlu_processing
@@ -26,6 +29,9 @@ def get_flags(context):
     if instr_entity:
         ADD_NLU_FLAG('MUSIC__instr_ent_exists')
 
+    slots = DoNotPlayInstrTemplate().execute(context.utterance)
+    if slots is not None:
+        ADD_NLU_FLAG('MUSIC__do_not_play_instr')
 
 @nlu_processing
 def get_background_flags(context):

@@ -3,7 +3,7 @@ from chirpy.core.response_generator.nlu import nlu_processing
 from collections import OrderedDict
 from chirpy.response_generators.music.regex_templates.word_lists import KEYWORD_MUSIC, FREQUENCY_ANSWERS
 from chirpy.response_generators.wiki2.wiki_helpers import is_opinion as is_wiki_opinion
-from chirpy.response_generators.music.expression_lists import POSITIVE_WORDS, NEGATIVE_WORDS
+from chirpy.response_generators.music.expression_lists import POSITIVE_WORDS, NEGATIVE_WORDS, PositiveTemplate, NegativeTemplate
 
 import re
 
@@ -89,7 +89,6 @@ def is_freq_answer(context):
     return any(found_phrase(i, context.utterance) for i in FREQUENCY_ANSWERS)
 
 def is_music_response(context):
-    # Mainly detects if the user mentions a genre for now
     return any(found_phrase(i, context.utterance) for i in tags.keys())
 
 def is_opinion(context):
@@ -104,6 +103,7 @@ def is_negative(context):
     top_da = context.state_manager.current_state.dialogact['top_1']
     return top_da == 'neg_answer' or any(found_phrase(i, context.utterance) for i in NEGATIVE_WORDS)
 
+
 @nlu_processing
 def get_flags(context):
     if is_freq_answer(context):
@@ -111,9 +111,9 @@ def get_flags(context):
         if 'everyday' in context.utterance:
             ADD_NLU_FLAG('MUSIC__user_listens_everyday')
     if is_negative(context):
-        ADD_NLU_FLAG('MUSIC__user_has_negative_opinion')
+        ADD_NLU_FLAG('MUSIC__user_has_negative_response')
     elif is_positive(context):
-        ADD_NLU_FLAG('MUSIC__user_has_positive_opinion')
+        ADD_NLU_FLAG('MUSIC__user_has_positive_response')
     if is_music_response(context):
         ADD_NLU_FLAG('MUSIC__user_response_is_music_response')
 

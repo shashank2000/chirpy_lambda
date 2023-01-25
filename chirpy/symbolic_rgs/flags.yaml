@@ -86,7 +86,8 @@
 - MOVIE__last_utterance
 - MUSIC__user_listens_frequently
 - MUSIC__user_listens_everyday
-- MUSIC__user_has_positive_opinion
+- MUSIC__user_has_positive_response
+- MUSIC__user_has_negative_response
 - MUSIC__user_response_is_about_music
 - MUSIC__fav_instr_ent
 - MUSIC__instr_ent_exists
@@ -94,14 +95,20 @@
 - MUSIC__instr_to_learn_exists
 - MUSIC__follow_up_on_no_fav_instr
 - MUSIC__follow_up_on_known_fav_instr
+- MUSIC__follow_up_on_known_fav_instr_opinion
+- MUSIC__do_not_play_instr
 - MUSIC__instrument_to_learn_ent
 - MUSIC__instr_to_learn_exists
-- MUSIC__advanced_musician
-#- MUSIC__fav_singer_ent
-#- MUSIC__fav_singer_str
-#- MUSIC__singer_has_no_genre
-#- MUSIC__singer_is_musical_group
-#- MUSIC__user_has_negative_opinion
-#- MUSIC__fav_singer_comment
+- MUSIC__fav_composition_ent
+- MUSIC__fav_composition_str
+- MUSIC__fav_composition_str_exists
+- MUSIC__follow_up_on_known_fav_composition_factoid
+- MUSIC__fav_singer_ent
+- MUSIC__fav_singer_str
+- MUSIC__singer_is_musical_group
+- MUSIC__fav_singer_comment
+- MUSIC__user_disagree
+- MUSIC__follow_up_on_known_fav_singer_comment
 #- MUSIC__first_follow_up_on_fav_song
 #- MUSIC__second_follow_up_on_fav_song
+

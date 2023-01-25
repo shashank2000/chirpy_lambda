@@ -2,7 +2,6 @@ from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_TYPE
 
-
 def get_instrument_entity(context):
     def is_instrument(ent):
         return ent and WikiEntityInterface.is_in_entity_group(ent, ENTITY_GROUPS_FOR_EXPECTED_TYPE.musical_instrument)
@@ -17,7 +16,6 @@ def get_instrument_entity(context):
 
     for e in entities:
         if is_instrument(e):
-            print(e)
             return e
 
 @nlu_processing

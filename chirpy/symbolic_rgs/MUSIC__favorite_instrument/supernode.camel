@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
@@ -5,17 +7,55 @@ IS_FALSE(State.MUSIC__fav_instr_was_triggered) and
 IS_NONE(State.User__FavoriteInstrument)
 
 <PROMPTS>
-Prompt ask_favorite_instrument [ ] {
+Prompt ask_favorite_instrument [
+    IS_FALSE(State.MUSIC__fav_singer_was_triggered) #and    # TODO
+    #IS_FALSE(State.MUSIC__fav_song_was_triggered) and
+    #IS_FALSE(State.MUSIC__fav_genre_was_triggered)
+ ] {
     "There are so many instruments in the world. Do you play any instrument? What is your favorite one?"
 }
 
+Prompt ask_favorite_instrument [
+    IS_TRUE(State.MUSIC__fav_singer_was_triggered) #or  # TODO
+    #IS_TRUE(State.MUSIC__fav_song_was_triggered) or
+    #IS_TRUE(State.MUSIC__fav_genre_was_triggered)
+] {
+    - @one_of(
+        "Oh hey, on another topic,",
+        "So, changing the subject a little,",
+        "Hmm, so, on another topic,",
+        "Oh hey, sorry to change the subject, but I just remembered that I wanted to ask you,",
+        "Anyway, there’s actually something unrelated I wanted to ask you about,",
+        "Oh hey, this is a bit random, but I just remembered something unrelated I wanted to ask you about,",
+        "Okay, so, on another topic,",
+        "Umm, so I hope you don't mind me changing the subject, but",
+        "So, umm, this is a little off topic, but",
+        "Hey, if you don't mind me changing the topic, ",
+        "Hey, so changing the topic, ",
+        "This is kind of random, but ",
+    )
+    - "do you happen to play any instrument? What is your favorite one?"
+}
+
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteInstrument = @val(Flags.MUSIC__fav_instr_ent)
 
 <SUBNODES>
+Subnode instr_exists_with_database [
+    IS_TRUE(Flags.MUSIC__instr_ent_exists) and
+    EXISTS(database_name="music_instrument", key={@val(State.User__FavoriteInstrument | name | lower)})
+] {
+    - "The"
+    - @val(State.User__FavoriteInstrument | name | lower)
+    - "is absolutely a fascinating instrument!"
+} <
+    Flags.MUSIC__follow_up_on_known_fav_instr_opinion = @constant(True)
+>
 
-Subnode instr_exists [
-   IS_TRUE(Flags.MUSIC__instr_ent_exists)
+Subnode instr_exists_wo_database [
+    IS_TRUE(Flags.MUSIC__instr_ent_exists) and
+    not EXISTS(database_name="music_instrument", key={@val(State.User__FavoriteInstrument | name | lower)})
 ] {
     - "The"
     - @val(State.User__FavoriteInstrument | name | lower)
@@ -25,10 +65,11 @@ Subnode instr_exists [
 >
 
 Subnode no_fav_instrument [
-   IS_FALSE(Flags.MUSIC__instr_ent_exists) and
-   (IS_TRUE(Flags.GlobalFlag__NO) or
-   IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
-   IS_TRUE(Flags.GlobalFlag__NOTHING))
+    IS_FALSE(Flags.MUSIC__instr_ent_exists) and
+    (IS_TRUE(Flags.MUSIC__do_not_play_instr) or
+    IS_TRUE(Flags.GlobalFlag__NO) or
+    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
+    IS_TRUE(Flags.GlobalFlag__NOTHING))
 ] {
     - "It's alright, I think many people enjoy music even though they don't play any instrument."
 } <
@@ -37,12 +78,12 @@ Subnode no_fav_instrument [
 >
 
 Subnode catch_all [
-   IS_FALSE(Flags.MUSIC__instr_ent_exists) and
-   IS_FALSE(Flags.GlobalFlag__NO) and
-   IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
-   IS_FALSE(Flags.GlobalFlag__NOTHING)
+    IS_FALSE(Flags.MUSIC__instr_ent_exists) and
+    IS_FALSE(Flags.GlobalFlag__NO) and
+    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+    IS_FALSE(Flags.GlobalFlag__NOTHING)
 ] {
-    - "I don't seem to recognize that instrument. Maybe I need to go back to music class. Let's talk about something else then."
+    - "I don't seem to recognize that instrument, but I'm grateful you shared that with me. Let's talk about something else then."
 }
 
 <SET_STATE_AFTER>

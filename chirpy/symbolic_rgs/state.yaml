@@ -45,8 +45,9 @@ User__FavoriteMovie: null
 User__FavoriteMovieReason: null
 User__FavoriteInstrument: null
 User__NoFavoriteInstrument: false
-User__FavoriteInstrumentAdvanced: null
-#User__FavoriteInstrumentMusicPiece: null
+User__FavoriteComposition: null
+User__FavoriteCompositionStr: null
+User__NoFavoriteComposition: false
 User__InstrumentToLearn: null
 User__FavoriteSinger: null
 User__FavoriteSingerStr: null
@@ -57,8 +58,6 @@ User__FavoriteSong: null
 #User__FavoriteMusicGenreIsInstrumental: null
 MUSIC__supernode_starts_responding: false
 MUSIC__exit_supernode: false
-#MUSIC__exists_music_keyword: false
-#MUSIC__bot_triggers_supernode: false
 MUSIC__intro_was_triggered: false
 MUSIC__fav_instr_was_triggered: false
 MUSIC__fav_singer_was_triggered: false

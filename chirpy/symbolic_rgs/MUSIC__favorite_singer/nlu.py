@@ -29,12 +29,6 @@ def get_singer_entity(context):
 def get_musician_entity(context, string):
     return link_span_to_entity(string, context.state_manager.current_state, expected_type=ENTITY_GROUPS_FOR_EXPECTED_TYPE.musician)
 
-def get_singer_genre(singer_name):	# TODO: Get this working
-	# musicbrainz = MusicBrainzInterface()
-	# genre = musicbrainz.get_singer_genre(singer_name)
-	# return genre
-	return None
-
 def found_phrase(phrase, utterance):
     return re.search(f'(\A| ){phrase}(\Z| )', utterance) is not None
 
@@ -43,7 +37,7 @@ def is_negative(context):
     return top_da == 'neg_answer' or any(found_phrase(i, context.utterance) for i in NEGATIVE_WORDS)
 
 def least_repetitive_compliment(context):
-	return choose_least_repetitive(context, templates.compliment_user_musician_choice())
+    return choose_least_repetitive(context, templates.compliment_user_musician_choice())
 
 @nlu_processing
 def get_flags(context):
@@ -56,9 +50,7 @@ def get_flags(context):
             singer_str = slots['favorite']
             singer_ent = get_musician_entity(context, singer_str)
             if singer_ent:
-                singer_str = singer_ent .name
-            #if get_singer_genre(singer_str) is None:   # TODO
-            #    ADD_NLU_FLAG('MUSIC__singer_has_no_genre')
+                singer_str = singer_ent.name
 
     ADD_NLU_FLAG('MUSIC__fav_singer_ent', singer_ent)
     ADD_NLU_FLAG('MUSIC__fav_singer_str', singer_str)
@@ -68,7 +60,7 @@ def get_flags(context):
             ADD_NLU_FLAG('MUSIC__singer_is_musical_group')
 
     if is_negative(context):
-        ADD_NLU_FLAG('MUSIC__user_has_negative_opinion')
+        ADD_NLU_FLAG('MUSIC__user_has_negative_response')
 
     ADD_NLU_FLAG('MUSIC__fav_singer_comment', least_repetitive_compliment(context))
 

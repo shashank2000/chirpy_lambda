@@ -1,0 +1,31 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
+IS_FALSE(State.User__NoFavoriteInstrument) and
+not IS_NONE(State.User__FavoriteInstrument) and
+not IS_NONE(State.User__FavoriteCompositionStr) and
+IS_FALSE(State.User__NoFavoriteComposition) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_composition_factoid)
+
+<PROMPTS>
+Prompt ask_piece_music [ ] {
+    - @lookup(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)}, column="factoid")
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+
+<SUBNODES>
+Subnode composition_open_ended_neural_fallback [ ] {
+   - @neural_generation(prefix="")
+}
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+   @constant(True)
+}
+
+

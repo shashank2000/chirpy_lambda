@@ -1,0 +1,71 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
+IS_FALSE(State.User__NoFavoriteInstrument) and
+not IS_NONE(State.User__FavoriteInstrument) and
+IS_NONE(State.User__FavoriteComposition) and
+IS_NONE(State.User__FavoriteCompositionStr) and
+IS_FALSE(State.User__NoFavoriteComposition) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr)
+
+<PROMPTS>
+Prompt ask_piece_music [ ] {
+    - "I am now curious. What piece of music do you like to play with"
+    - @val(State.User__FavoriteInstrument | name | lower)
+    - "?"
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__FavoriteComposition = @val(Flags.MUSIC__fav_composition_ent)
+State.User__FavoriteCompositionStr = @val(Flags.MUSIC__fav_composition_str)
+
+<SUBNODES>
+Subnode composition_with_database [
+    IS_TRUE(Flags.MUSIC__fav_composition_str_exists) and
+    EXISTS(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)})
+] {
+    - "That's so cool!"
+    - @val(State.User__FavoriteCompositionStr)
+    - "and"
+    - @val(State.User__FavoriteInstrument | name | lower)
+    - "is a great combination."
+} <
+    Flags.MUSIC__follow_up_on_known_fav_composition_factoid = @constant(True)
+>
+
+Subnode composition_wo_database [
+    IS_TRUE(Flags.MUSIC__fav_composition_str_exists) and
+    not EXISTS(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)})
+] {
+    - "That's so cool!"
+    - @val(State.User__FavoriteCompositionStr)
+    - "and"
+    - @val(State.User__FavoriteInstrument | name | lower)
+    - "is a great combination."
+}
+
+Subnode no_fav_composition [
+    IS_FALSE(Flags.MUSIC__fav_composition_str_exists) and
+    (IS_TRUE(Flags.GlobalFlag__NO) or
+    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
+    IS_TRUE(Flags.GlobalFlag__NOTHING))
+] {
+    - "It's alright. Sometimes, it is hard to choose."
+} <
+    State.User__NoFavoriteComposition = @constant(True)
+>
+
+Subnode catch_all [
+    IS_FALSE(Flags.MUSIC__fav_composition_str_exists) and
+    IS_FALSE(Flags.GlobalFlag__NO) and
+    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+    IS_FALSE(Flags.GlobalFlag__NOTHING)
+] {
+    - "I don't seem to recognize that composition, but thank you for sharing. I'll go look it up!"
+}
+
+<SET_STATE_AFTER>

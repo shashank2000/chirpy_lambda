@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
@@ -11,11 +13,27 @@ Prompt ask_instrument_to_learn [ ] {
 }
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__InstrumentToLearn = @val(Flags.MUSIC__instrument_to_learn_ent)
 
 <SUBNODES>
-Subnode instr_to_learn_exists [
-   IS_TRUE(Flags.MUSIC__instr_to_learn_exists)
+Subnode instr_to_learn_exists_with_database [
+   IS_TRUE(Flags.MUSIC__instr_to_learn_exists) and
+   EXISTS(database_name="music_instrument", key={@val(State.User__InstrumentToLearn | name | lower)})
+] {
+    - @one_of(
+        {
+            - @lookup(database_name="music_instrument", key={@val(State.User__InstrumentToLearn | name | lower)}, column="comment_1")
+        },
+        {
+            - @lookup(database_name="music_instrument", key={@val(State.User__InstrumentToLearn | name | lower)}, column="comment_2")
+        }
+    )
+}
+
+Subnode instr_to_learn_exists_wo_database [
+   IS_TRUE(Flags.MUSIC__instr_to_learn_exists) and
+   not EXISTS(database_name="music_instrument", key={@val(State.User__InstrumentToLearn | name | lower)})
 ] {
     - "The"
     - @val(State.User__InstrumentToLearn | name | lower)
@@ -41,5 +59,3 @@ Subnode catch_all [
 ] {
     - "I don't seem to recognize that instrument. Maybe I need to go back to music class. Let's talk about something else then."
 }
-
-<SET_STATE_AFTER>

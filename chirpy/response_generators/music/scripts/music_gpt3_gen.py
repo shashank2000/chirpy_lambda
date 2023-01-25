@@ -3,7 +3,7 @@ import json
 import time
 import openai
 
-openai.api_key = "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"
+openai.api_key = ""    # Fill it out here
 
 
 def generate(prompt, **kwargs):

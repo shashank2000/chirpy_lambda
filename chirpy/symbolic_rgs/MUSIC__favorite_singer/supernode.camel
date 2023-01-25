@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
@@ -7,20 +9,29 @@ IS_NONE(State.User__FavoriteSinger) and IS_NONE(State.User__FavoriteSingerStr) #
 
 <PROMPTS>
 Prompt ask_favorite_singer [
-    #IS_NONE(State.User__FavoriteSongSinger)
  ] {
-    "Do you have a favorite singer? Who is it?"
+    "Who is your favorite singer?"
 }
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteSinger = @val(Flags.MUSIC__fav_singer_ent)
 State.User__FavoriteSingerStr = @val(Flags.MUSIC__fav_singer_str)
 
 <SUBNODES>
+Subnode musician_exists_with_database [
+    not IS_NONE(State.User__FavoriteSinger) and
+    EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
+] {
+    - @lookup(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)}, column="comment")
+} <
+    Flags.MUSIC__follow_up_on_known_fav_singer_comment = @constant(True)
+>
 
 Subnode musical_group [
    not IS_NONE(State.User__FavoriteSinger) and
-   IS_TRUE(Flags.MUSIC__singer_is_musical_group)
+   IS_TRUE(Flags.MUSIC__singer_is_musical_group) and
+   not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
 ] {
     - @val(Flags.MUSIC__fav_singer_comment)
     - @val(State.User__FavoriteSingerStr)
@@ -39,7 +50,8 @@ Subnode musical_group [
 
 Subnode single_musician [
    not IS_NONE(State.User__FavoriteSinger) and
-   IS_FALSE(Flags.MUSIC__singer_is_musical_group)
+   IS_FALSE(Flags.MUSIC__singer_is_musical_group) and
+   not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
 ] {
     - @val(Flags.MUSIC__fav_singer_comment)
     - @val(State.User__FavoriteSingerStr)
@@ -56,34 +68,12 @@ Subnode single_musician [
     )
 }
 
-Subnode only_know_singer_str_no_genre [
+Subnode only_know_singer_str [
    IS_NONE(State.User__FavoriteSinger) and
-   not IS_NONE(State.User__FavoriteSingerStr) and
-   IS_TRUE(Flags.MUSIC__singer_has_no_genre)
+   not IS_NONE(State.User__FavoriteSingerStr)
 ] {
     - "Oh I don't seem to recognize that artist, I definitely need to get out more."
 }
-
-#Subnode only_know_singer_str_w_genre [     # TODO: Fix get_singer_genre
-#   IS_NONE(State.User__FavoriteSinger) and
-#   not IS_NONE(State.User__FavoriteSingerStr) and
-#   IS_FALSE(Flags.MUSIC__singer_has_no_genre)
-#] {
-#    - @helper.least_repetitive_compliment()
-#    - "I love"
-#    - @val(State.User__FavoriteSingerStr)
-#    - "too!"
-#    - @one_of(
-#        {
-#            - @val(State.User__FavoriteSingerStr)
-#            - "does really nice songs."
-#        },
-#        {
-#            - @val(State.User__FavoriteSingerStr)
-#            - "has some really good tunes."
-#        }
-#    )
-#}
 
 Subnode no_fav_musician [
    IS_NONE(State.User__FavoriteSinger) and
@@ -91,7 +81,7 @@ Subnode no_fav_musician [
    (IS_TRUE(Flags.GlobalFlag__NO) or
    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
    IS_TRUE(Flags.GlobalFlag__NOTHING) or
-   IS_TRUE(Flags.MUSIC__user_has_negative_opinion))
+   IS_TRUE(Flags.MUSIC__user_has_negative_response))
 ] {
     - "Yeah, it can be hard to pick a particular musician when there are so many."
 }
@@ -99,15 +89,13 @@ Subnode no_fav_musician [
 Subnode catch_all [
    IS_NONE(State.User__FavoriteSinger) and
    IS_NONE(State.User__FavoriteSingerStr) and
-   IS_FALSE(Flags.MUSIC__singer_has_no_genre) and
    IS_FALSE(Flags.GlobalFlag__NO) and
    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
    IS_FALSE(Flags.GlobalFlag__NOTHING) and
-   IS_FALSE(Flags.MUSIC__user_has_negative_opinion)
+   IS_FALSE(Flags.MUSIC__user_has_negative_response)
 ] {
     - "Oh I don't seem to recognize that."
 }
-
 
 <SET_STATE_AFTER>
 State.MUSIC__fav_singer_was_triggered = {
