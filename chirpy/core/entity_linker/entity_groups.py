@@ -83,6 +83,7 @@ class EntityGroupsForExpectedType:
                                              "certain aspects of a person's life"}, entity_blacklist={'Woman', 'Girl',
                                                                                                       'Man', 'Boy'})
     food_related: EntityGroup = EntityGroup({'food', 'fruit', 'taxon', 'restaurant chain', 'diet'})
+    foods: EntityGroup = EntityGroup({'food', 'fruit'})
     anime_related: EntityGroup = EntityGroup({'anime', 'manga', 'manga series', 'television program', 'film', 'book'}, set())
     artcraft_related: EntityGroup = EntityGroup(
         {"art", "arts", "art form", 'textile process', 'textile arts', 'ceramic', 'paint', 'craft', 'art material',
