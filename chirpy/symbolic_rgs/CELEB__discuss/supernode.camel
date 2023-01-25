@@ -78,3 +78,6 @@ Subnode unknown_song [
 ] {
     - "Hmm, I don't think I have listened to that song."
 }
+
+<ENTITY_GROUPS>
+["film", "anime_related", "musical_work"]
