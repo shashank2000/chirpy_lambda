@@ -45,6 +45,7 @@ class Supernode:
     set_state_after: AssignmentList = field(default_factory=AssignmentList)
     entity_groups: EntityGroupList = field(default_factory=EntityGroupList)
     entity_groups_regex: EntityGroupRegexList = field(default_factory=EntityGroupRegexList)
+    entity_groups_addtl_conditions: Predicate = field(default_factory=TruePredicate)
 
     @classmethod
     def load(cls, camel_tree, name):
@@ -93,6 +94,13 @@ class Supernode:
                 logger.bluejay(f"subnode_error//{subnode.name}: {traceback.format_exc()}", exc_info=True)
                 tried_subnodes.append(subnode)
                 continue
+    
+    def entity_group_takeover(self, context):
+        return (
+            (self.entity_groups.evaluate(context) 
+             or self.entity_groups_regex.evaluate(context))
+            and self.entity_groups_addtl_conditions.evaluate(context)
+        )
 
     def uses_current_topic(self, condition=None):
         if condition is None:

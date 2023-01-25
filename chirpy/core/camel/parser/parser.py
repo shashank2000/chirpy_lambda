@@ -266,6 +266,9 @@ class SupernodeMaker(Transformer):
     def entity_groups_regex_section(self, tok):
         return "entity_groups_regex", entities.EntityGroupRegexList(tok)
 
+    def entity_groups_addtl_conditions_section(self, tok):
+        return "entity_groups_addtl_conditions", tok[0]
+
     def document(self, tok):
         return tok
 
