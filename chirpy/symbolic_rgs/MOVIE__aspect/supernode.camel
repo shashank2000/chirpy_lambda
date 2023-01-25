@@ -3,7 +3,7 @@ can_only_prompt_once_for = State.CurrentTopic
 <ENTRY_CONDITIONS>
 not IS_NONE(State.CurrentTopic)
 and IS_NONE(State.User__FavoriteMovieReason)
-and IS_TRUE(Flags.MOVIE__ask_for_fav_aspect)
+and (IS_TRUE(Flags.MOVIE__ask_for_fav_aspect) or ENTITY_GROUP_MATCHES(["film"]))
 
 
 <PROMPTS>
