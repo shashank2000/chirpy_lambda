@@ -96,6 +96,9 @@ class Supernode:
                 continue
     
     def entity_group_takeover(self, context):
+        if not context.flags["GlobalFlag__SpecifiedEntity"]:
+            return False
+        # GlobalFlag__SpecifiedEntity exists and equals cur_entity
         return (
             (self.entity_groups.evaluate(context) 
              or self.entity_groups_regex.evaluate(context))

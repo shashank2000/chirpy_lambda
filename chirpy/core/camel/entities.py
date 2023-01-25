@@ -12,9 +12,9 @@ class EntityGroup():
 	def __init__(self, entityGroupName: str) -> None:
 		self.entityGroup = getattr(EntityGroupsForExpectedType, entityGroupName)
 	def evaluate(self, context):
-		if not context.flags["GlobalFlag__SpecifiedEntity"]:
+		if not context.utilities["cur_entity"]:
 			return False
-		return self.entityGroup.matches(context.flags["GlobalFlag__SpecifiedEntity"])
+		return self.entityGroup.matches(context.utilities["cur_entity"])
 
 @dataclass
 class EntityGroupRegex():
