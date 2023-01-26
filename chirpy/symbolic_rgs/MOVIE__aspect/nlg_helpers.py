@@ -19,4 +19,4 @@ def get_regex_match_category(response):
 @nlg_helper
 def get_user_reasons(response):
     reasons = get_regex_match_category(response)
-     return reasons[0] if reasons else None
+    return reasons[0] if reasons else None
