@@ -25,7 +25,7 @@ State.CurrentTopic = @val(Utilities.cur_entity)
 
 <SUBNODES>
 Subnode user_pos_opinion_exists [
-    IS_FALSE(Flags.MUSIC__user_disagree) and
+    IS_FALSE(Flags.MUSIC__user_heard_but_do_not_like) and
     IS_FALSE(Flags.GlobalFlag__NO) and
     IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
     IS_FALSE(Flags.GlobalFlag__NOTHING)
@@ -35,13 +35,13 @@ Subnode user_pos_opinion_exists [
 }
 
 Subnode user_neg_opinion_exists [
-    IS_TRUE(Flags.MUSIC__user_disagree)
+    IS_TRUE(Flags.MUSIC__user_heard_but_do_not_like)
 ] {
     - "Oh, I guess it might not be your style."
 }
 
 Subnode user_neutral_opinion_exists [
-    IS_FALSE(Flags.MUSIC__user_disagree) and
+    IS_FALSE(Flags.MUSIC__user_heard_but_do_not_like) and
     (IS_TRUE(Flags.GlobalFlag__NO) or
     IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
     IS_TRUE(Flags.GlobalFlag__NOTHING))

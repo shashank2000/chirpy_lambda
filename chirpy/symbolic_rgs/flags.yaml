@@ -112,7 +112,7 @@
 - MUSIC__fav_singer_str
 - MUSIC__singer_is_musical_group
 - MUSIC__fav_singer_comment
-- MUSIC__user_disagree
+- MUSIC__user_heard_but_do_not_like
 - MUSIC__follow_up_on_known_fav_singer_comment
 #- MUSIC__first_follow_up_on_fav_song
 #- MUSIC__second_follow_up_on_fav_song

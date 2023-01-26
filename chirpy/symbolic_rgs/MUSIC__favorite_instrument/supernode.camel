@@ -31,7 +31,7 @@ Prompt ask_favorite_instrument [
         "Umm, so I hope you don't mind me changing the subject, but",
         "So, umm, this is a little off topic, but",
         "Hey, if you don't mind me changing the topic, ",
-        "Hey, so changing the topic, ",
+        "Hey, so changing the topic,",
         "This is kind of random, but ",
     )
     - "do you happen to play any instrument? What is your favorite one?"
