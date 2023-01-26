@@ -5,6 +5,7 @@ can_only_prompt_once_for = State.CurrentTopic
  or IS_TRUE(Flags.PETS__user_has_cat)
  or IS_TRUE(Flags.PETS__user_has_rabbit)) 
 and not IS_NONE(State.User__PetType)
+and IS_NONE(State.User__PetBreed)
 
 <PROMPTS>
 Prompt pet_type_with_name [ 
@@ -57,3 +58,5 @@ Subnode default [
 } <
    Flags.PETS__ask_hypothetical_breed = @constant(True)
 >
+
+<ENTITY_GROUPS>

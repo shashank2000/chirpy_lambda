@@ -30,7 +30,7 @@ State.User__PetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
 Subnode valid_type [
   EXISTS(database_name="animal_gpt", key={@val(State.User__PetType)})
 ] {
-	 - "That's awesome!"
+	- "That's awesome!"
   - "I love"
   - @val(State.User__PetTypeTalkable)
   - "."
@@ -55,3 +55,6 @@ Subnode default [
   - "A great choice! Animals are great. Did you know that "
   - "Giraffes have the same number of bones in their necks as humans do in their arms."
 } 
+
+<ENTITY_GROUPS>
+["pet"]
