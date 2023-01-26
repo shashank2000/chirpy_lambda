@@ -67,5 +67,3 @@ Subnode catch_all [
 ] {
     - "I don't seem to recognize that composition, but thank you for sharing. I'll go look it up!"
 }
-
-<SET_STATE_AFTER>

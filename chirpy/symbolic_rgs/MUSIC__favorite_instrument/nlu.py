@@ -8,7 +8,7 @@ def get_instrument_entity(context):
     def is_wiki_instrument(ent):
         return ent and WikiEntityInterface.is_in_entity_group(ent, ENTITY_GROUPS_FOR_EXPECTED_TYPE.musical_instrument)
     def is_in_instrument_database(ent):
-        return ent and exists("music_instrument", ent.name)
+        return ent and exists("music_instrument", ent.name.lower())
 
     cur_entity = context.utilities["cur_entity"]
     entity_linker_results = context.state_manager.current_state.entity_linker

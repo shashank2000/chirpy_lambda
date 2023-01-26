@@ -5,6 +5,7 @@ IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_song_was_triggered) and
 not IS_NONE(State.User__FavoriteSong) and
+not IS_NONE(State.User__FavoriteSongStr) and
 IS_TRUE(Flags.MUSIC__fav_song_comment)
 
 <PROMPTS>
@@ -19,7 +20,8 @@ Prompt ask_fav_song_opinion [
 State.CurrentTopic = @val(Utilities.cur_entity)
 
 <SUBNODES>
-Subnode generic_response [
+
+Subnode generic_response  [
     IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
     IS_FALSE(Flags.GlobalFlag__NOTHING)
 ] {
@@ -45,6 +47,3 @@ Subnode dont_know_or_nothing [
     - @helper.get_plural_form(@val(State.User__FavoriteSongWorkDescriptor))
     - "."
 }
-
-<SET_STATE_AFTER>
-Flags.MUSIC__fav_song_comment = @constant(False)

@@ -69,6 +69,6 @@ with open(MUSIC_GENRE_GPT_DATABASE_FILE) as f:
 def verify_music_genre_gpt_exists(genre_name : str):
     return genre_name in music_genre_gpt.keys()
 
-@database_lookup("music_song")
+@database_lookup("music_genre")
 def lookup_music_genre_gpt_gpt(genre_name : str):
     return music_genre_gpt[genre_name]

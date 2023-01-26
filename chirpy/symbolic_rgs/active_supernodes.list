@@ -25,13 +25,13 @@ LAUNCH
 #WIKI__get_intro_paragraph
 
 MUSIC__intro
-MUSIC__favorite_instrument
-MUSIC__favorite_instrument_opinion
-MUSIC__favorite_composition
-MUSIC__favorite_composition_factoid
-MUSIC__instrument_to_learn
-MUSIC__favorite_singer
-MUSIC__favorite_singer_comment
+#MUSIC__favorite_instrument
+#MUSIC__favorite_instrument_opinion
+#MUSIC__favorite_composition
+#MUSIC__favorite_composition_factoid
+#MUSIC__instrument_to_learn
+#MUSIC__favorite_singer
+#MUSIC__favorite_singer_comment
 MUSIC__favorite_song
 MUSIC__favorite_song_opinion
 MUSIC__favorite_genre

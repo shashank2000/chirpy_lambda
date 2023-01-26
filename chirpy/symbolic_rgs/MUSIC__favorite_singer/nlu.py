@@ -4,16 +4,18 @@ from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_T
 from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_linker_simple import link_span_to_entity
 from chirpy.response_generators.music.regex_templates import NameFavoriteSongTemplate
-
 import chirpy.response_generators.music.response_templates.general_templates as templates
 from chirpy.core.util import choose_least_repetitive
+from chirpy.databases.databases import exists
 
 import re
 from chirpy.response_generators.music.expression_lists import NEGATIVE_WORDS
 
 def get_singer_entity(context):
-    def is_singer(ent):
+    def is_wiki_singer(ent):
         return ent and WikiEntityInterface.is_in_entity_group(ent, ENTITY_GROUPS_FOR_EXPECTED_TYPE.musician)
+    def is_in_singer_database(ent):
+        return ent and exists("music_singer", ent.name.lower())
 
     cur_entity = context.utilities["cur_entity"]
     entity_linker_results = context.state_manager.current_state.entity_linker
@@ -23,9 +25,10 @@ def get_singer_entity(context):
     if len(entity_linker_results.threshold_removed): entities.append(entity_linker_results.threshold_removed[0].top_ent)
     if len(entity_linker_results.conflict_removed): entities.append(entity_linker_results.conflict_removed[0].top_ent)
     for e in entities:
-        if is_singer(e): return e
+        if is_wiki_singer(e) or is_in_singer_database(e):
+            return e
 
-def get_musician_entity(context, string):
+def get_singer_entity_from_str(context, string):
     return link_span_to_entity(string, context.state_manager.current_state, expected_type=ENTITY_GROUPS_FOR_EXPECTED_TYPE.musician)
 
 def found_phrase(phrase, utterance):
@@ -47,7 +50,7 @@ def get_flags(context):
         slots = NameFavoriteSongTemplate().execute(context.utterance)
         if slots is not None and 'favorite' in slots:
             singer_str = slots['favorite']
-            singer_ent = get_musician_entity(context, singer_str)
+            singer_ent = get_singer_entity_from_str(context, singer_str)
             if singer_ent:
                 singer_str = singer_ent.name
 

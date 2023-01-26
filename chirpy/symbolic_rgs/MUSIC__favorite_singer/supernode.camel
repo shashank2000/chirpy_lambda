@@ -18,7 +18,7 @@ State.User__FavoriteSinger = @val(Flags.MUSIC__fav_singer_ent)
 State.User__FavoriteSingerStr = @val(Flags.MUSIC__fav_singer_str)
 
 <SUBNODES>
-Subnode musician_exists_with_database [
+Subnode singer_exists_with_database [
     not IS_NONE(State.User__FavoriteSinger) and
     EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
 ] {
@@ -27,7 +27,7 @@ Subnode musician_exists_with_database [
     Flags.MUSIC__follow_up_on_known_fav_singer_comment = @constant(True)
 >
 
-Subnode musical_group [
+Subnode generic_comment_on_band [
    not IS_NONE(State.User__FavoriteSinger) and
    IS_TRUE(Flags.MUSIC__singer_is_musical_group) and
    not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
@@ -49,14 +49,14 @@ Subnode musical_group [
      Flags.MUSIC__follow_up_on_known_fav_singer_song = @constant(True)
 >
 
-Subnode single_musician [
+Subnode generic_comment_on_singer [
    not IS_NONE(State.User__FavoriteSinger) and
    IS_FALSE(Flags.MUSIC__singer_is_musical_group) and
    not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
 ] {
     - @val(Flags.MUSIC__fav_singer_comment)
     - @val(State.User__FavoriteSingerStr)
-    - "is definitely a great musician!"
+    - "is definitely a great singer!"
     - @one_of(
         {
             - @val(State.User__FavoriteSingerStr)
@@ -78,7 +78,7 @@ Subnode only_know_singer_str [
     - "Oh I don't seem to recognize that artist, I definitely need to get out more."
 }
 
-Subnode no_fav_musician [
+Subnode no_fav_singer [
    IS_NONE(State.User__FavoriteSinger) and
    IS_NONE(State.User__FavoriteSingerStr) and
    (IS_TRUE(Flags.GlobalFlag__NO) or
@@ -86,7 +86,7 @@ Subnode no_fav_musician [
    IS_TRUE(Flags.GlobalFlag__NOTHING) or
    IS_TRUE(Flags.MUSIC__user_has_negative_response))
 ] {
-    - "Yeah, it can be hard to pick a particular musician when there are so many."
+    - "Yeah, it can be hard to pick a particular singer when there are so many."
 }
 
 Subnode catch_all [

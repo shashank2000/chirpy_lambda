@@ -262,6 +262,7 @@ def spacingaware_join(x):
             if isinstance(item, PseudoEntity):
                 item = item.talkable_name
             elif isinstance(item, (int, float)):
+                print(f'DEBUGGG {x}')
                 item = item.talkable_name
             else:
                 raise TypeError(f"Item {item} (from {x}) is type {type(item)} and can't be converted to String")

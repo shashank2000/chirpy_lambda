@@ -20,8 +20,16 @@ State.User__FavoriteMusicGenreStr = @val(Flags.MUSIC__fav_genre_str)
 State.User__FavoriteMusicGenreWorkDescriptor = @val(Flags.MUSIC__fav_genre_work_descriptor)
 
 <SUBNODES>
-Subnode make_genre_comment [
-  not IS_NONE(State.User__FavoriteMusicGenre)
+Subnode make_comment_with_database [
+    not IS_NONE(State.User__FavoriteMusicGenre) and
+    EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenre | name | lower)})
+] {
+    - @lookup(database_name="music_genre", key={@val(State.User__FavoriteMusicGenre | name | lower)}, column="comment")
+}
+
+Subnode make_generic_comment [
+    not IS_NONE(State.User__FavoriteMusicGenre) and
+    not EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenre | name | lower)})
 ] {
     - @one_of(
         {"Wow,"},
@@ -29,13 +37,27 @@ Subnode make_genre_comment [
     )
     - "I also like to listen to"
     - @val(Flags.MUSIC__fav_genre | name | lower)
-    - "."
+    - "as well!"
 }
 
-Subnode default [
-  IS_NONE(State.User__FavoriteMusicGenre)
+Subnode no_fav_genre [
+    IS_NONE(State.User__FavoriteMusicGenre) and
+    (IS_TRUE(Flags.GlobalFlag__NO) or
+    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
+    IS_TRUE(Flags.GlobalFlag__NOTHING))
 ] {
-    -"Oh I'm not very familiar with that genre. I should listen to a greater variety of music!"
+    - "It's alright. It is hard for me to choose one specific genre as well."
+} <
+    State.User__NoFavoriteComposition = @constant(True)
+>
+
+Subnode catch_all [
+    IS_NONE(State.User__FavoriteMusicGenre) and
+    IS_FALSE(Flags.GlobalFlag__NO) and
+    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+    IS_FALSE(Flags.GlobalFlag__NOTHING)
+] {
+    - "Oh I'm not very familiar with that genre. I should listen to a greater variety of music!"
 }
 
 <SET_STATE_AFTER>
