@@ -25,7 +25,6 @@ def get_genre_entity(context):
         if is_wiki_genre(e):
             return e
 
-
 @nlu_processing
 def get_flags(context):
     genre_ent = get_genre_entity(context)

@@ -39,5 +39,3 @@ def get_flags(context):
 @nlu_processing
 def get_background_flags(context):
     return
-
-

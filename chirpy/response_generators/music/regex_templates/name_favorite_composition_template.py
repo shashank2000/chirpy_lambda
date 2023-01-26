@@ -71,9 +71,7 @@ class NameFavoriteCompositionTemplate(RegexTemplate):
         OPTIONAL_TEXT_PRE + "i {play_word} {favorite} lately",
         OPTIONAL_TEXT_PRE + "i just {play_word} {favorite}",
         "{yes_word} {favorite}",
-        OPTIONAL_TEXT_PRE + "{favorite}",
         OPTIONAL_TEXT_PRE + "{yes_word} {favorite}",
-        "{favorite}"
     ]
 
     positive_examples = []

@@ -37,7 +37,7 @@ Subnode make_generic_comment [
         {"Cool!"}
     )
     - "I also like to listen to"
-    - @val(State.User__FavoriteMusicGenreStr)
+    - @val(State.User__FavoriteMusicGenreStr | lower)
     - "as well!"
 }
 
