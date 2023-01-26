@@ -1,0 +1,81 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_TRUE(State.User__LikeMovie) and
+IS_NONE(State.User__PreferredMovieActor) and
+IS_FALSE(Flags.MOVIE__ask_for_fav_aspect)
+
+<PROMPTS>
+Prompt actor_preferences [ ] {
+    "Having said that, I'm also interested in your preferences for movies. Which actors do you enjoy watching?"
+}
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.MOVIE__user_mentioned_preferred_actor)
+
+<LOCALS>
+Locals.intro_statement = {
+    - @one_of(
+        {"Ah yes"},
+        {"Oh yeah"}
+    )
+    - ,
+    - @val(Utilities.cur_entity | name)
+    - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
+    - "an amazing actor."
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__PreferredMovieActor = @val(Utilities.cur_entity | name)
+State.User__PreferredMovieActorMovie = @lookup(
+        database_name="actor_info",
+        key={@val(State.User__PreferredMovieActor)},
+        column="movie_name"
+)
+State.User__PreferredMovieActorMovieDesc = @lookup(
+        database_name="movie_info",
+        key={@val(State.User__PreferredMovieActorMovie)},
+        column="plot"
+)
+
+<SUBNODES>
+Subnode make_actor_movie_desc_comment [
+  not IS_NONE(State.User__PreferredMovieActorMovie) and
+  not IS_NONE(State.User__PreferredMovieActorMovieDesc)
+
+] {
+  - @val(Locals.intro_statement)
+  - "You should see"
+  - @val(State.User__PreferredMovieActor)
+  - "in"
+  - @val(State.User__PreferredMovieActorMovie)
+  - "."
+  - @val(State.User__PreferredMovieActorMovieDesc)
+}
+
+Subnode make_actor_movie_comment [
+  not IS_NONE(State.User__PreferredMovieActorMovie)
+] {
+  - @val(Locals.intro_statement)
+  - "I loved"
+  - @val(State.User__PreferredMovieActor)
+  - "in"
+  - @val(State.User__PreferredMovieActorMovie)
+  - "."
+}
+
+Subnode default [
+] {
+  - "I haven't seen a movie by"
+  - @val(State.User__PreferredMovieActor)
+  - "."
+  - "Thanks for telling me about them."
+}
+
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+

@@ -1,12 +1,6 @@
 from chirpy.core.response_generator import nlg_helper
-from chirpy.core.camel.context import Context
-
-
 import logging
 import re
-
-logger = logging.getLogger("chirpylogger")
-
 
 def get_regex_match_category(response):
     regex_expressions = {
@@ -25,10 +19,4 @@ def get_regex_match_category(response):
 @nlg_helper
 def get_user_reasons(response):
     reasons = get_regex_match_category(response)
-    if reasons:
-        return reasons[0]
-    else:
-        return None
-
-def untriggerAspect():
-    return False
+    return reasons[0] if reasons else None

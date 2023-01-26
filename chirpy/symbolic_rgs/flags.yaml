@@ -44,6 +44,7 @@
 - NavigationPositive
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
+- PLACES__user_mentioned_city
 - CELEB__have_asked_about_celeb
 - CELEB__move_on_to_new_topic
 - CELEB__discuss_tv
@@ -86,3 +87,7 @@
 - MOVIE__user_likes_movie
 - MOVIE__user_mentioned_reason
 - MOVIE__last_utterance
+- MOVIE__user_mentioned_movie
+- MOVIE__user_mentioned_preferred_actor
+- MOVIE__user_mentioned_preferred_genre
+- MOVIE__ask_for_fav_aspect
