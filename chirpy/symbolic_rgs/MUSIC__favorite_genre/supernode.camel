@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
@@ -12,6 +14,7 @@ Prompt favorite_genre [
 }
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteMusicGenre = @val(Flags.MUSIC__fav_genre)
 State.User__FavoriteMusicGenreStr = @val(Flags.MUSIC__fav_genre_str)
 State.User__FavoriteMusicGenreWorkDescriptor = @val(Flags.MUSIC__fav_genre_work_descriptor)
@@ -27,9 +30,6 @@ Subnode make_genre_comment [
     - "I also like to listen to"
     - @val(Flags.MUSIC__fav_genre | name | lower)
     - "."
-#    - "Personally, I especially like the song"
-#    - {song in State.User__FavoriteMusicGenre}
-#    - "."
 }
 
 Subnode default [

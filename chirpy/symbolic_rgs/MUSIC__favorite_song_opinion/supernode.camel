@@ -1,9 +1,11 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_song_was_triggered) and
 not IS_NONE(State.User__FavoriteSong) and
-IS_TRUE(Flags.MUSIC__first_follow_up_on_fav_song)
+IS_TRUE(Flags.MUSIC__fav_song_comment)
 
 <PROMPTS>
 Prompt ask_fav_song_opinion [
@@ -12,6 +14,9 @@ Prompt ask_fav_song_opinion [
     - @val(State.User__FavoriteSongWorkDescriptor)
     - "?"
 }
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 
 <SUBNODES>
 Subnode generic_response [
@@ -42,4 +47,4 @@ Subnode dont_know_or_nothing [
 }
 
 <SET_STATE_AFTER>
-Flags.MUSIC__first_follow_up_on_fav_song = @constant(False)
+Flags.MUSIC__fav_song_comment = @constant(False)

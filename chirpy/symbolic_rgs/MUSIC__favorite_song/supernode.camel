@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
@@ -36,38 +38,12 @@ Prompt ask_song [
 >
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteSong = @val(Flags.MUSIC__fav_song_ent)
 State.User__FavoriteSongStr = @val(Flags.MUSIC__fav_song_str)
 State.User__FavoriteSongWorkDescriptor = @val(Flags.MUSIC__asked_work_descriptor)
 
 <SUBNODES>
-Subnode song_exists_with_meta [
-   not IS_NONE(State.User__FavoriteSong) and
-   IS_TRUE(Flags.MUSIC__song_metadata_exists)
-] {
-    - @one_of(
-        {
-            - "Oh yeah,"
-            - @val(Flags.MUSIC__song_metadata_song)
-            - "is a song by"
-            - @val(Flags.MUSIC__song_metadata_artist)
-            - "released in"
-            - @val(Flags.MUSIC__song_metadata_year)
-            - ", right?"
-        },
-        {
-            - @val(Flags.MUSIC__song_metadata_song)
-            - "was released by"
-            - @val(Flags.MUSIC__song_metadata_artist)
-            - "in"
-            - @val(Flags.MUSIC__song_metadata_year)
-            - ", right?"
-        }
-    )
-} <
-    Flags.MUSIC__first_follow_up_on_fav_song = @constant(True)
->
-
 Subnode generic_response [
    not IS_NONE(State.User__FavoriteSong)
 ] {
@@ -86,7 +62,7 @@ Subnode generic_response [
         }
     )
 } <
-    Flags.MUSIC__first_follow_up_on_fav_song = @constant(True)
+    Flags.MUSIC__fav_song_comment = @constant(True)
 >
 
 Subnode dont_know [
@@ -96,34 +72,28 @@ Subnode dont_know [
     - "I understand. I like different"
     - @helper.get_plural_form(@val(Flags.MUSIC__asked_work_descriptor))
     - "depending on how I'm feeling and I don't really have a favorite either."
-} <
-    State.MUSIC__exit_supernode = @constant(True)
->
+}
 
 Subnode no_fav_song [
    IS_NONE(State.User__FavoriteSong) and
-   (IS_TRUE(Flags.GlobalFlag__NO) or IS_TRUE(Flags.GlobalFlag__NOTHING)) and
+   (IS_TRUE(Flags.GlobalFlag__NO) or
+   IS_TRUE(Flags.GlobalFlag__NOTHING)) and
    IS_FALSE(Flags.GlobalFlag__DONT_KNOW)
 ] {
     - "Oh it's okay, maybe you will find a"
     - @val(Flags.MUSIC__asked_work_descriptor)
     - "that touches your heart one day!"
-} <
-    State.MUSIC__exit_supernode = @constant(True)
->
+}
 
 Subnode catch_all [
    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
    IS_FALSE(Flags.GlobalFlag__NO) and
-   IS_FALSE(Flags.GlobalFlag__NOTHING) and
-   IS_FALSE(Flags.MUSIC__song_metadata_exists)
+   IS_FALSE(Flags.GlobalFlag__NOTHING)
 ] {
     - "Oh I don't seem to recognize that"
     - @val(Flags.MUSIC__asked_work_descriptor)
     -"."
-} <
-    State.MUSIC__exit_supernode = @constant(True)
->
+}
 
 <SET_STATE_AFTER>
 State.MUSIC__fav_song_was_triggered = @constant(True)

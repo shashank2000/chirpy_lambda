@@ -8,17 +8,17 @@ IS_NONE(State.User__FavoriteInstrument)
 
 <PROMPTS>
 Prompt ask_favorite_instrument [
-    IS_FALSE(State.MUSIC__fav_singer_was_triggered) #and    # TODO
-    #IS_FALSE(State.MUSIC__fav_song_was_triggered) and
-    #IS_FALSE(State.MUSIC__fav_genre_was_triggered)
+    IS_FALSE(State.MUSIC__fav_singer_was_triggered) and
+    IS_FALSE(State.MUSIC__fav_song_was_triggered) and
+    IS_FALSE(State.MUSIC__fav_genre_was_triggered)
  ] {
     "There are so many instruments in the world. Do you play any instrument? What is your favorite one?"
 }
 
 Prompt ask_favorite_instrument [
-    IS_TRUE(State.MUSIC__fav_singer_was_triggered) #or  # TODO
-    #IS_TRUE(State.MUSIC__fav_song_was_triggered) or
-    #IS_TRUE(State.MUSIC__fav_genre_was_triggered)
+    IS_TRUE(State.MUSIC__fav_singer_was_triggered) or
+    IS_TRUE(State.MUSIC__fav_song_was_triggered) or
+    IS_TRUE(State.MUSIC__fav_genre_was_triggered)
 ] {
     - @one_of(
         "Oh hey, on another topic,",
