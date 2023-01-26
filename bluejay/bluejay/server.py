@@ -22,7 +22,7 @@ def reload_chirpy(code):
     print("Reloading chirpy")
     global process
     process = Popen(
-        f"export PYTHONPATH=$(pwd) && python3 agents/bluejay_agent.py -c {CODE} 2>&1",
+        f"export PYTHONPATH=$(pwd) && source env.list && python3 agents/bluejay_agent.py -c {CODE} 2>&1",
         stdout=PIPE,
         stdin=PIPE,
         stderr=PIPE,
