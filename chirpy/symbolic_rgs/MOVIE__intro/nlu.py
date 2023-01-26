@@ -8,4 +8,4 @@ def get_flags(context):
 
 @nlu_processing
 def get_background_flags(context):
-    ADD_NLU_FLAG('MOVIE__user_likes_movie', pos_val)
+    pass

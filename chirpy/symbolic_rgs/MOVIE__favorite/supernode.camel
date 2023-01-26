@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_TRUE(State.User__LikeMovie) and
 IS_NONE(State.User__FavoriteMovie)
@@ -30,26 +32,25 @@ Locals.intro_statement = {
 
 
 <SET_STATE>
-State.User__FavoriteMovie = @val(Utilities.cur_entity | name)
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__FavoriteMovie = @val(Utilities.cur_entity)
 State.User__FavoriteMovieTalkable = @val(Utilities.cur_entity | talkable | lower)
 State.User__FavoriteMovieMainActor = @lookup(
         database_name="movie_info",
-        key={@val(State.User__FavoriteMovie)},
+        key={@val(State.User__FavoriteMovie | name)},
         column="main_actor"
 )
 State.User__FavoriteMovieDirector = @lookup(
         database_name="movie_info",
-        key={@val(State.User__FavoriteMovie)},
+        key={@val(State.User__FavoriteMovie | name)},
         column="director"
 )
 State.User__FavoriteMovieGenre = @lookup(
         database_name="movie_info",
-        key={@val(State.User__FavoriteMovie)},
+        key={@val(State.User__FavoriteMovie | name)},
         column="genre"
 )
-State.Trigger__AspectNode = {
-    @helper.triggerAspect()
-}
+Flags.MOVIE__ask_for_fav_aspect = @constant(True)
 
 
 <SUBNODES>

@@ -1,5 +1,7 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
-IS_NONE(State.User__LikeMovie)
+IS_FALSE(State.User__LikeMovie)
 
 
 <PROMPTS>
@@ -26,10 +28,19 @@ Locals.statement_okay = {
 
 
 <SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__LikeMovie = @val(Flags.MOVIE__user_likes_movie)
 State.User__FavoriteMovie = @helper.set_favorite_movie(@val(Utilities.cur_entity))
 
 <SUBNODES>
+Subnode user_dislikes_movie [
+  not IS_NONE(State.User__FavoriteMovie)
+  and (IS_TRUE(Utilities.pos_intent) or IS_TRUE(State.User__LikeMovie))
+] {
+  - "It's great to to hear that you like"
+  - @val(State.User__FavoriteMovie | talkable)
+}
+
 Subnode user_likes_movie [
   IS_TRUE(Flags.MOVIE__user_likes_movie)
 ] {
