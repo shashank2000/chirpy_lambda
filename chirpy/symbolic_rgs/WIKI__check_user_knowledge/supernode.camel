@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 not IS_NONE(State.CurrentTopic) and IS_FALSE(Flags.WIKI__understand_user_better) and IS_FALSE(Flags.WIKI__discuss_article)
 
