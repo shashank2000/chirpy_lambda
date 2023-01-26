@@ -4,13 +4,15 @@ can_only_prompt_once_for = State.CurrentTopic
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
-IS_TRUE(State.User__FavoriteInstrument) and
+(not IS_NONE(State.User__FavoriteInstrument) or
+not IS_NONE(State.User__FavoriteInstrumentStr)) and
+IS_FALSE(State.User__NoFavoriteInstrument) and
 IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr_opinion)
 
 <PROMPTS>
 Prompt ask_favorite_instrument_opinion [ ] {
     - "What do you like about"
-    - @val(State.User__FavoriteInstrument | name | lower)
+    - @val(State.User__FavoriteInstrumentStr | lower)
     - "?"
 }
 
@@ -25,10 +27,10 @@ Subnode user_pos_opinion_exists [
 ] {
     - @one_of(
         {
-            - @lookup(database_name="music_instrument", key={@val(State.User__FavoriteInstrument | name | lower)}, column="comment_1")
+            - @lookup(database_name="music_instrument", key={@val(State.User__FavoriteInstrumentStr | lower)}, column="comment_1")
         },
         {
-            - @lookup(database_name="music_instrument", key={@val(State.User__FavoriteInstrument | name | lower)}, column="comment_2")
+            - @lookup(database_name="music_instrument", key={@val(State.User__FavoriteInstrumentStr | lower)}, column="comment_2")
         }
     )
 }

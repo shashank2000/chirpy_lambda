@@ -5,7 +5,8 @@ IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
 IS_FALSE(State.User__NoFavoriteInstrument) and
-not IS_NONE(State.User__FavoriteInstrument) and
+(not IS_NONE(State.User__FavoriteInstrument) or
+not IS_NONE(State.User__FavoriteInstrumentStr)) and
 not IS_NONE(State.User__FavoriteCompositionStr) and
 IS_FALSE(State.User__NoFavoriteComposition) and
 IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_composition_comment)

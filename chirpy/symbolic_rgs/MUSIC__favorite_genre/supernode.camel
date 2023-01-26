@@ -5,7 +5,8 @@ IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_genre_was_triggered) and
 IS_NONE(State.User__FavoriteMusicGenre) and
-IS_NONE(State.User__FavoriteSong)
+IS_NONE(State.User__FavoriteSong) and
+IS_FALSE(State.User__NoFavoriteMusicGenre)
 
 <PROMPTS>
 Prompt favorite_genre [
@@ -22,21 +23,21 @@ State.User__FavoriteMusicGenreWorkDescriptor = @val(Flags.MUSIC__fav_genre_work_
 <SUBNODES>
 Subnode make_comment_with_database [
     not IS_NONE(State.User__FavoriteMusicGenre) and
-    EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenre | name | lower)})
+    EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr)})
 ] {
-    - @lookup(database_name="music_genre", key={@val(State.User__FavoriteMusicGenre | name | lower)}, column="comment")
+    - @lookup(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr)}, column="comment")
 }
 
 Subnode make_generic_comment [
     not IS_NONE(State.User__FavoriteMusicGenre) and
-    not EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenre | name | lower)})
+    not EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr)})
 ] {
     - @one_of(
         {"Wow,"},
         {"Cool!"}
     )
     - "I also like to listen to"
-    - @val(Flags.MUSIC__fav_genre | name | lower)
+    - @val(State.User__FavoriteMusicGenreStr)
     - "as well!"
 }
 
@@ -48,7 +49,7 @@ Subnode no_fav_genre [
 ] {
     - "It's alright. It is hard for me to choose one specific genre as well."
 } <
-    State.User__NoFavoriteComposition = @constant(True)
+    State.User__NoFavoriteMusicGenre = @constant(True)
 >
 
 Subnode catch_all [

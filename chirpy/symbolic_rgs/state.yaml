@@ -79,17 +79,22 @@ WIKI__last_discussed_section: {}
 
 # Music
 User__FavoriteInstrument: null
+User__FavoriteInstrumentStr: null
 User__NoFavoriteInstrument: false
 User__FavoriteComposition: null
 User__FavoriteCompositionStr: null
 User__NoFavoriteComposition: false
 User__InstrumentToLearn: null
+User__InstrumentToLearnStr: null
 User__FavoriteSinger: null
 User__FavoriteSingerStr: null
+User__NoFavoriteSinger: false
 User__FavoriteSong: null
 User__FavoriteSongStr: null
+User__NoFavoriteSong: false
 User__FavoriteMusicGenre: null
 User__FavoriteMusicGenreStr: null
+User__NoFavoriteMusicGenre: false
 User__FavoriteMusicGenreWorkDescriptor: null
 User__FavoriteSongWorkDescriptor: null
 MUSIC__supernode_starts_responding: false

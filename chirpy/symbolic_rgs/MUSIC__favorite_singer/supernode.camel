@@ -4,7 +4,8 @@ can_only_prompt_once_for = State.CurrentTopic
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_singer_was_triggered) and
-IS_NONE(State.User__FavoriteSinger) and IS_NONE(State.User__FavoriteSingerStr)
+IS_NONE(State.User__FavoriteSinger) and IS_NONE(State.User__FavoriteSingerStr) and
+IS_FALSE(State.User__NoFavoriteSinger)
 
 <PROMPTS>
 Prompt ask_favorite_singer [
@@ -19,18 +20,18 @@ State.User__FavoriteSingerStr = @val(Flags.MUSIC__fav_singer_str)
 
 <SUBNODES>
 Subnode singer_exists_with_database [
-    not IS_NONE(State.User__FavoriteSinger) and
-    EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
+    not IS_NONE(State.User__FavoriteSingerStr) and
+    EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSingerStr | lower)})
 ] {
-    - @lookup(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)}, column="comment")
+    - @lookup(database_name="music_singer", key={@val(State.User__FavoriteSingerStr | lower)}, column="comment")
 } <
     Flags.MUSIC__follow_up_on_known_fav_singer_comment = @constant(True)
 >
 
 Subnode generic_comment_on_band [
-   not IS_NONE(State.User__FavoriteSinger) and
+   not IS_NONE(State.User__FavoriteSingerStr) and
    IS_TRUE(Flags.MUSIC__singer_is_musical_group) and
-   not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
+   not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSingerStr | lower)})
 ] {
     - @val(Flags.MUSIC__fav_singer_comment)
     - @val(State.User__FavoriteSingerStr)
@@ -50,9 +51,9 @@ Subnode generic_comment_on_band [
 >
 
 Subnode generic_comment_on_singer [
-   not IS_NONE(State.User__FavoriteSinger) and
+   not IS_NONE(State.User__FavoriteSingerStr) and
    IS_FALSE(Flags.MUSIC__singer_is_musical_group) and
-   not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSinger | name | lower)})
+   not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSingerStr | lower)})
 ] {
     - @val(Flags.MUSIC__fav_singer_comment)
     - @val(State.User__FavoriteSingerStr)
@@ -73,7 +74,8 @@ Subnode generic_comment_on_singer [
 
 Subnode only_know_singer_str [
    IS_NONE(State.User__FavoriteSinger) and
-   not IS_NONE(State.User__FavoriteSingerStr)
+   not IS_NONE(State.User__FavoriteSingerStr) and
+   not EXISTS(database_name="music_singer", key={@val(State.User__FavoriteSingerStr | lower)})
 ] {
     - "Oh I don't seem to recognize that artist, I definitely need to get out more."
 }
@@ -87,7 +89,9 @@ Subnode no_fav_singer [
    IS_TRUE(Flags.MUSIC__user_has_negative_response))
 ] {
     - "Yeah, it can be hard to pick a particular singer when there are so many."
-}
+} <
+     State.User__NoFavoriteSinger = @constant(True)
+>
 
 Subnode catch_all [
    IS_NONE(State.User__FavoriteSinger) and

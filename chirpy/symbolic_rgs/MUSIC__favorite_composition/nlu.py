@@ -4,7 +4,7 @@ from chirpy.response_generators.music.regex_templates.name_favorite_composition_
 
 def get_composition_entity(context):
     def is_in_composition_comment_database(ent):
-        return ent and exists("music_composition", ent.name.lower())
+        return ent and exists("music_composition_comment", ent.name.lower())
 
     cur_entity = context.utilities["cur_entity"]
     entity_linker_results = context.state_manager.current_state.entity_linker
@@ -23,17 +23,18 @@ def get_flags(context):
     composition_entity = get_composition_entity(context)
     ADD_NLU_FLAG('MUSIC__fav_composition_ent', composition_entity)
 
-    composition_str = None
+    composition_str_slot = None
     slots = NameFavoriteCompositionTemplate().execute(context.utterance)
     if slots is not None and 'favorite' in slots:
-        composition_str = slots['favorite']
+        composition_str_slot = slots['favorite']
 
     if composition_entity:
-        ADD_NLU_FLAG('MUSIC__fav_composition_str_exists')
         ADD_NLU_FLAG('MUSIC__fav_composition_str', composition_entity.name)
-    elif composition_str:
-        ADD_NLU_FLAG('MUSIC__fav_composition_str_exists')
-        ADD_NLU_FLAG('MUSIC__fav_composition_str', composition_str.capitalize())
+    elif exists("music_composition_comment", context.utterance.lower()):
+        ADD_NLU_FLAG('MUSIC__fav_composition_str', context.utterance.capitalize())
+        print(context.utterance)
+    elif composition_str_slot:
+        ADD_NLU_FLAG('MUSIC__fav_composition_str', composition_str_slot.capitalize())
 
 @nlu_processing
 def get_background_flags(context):

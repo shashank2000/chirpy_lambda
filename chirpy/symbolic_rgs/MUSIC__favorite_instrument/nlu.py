@@ -30,8 +30,11 @@ def get_instrument_entity(context):
 def get_flags(context):
     instr_entity = get_instrument_entity(context)
     ADD_NLU_FLAG('MUSIC__fav_instr_ent', instr_entity)
+
     if instr_entity:
-        ADD_NLU_FLAG('MUSIC__instr_ent_exists')
+        ADD_NLU_FLAG('MUSIC__fav_instr_str', instr_entity.name)
+    elif exists("music_instrument", context.utterance.lower()):
+        ADD_NLU_FLAG('MUSIC__fav_instr_str', context.utterance)
 
     slots = DoNotPlayInstrTemplate().execute(context.utterance)
     if slots is not None:

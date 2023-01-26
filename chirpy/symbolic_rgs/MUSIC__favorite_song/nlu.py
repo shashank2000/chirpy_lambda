@@ -39,10 +39,13 @@ def get_flags(context):
     if song_ent:
         song_str = song_ent.name
         song_str = re.sub(r'\(.*?\)', '', song_str)
+    elif exists("music_song", context.utterance.lower()):
+        song_str = context.utterance.capitalize()
+        song_ent = get_song_entity_from_str(context, song_str)
     else:
         song_slots = NameFavoriteSongTemplate().execute(context.utterance)
         if song_slots is not None and 'favorite' in song_slots:
-            song_str = song_slots['favorite']
+            song_str = song_slots['favorite'].capitalize()
             song_ent = get_song_entity_from_str(context, song_str)
 
     ADD_NLU_FLAG('MUSIC__fav_song_ent', song_ent)

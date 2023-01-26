@@ -4,9 +4,10 @@ can_only_prompt_once_for = State.CurrentTopic
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_song_was_triggered) and
-IS_NONE(State.User__FavoriteSong) and
+IS_NONE(State.User__FavoriteSong) and IS_NONE(State.User__FavoriteSongStr) and
 (IS_NONE(State.User__FavoriteSinger) or not IS_NONE(State.User__FavoriteSinger)) and
-(IS_NONE(State.User__FavoriteMusicGenre) or not IS_NONE(State.User__FavoriteMusicGenre))
+(IS_NONE(State.User__FavoriteMusicGenre) or not IS_NONE(State.User__FavoriteMusicGenre)) and
+IS_FALSE(State.User__NoFavoriteSong)
 
 <PROMPTS>
 Prompt ask_song_when_singer_ent_exists [
@@ -46,20 +47,18 @@ State.User__FavoriteSongStr = @val(Flags.MUSIC__fav_song_str)
 
 <SUBNODES>
 Subnode make_comment_with_database [
-    not IS_NONE(State.User__FavoriteSong) and
     not IS_NONE(State.User__FavoriteSongStr) and
-    EXISTS(database_name="music_song", key={@val(State.User__FavoriteSong | name | lower)})
+    EXISTS(database_name="music_song", key={@val(State.User__FavoriteSongStr | lower)})
 ] {
-    - @lookup(database_name="music_song", key={@val(State.User__FavoriteSong | name | lower)}, column="comment")
+    - @lookup(database_name="music_song", key={@val(State.User__FavoriteSongStr | lower)}, column="comment")
 } <
     Flags.MUSIC__fav_song_comment = @constant(True)
 >
 
 
 Subnode make_generic_response [
-   not IS_NONE(State.User__FavoriteSong) and
    not IS_NONE(State.User__FavoriteSongStr) and
-   not EXISTS(database_name="music_song", key={@val(State.User__FavoriteSong | name | lower)})
+   not EXISTS(database_name="music_song", key={@val(State.User__FavoriteSongStr | lower)})
 ] {
     - @one_of(
         {
@@ -95,7 +94,9 @@ Subnode no_fav_song [
     - "Oh it's okay, maybe you will find a"
     - @val(State.User__FavoriteSongWorkDescriptor)
     - "that touches your heart one day!"
-}
+} <
+    State.User__NoFavoriteSong= @constant(True)
+>
 
 Subnode catch_all [
    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and

@@ -31,16 +31,19 @@ def get_flags(context):
     genre_ent = get_genre_entity(context)
     genre_str = None
     if genre_ent:
-        genre_str = genre_ent.name[:-6] if genre_ent.talkable_name.endswith('music') else genre_ent.talkable_name
+        genre_str = genre_ent.name
+    elif exists("music_genre", context.utterance.lower()):
+        genre_str = context.utterance
 
     ADD_NLU_FLAG('MUSIC__fav_genre', genre_ent)
     ADD_NLU_FLAG('MUSIC__fav_genre_str', genre_str)
 
-    if genre_str and genre_str.lower() == 'classical':
-        ADD_NLU_FLAG('MUSIC__fav_genre_work_descriptor', 'piece')
-    else:
-        ADD_NLU_FLAG('MUSIC__fav_genre_work_descriptor', 'song')
-
+    if genre_str:
+        modified_genre_str = genre_str[:-6] if genre_str.endswith('music') else genre_str
+        if modified_genre_str and modified_genre_str.lower() == 'classical':
+            ADD_NLU_FLAG('MUSIC__fav_genre_work_descriptor', 'piece')
+        else:
+            ADD_NLU_FLAG('MUSIC__fav_genre_work_descriptor', 'song')
 
 @nlu_processing
 def get_background_flags(context):
