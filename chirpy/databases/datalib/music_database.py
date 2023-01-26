@@ -7,7 +7,7 @@ MUSIC_INSTRUMENT_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'js
 MUSIC_COMPOSITION_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/music_composition_gpt.json')
 MUSIC_SINGER_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/music_singer_gpt.json')
 MUSIC_SONG_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/music_song_gpt.json')
-
+MUSIC_GENRE_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/music_genre_gpt.json')
 
 import logging
 
@@ -60,3 +60,15 @@ def verify_music_song_gpt_exists(song_name : str):
 @database_lookup("music_song")
 def lookup_music_song_gpt_gpt(song_name : str):
     return music_song_gpt[song_name]
+
+# load music_genre_gpt database
+with open(MUSIC_GENRE_GPT_DATABASE_FILE) as f:
+    music_genre_gpt = json.load(f)
+
+@database_exists("music_genre")
+def verify_music_genre_gpt_exists(genre_name : str):
+    return genre_name in music_genre_gpt.keys()
+
+@database_lookup("music_song")
+def lookup_music_genre_gpt_gpt(genre_name : str):
+    return music_genre_gpt[genre_name]
