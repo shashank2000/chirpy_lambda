@@ -22,8 +22,11 @@ def get_song_entity(context):
     if len(entity_linker_results.conflict_removed): entities.append(entity_linker_results.conflict_removed[0].top_ent)
 
     for e in entities:
-        if is_wiki_song(e) or is_in_song_database(e):
+        if is_in_song_database(e):
             return e
+    for e in entities:
+        if is_wiki_song(e):
+            return
 
 def get_song_entity_from_str(context, string):
     return link_span_to_entity(string, context.state_manager.current_state, expected_type=ENTITY_GROUPS_FOR_EXPECTED_TYPE.musical_work)

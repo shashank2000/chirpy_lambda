@@ -17,9 +17,12 @@ def get_genre_entity(context):
     if len(entity_linker_results.threshold_removed): entities.append(entity_linker_results.threshold_removed[0].top_ent)
     if len(entity_linker_results.conflict_removed): entities.append(entity_linker_results.conflict_removed[0].top_ent)
 
-    genre = None
     for e in entities:
-        if is_wiki_genre(e) and is_in_genre_database(e):
+        if is_in_genre_database(e):
+            return e
+
+    for e in entities:
+        if is_wiki_genre(e):
             return e
 
 

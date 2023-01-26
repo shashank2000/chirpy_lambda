@@ -19,7 +19,11 @@ def get_instrument_entity(context):
     if len(entity_linker_results.conflict_removed): entities.append(entity_linker_results.conflict_removed[0].top_ent)
 
     for e in entities:
-        if is_wiki_instrument(e) or is_in_instrument_database(e):
+        if is_in_instrument_database(e):
+            return e
+
+    for e in entities:
+        if is_wiki_instrument(e):
             return e
 
 @nlu_processing
@@ -36,5 +40,3 @@ def get_flags(context):
 @nlu_processing
 def get_background_flags(context):
     return
-
-

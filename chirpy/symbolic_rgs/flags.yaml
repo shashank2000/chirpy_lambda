@@ -107,7 +107,7 @@
 - MUSIC__fav_composition_ent
 - MUSIC__fav_composition_str
 - MUSIC__fav_composition_str_exists
-- MUSIC__follow_up_on_known_fav_composition_factoid
+- MUSIC__follow_up_on_known_fav_composition_comment
 - MUSIC__fav_singer_ent
 - MUSIC__fav_singer_str
 - MUSIC__singer_is_musical_group

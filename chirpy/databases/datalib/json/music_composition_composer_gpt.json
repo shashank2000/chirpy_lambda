@@ -1,0 +1,497 @@
+{
+    "symphony no. 5 (beethoven)": {
+        "composer": "Beethoven"
+    },
+    "1812 overture": {
+        "composer": "Tchaikovsky"
+    },
+    "eine kleine nachtmusik": {
+        "composer": "Mozart"
+    },
+    "toccata and fugue in d minor, bwv 565": {
+        "composer": "Bach"
+    },
+    "william tell overture": {
+        "composer": "Rossini"
+    },
+    "pachelbel's canon": {
+        "composer": "Pachelbel"
+    },
+    "the blue danube": {
+        "composer": "Strauss"
+    },
+    "o fortuna": {
+        "composer": "Orff"
+    },
+    "also sprach zarathustra": {
+        "composer": "Strauss"
+    },
+    "orpheus in the underworld": {
+        "composer": "Offenbach"
+    },
+    "messiah": {
+        "composer": "Handel"
+    },
+    "carmen": {
+        "composer": "Bizet"
+    },
+    "sabre dance": {
+        "composer": "Khachaturian"
+    },
+    "symphony no. 9 (beethoven)": {
+        "composer": "Beethoven"
+    },
+    "pomp and circumstance marches": {
+        "composer": "Elgar"
+    },
+    "in the hall of the mountain king": {
+        "composer": "Grieg"
+    },
+    "dance of the hours": {
+        "composer": "Ponchielli"
+    },
+    "hungarian rhapsody no. 2": {
+        "composer": "Liszt"
+    },
+    "a midsummer night's dream (mendelssohn)": {
+        "composer": "Mendelssohn"
+    },
+    "flight of the bumblebee": {
+        "composer": "Rimsky-Korsakov"
+    },
+    "rhapsody in blue": {
+        "composer": "Gershwin"
+    },
+    "piano sonata no. 14 (beethoven)": {
+        "composer": "Beethoven"
+    },
+    "bolero": {
+        "composer": "Ravel"
+    },
+    "sobre las olas": {
+        "composer": "Rosas"
+    },
+    "air on the g string": {
+        "composer": "Bach"
+    },
+    "the magic flute": {
+        "composer": "Mozart"
+    },
+    "f\u00fcr elise": {
+        "composer": "Beethoven"
+    },
+    "entrance of the gladiators": {
+        "composer": "Fucik"
+    },
+    "flower duet": {
+        "composer": "Delibes"
+    },
+    "the sorcerer's apprentice (dukas)": {
+        "composer": "Dukas"
+    },
+    "rodeo (ballet)": {
+        "composer": "Copland"
+    },
+    "ride of the valkyries": {
+        "composer": "Wagner"
+    },
+    "jesu, joy of man's desiring": {
+        "composer": "Bach"
+    },
+    "habanera (aria)": {
+        "composer": "Bizet"
+    },
+    "clair de lune": {
+        "composer": "Debussy"
+    },
+    "piano sonata no. 2 (chopin)": {
+        "composer": "Chopin"
+    },
+    "piano sonata no. 11 (mozart)": {
+        "composer": "Mozart"
+    },
+    "night on bald mountain": {
+        "composer": "Mussorgsky"
+    },
+    "string quintet in e major, op. 11, no. 5 (boccherini)": {
+        "composer": "Boccherini"
+    },
+    "morning mood": {
+        "composer": "Grieg"
+    },
+    "the marriage of figaro": {
+        "composer": "Mozart"
+    },
+    "the stars and stripes forever": {
+        "composer": "Sousa"
+    },
+    "bridal chorus": {
+        "composer": "Wagner"
+    },
+    "minuet woo 10, no. 2 (beethoven)": {
+        "composer": "Beethoven"
+    },
+    "adagio for strings": {
+        "composer": "Barber"
+    },
+    "the nutcracker": {
+        "composer": "Tchaikovsky"
+    },
+    "the imperial march": {
+        "composer": "Williams"
+    },
+    "cello suites (bach)": {
+        "composer": "Bach"
+    },
+    "the barber of seville": {
+        "composer": "Rossini"
+    },
+    "trepak (the nutcracker)": {
+        "composer": "Tchaikovsky"
+    },
+    "wiegenlied (brahms)": {
+        "composer": "Brahms"
+    },
+    "rhapsody on a theme of paganini": {
+        "composer": "Rachmaninov"
+    },
+    "fanfare for the common man": {
+        "composer": "Copland"
+    },
+    "piano concerto no. 1 (tchaikovsky)": {
+        "composer": "Tchaikovsky"
+    },
+    "la gazza ladra": {
+        "composer": "Rossini"
+    },
+    "hungarian dances (brahms)": {
+        "composer": "Brahms"
+    },
+    "piano sonata no. 16 (mozart)": {
+        "composer": "Mozart"
+    },
+    "solomon": {
+        "composer": "Handel"
+    },
+    "brandenburg concertos": {
+        "composer": "Bach"
+    },
+    "peter and the wolf": {
+        "composer": "Prokofiev"
+    },
+    "romeo and juliet (tchaikovsky)": {
+        "composer": "Tchaikovsky"
+    },
+    "rigoletto": {
+        "composer": "Verdi"
+    },
+    "palladio (jenkins)": {
+        "composer": "Jenkins"
+    },
+    "the carnival of the animals": {
+        "composer": "Saint-Sa\u00ebns"
+    },
+    "piano concerto (grieg)": {
+        "composer": "Grieg"
+    },
+    "requiem (mozart)": {
+        "composer": "Mozart"
+    },
+    "light cavalry overture": {
+        "composer": "Supp\u00e8"
+    },
+    "bourr\u00e9e in e minor": {
+        "composer": "Bach"
+    },
+    "les patineurs (waltz)": {
+        "composer": "Waldteufel"
+    },
+    "the four seasons (vivaldi)": {
+        "composer": "Vivaldi"
+    },
+    "swan lake": {
+        "composer": "Tchaikovsky"
+    },
+    "symphony no. 40 (mozart)": {
+        "composer": "Mozart"
+    },
+    "the planets": {
+        "composer": "Holst"
+    },
+    "the washington post (march)": {
+        "composer": "Sousa"
+    },
+    "il trovatore": {
+        "composer": "Verdi"
+    },
+    "tritsch-tratsch-polka": {
+        "composer": "Strauss"
+    },
+    "water music": {
+        "composer": "Handel"
+    },
+    "romeo and juliet (prokofiev)": {
+        "composer": "Prokofiev"
+    },
+    "piano concerto no. 21 (mozart)": {
+        "composer": "Mozart"
+    },
+    "symphony no. 7 (beethoven)": {
+        "composer": "Beethoven"
+    },
+    "sylvia (ballet)": {
+        "composer": "Delibes"
+    },
+    "colonel bogey march": {
+        "composer": "Ricketts"
+    },
+    "liebestr\u00e4ume": {
+        "composer": "Liszt"
+    },
+    "nessun dorma": {
+        "composer": "Puccini"
+    },
+    "requiem (verdi)": {
+        "composer": "Verdi"
+    },
+    "symphony no. 9 (dvo\u0159\u00e1k)": {
+        "composer": "Dvo\u0159\u00e1k"
+    },
+    "radetzky march": {
+        "composer": "Strauss"
+    },
+    "the well-tempered clavier": {
+        "composer": "Bach"
+    },
+    "carol of the bells": {
+        "composer": "Leontovych"
+    },
+    "prelude in c-sharp minor (rachmaninoff)": {
+        "composer": "Rachmaninoff"
+    },
+    "songs without words": {
+        "composer": "Mendelssohn"
+    },
+    "the sleeping beauty (ballet)": {
+        "composer": "Tchaikovsky"
+    },
+    "prince of denmark's march": {
+        "composer": "Clarke"
+    },
+    "fr\u00fchlingsstimmen": {
+        "composer": "Strauss"
+    },
+    "la traviata": {
+        "composer": "Verdi"
+    },
+    "sleigh ride": {
+        "composer": "Anderson"
+    },
+    "lohengrin (opera)": {
+        "composer": "Wagner"
+    },
+    "sheep may safely graze": {
+        "composer": "Bach"
+    },
+    "te deum (charpentier)": {
+        "composer": "Charpentier"
+    },
+    "the bartered bride": {
+        "composer": "Smetana"
+    },
+    "m\u00e9ditation (tha\u00efs)": {
+        "composer": "Massenet"
+    },
+    "wiener blut (waltz)": {
+        "composer": "Strauss"
+    },
+    "marche slave": {
+        "composer": "Tchaikovsky"
+    },
+    "genevi\u00e8ve de brabant": {
+        "composer": "Offenbach"
+    },
+    "symphony for organ no. 5": {
+        "composer": "Widor"
+    },
+    "aida": {
+        "composer": "Verdi"
+    },
+    "piano sonata no. 8 (beethoven)": {
+        "composer": "Beethoven"
+    },
+    "l'arl\u00e9sienne (bizet)": {
+        "composer": "Bizet"
+    },
+    "pictures at an exhibition": {
+        "composer": "Mussorgsky"
+    },
+    "the liberty bell (march)": {
+        "composer": "Sousa"
+    },
+    "an american in paris": {
+        "composer": "Gershwin"
+    },
+    "the rite of spring": {
+        "composer": "Stravinsky"
+    },
+    "the tales of hoffmann": {
+        "composer": "Offenbach"
+    },
+    "the hebrides (overture)": {
+        "composer": "Mendelssohn"
+    },
+    "finlandia": {
+        "composer": "Sibelius"
+    },
+    "humoresques (dvo\u0159\u00e1k)": {
+        "composer": "Dvo\u0159\u00e1k"
+    },
+    "wachet auf, ruft uns die stimme, bwv 140": {
+        "composer": "Bach"
+    },
+    "m\u00e1 vlast": {
+        "composer": "Smetana"
+    },
+    "the lark ascending (vaughan williams)": {
+        "composer": "Vaughan Williams"
+    },
+    "karelia suite": {
+        "composer": "Sibelius"
+    },
+    "gymnop\u00e9dies": {
+        "composer": "Satie"
+    },
+    "polovtsian dances": {
+        "composer": "Borodin"
+    },
+    "the comedians (kabalevsky)": {
+        "composer": "Kabalevsky"
+    },
+    "zadok the priest": {
+        "composer": "Handel"
+    },
+    "three marches militaires (schubert)": {
+        "composer": "Schubert"
+    },
+    "symphony no. 3 (saint-sa\u00ebns)": {
+        "composer": "Saint-Sa\u00ebns"
+    },
+    "funeral march of a marionette": {
+        "composer": "Gounod"
+    },
+    "nocturnes, op. 9 (chopin)": {
+        "composer": "Chopin"
+    },
+    "tales from the vienna woods": {
+        "composer": "Strauss"
+    },
+    "symphony no. 94 (haydn)": {
+        "composer": "Haydn"
+    },
+    "enigma variations": {
+        "composer": "Elgar"
+    },
+    "minute waltz": {
+        "composer": "Chopin"
+    },
+    "appalachian spring": {
+        "composer": "Copland"
+    },
+    "symphonie fantastique": {
+        "composer": "Berlioz"
+    },
+    "serse": {
+        "composer": "Handel"
+    },
+    "pr\u00e9lude \u00e0 l'apr\u00e8s-midi d'un faune": {
+        "composer": "Debussy"
+    },
+    "\u00e9tude op. 10, no. 12 (chopin)": {
+        "composer": "Chopin"
+    },
+    "danse macabre (saint-sa\u00ebns)": {
+        "composer": "Saint-Sa\u00ebns"
+    },
+    "scheherazade (rimsky-korsakov)": {
+        "composer": "Rimsky-Korsakov"
+    },
+    "symphony no. 6 (beethoven)": {
+        "composer": "Beethoven"
+    },
+    "ave maria (schubert)": {
+        "composer": "Schubert"
+    },
+    "die fledermaus": {
+        "composer": "Strauss"
+    },
+    "cavalleria rusticana": {
+        "composer": "Mascagni"
+    },
+    "pagliacci": {
+        "composer": "Leoncavallo"
+    },
+    "funeral sentences and music for the funeral of queen mary": {
+        "composer": "Purcell"
+    },
+    "semper fidelis (march)": {
+        "composer": "Sousa"
+    },
+    "peer gynt (grieg)": {
+        "composer": "Grieg"
+    },
+    "two arabesques": {
+        "composer": "Debussy"
+    },
+    "music for the royal fireworks": {
+        "composer": "Handel"
+    },
+    "polonaise in a-flat major, op. 53": {
+        "composer": "Chopin"
+    },
+    "caprice no. 24 (paganini)": {
+        "composer": "Paganini"
+    },
+    "clarinet concerto (mozart)": {
+        "composer": "Mozart"
+    },
+    "album for the young": {
+        "composer": "Schumann"
+    },
+    "tristan und isolde": {
+        "composer": "Wagner"
+    },
+    "pines of rome": {
+        "composer": "Respighi"
+    },
+    "the firebird": {
+        "composer": "Stravinsky"
+    },
+    "spartacus (ballet)": {
+        "composer": "Khachaturian"
+    },
+    "\u00e9tude op. 10, no. 3 (chopin)": {
+        "composer": "Chopin"
+    },
+    "carnival overture (dvo\u0159\u00e1k)": {
+        "composer": "Dvorak"
+    },
+    "symphony no. 5 (mahler)": {
+        "composer": "Mahler"
+    },
+    "tafelmusik (telemann)": {
+        "composer": "Telemann"
+    },
+    "st matthew passion": {
+        "composer": "Bach"
+    },
+    "horn concerto no. 4 (mozart)": {
+        "composer": "Mozart"
+    },
+    "symphony no. 6 (tchaikovsky)": {
+        "composer": "Tchaikovsky"
+    },
+    "the ruins of athens": {
+        "composer": "Beethoven"
+    }
+}

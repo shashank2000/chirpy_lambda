@@ -24,8 +24,13 @@ def get_singer_entity(context):
     if len(entity_linker_results.high_prec): entities.append(entity_linker_results.high_prec[0].top_ent)
     if len(entity_linker_results.threshold_removed): entities.append(entity_linker_results.threshold_removed[0].top_ent)
     if len(entity_linker_results.conflict_removed): entities.append(entity_linker_results.conflict_removed[0].top_ent)
+
     for e in entities:
-        if is_wiki_singer(e) or is_in_singer_database(e):
+        if is_in_singer_database(e):
+            return e
+
+    for e in entities:
+        if is_wiki_singer(e):
             return e
 
 def get_singer_entity_from_str(context, string):
@@ -69,4 +74,3 @@ def get_flags(context):
 @nlu_processing
 def get_background_flags(context):
     return
-

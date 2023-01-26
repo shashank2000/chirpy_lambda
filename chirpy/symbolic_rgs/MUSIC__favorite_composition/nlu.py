@@ -3,7 +3,7 @@ from chirpy.databases.databases import exists
 from chirpy.response_generators.music.regex_templates.name_favorite_composition_template import NameFavoriteCompositionTemplate
 
 def get_composition_entity(context):
-    def is_in_composition_database(ent):
+    def is_in_composition_comment_database(ent):
         return ent and exists("music_composition", ent.name.lower())
 
     cur_entity = context.utilities["cur_entity"]
@@ -15,7 +15,7 @@ def get_composition_entity(context):
     if len(entity_linker_results.conflict_removed): entities.append(entity_linker_results.conflict_removed[0].top_ent)
 
     for e in entities:
-        if is_in_composition_database(e):
+        if is_in_composition_comment_database(e):
             return e
 
 @nlu_processing
