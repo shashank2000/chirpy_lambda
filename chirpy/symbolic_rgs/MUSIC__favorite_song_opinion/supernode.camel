@@ -1,0 +1,45 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(State.MUSIC__fav_song_was_triggered) and
+not IS_NONE(State.User__FavoriteSong) and
+IS_TRUE(Flags.MUSIC__first_follow_up_on_fav_song)
+
+<PROMPTS>
+Prompt ask_fav_song_opinion [
+] {
+    - "What do you personally like about the"
+    - @val(State.User__FavoriteSongWorkDescriptor)
+    - "?"
+}
+
+<SUBNODES>
+Subnode generic_response [
+    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+    IS_FALSE(Flags.GlobalFlag__NOTHING)
+] {
+    - @one_of(
+        {
+            - "That's cool! I should listen to"
+            - @val(State.User__FavoriteSongStr)
+            - "more often."
+        },
+        {
+            - "Nice! I also like that about"
+            - @val(State.User__FavoriteSongStr)
+            -"."
+        }
+    )
+}
+
+Subnode dont_know_or_nothing [
+    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
+    IS_TRUE(Flags.GlobalFlag__NOTHING)
+] {
+    - "That's alright. I also don't always know why I like certain"
+    - @helper.get_plural_form(@val(State.User__FavoriteSongWorkDescriptor))
+    - "."
+}
+
+<SET_STATE_AFTER>
+Flags.MUSIC__first_follow_up_on_fav_song = @constant(False)

@@ -1,0 +1,129 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_FALSE(State.MUSIC__fav_song_was_triggered) and
+IS_NONE(State.User__FavoriteSong)
+
+<PROMPTS>
+Prompt ask_song_when_singer_ent_exists [
+    IS_TRUE(State.MUSIC__fav_singer_was_triggered) and
+    not IS_NONE(State.User__FavoriteSinger)
+] {
+    - "What song by"
+    - @val(State.User__FavoriteSinger | talkable)
+    - "is your favorite?"
+} <
+    Flags.MUSIC__asked_work_descriptor = "song"
+>
+
+Prompt ask_song_when_genre_ent_exists [
+    IS_TRUE(State.MUSIC__fav_genre_was_triggered) and
+    not IS_NONE(State.User__FavoriteMusicGenre)
+] {
+    - "What is your favorite"
+    - @val(State.User__FavoriteMusicGenreStr)
+    - @val(State.User__FavoriteMusicGenreWorkDescriptor)
+    - "?"
+} <
+    Flags.MUSIC__asked_work_descriptor = @val(State.User__FavoriteMusicGenreWorkDescriptor)
+>
+
+Prompt ask_song [
+] {
+    "What is a song you love listening to?"
+} <
+    Flags.MUSIC__asked_work_descriptor = "song"
+>
+
+<SET_STATE>
+State.User__FavoriteSong = @val(Flags.MUSIC__fav_song_ent)
+State.User__FavoriteSongStr = @val(Flags.MUSIC__fav_song_str)
+State.User__FavoriteSongWorkDescriptor = @val(Flags.MUSIC__asked_work_descriptor)
+
+<SUBNODES>
+Subnode song_exists_with_meta [
+   not IS_NONE(State.User__FavoriteSong) and
+   IS_TRUE(Flags.MUSIC__song_metadata_exists)
+] {
+    - @one_of(
+        {
+            - "Oh yeah,"
+            - @val(Flags.MUSIC__song_metadata_song)
+            - "is a song by"
+            - @val(Flags.MUSIC__song_metadata_artist)
+            - "released in"
+            - @val(Flags.MUSIC__song_metadata_year)
+            - ", right?"
+        },
+        {
+            - @val(Flags.MUSIC__song_metadata_song)
+            - "was released by"
+            - @val(Flags.MUSIC__song_metadata_artist)
+            - "in"
+            - @val(Flags.MUSIC__song_metadata_year)
+            - ", right?"
+        }
+    )
+} <
+    Flags.MUSIC__first_follow_up_on_fav_song = @constant(True)
+>
+
+Subnode generic_response [
+   not IS_NONE(State.User__FavoriteSong)
+] {
+    - @one_of(
+        {
+            - "That's a great"
+            - @val(Flags.MUSIC__asked_work_descriptor)
+            - ", I like"
+            - @val(State.User__FavoriteSong | talkable)
+            - "too!"
+        },
+        {
+            - "Yes,"
+            - @val(State.User__FavoriteSong | talkable)
+            - "does sound amazing!"
+        }
+    )
+} <
+    Flags.MUSIC__first_follow_up_on_fav_song = @constant(True)
+>
+
+Subnode dont_know [
+   IS_NONE(State.User__FavoriteSong) and
+   IS_TRUE(Flags.GlobalFlag__DONT_KNOW)
+] {
+    - "I understand. I like different"
+    - @helper.get_plural_form(@val(Flags.MUSIC__asked_work_descriptor))
+    - "depending on how I'm feeling and I don't really have a favorite either."
+} <
+    State.MUSIC__exit_supernode = @constant(True)
+>
+
+Subnode no_fav_song [
+   IS_NONE(State.User__FavoriteSong) and
+   (IS_TRUE(Flags.GlobalFlag__NO) or IS_TRUE(Flags.GlobalFlag__NOTHING)) and
+   IS_FALSE(Flags.GlobalFlag__DONT_KNOW)
+] {
+    - "Oh it's okay, maybe you will find a"
+    - @val(Flags.MUSIC__asked_work_descriptor)
+    - "that touches your heart one day!"
+} <
+    State.MUSIC__exit_supernode = @constant(True)
+>
+
+Subnode catch_all [
+   IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+   IS_FALSE(Flags.GlobalFlag__NO) and
+   IS_FALSE(Flags.GlobalFlag__NOTHING) and
+   IS_FALSE(Flags.MUSIC__song_metadata_exists)
+] {
+    - "Oh I don't seem to recognize that"
+    - @val(Flags.MUSIC__asked_work_descriptor)
+    -"."
+} <
+    State.MUSIC__exit_supernode = @constant(True)
+>
+
+<SET_STATE_AFTER>
+State.MUSIC__fav_song_was_triggered = @constant(True)
