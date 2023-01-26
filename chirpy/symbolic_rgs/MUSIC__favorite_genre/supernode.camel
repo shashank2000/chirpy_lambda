@@ -1,0 +1,42 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_FALSE(State.MUSIC__fav_genre_was_triggered) and
+IS_NONE(State.User__FavoriteMusicGenre) and
+IS_NONE(State.User__FavoriteSong)
+
+<PROMPTS>
+Prompt favorite_genre [
+] {
+    "What's your favorite genre of music?"
+}
+
+<SET_STATE>
+State.User__FavoriteMusicGenre = @val(Flags.MUSIC__fav_genre)
+State.User__FavoriteMusicGenreStr = @val(Flags.MUSIC__fav_genre_str)
+State.User__FavoriteMusicGenreWorkDescriptor = @val(Flags.MUSIC__fav_genre_work_descriptor)
+
+<SUBNODES>
+Subnode make_genre_comment [
+  not IS_NONE(State.User__FavoriteMusicGenre)
+] {
+    - @one_of(
+        {"Wow,"},
+        {"Cool!"}
+    )
+    - "I also like to listen to"
+    - @val(Flags.MUSIC__fav_genre | name | lower)
+    - "."
+#    - "Personally, I especially like the song"
+#    - {song in State.User__FavoriteMusicGenre}
+#    - "."
+}
+
+Subnode default [
+  IS_NONE(State.User__FavoriteMusicGenre)
+] {
+    -"Oh I'm not very familiar with that genre. I should listen to a greater variety of music!"
+}
+
+<SET_STATE_AFTER>
+State.MUSIC__fav_genre_was_triggered = @constant(True)
