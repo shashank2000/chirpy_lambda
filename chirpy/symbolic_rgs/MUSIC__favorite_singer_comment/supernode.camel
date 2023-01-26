@@ -53,3 +53,6 @@ Subnode user_neutral_opinion_exists [
         "Oh, you have to give it a listen then! It's so beautiful. It's definitely one of my favorites."
     )
 }
+
+<SET_STATE_AFTER>
+ Flags.MUSIC__follow_up_on_known_fav_singer_song = @constant(True)

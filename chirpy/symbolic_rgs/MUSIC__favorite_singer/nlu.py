@@ -22,7 +22,6 @@ def get_singer_entity(context):
     if len(entity_linker_results.high_prec): entities.append(entity_linker_results.high_prec[0].top_ent)
     if len(entity_linker_results.threshold_removed): entities.append(entity_linker_results.threshold_removed[0].top_ent)
     if len(entity_linker_results.conflict_removed): entities.append(entity_linker_results.conflict_removed[0].top_ent)
-    print(f'0: {entities}')
     for e in entities:
         if is_singer(e): return e
 
