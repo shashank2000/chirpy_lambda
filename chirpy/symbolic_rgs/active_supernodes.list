@@ -7,6 +7,7 @@ GLOBALS
 GLOBAL__openended
 LAUNCH
 MOVIE__intro
+NEGNAV
 PLACES__intro
 OPINION__intro
 OPINION__subsequent_turn
