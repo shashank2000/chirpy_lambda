@@ -33,7 +33,7 @@ def get_flags(context):
         ADD_NLU_FLAG('MUSIC__fav_composition_str', composition_entity.name)
     elif composition_str:
         ADD_NLU_FLAG('MUSIC__fav_composition_str_exists')
-        ADD_NLU_FLAG('MUSIC__fav_composition_str', composition_str)
+        ADD_NLU_FLAG('MUSIC__fav_composition_str', composition_str.capitalize())
 
 @nlu_processing
 def get_background_flags(context):
