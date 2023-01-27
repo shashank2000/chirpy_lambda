@@ -7,6 +7,10 @@ GLOBALS
 GLOBAL__openended
 LAUNCH
 MOVIE__intro
+CELEB__intro
+CELEB__discuss
+CELEB__generic
+CELEB__unknown
 NEGNAV
 PLACES__intro
 OPINION__intro

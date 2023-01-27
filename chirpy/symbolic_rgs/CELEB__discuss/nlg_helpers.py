@@ -20,5 +20,18 @@ def is_known_work(work):
 
 
 @nlg_helper
+def is_same_work(bot_work_1, bot_work_2, bot_work_3, user_work):
+    if user_work is None:
+        return False
+    for bw in [bot_work_1, bot_work_2, bot_work_3]:
+        if bw is None:
+            continue
+        if bw == user_work:
+            return True
+    return False
+
+
+
+@nlg_helper
 def find_opinion(work: str, celeb_name: str):
     return celeb_helper.find_celeb_opinion(work, celeb_name)
