@@ -14,7 +14,7 @@ IS_TRUE(Flags.PETS__user_mentioned_pet)
 
 <SET_STATE>
 State.CurrentTopic = @val(Utilities.cur_entity)
-State.User__PetType = @helper.set_pet_type(Utilities.cur_entity)
+State.User__PetType = @helper.set_pet_type(@val(Utilities.cur_entity))
 
 <SUBNODES>
 

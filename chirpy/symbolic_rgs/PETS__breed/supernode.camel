@@ -58,5 +58,3 @@ Subnode default [
 } <
    Flags.PETS__ask_hypothetical_breed = @constant(True)
 >
-
-<ENTITY_GROUPS>

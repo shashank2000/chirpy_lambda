@@ -104,6 +104,7 @@ class EntityGroupsForExpectedType:
          'tourist attraction', 'point of interest', 'group of physical objects', 'business', 'restaurant chain',
          'brick and mortar company'})
     clothing_related: EntityGroup = EntityGroup({'clothing', 'fashion house', 'fashion label', 'clothing store chain'}, set())
+    pet: EntityGroup = EntityGroup({'pet'})  # more specific than animal
     film: EntityGroup = EntityGroup({'film', 'film series', 'television film'}, {'genre'}) 
     actor: EntityGroup = EntityGroup({'film actor', 'television actor', 'stage actor'}, {'politician'}, entity_blacklist={
         'LeBron James', 'Ronald Reagan', 'Donald Trump'})  # problem: there are quite a few musicians in here like Taylor Swift
