@@ -367,3 +367,5 @@ ENTITY_BLACK_LIST += [
     "Panda (band)",
     "Chemistry",
 ]
+
+ENTITY_BLACK_LIST += ["Film (film)"]

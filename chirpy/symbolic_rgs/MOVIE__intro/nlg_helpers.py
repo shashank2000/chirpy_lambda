@@ -9,7 +9,4 @@ def set_favorite_movie(cur_entity):
         return cur_entity
     return None
 
-@nlg_helper
-def set_whether_user_likes_movie(flag):
-    return flag
     

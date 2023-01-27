@@ -1,9 +1,9 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.User__FavoriteMovie)
+not IS_NONE(State.User__FavoriteMovie)
 and IS_NONE(State.User__FavoriteMovieReason)
-and IS_TRUE(State.Trigger__AspectNode)
+and IS_TRUE(Flags.MOVIE__ask_for_fav_aspect)
 
 
 <PROMPTS>
@@ -23,9 +23,6 @@ IS_TRUE(Flags.MOVIE__user_mentioned_reason)
 State.CurrentTopic = @val(State.User__FavoriteMovie)
 State.User__FavoriteMovieReason = {
     @helper.get_user_reasons(@val(Flags.MOVIE__last_utterance))
-}
-State.Trigger__AspectNode = {
-    @helper.untriggerAspect()
 }
 
 

@@ -58,24 +58,6 @@ User__PreferredMovieActorMovieDesc: null
 User__PreferredMovieGenre: null
 User__PreferredMovieGenreMovie: null
 User__PreferredMovieGenreMovieDesc: null
-Trigger__AspectNode: null
-
-# Launch
-User__Name: null
-User__NameGivenUp: False
-LAUNCH__NumTimesAskedName: 0
-User__CurrentOpinionTopic: _get_opinion
-User__OpinionYes: False
-User__OpinionNo: False
-
-WIKI__AskedWhenInterested: False
-WIKI__AskedWhatInterested: False
-WIKI__AskedWhyInterested: False
-WIKI__currently_chosen_sections: []
-WIKI__suggested_sections: {}
-WIKI__discussed_sections: {}
-WIKI__last_discussed_section: {}
-
 
 # Music
 User__FavoriteInstrument: null
@@ -105,3 +87,22 @@ MUSIC__fav_instr_was_triggered: false
 MUSIC__fav_singer_was_triggered: false
 MUSIC__fav_song_was_triggered: false
 MUSIC__fav_genre_was_triggered: false
+
+# Launch
+User__Name: null
+User__NameGivenUp: False
+LAUNCH__NumTimesAskedName: 0
+User__CurrentOpinionTopic: _get_opinion
+User__OpinionYes: False
+User__OpinionNo: False
+
+WIKI__AskedWhenInterested: False
+WIKI__AskedWhatInterested: False
+WIKI__AskedWhyInterested: False
+WIKI__currently_chosen_sections: []
+WIKI__suggested_sections: {}
+WIKI__discussed_sections: {}
+WIKI__last_discussed_section: {}
+
+
+

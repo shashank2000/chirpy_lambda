@@ -40,6 +40,8 @@
 - GlobalFlag__AreYouRecording
 - GlobalFlag__SpecifiedEntity
 - GlobalFlag__personal_sharing_negative
+- NavigationNegative
+- NavigationPositive
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
 - PLACES__user_mentioned_city
@@ -88,7 +90,7 @@
 - MOVIE__user_mentioned_movie
 - MOVIE__user_mentioned_preferred_actor
 - MOVIE__user_mentioned_preferred_genre
-
+- MOVIE__ask_for_fav_aspect
 - MUSIC__user_listens_frequently
 - MUSIC__user_listens_everyday
 - MUSIC__user_has_positive_response

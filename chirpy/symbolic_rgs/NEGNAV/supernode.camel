@@ -1,0 +1,12 @@
+<PROMPTS>
+
+<ENTRY_CONDITIONS_TAKEOVER>
+IS_TRUE(Flags.GlobalFlag__CHANGE_TOPIC)
+
+<SUBNODES>
+
+Subnode negnav_default [ ] {
+   - "Yeah no worries, we can talk about something else."
+} <
+    State.CurrentTopic = @constant(None)
+>
