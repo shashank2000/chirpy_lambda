@@ -6,6 +6,13 @@ FOOD__intro
 GLOBALS
 GLOBAL__openended
 LAUNCH
+CELEB__discuss
+CELEB__generic
+CELEB__intro
+CELEB__unknown
+MOVIE__aspect
+MOVIE__favorite
+MOVIE__preferences_actor
 MOVIE__intro
 PLACES__intro
 OPINION__intro
