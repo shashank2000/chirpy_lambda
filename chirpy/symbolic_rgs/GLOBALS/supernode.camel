@@ -156,8 +156,12 @@ Subnode fallback_neural [
 	- @neural_generation(prefix={
 		- "I don't know much about this, but I'm happy to learn more. Even though I'm a bot, I don't know everything yet."
 	})
-}
+} <
+    State.CurrentTopic = @constant(None)
+>
 
 Subnode fallback [ ] {
 	"Sorry, I don't know what you're talking about."
-}
+} <
+    State.CurrentTopic = @constant(None)
+>
