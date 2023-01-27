@@ -30,4 +30,3 @@ Subnode general_response [
 
 <SET_STATE_AFTER>
 State.User__CurrentOpinionTopic = @helper.get_opinion(@val(Flags.OPINION__last_said))
-State.CurrentTopic = @val(State.User__CurrentOpinionTopic | topseudoentity)
