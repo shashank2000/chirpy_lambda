@@ -43,7 +43,7 @@ Subnode exists_composition_str_wo_database [
     not IS_NONE(State.User__FavoriteCompositionStr) and
     not EXISTS(database_name="music_composition_composer", key={@val(State.User__FavoriteCompositionStr | lower)})
 ] {
-    - "That's so cool!"
+    - "Wow, that's so cool!"
     - @val(State.User__FavoriteCompositionStr)
     - "really suits the"
     - @val(State.User__FavoriteInstrumentStr | lower)

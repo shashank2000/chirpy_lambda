@@ -2,7 +2,7 @@ from chirpy.core.regex.util import *
 from chirpy.core.regex.regex_template import RegexTemplate
 from chirpy.response_generators.music.expression_lists import *
 from chirpy.response_generators.food.regex_templates.word_lists import *
-
+from chirpy.databases.datalib.music_database import music_song_str_wiki
 
 class NameFavoriteSongTemplate(RegexTemplate):
     # TODO-Kathleen: can we use OPTIONAL_TEXT_PRE instead of continuer and yes_word?
@@ -72,10 +72,20 @@ class NameFavoriteSongTemplate(RegexTemplate):
         OPTIONAL_TEXT_PRE + "i {listen_word} {favorite} lately",
         OPTIONAL_TEXT_PRE + "i just {listen_word} {favorite}",
         "{yes_word} {favorite}",
-        OPTIONAL_TEXT_PRE + "{favorite}",
         OPTIONAL_TEXT_PRE + "{yes_word} {favorite}",
-        "{favorite}"
     ]
-    # TODO-Kathleen: write tests
+
+    positive_examples = []
+    negative_examples = []
+
+class NameFavoriteSongWithDatabaseTemplate(RegexTemplate):
+    slots = {
+        'database_song': list(music_song_str_wiki.keys())
+    }
+
+    templates = [
+        OPTIONAL_TEXT_PRE + "{database_song}" + OPTIONAL_TEXT_POST
+    ]
+
     positive_examples = []
     negative_examples = []

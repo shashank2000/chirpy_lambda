@@ -114,6 +114,7 @@
 - MUSIC__follow_up_on_known_fav_singer_comment
 - MUSIC__fav_song_ent
 - MUSIC__fav_song_str
+- MUSIC__fav_song_talkable
 - MUSIC__fav_song_comment
 - MUSIC__fav_genre
 - MUSIC__fav_genre_str

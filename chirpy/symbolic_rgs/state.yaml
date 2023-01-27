@@ -91,6 +91,7 @@ User__FavoriteSingerStr: null
 User__NoFavoriteSinger: false
 User__FavoriteSong: null
 User__FavoriteSongStr: null
+User__FavoriteSongTalkable: null
 User__NoFavoriteSong: false
 User__FavoriteMusicGenre: null
 User__FavoriteMusicGenreStr: null

@@ -2,8 +2,9 @@ from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_TYPE
 from chirpy.core.entity_linker.entity_linker_simple import link_span_to_entity
-from chirpy.response_generators.music.regex_templates import NameFavoriteSongTemplate
+from chirpy.response_generators.music.regex_templates.name_favorite_song_template import NameFavoriteSongTemplate, NameFavoriteSongWithDatabaseTemplate
 from chirpy.databases.databases import exists
+from chirpy.databases.datalib.music_database import music_song_str_wiki
 import re
 
 def get_song_entity(context):
@@ -36,20 +37,31 @@ def get_flags(context):
     song_ent = get_song_entity(context)
     song_str = None
 
+    song_str_database_slot = None
+    slots_with_database = NameFavoriteSongWithDatabaseTemplate().execute(context.utterance.lower())
+    if slots_with_database is not None and 'database_song' in slots_with_database:
+        song_str_database_slot = slots_with_database['database_song']
+
+    song_str_wo_database_slot = None
+    slots_wo_database = NameFavoriteSongTemplate().execute(context.utterance)
+    if slots_wo_database is not None and 'favorite' in slots_wo_database:
+        song_str_wo_database_slot = slots_wo_database['favorite']
+
     if song_ent:
         song_str = song_ent.name
-        song_str = re.sub(r'\(.*?\)', '', song_str)
-    elif exists("music_song", context.utterance.lower()):
-        song_str = context.utterance.capitalize()
+    elif song_str_database_slot:
+        song_str = music_song_str_wiki[song_str_database_slot]['wiki_doc_title']
         song_ent = get_song_entity_from_str(context, song_str)
-    else:
-        song_slots = NameFavoriteSongTemplate().execute(context.utterance)
-        if song_slots is not None and 'favorite' in song_slots:
-            song_str = song_slots['favorite'].capitalize()
-            song_ent = get_song_entity_from_str(context, song_str)
+    elif song_str_wo_database_slot:
+        song_str = song_str_wo_database_slot.capitalize()
+
+    song_talkable = re.sub(r'\(.*?\)', '', song_str).capitalize() if song_str else None
+
 
     ADD_NLU_FLAG('MUSIC__fav_song_ent', song_ent)
     ADD_NLU_FLAG('MUSIC__fav_song_str', song_str)
+    ADD_NLU_FLAG('MUSIC__fav_song_talkable', song_talkable)
+
 
 @nlu_processing
 def get_background_flags(context):

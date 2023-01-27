@@ -28,12 +28,12 @@ Subnode generic_response  [
     - @one_of(
         {
             - "That's cool! I should listen to"
-            - @val(State.User__FavoriteSongStr)
+            - @val(State.User__FavoriteSongTalkable)
             - "more often."
         },
         {
             - "Nice! I also like that about"
-            - @val(State.User__FavoriteSongStr)
+            - @val(State.User__FavoriteSongTalkable)
             -"."
         }
     )

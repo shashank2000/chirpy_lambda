@@ -23,14 +23,14 @@ State.User__FavoriteMusicGenreWorkDescriptor = @val(Flags.MUSIC__fav_genre_work_
 <SUBNODES>
 Subnode make_comment_with_database [
     not IS_NONE(State.User__FavoriteMusicGenre) and
-    EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr)})
+    EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr | lower)})
 ] {
-    - @lookup(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr)}, column="comment")
+    - @lookup(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr | lower)}, column="comment")
 }
 
 Subnode make_generic_comment [
     not IS_NONE(State.User__FavoriteMusicGenre) and
-    not EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr)})
+    not EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr | lower)})
 ] {
     - @one_of(
         {"Wow,"},

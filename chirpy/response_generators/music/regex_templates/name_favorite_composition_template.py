@@ -2,6 +2,7 @@ from chirpy.core.regex.util import *
 from chirpy.core.regex.regex_template import RegexTemplate
 from chirpy.response_generators.music.expression_lists import *
 from chirpy.response_generators.food.regex_templates.word_lists import *
+from chirpy.databases.datalib.music_database import music_composition_comment_gpt
 
 
 class NameFavoriteCompositionTemplate(RegexTemplate):
@@ -16,6 +17,7 @@ class NameFavoriteCompositionTemplate(RegexTemplate):
     }
     templates = [
         "i {positive_verb} {play_word} {favorite}",
+        "i {positive_adverb} {positive_verb} to {play_word} {favorite}",
         "my favorite {keyword_song} is {favorite}",
         "my favorite is {favorite}",
         "my favorite {keyword_song} of all time is {favorite}",
@@ -71,7 +73,28 @@ class NameFavoriteCompositionTemplate(RegexTemplate):
         OPTIONAL_TEXT_PRE + "i {play_word} {favorite} lately",
         OPTIONAL_TEXT_PRE + "i just {play_word} {favorite}",
         "{yes_word} {favorite}",
-        OPTIONAL_TEXT_PRE + "{yes_word} {favorite}",
+        OPTIONAL_TEXT_PRE + "{yes_word} {favorite}"
+    ]
+
+    positive_examples = [
+        ('i really like to play zigeunerweisen', {'positive_adverb': 'really', 'positive_verb': 'like',
+                                                  'play_word': 'play', 'favorite': 'zigeunerweisen'}),
+        ('i really like to play la campanella', {'positive_adverb': 'really', 'positive_verb': 'like',
+                                                  'play_word': 'play', 'favorite': 'la campanella'})
+
+    ]
+    negative_examples = [
+        ('i really like to play la campanella', {'positive_adverb': 'really', 'positive_verb': 'like',
+                                                 'favorite': 'to play la campanella'})
+    ]
+
+class NameFavoriteCompositionWithDatabaseTemplate(RegexTemplate):
+    slots = {
+        'database_composition': list(music_composition_comment_gpt.keys())
+    }
+
+    templates = [
+        OPTIONAL_TEXT_PRE + "{database_composition}" + OPTIONAL_TEXT_POST
     ]
 
     positive_examples = []

@@ -21,12 +21,14 @@ State.CurrentTopic = @val(Utilities.cur_entity)
 
 <SUBNODES>
 Subnode make_response_with_database [
-     EXISTS(database_name="music_composition_comment", key={@val(State.User__FavoriteCompositionStr | lower)})
+    not IS_NONE(State.User__FavoriteCompositionStr) and
+    EXISTS(database_name="music_composition_comment", key={@val(State.User__FavoriteCompositionStr | lower)})
 ] {
     - @lookup(database_name="music_composition_comment", key={@val(State.User__FavoriteCompositionStr | lower)}, column="comment")
 }
 
 Subnode generic_response  [
+    not IS_NONE(State.User__FavoriteCompositionStr) and
     not  EXISTS(database_name="music_composition_comment", key={@val(State.User__FavoriteCompositionStr | lower)}) and
     IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
     IS_FALSE(Flags.GlobalFlag__NOTHING)
@@ -35,6 +37,7 @@ Subnode generic_response  [
 }
 
 Subnode dont_know_or_nothing [
+    IS_NONE(State.User__FavoriteCompositionStr) and
     not EXISTS(database_name="music_composition_comment", key={@val(State.User__FavoriteCompositionStr | lower)}) and
     (IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
     IS_TRUE(Flags.GlobalFlag__NOTHING))

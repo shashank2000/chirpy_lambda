@@ -28,11 +28,14 @@ def get_instrument_entity(context):
 @nlu_processing
 def get_flags(context):
     instr_entity = get_instrument_entity(context)
+    instr_str = None
     ADD_NLU_FLAG('MUSIC__instr_to_learn_ent', instr_entity)
     if instr_entity:
-        ADD_NLU_FLAG('MUSIC__instr_to_learn_str', instr_entity.name)
+        instr_str = instr_entity.name
     elif exists("music_instrument", context.utterance.lower()):
-        ADD_NLU_FLAG('MUSIC__instr_to_learn_str', context.utterance)
+        instr_str = context.utterance
+
+    ADD_NLU_FLAG('MUSIC__instr_to_learn_str', instr_str)
 
 
 @nlu_processing
