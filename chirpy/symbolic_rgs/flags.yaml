@@ -122,4 +122,5 @@
 - MUSIC__fav_genre_str
 - MUSIC__fav_genre_work_descriptor
 - MUSIC__asked_work_descriptor
-
+- MUSIC__instr_to_learn_str
+- MUSIC__follow_up_on_known_fav_singer_song
