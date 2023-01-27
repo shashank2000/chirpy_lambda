@@ -26,7 +26,7 @@ Prompt fav_celeb_tv [IS_TRUE(State.CELEB__discuss_tv)] {
     - @one_of(
         {
         - "Do you like any of"
-        - @helper.pronoun_possessive_adjs(@val(State.User__FavoriteCelebrityPronoun))
+        - @helper.pronoun_possessive_adjs_(@val(State.User__FavoriteCelebrityPronoun))
         - "TV shows?"
         },
         {
