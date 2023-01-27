@@ -56,6 +56,4 @@ Subnode user_dislikes_movie [
 ] {
   - @val(Locals.statement_okay)
   - "do let me know if you happen to like movies in the future!"
-} <
-  Flags.GlobalFlag__LastBotTurnWasOpenEnded = @constant(True)
->
+}
