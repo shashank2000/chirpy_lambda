@@ -49,6 +49,7 @@ User__FavoriteMovieTalkable: null
 User__FavoriteMovieMainActor: null
 User__FavoriteMovieDirector: null
 User__FavoriteMovieGenre: null
+User__FavoriteMovieReason: null
 
 User__PreferredMovieActor: null
 User__PreferredMovieActorCaseSensitive: null
