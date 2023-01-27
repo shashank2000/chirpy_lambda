@@ -80,7 +80,7 @@ tags = OrderedDict({
 })
 
 def found_phrase(phrase, utterance):
-    return re.search(f'(\A| ){phrase}(\Z| )', utterance) is not None
+    return re.search(f'(\A| ){phrase}[\.!]?(\Z| )', utterance) is not None
 
 def is_music_keyword(context):
     return any(found_phrase(i, context.utterance) for i in KEYWORD_MUSIC)

@@ -4,9 +4,9 @@ can_only_prompt_once_for = State.CurrentTopic
 IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_genre_was_triggered) and
-IS_NONE(State.User__FavoriteMusicGenre) and
+IS_NONE(State.User__FavoriteMusicGenre) and IS_FALSE(State.User__NoFavoriteMusicGenre) and
 IS_NONE(State.User__FavoriteSong) and
-IS_FALSE(State.User__NoFavoriteMusicGenre)
+(IS_TRUE(Flags.MUSIC__force_start) or IS_FALSE(Flags.MUSIC__force_start))
 
 <PROMPTS>
 Prompt favorite_genre [
@@ -22,14 +22,14 @@ State.User__FavoriteMusicGenreWorkDescriptor = @val(Flags.MUSIC__fav_genre_work_
 
 <SUBNODES>
 Subnode make_comment_with_database [
-    not IS_NONE(State.User__FavoriteMusicGenre) and
+    not IS_NONE(State.User__FavoriteMusicGenreStr) and
     EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr | lower)})
 ] {
     - @lookup(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr | lower)}, column="comment")
 }
 
 Subnode make_generic_comment [
-    not IS_NONE(State.User__FavoriteMusicGenre) and
+    not IS_NONE(State.User__FavoriteMusicGenreStr) and
     not EXISTS(database_name="music_genre", key={@val(State.User__FavoriteMusicGenreStr | lower)})
 ] {
     - @one_of(
@@ -42,7 +42,7 @@ Subnode make_generic_comment [
 }
 
 Subnode no_fav_genre [
-    IS_NONE(State.User__FavoriteMusicGenre) and
+    IS_NONE(State.User__FavoriteMusicGenreStr) and
     (IS_TRUE(Flags.GlobalFlag__NO) or
     IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
     IS_TRUE(Flags.GlobalFlag__NOTHING))
@@ -53,7 +53,7 @@ Subnode no_fav_genre [
 >
 
 Subnode catch_all [
-    IS_NONE(State.User__FavoriteMusicGenre) and
+    IS_NONE(State.User__FavoriteMusicGenreStr) and
     IS_FALSE(Flags.GlobalFlag__NO) and
     IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
     IS_FALSE(Flags.GlobalFlag__NOTHING)

@@ -2,9 +2,9 @@ from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_TYPE
 from chirpy.core.entity_linker.entity_linker_simple import link_span_to_entity
-from chirpy.response_generators.music.regex_templates.name_favorite_song_template import NameFavoriteSongTemplate, NameFavoriteSongWithDatabaseTemplate
 from chirpy.databases.databases import exists
 from chirpy.databases.datalib.music_database import music_song_str_wiki
+from chirpy.response_generators.music.regex_templates.name_favorite_song_template import NameFavoriteSongTemplate, NameFavoriteSongWithDatabaseTemplate
 import re
 
 def get_song_entity(context):
@@ -50,7 +50,10 @@ def get_flags(context):
     if song_ent:
         song_str = song_ent.name
     elif song_str_database_slot:
-        song_str = music_song_str_wiki[song_str_database_slot]['wiki_doc_title']
+        if song_str_database_slot in music_song_str_wiki:
+            song_str = music_song_str_wiki[song_str_database_slot]['wiki_doc_title']
+        else:
+            song_str = song_str_database_slot
         song_ent = get_song_entity_from_str(context, song_str)
     elif song_str_wo_database_slot:
         song_str = song_str_wo_database_slot.capitalize()

@@ -10,6 +10,7 @@ MUSIC_SINGER_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/m
 MUSIC_SONG_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/music_song_gpt.json')
 MUSIC_SONG_STR_WIKI_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/music_song_str_wiki.json')
 MUSIC_GENRE_GPT_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/music_genre_gpt.json')
+MUSIC_GENRE_STR_WIKI_DATABASE_FILE = os.path.join(os.path.dirname(__file__), 'json/music_genre_str_wiki.json')
 
 import logging
 
@@ -99,3 +100,14 @@ def verify_music_genre_gpt_exists(genre_name: str):
 def lookup_music_genre_gpt_gpt(genre_name: str):
     return music_genre_gpt[genre_name]
 
+# load music_genre_str_wiki database
+with open(MUSIC_GENRE_STR_WIKI_DATABASE_FILE) as f:
+    music_genre_str_wiki = json.load(f)
+
+@database_exists("music_genre_str_wiki")
+def verify_music_genre_str_wiki_exists(genre_name: str):
+    return genre_name in music_genre_str_wiki.keys()
+
+@database_lookup("music_genre_str_wiki")
+def lookup_music_genre_str_wiki_gpt(genre_name: str):
+    return music_genre_str_wiki[genre_name]

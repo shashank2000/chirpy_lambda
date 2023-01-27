@@ -5,7 +5,8 @@ IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_singer_was_triggered) and
 IS_NONE(State.User__FavoriteSinger) and IS_NONE(State.User__FavoriteSingerStr) and
-IS_FALSE(State.User__NoFavoriteSinger)
+IS_FALSE(State.User__NoFavoriteSinger) and
+(IS_TRUE(Flags.MUSIC__force_start) or IS_FALSE(Flags.MUSIC__force_start))
 
 <PROMPTS>
 Prompt ask_favorite_singer [

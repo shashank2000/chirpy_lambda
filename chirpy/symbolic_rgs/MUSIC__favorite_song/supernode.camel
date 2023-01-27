@@ -5,9 +5,10 @@ IS_TRUE(State.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_song_was_triggered) and
 IS_NONE(State.User__FavoriteSong) and IS_NONE(State.User__FavoriteSongStr) and
+IS_FALSE(State.User__NoFavoriteSong) and
 (IS_NONE(State.User__FavoriteSinger) or not IS_NONE(State.User__FavoriteSinger)) and
 (IS_NONE(State.User__FavoriteMusicGenre) or not IS_NONE(State.User__FavoriteMusicGenre)) and
-IS_FALSE(State.User__NoFavoriteSong)
+(IS_TRUE(Flags.MUSIC__force_start) or IS_FALSE(Flags.MUSIC__force_start))
 
 <PROMPTS>
 Prompt ask_song_when_singer_ent_exists [

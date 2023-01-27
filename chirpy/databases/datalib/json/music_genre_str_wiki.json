@@ -1,0 +1,140 @@
+{
+    "noise": {
+        "wiki_doc_title": "noise music"
+    },
+    "bubblegum": {
+        "wiki_doc_title": "bubblegum music"
+    },
+    "baroque": {
+        "wiki_doc_title": "baroque music"
+    },
+    "classical": {
+        "wiki_doc_title": "classical music"
+    },
+    "independent": {
+        "wiki_doc_title": "independent music"
+    },
+    "intelligent dance": {
+        "wiki_doc_title": "intelligent dance music"
+    },
+    "calypso": {
+        "wiki_doc_title": "calypso music"
+    },
+    "hip hop": {
+        "wiki_doc_title": "hip hop music"
+    },
+    "chill-out": {
+        "wiki_doc_title": "chill-out music"
+    },
+    "rock": {
+        "wiki_doc_title": "rock music"
+    },
+    "adult contemporary": {
+        "wiki_doc_title": "adult contemporary music"
+    },
+    "popular": {
+        "wiki_doc_title": "popular music"
+    },
+    "surf": {
+        "wiki_doc_title": "surf music"
+    },
+    "minimal": {
+        "wiki_doc_title": "minimal music"
+    },
+    "electronic": {
+        "wiki_doc_title": "electronic music"
+    },
+    "renaissance": {
+        "wiki_doc_title": "renaissance music"
+    },
+    "country": {
+        "wiki_doc_title": "country music"
+    },
+    "house": {
+        "wiki_doc_title": "house music"
+    },
+    "swing": {
+        "wiki_doc_title": "swing music"
+    },
+    "romantic": {
+        "wiki_doc_title": "romantic music"
+    },
+    "lo-fi": {
+        "wiki_doc_title": "lo-fi music"
+    },
+    "industrial": {
+        "wiki_doc_title": "industrial music"
+    },
+    "electronic body": {
+        "wiki_doc_title": "electronic body music"
+    },
+    "carnatic": {
+        "wiki_doc_title": "carnatic music"
+    },
+    "medieval": {
+        "wiki_doc_title": "medieval music"
+    },
+    "indian classical": {
+        "wiki_doc_title": "indian classical music"
+    },
+    "gospel": {
+        "wiki_doc_title": "gospel music"
+    },
+    "trap": {
+        "wiki_doc_title": "trap music"
+    },
+    "bluegrass": {
+        "wiki_doc_title": "bluegrass music"
+    },
+    "world": {
+        "wiki_doc_title": "world music"
+    },
+    "psychedelic": {
+        "wiki_doc_title": "psychedelic music"
+    },
+    "trance": {
+        "wiki_doc_title": "trance music"
+    },
+    "video game": {
+        "wiki_doc_title": "video game music"
+    },
+    "new wave": {
+        "wiki_doc_title": "new wave music"
+    },
+    "soul": {
+        "wiki_doc_title": "soul music"
+    },
+    "ambient": {
+        "wiki_doc_title": "ambient music"
+    },
+    "jungle": {
+        "wiki_doc_title": "jungle music"
+    },
+    "drill": {
+        "wiki_doc_title": "drill music"
+    },
+    "folk": {
+        "wiki_doc_title": "folk music"
+    },
+    "heavy metal": {
+        "wiki_doc_title": "heavy metal music"
+    },
+    "new-age": {
+        "wiki_doc_title": "new-age music"
+    },
+    "dub": {
+        "wiki_doc_title": "dub music"
+    },
+    "hindustani classical": {
+        "wiki_doc_title": "hindustani classical music"
+    },
+    "electronic dance": {
+        "wiki_doc_title": "electronic dance music"
+    },
+    "avant-garde": {
+        "wiki_doc_title": "avant-garde music"
+    },
+    "pop": {
+        "wiki_doc_title": "pop music"
+    }
+}

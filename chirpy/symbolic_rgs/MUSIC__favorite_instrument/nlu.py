@@ -3,6 +3,7 @@ from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_TYPE
 from chirpy.databases.databases import exists
 from chirpy.response_generators.music.regex_templates.do_not_play_instrument_template import DoNotPlayInstrTemplate
+from chirpy.response_generators.music.regex_templates.name_favorite_instrument_template import NameFavoriteInstrumentWithDatabaseTemplate
 
 def get_instrument_entity(context):
     def is_wiki_instrument(ent):
@@ -28,14 +29,19 @@ def get_instrument_entity(context):
 
 @nlu_processing
 def get_flags(context):
+    instr_str = None
     instr_entity = get_instrument_entity(context)
     ADD_NLU_FLAG('MUSIC__fav_instr_ent', instr_entity)
 
-    instr_str = None
+    instr_str_database_slot = None
+    slots_with_database = NameFavoriteInstrumentWithDatabaseTemplate().execute(context.utterance.lower())
+    if slots_with_database is not None and 'database_instr' in slots_with_database:
+        instr_str_database_slot = slots_with_database['database_instr']
+
     if instr_entity:
         instr_str = instr_entity.name
-    elif exists("music_instrument", context.utterance.lower()):
-        instr_str = context.utterance
+    elif instr_str_database_slot:
+        instr_str = instr_str_database_slot
 
     ADD_NLU_FLAG('MUSIC__fav_instr_str', instr_str)
 
