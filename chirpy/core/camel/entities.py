@@ -33,6 +33,8 @@ class EntityGroupList():
 			if entity.evaluate(context):
 				return True
 		return False
+	def get_score(self):
+		return 1
 
 @dataclass
 class EntityGroupRegexList():
