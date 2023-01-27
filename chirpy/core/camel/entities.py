@@ -28,7 +28,7 @@ class EntityGroupRegex():
 @dataclass
 class EntityGroupList():
 	entityGroups : List[EntityGroup] = field(default_factory=list)
-	def evaluate(self, context):
+	def evaluate(self, context, label=""):
 		for entity in self.entityGroups:
 			if entity.evaluate(context):
 				return True
@@ -37,7 +37,7 @@ class EntityGroupList():
 @dataclass
 class EntityGroupRegexList():
 	entityRegexes : List[EntityGroupRegex] = field(default_factory=list)
-	def evaluate(self, context):
+	def evaluate(self, context, label=""):
 		for entity in self.entityRegexes:
 			if entity.evaluate(context):
 				return True
