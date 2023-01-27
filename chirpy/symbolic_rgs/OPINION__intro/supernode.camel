@@ -1,4 +1,4 @@
-can_only_prompt_once_for = State.CurrentTopic
+can_only_prompt_once_for = State.User__CurrentOpinionTopic
 
 <ENTRY_CONDITIONS>
 not IS_NONE(State.User__CurrentOpinionTopic)
@@ -16,12 +16,12 @@ Prompt do_you_like_prompt [
         {"The best part of my job is getting to know new people and there's actually something kind of random I've been wanting to ask you."}
     )
 	- "Do you like"
-	- @val(State.User__CurrentOpinionTopic)
+	- @val(State.User__CurrentOpinionTopic | name)
 	- "?"
 }
 
 <SET_STATE>
-State.CurrentTopic = @val(State.User__CurrentOpinionTopic | topseudoentity)
+State.CurrentTopic = @val(State.User__CurrentOpinionTopic | name | topseudoentity)
 
 <SUBNODES>
 Subnode opinion_intro_response [
