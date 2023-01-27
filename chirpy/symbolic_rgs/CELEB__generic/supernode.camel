@@ -34,4 +34,4 @@ Flags.CELEB__move_on_to_new_topic = {@constant(True)}
 
 <ENTITY_GROUPS_ADDITIONAL_CONDITIONS>
 not IS_NONE(Flags.GlobalFlag__SpecifiedEntity) 
-and EXISTS(database_name="celeb_opinion", key={@val(State.GlobalFlag__SpecifiedEntity | name | lower)})
+and EXISTS(database_name="celeb_opinion", key={@val(Flags.GlobalFlag__SpecifiedEntity | name | lower)})
