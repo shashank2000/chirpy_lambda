@@ -23,7 +23,11 @@ Subnode general_response [
 Subnode general_response [
 ] {
 	- "That's interesting."
+	- "Oh that's fascinating."
+	- "Gotcha."
+	- "I see."
 }
 
 <SET_STATE_AFTER>
 State.User__CurrentOpinionTopic = @helper.get_opinion(@val(Flags.OPINION__last_said))
+State.User__CurrentTopic = @helper.get_opinion(@val(Flags.OPINION__last_said))

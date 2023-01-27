@@ -51,6 +51,7 @@
 - CELEB__discuss_movie
 - CELEB__discuss_song
 - CELEB__known_work
+- CELEB__like_same_work
 - PERSONALISSUE__gratitude
 - PERSONALISSUE__is_continued_sharing
 - PERSONALISSUE__noncommittal
