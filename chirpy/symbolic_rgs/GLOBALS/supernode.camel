@@ -160,7 +160,7 @@ Subnode confused [
 Subnode fallback_neural [
 ] {
 	- @neural_generation(prefix={
-		- "I don't know much about this, but I'm happy to learn more. Even though I'm a bot, I don't know everything yet."
+		- "Interesting. I'm not quite sure what to make of that."
 	})
 } <
     State.CurrentTopic = @constant(None)
