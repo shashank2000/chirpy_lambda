@@ -12,8 +12,8 @@ Prompt favorite_place [ ] {
     
 }
 
-# <CONTINUE_CONDITIONS>
-# IS_TRUE(Flags.PLACES__user_mentioned_city)
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.PLACES__user_mentioned_city)
 
 <LOCALS>
 Locals.intro_statement = {

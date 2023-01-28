@@ -31,6 +31,8 @@ User__FavoriteCelebrityCurrWork: null
 CELEB__discuss_movie: False
 CELEB__discuss_tv: False
 CELEB__discuss_song: False
+CELEB__known_work: False
+CELEB__like_same_work: False
 User__HasPet: null
 User__PetName: null
 User__HypotheticalPetType: null
@@ -49,6 +51,7 @@ User__FavoriteMovieTalkable: null
 User__FavoriteMovieMainActor: null
 User__FavoriteMovieDirector: null
 User__FavoriteMovieGenre: null
+User__FavoriteMovieReason: null
 
 User__PreferredMovieActor: null
 User__PreferredMovieActorCaseSensitive: null

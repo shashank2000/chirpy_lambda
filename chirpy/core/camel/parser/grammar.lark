@@ -29,7 +29,8 @@ condition_assignment : variable "=" condition
           subnodes_section \
           set_state_after_section? \
           entity_groups_section? \
-          entity_groups_regex_section?
+          entity_groups_regex_section? \
+          entity_groups_addtl_conditions_section?
 
 // Section: Attribute
 details_section: detail*
@@ -75,6 +76,8 @@ set_state_after_section : "<SET_STATE_AFTER>" assignment*
 // entry groups section
 entity_groups_section : "<ENTITY_GROUPS>" _OB (entity_group (_COMMA entity_group)* _COMMA?)? _CB
 entity_group: ESCAPED_STRING
+
+entity_groups_addtl_conditions_section : "<ENTITY_GROUPS_ADDITIONAL_CONDITIONS>" condition?
 
 // entry groups regex section
 entity_groups_regex_section : "<ENTITY_GROUPS_REGEX>" _OB (entity_group_regex (_COMMA entity_group_regex)* _COMMA?)? _CB

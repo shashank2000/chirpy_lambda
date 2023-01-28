@@ -58,7 +58,9 @@ Subnode greet_with_name [
 		{"I appreciate you taking the time to chat with me today"}
 	)
 	- .
-}
+} <
+	Flags.FOOD__launch = @constant(True)
+>
 
 Subnode greet_without_name [
 	IS_TRUE(State.User__NameGivenUp)
@@ -69,7 +71,9 @@ Subnode greet_without_name [
 		{"Nice"}
 	)
 	- "to meet you! Let's get started chatting!"
-}
+} <
+	Flags.FOOD__launch = @constant(True)
+>
 
 Subnode ask_name_again [
 	IS_NONE(State.User__Name)

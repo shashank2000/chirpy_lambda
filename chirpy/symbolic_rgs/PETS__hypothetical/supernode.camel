@@ -55,3 +55,5 @@ Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
   @constant(True)
 }
 
+<ENTITY_GROUPS>
+["animal_related"]

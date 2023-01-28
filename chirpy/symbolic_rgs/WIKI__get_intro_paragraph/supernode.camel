@@ -23,3 +23,10 @@ Subnode pos_response [
 } <
 	Flags.WIKI__discuss_article = @constant(True)
 >
+
+Subnode stop_response [
+] {
+	- "Sure, I'll talk about something else."
+} <
+	Flags.WIKI__discuss_article = @constant(False)
+>

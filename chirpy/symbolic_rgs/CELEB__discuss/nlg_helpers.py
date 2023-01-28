@@ -2,6 +2,14 @@ from chirpy.response_generators.celeb import celeb_helper
 from chirpy.core.response_generator import nlg_helper
 from chirpy.core.entity_linker.entity_linker_classes import PseudoEntity
 
+@nlg_helper
+def pronoun_possessive_adjs_(pronoun: str):
+    if pronoun == "he":
+        return "his"
+    elif pronoun == "she":
+        return "her"
+    else:
+        return "their"
 
 @nlg_helper
 def extract_work_name(work):

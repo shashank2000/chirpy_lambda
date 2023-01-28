@@ -25,7 +25,8 @@ def find_celeb_opinion(work_name, celeb_name):
     work_opinions = OPINIONS[work_name]
     if celeb_name in work_opinions:
         return work_opinions[celeb_name]
-    return work_opinions["General"]
+    first_opinion = list(work_opinions.values())[0]
+    return first_opinion
 
 
 def find_celeb_pronoun(entity_name):

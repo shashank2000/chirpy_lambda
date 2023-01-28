@@ -116,8 +116,7 @@ class SymbolicResponseGenerator:
             logger.warning(f"Evaluating {supernode} for takeover {supernode.entry_conditions_takeover.evaluate(context)}")
             if (
                 supernode.entry_conditions_takeover.evaluate(context)
-                or supernode.entity_groups.evaluate(context)
-                or supernode.entity_groups_regex.evaluate(context)
+                or supernode.entity_group_takeover(context)
             ):
                 return supernode
         return self.get_current_supernode_with_fallback(context)

@@ -12,9 +12,9 @@ class EntityGroup():
 	def __init__(self, entityGroupName: str) -> None:
 		self.entityGroup = getattr(EntityGroupsForExpectedType, entityGroupName)
 	def evaluate(self, context):
-		if not context.flags["GlobalFlag__SpecifiedEntity"]:
+		if not context.utilities["cur_entity"]:
 			return False
-		return self.entityGroup.matches(context.flags["GlobalFlag__SpecifiedEntity"])
+		return self.entityGroup.matches(context.utilities["cur_entity"])
 
 @dataclass
 class EntityGroupRegex():
@@ -28,16 +28,18 @@ class EntityGroupRegex():
 @dataclass
 class EntityGroupList():
 	entityGroups : List[EntityGroup] = field(default_factory=list)
-	def evaluate(self, context):
+	def evaluate(self, context, label=""):
 		for entity in self.entityGroups:
 			if entity.evaluate(context):
 				return True
 		return False
+	def get_score(self):
+		return 1
 
 @dataclass
 class EntityGroupRegexList():
 	entityRegexes : List[EntityGroupRegex] = field(default_factory=list)
-	def evaluate(self, context):
+	def evaluate(self, context, label=""):
 		for entity in self.entityRegexes:
 			if entity.evaluate(context):
 				return True

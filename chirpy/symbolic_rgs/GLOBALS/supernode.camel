@@ -151,6 +151,12 @@ Subnode factoid [
 	State.CurrentTopic = @val(Utilities.cur_entity)
 >
 
+Subnode confused [
+	IS_TRUE(Flags.GlobalFlag__CONFUSED)
+] {
+	"Sorry, I'm still learning how to talk to people."
+}
+
 Subnode fallback_neural [
 ] {
 	- @neural_generation(prefix={
