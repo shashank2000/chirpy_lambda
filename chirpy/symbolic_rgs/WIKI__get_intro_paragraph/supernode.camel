@@ -26,5 +26,7 @@ Subnode pos_response [
 
 Subnode stop_response [
 ] {
-	- "Yep!"
-}
+	- "Sure, I'll talk about something else."
+} <
+	Flags.WIKI__discuss_article = @constant(False)
+>
