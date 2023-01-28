@@ -49,7 +49,7 @@ Subnode greet_with_name [
 		{"Well it's nice to meet you"},
 		{"It's nice to meet you"}
 	)
-    - ","
+  - ","
 	- @val(State.User__Name)
 	- "!"
 	- @one_of(
