@@ -19,7 +19,8 @@ State.User__PetType = @helper.set_pet_type(@val(Utilities.cur_entity))
 <SUBNODES>
 
 Subnode valid_type [
-  IS_TRUE(Flags.PETS__user_owns_pet)
+  not IS_NONE(State.User__PetType)
+  and IS_TRUE(Flags.PETS__user_owns_pet)
   and EXISTS(database_name="animal_gpt", key={@val(State.User__PetType)})
 ] {
   - "Isn't it awesome to own a pet!"
