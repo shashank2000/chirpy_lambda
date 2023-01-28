@@ -32,6 +32,7 @@ CELEB__discuss_movie: False
 CELEB__discuss_tv: False
 CELEB__discuss_song: False
 CELEB__known_work: False
+CELEB__like_same_work: False
 User__HasPet: null
 User__PetName: null
 User__HypotheticalPetType: null

@@ -3,7 +3,6 @@ from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.core.entity_linker.entity_groups import EntityGroupsForExpectedType
 import os
 
-
 CITY_INFO_PATH = "./chirpy/symbolic_rgs/PLACES__intro/city_info.pkl"
 city_info = pkl.load(open(CITY_INFO_PATH, "rb"))
 

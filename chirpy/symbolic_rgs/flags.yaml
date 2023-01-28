@@ -40,6 +40,8 @@
 - GlobalFlag__AreYouRecording
 - GlobalFlag__SpecifiedEntity
 - GlobalFlag__personal_sharing_negative
+- NavigationNegative
+- NavigationPositive
 - FOOD__launch
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type

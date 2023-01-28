@@ -8,9 +8,24 @@ and IS_FALSE(Flags.CELEB__move_on_to_new_topic)
 Prompt celeb_when []
 {
     - "You know, I was almost in a movie once, but they picked Scarlett Johansson instead."
-    - "When did you start following"
-    - @val(State.CurrentTopic | talkable)
-    - "?"
+    - @one_of(
+        {
+        - "When did you start following"
+        - @val(State.CurrentTopic | talkable)
+        - "?"
+        },
+        {
+        - "What do you think sets"
+        - @val(State.CurrentTopic | talkable)
+        - "away from other celebrities?"
+        },
+        {
+        - "What do you think makes"
+        - @val(State.CurrentTopic | talkable)
+        - "so successful?"
+        }
+    )
+
 }
 
 <SUBNODES>

@@ -113,6 +113,7 @@ class SymbolicResponseGenerator:
         Else, returns the current supernode if it exists.
         """
         for supernode in self.get_supernodes():
+            logger.warning(f"Evaluating {supernode} for takeover {supernode.entry_conditions_takeover.evaluate(context)}")
             if (
                 supernode.entry_conditions_takeover.evaluate(context)
                 or supernode.entity_group_takeover(context)
@@ -171,6 +172,7 @@ class SymbolicResponseGenerator:
         if not self.state_manager.is_first_turn():
             context = Context.get_context(state, self.state_manager, kwargs=kwargs)
             supernode = self.get_takeover_or_current_supernode(context)
+            logger.warning(f"We will continue with: {supernode}.")
             context = Context.get_context(state, self.state_manager, supernode, kwargs=kwargs)
 
             cancelled_supernodes = set()

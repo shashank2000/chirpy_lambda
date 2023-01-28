@@ -207,7 +207,7 @@ class SupernodeMaker(Transformer):
         )
 
     def continue_conditions_section(self, tok):
-        return tok
+        return "continue_conditions", tok
 
     def assignment(self, tok):
         return assignment.Assignment(tok[0], tok[1:-1], tok[-1])
@@ -236,9 +236,7 @@ class SupernodeMaker(Transformer):
 
     ### PROMPT
     def prompt_section(self, tok):
-        if len(tok):
-            return "prompts", prompt.PromptList(tok)
-        return None
+        return "prompts", prompt.PromptList(tok)
 
     ### CONTINUE CONDITIONS
     def continue_conditions_section(self, tok):
@@ -276,6 +274,7 @@ class SupernodeMaker(Transformer):
         return "entity_groups_addtl_conditions", tok[0]
 
     def document(self, tok):
+        logger.warning(f"Tok is {tok}")
         return tok
 
     def __getattr__(self, attr):
@@ -284,13 +283,13 @@ class SupernodeMaker(Transformer):
         return super().__getattr__(self, attr)
 
 
-def nice_error(e, filename):
-    sys.tracebacklimit = 1
-    raise type(e)(e.message + f"\nin{filename}")
+# def nice_error(e, filename):
+#     sys.tracebacklimit = 1
+#     raise type(e)(e.message + f"\nin{filename}")
 
 
 parser = Lark(grammar, start="document", parser="lalr", transformer=SupernodeMaker(), import_paths=[BASE_PATH])
 
 
 def parse(text, filename):
-    return parser.parse(text, on_error=lambda e: nice_error(e, filename))
+    return parser.parse(text)

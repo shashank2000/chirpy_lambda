@@ -18,7 +18,7 @@ condition_assignment : variable "=" condition
 
 // CAMEL syntax
 
-document: details_section? \
+?document: details_section? \
           entry_conditions_section? \
           entry_locals_section? \
           prompt_section? \
