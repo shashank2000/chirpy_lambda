@@ -1,7 +1,7 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.User__LikeMovie) and
+(IS_TRUE(State.User__LikeMovie) or IS_TRUE(Flags.MOVIE__ask_for_fav_movie)) and
 IS_NONE(State.User__FavoriteMovie)
 
 
