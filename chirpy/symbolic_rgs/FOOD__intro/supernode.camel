@@ -33,11 +33,11 @@ State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteFood = @val(Utilities.cur_entity)
 State.User__FavoriteFoodIngredientOf = @helper.get_food_ingredient_of(@val(Utilities.cur_entity | name))
 
-# State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity | talkable | lower)
-# State.User__FavoriteFoodFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity | name))
-# State.User__FavoriteFoodFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity | name))
-# State.User__FavoriteFoodIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity | name))
-# State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity | talkable | lower)
+State.User__FavoriteFoodFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity | name))
 
 <SUBNODES>
 Subnode make_ingredient_attribute_comment [

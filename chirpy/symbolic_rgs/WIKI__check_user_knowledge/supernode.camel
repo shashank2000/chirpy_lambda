@@ -1,8 +1,10 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-not IS_NONE(State.CurrentTopic) and IS_FALSE(Flags.WIKI__understand_user_better) 
+not IS_NONE(State.CurrentTopic)
+and IS_FALSE(Flags.WIKI__understand_user_better) 
 and IS_FALSE(Flags.WIKI__discuss_article)
+and IS_FALSE(Flags.GlobalFlag__DISINTERESTED)
 
 <PROMPTS>
 Prompt check_user_knowledge [ ] {
