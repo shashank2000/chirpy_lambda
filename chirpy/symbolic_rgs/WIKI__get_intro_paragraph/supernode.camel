@@ -23,3 +23,8 @@ Subnode pos_response [
 } <
 	Flags.WIKI__discuss_article = @constant(True)
 >
+
+Subnode stop_response [
+] {
+	- "Yep!"
+}
