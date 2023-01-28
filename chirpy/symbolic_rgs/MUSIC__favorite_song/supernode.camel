@@ -15,9 +15,13 @@ Prompt ask_song_when_singer_ent_exists [
     IS_TRUE(State.MUSIC__fav_singer_was_triggered) and
     not IS_NONE(State.User__FavoriteSinger)
 ] {
-    - "What song by"
+    - "You mentioned that"
     - @val(State.User__FavoriteSinger | talkable)
-    - "is your favorite?"
+    - "is your favorite singer."
+    - "What"
+    - "is your favorite"
+    - @val(State.User__FavoriteSinger | talkable)
+    - "song?"
 } <
     State.User__FavoriteSongWorkDescriptor = "song"
 >

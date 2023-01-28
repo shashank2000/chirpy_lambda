@@ -56,9 +56,10 @@ def get_flags(context):
             song_str = song_str_database_slot
         song_ent = get_song_entity_from_str(context, song_str)
     elif song_str_wo_database_slot:
-        song_str = song_str_wo_database_slot.capitalize()
+        song_str = song_str_wo_database_slot
 
-    song_talkable = re.sub(r'\(.*?\)', '', song_str).capitalize() if song_str else None
+    song_talkable = re.sub(r'\(.*?\)', '', song_str) if song_str else None
+    song_talkable = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), song_talkable) if song_talkable else None
 
 
     ADD_NLU_FLAG('MUSIC__fav_song_ent', song_ent)

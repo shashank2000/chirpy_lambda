@@ -53,7 +53,7 @@ def get_flags(context):
 
     if singer_ent is None:
         if exists("music_singer", context.utterance.lower()):
-            singer_str = context.utterance.capitalize()
+            singer_str = context.utterance
             singer_ent = get_singer_entity_from_str(context, singer_str)
         else:
             slots = NameFavoriteSongTemplate().execute(context.utterance)
@@ -62,6 +62,8 @@ def get_flags(context):
                 singer_ent = get_singer_entity_from_str(context, singer_str)
                 if singer_ent:
                     singer_str = singer_ent.name
+
+    singer_str = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), singer_str) if singer_str else None
 
     ADD_NLU_FLAG('MUSIC__fav_singer_ent', singer_ent)
     ADD_NLU_FLAG('MUSIC__fav_singer_str', singer_str)

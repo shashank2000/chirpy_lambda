@@ -1,6 +1,7 @@
 from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.databases.databases import exists
 from chirpy.response_generators.music.regex_templates.name_favorite_composition_template import NameFavoriteCompositionTemplate, NameFavoriteCompositionWithDatabaseTemplate
+import re
 
 def get_composition_entity(context):
     def is_in_composition_comment_database(ent):
@@ -38,10 +39,11 @@ def get_flags(context):
     if composition_entity:
         composition_str = composition_entity.name
     elif  composition_str_database_slot:
-        composition_str =  composition_str_database_slot.capitalize()
+        composition_str =  composition_str_database_slot
     elif composition_str_wo_database_slot:
-        composition_str = composition_str_wo_database_slot.capitalize()
+        composition_str = composition_str_wo_database_slot
 
+    composition_str = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), composition_str) if composition_str else None
     ADD_NLU_FLAG('MUSIC__fav_composition_str', composition_str)
 
 @nlu_processing
