@@ -40,6 +40,7 @@
 - GlobalFlag__AreYouRecording
 - GlobalFlag__SpecifiedEntity
 - GlobalFlag__personal_sharing_negative
+- FOOD__launch
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
 - PLACES__user_mentioned_city

@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-IS_NONE(State.User__FavoriteFood)
+IS_NONE(State.User__FavoriteFood) or IS_TRUE(Flags.FOOD__launch)
 
 <PROMPTS>
 Prompt favorite_food [ ] {

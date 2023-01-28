@@ -45,7 +45,7 @@ Prompt check_user_knowledge [ ] {
 <SET_STATE>
 
 <SUBNODES>
-Subnode yes_response:force_activation [
+Subnode wiki_yes_response [
 	IS_TRUE(Flags.GlobalFlag__YES)
 ] {
 	- @one_of(
@@ -57,8 +57,10 @@ Subnode yes_response:force_activation [
    Flags.WIKI__learn_more = @constant(False)
 >
 
-Subnode no_response:force_activation [
+Subnode wiki_no_response [
 	IS_TRUE(Flags.GlobalFlag__NO)
+	and IS_FALSE(Flags.GlobalFlag__HIGH_INITIATIVE)
+	and IS_FALSE(Flags.GlobalFlag__COMPLAINT)
 ] {
 	- "That's alright, let me tell you more about it."
 } <
@@ -66,9 +68,11 @@ Subnode no_response:force_activation [
    Flags.WIKI__learn_more = @constant(True)
 >
 
-Subnode default [
+Subnode wiki_default [
 ] {
 	- @neural_generation(prefix={
-		- "I'm sorry, I'm not sure I understand. I don't want to talk more about it if you don't want to."
+		- "I don't want to talk more about it if you don't want to."
 	})
-}
+} <
+	State.CurrentTopic = @constant(None)
+>
