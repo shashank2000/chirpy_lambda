@@ -11,7 +11,7 @@ Prompt favorite_food [ ] {
 }
 
 <CONTINUE_CONDITIONS>
-EXISTS(database_name="food", key={@val(Utilities.cur_entity | name | lower)})
+not IS_NONE(Utilities.cur_entity) and ENTITY_GROUP_MATCHES(["foods"])
 
 <LOCALS>
 Locals.intro_statement = {
