@@ -51,6 +51,7 @@ Subnode has_no_pet [
    - "Oh interesting! That makes me think --"
 } <
     State.User__HasPet = @constant(False)
+    Flags.PETS__ask_hypothetical_breed = @constant(True)
 >
 
 Subnode move_on_from_pets [
