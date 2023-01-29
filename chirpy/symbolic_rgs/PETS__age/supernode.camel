@@ -13,7 +13,6 @@ Prompt favorite_pet [ ] {
 
 
 <SET_STATE>
-State.CurrentTopic = @val(Flags.PETS__age | topseudoentity)
 State.User__PetAge = @val(Flags.PETS__age)
 
 <SUBNODES>

@@ -43,3 +43,10 @@ Subnode give_celeb_opinion [] {
 
 <SET_STATE_AFTER>
 Flags.CELEB__move_on_to_new_topic = {@constant(True)}
+
+<ENTITY_GROUPS>
+["actor", "musician"]
+
+<ENTITY_GROUPS_ADDITIONAL_CONDITIONS>
+not IS_NONE(Flags.GlobalFlag__SpecifiedEntity) 
+and EXISTS(database_name="celeb_opinion", key={@val(Flags.GlobalFlag__SpecifiedEntity | name | lower)})

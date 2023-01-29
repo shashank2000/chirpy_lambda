@@ -42,16 +42,12 @@
 - GlobalFlag__personal_sharing_negative
 - NavigationNegative
 - NavigationPositive
+- FOOD__launch
 - FOOD__user_mentioned_food
 - FOOD__best_comment_type
 - PLACES__user_mentioned_city
 - CELEB__have_asked_about_celeb
 - CELEB__move_on_to_new_topic
-- CELEB__discuss_tv
-- CELEB__discuss_movie
-- CELEB__discuss_song
-- CELEB__known_work
-- CELEB__like_same_work
 - PERSONALISSUE__gratitude
 - PERSONALISSUE__is_continued_sharing
 - PERSONALISSUE__noncommittal
@@ -92,6 +88,7 @@
 - MOVIE__user_mentioned_preferred_actor
 - MOVIE__user_mentioned_preferred_genre
 - MOVIE__ask_for_fav_aspect
+- MOVIE__ask_for_fav_movie
 - MUSIC__force_start
 - MUSIC__user_listens_frequently
 - MUSIC__user_listens_everyday

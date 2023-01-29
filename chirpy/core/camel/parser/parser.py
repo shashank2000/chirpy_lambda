@@ -33,11 +33,17 @@ class SupernodeMaker(Transformer):
             return predicate.TruePredicate()
         return predicate.FalsePredicate()
 
+    def condition__entity_group_condition(self, tok):
+        entityGroupName = str(tok[0])[1:-1]  # remove leading and ending quotes
+        return entities.EntityGroup(entityGroupName)
+
     def condition__predicate(self, tok):
         if str(tok[0]) == "IS_EQUAL":
             return predicate.VariableIsPredicate(variable=tok[1], val=tok[2])
         elif str(tok[0]) == "IS_IN":
             return predicate.VariableInPredicate(variable=tok[1], vals=tok[2:])
+        elif str(tok[0]) == "ENTITY_GROUP_MATCHES":
+            return entities.EntityGroupList(tok[1:])
         elif str(tok[0]) == "IS_GREATER_THAN":
             return predicate.VariableGTPredicate(variable=tok[1], val=tok[2])
         elif str(tok[0]) == "IS_LESS_THAN":
@@ -263,6 +269,9 @@ class SupernodeMaker(Transformer):
     ### ENTITY GROUP REGEXES (for takeover)
     def entity_groups_regex_section(self, tok):
         return "entity_groups_regex", entities.EntityGroupRegexList(tok)
+
+    def entity_groups_addtl_conditions_section(self, tok):
+        return "entity_groups_addtl_conditions", tok[0]
 
     def document(self, tok):
         logger.warning(f"Tok is {tok}")

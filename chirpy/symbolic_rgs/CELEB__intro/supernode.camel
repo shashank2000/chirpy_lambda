@@ -103,3 +103,6 @@ Flags.CELEB__have_asked_about_celeb = {@constant(True)}
 State.CELEB__discuss_movie = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"movie"})
 State.CELEB__discuss_song = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"song"})
 State.CELEB__discuss_tv = @helper.decide_type(@val(State.User__FavoriteCelebrityWorkType), {"TV show"})
+
+<ENTITY_GROUPS>
+["actor", "musician"]

@@ -1,6 +1,7 @@
 import logging
 import random
 import json
+from chirpy.core.entity_linker.entity_linker_classes import PseudoEntity
 
 logger = logging.getLogger("chirpylogger")
 
@@ -16,8 +17,8 @@ def get_topic_type(topic: str):
 def get_opinion(input=""):
     for topic in activities.keys():
         if topic in input:
-            return topic
-    return random.choice(list(activities.keys()))
+            return PseudoEntity(topic)
+    return PseudoEntity(random.choice(list(activities.keys())))
 
 
 def opinion_exists(input=""):

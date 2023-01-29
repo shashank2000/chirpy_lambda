@@ -1,3 +1,5 @@
+can_only_prompt_once_for = State.CurrentTopic
+
 <ENTRY_CONDITIONS>
 IS_NONE(State.User__HasPet) and IS_FALSE(Flags.PETS__move_on_to_new_topic)
 
@@ -11,9 +13,29 @@ IS_TRUE(Flags.PETS__user_mentioned_pet)
 
 
 <SET_STATE>
-# TODO: user may potentially say pet type here, should be able to handle it here - not sure how 
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__PetType = @helper.set_pet_type(@val(Utilities.cur_entity))
 
 <SUBNODES>
+
+Subnode valid_type [
+  not IS_NONE(State.User__PetType)
+  and IS_TRUE(Flags.PETS__user_owns_pet)
+  and EXISTS(database_name="animal_gpt", key={@val(State.User__PetType)})
+] {
+  - "Isn't it awesome to own a pet!"
+  - "I love"
+  - @val(State.User__PetTypeTalkable)
+  - "."
+  - "Here's a fun fact about "
+  - @val(State.User__PetTypeTalkable)
+  - ": "
+  -@lookup(
+        database_name="animal_gpt",
+        key={@val(State.User__PetType)},
+        column="factoid"
+   )
+}
 
 Subnode has_pet [
    IS_TRUE(Flags.PETS__user_owns_pet)
@@ -29,6 +51,7 @@ Subnode has_no_pet [
    - "Oh interesting! That makes me think --"
 } <
     State.User__HasPet = @constant(False)
+    Flags.PETS__ask_hypothetical_breed = @constant(True)
 >
 
 Subnode move_on_from_pets [

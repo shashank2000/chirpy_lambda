@@ -1,5 +1,5 @@
 <ENTRY_CONDITIONS>
-IS_NONE(State.User__FavoriteFood)
+IS_NONE(State.User__FavoriteFood) or IS_TRUE(Flags.FOOD__launch)
 
 <PROMPTS>
 Prompt favorite_food [ ] {
@@ -11,7 +11,7 @@ Prompt favorite_food [ ] {
 }
 
 <CONTINUE_CONDITIONS>
-EXISTS(database_name="food", key={@val(Utilities.cur_entity | name | lower)})
+not IS_NONE(Utilities.cur_entity) and ENTITY_GROUP_MATCHES(["foods"])
 
 <LOCALS>
 Locals.intro_statement = {
@@ -30,15 +30,14 @@ Locals.intro_statement = {
 
 <SET_STATE>
 State.CurrentTopic = @val(Utilities.cur_entity)
-
 State.User__FavoriteFood = @val(Utilities.cur_entity)
 State.User__FavoriteFoodIngredientOf = @helper.get_food_ingredient_of(@val(Utilities.cur_entity | name))
 
-# State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity | talkable | lower)
-# State.User__FavoriteFoodFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity | name))
-# State.User__FavoriteFoodFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity | name))
-# State.User__FavoriteFoodIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity | name))
-# State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity | talkable | lower)
+State.User__FavoriteFoodFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity | name))
+State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity | name))
 
 <SUBNODES>
 Subnode make_ingredient_attribute_comment [
@@ -97,3 +96,5 @@ Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
   @constant(True)
 }
 
+<ENTITY_GROUPS>
+["foods"]

@@ -49,13 +49,13 @@ Subnode user_likes_movie [
     { "I like movies too." },
     { "Glad I found another movie aficionado!" }
   )
-}
+} <
+  Flags.MOVIE__ask_for_fav_movie = @constant(True)
+>
 
 Subnode user_dislikes_movie [
   IS_FALSE(Flags.MOVIE__user_likes_movie)
 ] {
   - @val(Locals.statement_okay)
   - "do let me know if you happen to like movies in the future!"
-} <
-  Flags.GlobalFlag__LastBotTurnWasOpenEnded = @constant(True)
->
+}

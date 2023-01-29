@@ -6,12 +6,18 @@ FOOD__intro
 GLOBALS
 GLOBAL__openended
 LAUNCH
+CELEB__discuss
+CELEB__generic
+CELEB__intro
+CELEB__unknown
+MOVIE__aspect
+MOVIE__favorite
+MOVIE__preferences_actor
 MOVIE__intro
 CELEB__intro
 CELEB__discuss
 CELEB__generic
 CELEB__unknown
-NEGNAV
 PLACES__intro
 OPINION__intro
 OPINION__subsequent_turn
@@ -28,6 +34,7 @@ WIKI__acknowledge_user_knowledge
 WIKI__check_user_knowledge
 WIKI__discuss_article
 WIKI__get_intro_paragraph
+NEGNAV
 
 MUSIC__intro
 MUSIC__favorite_instrument
