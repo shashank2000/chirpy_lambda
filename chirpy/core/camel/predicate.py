@@ -68,7 +68,7 @@ class AndPredicate(Predicate):
         return self.pred1.evaluate(context, label) and self.pred2.evaluate(context, label)
 
     def get_score(self):
-        return max(self.pred1.get_score(), self.pred2.get_score())
+        return self.pred1.get_score() + self.pred2.get_score()
 
 
 @dataclass
