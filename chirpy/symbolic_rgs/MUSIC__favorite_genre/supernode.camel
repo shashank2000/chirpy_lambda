@@ -18,6 +18,7 @@ Prompt favorite_genre [
 State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteMusicGenre = @val(Flags.MUSIC__fav_genre)
 State.User__FavoriteMusicGenreStr = @val(Flags.MUSIC__fav_genre_str)
+State.User__FavoriteMusicGenreTalkable = @val(Flags.MUSIC__fav_genre_talkable)
 State.User__FavoriteMusicGenreWorkDescriptor = @val(Flags.MUSIC__fav_genre_work_descriptor)
 
 <SUBNODES>
@@ -37,7 +38,7 @@ Subnode make_generic_comment [
         {"Cool!"}
     )
     - "I also like to listen to"
-    - @val(State.User__FavoriteMusicGenreStr | lower)
+    - @val(State.User__FavoriteMusicGenreTalkable | lower)
     - "as well!"
 }
 

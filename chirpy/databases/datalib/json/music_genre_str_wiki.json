@@ -1,140 +1,140 @@
 {
     "noise": {
-        "wiki_doc_title": "noise music"
+        "database_key": "noise music"
     },
     "bubblegum": {
-        "wiki_doc_title": "bubblegum music"
+        "database_key": "bubblegum music"
     },
     "baroque": {
-        "wiki_doc_title": "baroque music"
+        "database_key": "baroque music"
     },
     "classical": {
-        "wiki_doc_title": "classical music"
+        "database_key": "classical music"
     },
     "independent": {
-        "wiki_doc_title": "independent music"
+        "database_key": "independent music"
     },
     "intelligent dance": {
-        "wiki_doc_title": "intelligent dance music"
+        "database_key": "intelligent dance music"
     },
     "calypso": {
-        "wiki_doc_title": "calypso music"
+        "database_key": "calypso music"
     },
     "hip hop": {
-        "wiki_doc_title": "hip hop music"
+        "database_key": "hip hop music"
     },
     "chill-out": {
-        "wiki_doc_title": "chill-out music"
+        "database_key": "chill-out music"
     },
     "rock": {
-        "wiki_doc_title": "rock music"
+        "database_key": "rock music"
     },
     "adult contemporary": {
-        "wiki_doc_title": "adult contemporary music"
+        "database_key": "adult contemporary music"
     },
     "popular": {
-        "wiki_doc_title": "popular music"
+        "database_key": "popular music"
     },
     "surf": {
-        "wiki_doc_title": "surf music"
+        "database_key": "surf music"
     },
     "minimal": {
-        "wiki_doc_title": "minimal music"
+        "database_key": "minimal music"
     },
     "electronic": {
-        "wiki_doc_title": "electronic music"
+        "database_key": "electronic music"
     },
     "renaissance": {
-        "wiki_doc_title": "renaissance music"
+        "database_key": "renaissance music"
     },
     "country": {
-        "wiki_doc_title": "country music"
+        "database_key": "country music"
     },
     "house": {
-        "wiki_doc_title": "house music"
+        "database_key": "house music"
     },
     "swing": {
-        "wiki_doc_title": "swing music"
+        "database_key": "swing music"
     },
     "romantic": {
-        "wiki_doc_title": "romantic music"
+        "database_key": "romantic music"
     },
     "lo-fi": {
-        "wiki_doc_title": "lo-fi music"
+        "database_key": "lo-fi music"
     },
     "industrial": {
-        "wiki_doc_title": "industrial music"
+        "database_key": "industrial music"
     },
     "electronic body": {
-        "wiki_doc_title": "electronic body music"
+        "database_key": "electronic body music"
     },
     "carnatic": {
-        "wiki_doc_title": "carnatic music"
+        "database_key": "carnatic music"
     },
     "medieval": {
-        "wiki_doc_title": "medieval music"
+        "database_key": "medieval music"
     },
     "indian classical": {
-        "wiki_doc_title": "indian classical music"
+        "database_key": "indian classical music"
     },
     "gospel": {
-        "wiki_doc_title": "gospel music"
+        "database_key": "gospel music"
     },
     "trap": {
-        "wiki_doc_title": "trap music"
+        "database_key": "trap music"
     },
     "bluegrass": {
-        "wiki_doc_title": "bluegrass music"
+        "database_key": "bluegrass music"
     },
     "world": {
-        "wiki_doc_title": "world music"
+        "database_key": "world music"
     },
     "psychedelic": {
-        "wiki_doc_title": "psychedelic music"
+        "database_key": "psychedelic music"
     },
     "trance": {
-        "wiki_doc_title": "trance music"
+        "database_key": "trance music"
     },
     "video game": {
-        "wiki_doc_title": "video game music"
+        "database_key": "video game music"
     },
     "new wave": {
-        "wiki_doc_title": "new wave music"
+        "database_key": "new wave music"
     },
     "soul": {
-        "wiki_doc_title": "soul music"
+        "database_key": "soul music"
     },
     "ambient": {
-        "wiki_doc_title": "ambient music"
+        "database_key": "ambient music"
     },
     "jungle": {
-        "wiki_doc_title": "jungle music"
+        "database_key": "jungle music"
     },
     "drill": {
-        "wiki_doc_title": "drill music"
+        "database_key": "drill music"
     },
     "folk": {
-        "wiki_doc_title": "folk music"
+        "database_key": "folk music"
     },
     "heavy metal": {
-        "wiki_doc_title": "heavy metal music"
+        "database_key": "heavy metal music"
     },
     "new-age": {
-        "wiki_doc_title": "new-age music"
+        "database_key": "new-age music"
     },
     "dub": {
-        "wiki_doc_title": "dub music"
+        "database_key": "dub music"
     },
     "hindustani classical": {
-        "wiki_doc_title": "hindustani classical music"
+        "database_key": "hindustani classical music"
     },
     "electronic dance": {
-        "wiki_doc_title": "electronic dance music"
+        "database_key": "electronic dance music"
     },
     "avant-garde": {
-        "wiki_doc_title": "avant-garde music"
+        "database_key": "avant-garde music"
     },
     "pop": {
-        "wiki_doc_title": "pop music"
+        "database_key": "pop music"
     }
 }

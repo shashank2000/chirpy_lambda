@@ -108,7 +108,7 @@ class RegexTemplate(unittest.TestCase):
             matched = r.match(input_string)
             # logger.debug(f'RegexTemplate ({type(self).__name__}) took {(perf_counter_ns()-t0_indiv)/10**9} seconds for regex {r}')
             if matched:
-                logger.debug(f'RegexTemplate ({type(self).__name__}) finished executing on "{input_string}". '
+                logger.warning(f'RegexTemplate ({type(self).__name__}) finished executing on "{input_string}". '
                              f'Matched with compiled regex {idx} of {len(self.compiled_regexes)}, '
                              f'Took {(perf_counter_ns()-t0)/10**9} seconds total')
                 return {k: v for k,v in matched.groupdict().items() if v is not None}

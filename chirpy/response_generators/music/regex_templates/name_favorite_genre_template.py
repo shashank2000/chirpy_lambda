@@ -1,6 +1,6 @@
 from chirpy.core.regex.regex_template import RegexTemplate
 from chirpy.response_generators.music.expression_lists import *
-from chirpy.databases.datalib.music_database import music_genre_str_wiki, music_genre_gpt
+from chirpy.databases.datalib.music_database import music_genre_gpt, music_genre_str_wiki
 
 class NameFavoriteGenreWithDatabaseTemplate(RegexTemplate):
     slots = {
@@ -8,7 +8,7 @@ class NameFavoriteGenreWithDatabaseTemplate(RegexTemplate):
     }
 
     templates = [
-        OPTIONAL_TEXT_PRE + "{database_genre}" + OPTIONAL_TEXT_POST
+        OPTIONAL_TEXT_PRE + "{database_genre}[.!]?" + OPTIONAL_TEXT_POST
     ]
 
     positive_examples = []
@@ -20,7 +20,7 @@ class NameFavoriteGenreAbbrevWithDatabaseTemplate(RegexTemplate):
     }
 
     templates = [
-        OPTIONAL_TEXT_PRE + "{database_genre}" + OPTIONAL_TEXT_POST
+        OPTIONAL_TEXT_PRE + "{database_genre}[.!]?" + OPTIONAL_TEXT_POST
     ]
 
     positive_examples = []

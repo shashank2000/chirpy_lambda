@@ -3,35 +3,34 @@ from chirpy.core.regex.regex_template import RegexTemplate
 from chirpy.response_generators.music.expression_lists import *
 from chirpy.response_generators.music.regex_templates.word_lists import *
 from chirpy.response_generators.food.regex_templates.word_lists import *
-from chirpy.databases.datalib.music_database import music_song_gpt, music_song_str_wiki
+from chirpy.databases.datalib.music_database import music_singer_gpt, music_singer_str_wiki
 
-class NameFavoriteSongTemplate(RegexTemplate):
+class NameFavoriteSingerTemplate(RegexTemplate):
     slots = {
-        'keyword_song': ['song', 'album', 'tune', 'melody', 'singer', 'artist', 'musician', 'band'],
+        'keyword_singer': ['singer', 'artist', 'musician', 'band'],
         'favorite': NONEMPTY_TEXT,
         'positive_adjective': POSITIVE_ADJECTIVES,
         'positive_verb': POSITIVE_VERBS,
         'positive_adverb': POSITIVE_ADVERBS,
         'frequency_adverb': FREQUENCY_ANSWERS,
-        'listen_word': ['listening to', 'hearing', 'listened to', 'heard', 'have been listening to', 'have been hearing', 'listen to', 'to listen to'],
+        'listen_word': ['listening to', 'hearing', 'listened to', 'heard', 'have been listening to', 'have been hearing', 'to listen to', 'listen to'],
         'yes_word': YES_WORDS,
         'ending': '([.!]|)$'
     }
     templates = [
         "i {positive_verb} {listen_word} {favorite}{ending}",
-        "my favorite {keyword_song} is {favorite}{ending}",
+        "my favorite {keyword_singer} is {favorite}{ending}",
         "my favorite is {favorite}{ending}",
-        "my favorite {keyword_song} of all time is {favorite}{ending}",
+        "my favorite {keyword_singer} of all time is {favorite}{ending}",
         "my favorite of all time is {favorite}{ending}",
-        "my favorite {keyword_song} is probably {favorite}{ending}",
+        "my favorite {keyword_singer} is probably {favorite}{ending}",
         "my favorite is probably {favorite}{ending}",
-        "my favorite {keyword_song} of all time is probably {favorite}{ending}",
+        "my favorite {keyword_singer} of all time is probably {favorite}{ending}",
         "my favorite of all time is probably {favorite}{ending}",
         "i {positive_verb} {favorite}{ending}",
-        "i {positive_adverb} {positive_verb} {listen_word} {favorite}{ending}",
         "i {positive_adverb} {positive_verb} {favorite}{ending}",
         "i think {favorite} is {positive_adjective}",
-        OPTIONAL_TEXT_PRE + "my favorite {keyword_song} is {favorite}{ending}",
+        OPTIONAL_TEXT_PRE + "my favorite {keyword_singer} is {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "my favorite is {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "i {positive_verb} {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "i {positive_adverb} {positive_verb} {favorite}{ending}",
@@ -65,14 +64,14 @@ class NameFavoriteSongTemplate(RegexTemplate):
         OPTIONAL_TEXT_PRE + "{yes_word} i {listen_word} {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "{yes_word} i recently {listen_word} {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "{yes_word} lately i {listen_word} {favorite}{ending}",
-        OPTIONAL_TEXT_PRE + "{yes_word} i {listen_word} {favorite} recently",
-        OPTIONAL_TEXT_PRE + "{yes_word} i {listen_word} {favorite} lately",
+        OPTIONAL_TEXT_PRE + "{yes_word} i {listen_word} {favorite} recently" + OPTIONAL_TEXT_POST,
+        OPTIONAL_TEXT_PRE + "{yes_word} i {listen_word} {favorite} lately" + OPTIONAL_TEXT_POST,
         OPTIONAL_TEXT_PRE + "{yes_word} i just {listen_word} {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "i {listen_word} {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "i recently {listen_word} {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "lately i {listen_word} {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "i {listen_word} {favorite} recently" + OPTIONAL_TEXT_POST,
-        OPTIONAL_TEXT_PRE + "i {listen_word} {favorite} lately"+ OPTIONAL_TEXT_POST,
+        OPTIONAL_TEXT_PRE + "i {listen_word} {favorite} lately" + OPTIONAL_TEXT_POST,
         OPTIONAL_TEXT_PRE + "i just {listen_word} {favorite}{ending}",
         "{yes_word} {favorite}{ending}",
         OPTIONAL_TEXT_PRE + "{yes_word} {favorite}{ending}",
@@ -84,13 +83,13 @@ class NameFavoriteSongTemplate(RegexTemplate):
     positive_examples = []
     negative_examples = []
 
-class NameFavoriteSongWithDatabaseTemplate(RegexTemplate):
+class NameFavoriteSingerWithDatabaseTemplate(RegexTemplate):
     slots = {
-        'database_song': list(music_song_gpt.keys()) + list(music_song_str_wiki.keys())
+        'database_singer': list(music_singer_gpt.keys()) + list(music_singer_str_wiki.keys())
     }
 
     templates = [
-        OPTIONAL_TEXT_PRE + "{database_song}[.!]?" + OPTIONAL_TEXT_POST
+        OPTIONAL_TEXT_PRE + "{database_singer}[.!]?" + OPTIONAL_TEXT_POST
     ]
 
     positive_examples = []

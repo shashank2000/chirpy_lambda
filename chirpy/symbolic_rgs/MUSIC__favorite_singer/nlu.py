@@ -3,10 +3,12 @@ from chirpy.core.response_generator.nlu import nlu_processing
 from chirpy.core.entity_linker.entity_groups import ENTITY_GROUPS_FOR_EXPECTED_TYPE
 from chirpy.response_generators.music.utils import WikiEntityInterface
 from chirpy.core.entity_linker.entity_linker_simple import link_span_to_entity
-from chirpy.response_generators.music.regex_templates import NameFavoriteSongTemplate
 import chirpy.response_generators.music.response_templates.general_templates as templates
 from chirpy.core.util import choose_least_repetitive
-from chirpy.databases.databases import exists
+from chirpy.databases.databases import exists, lookup
+from chirpy.core.entity_linker.entity_linker_simple import get_entity_by_wiki_name
+from chirpy.databases.datalib.music_database import music_singer_str_wiki
+from chirpy.response_generators.music.regex_templates.name_favorite_singer_template import NameFavoriteSingerTemplate, NameFavoriteSingerWithDatabaseTemplate
 
 import re
 from chirpy.response_generators.music.expression_lists import NEGATIVE_WORDS
@@ -48,25 +50,42 @@ def least_repetitive_compliment(context):
 
 @nlu_processing
 def get_flags(context):
+    # Find entity with database
+    singer_str_database_slot = None
+    slots_with_database = NameFavoriteSingerWithDatabaseTemplate().execute(context.utterance.lower())
+    if slots_with_database is not None and 'database_singer' in slots_with_database:
+        singer_str_database_slot = slots_with_database['database_singer']
+
+    # Find entity with entity linker
     singer_ent = get_singer_entity(context)
-    singer_str = None if singer_ent is None else re.sub(r'\(.*?\)', '', singer_ent.talkable_name)
+    singer_str = None
 
-    if singer_ent is None:
-        if exists("music_singer", context.utterance.lower()):
-            singer_str = context.utterance
-            singer_ent = get_singer_entity_from_str(context, singer_str)
+    # Find str with slot
+    singer_str_wo_database_slot = None
+    slots_wo_database = NameFavoriteSingerTemplate().execute(context.utterance)
+    if slots_wo_database is not None and 'favorite' in slots_wo_database:
+        singer_str_wo_database_slot = slots_wo_database['favorite']
+
+
+    if singer_str_database_slot:
+        if singer_str_database_slot in music_singer_str_wiki:
+            singer_str = lookup("music_singer_str_wiki", singer_str_database_slot)['database_key']
         else:
-            slots = NameFavoriteSongTemplate().execute(context.utterance)
-            if slots is not None and 'favorite' in slots:
-                singer_str = slots['favorite']
-                singer_ent = get_singer_entity_from_str(context, singer_str)
-                if singer_ent:
-                    singer_str = singer_ent.name
+            singer_str = singer_str_database_slot
+        singer_wiki_doc_title = lookup("music_singer", singer_str)['wiki_doc_title']
+        singer_ent = get_entity_by_wiki_name(singer_wiki_doc_title)
+    elif singer_ent:
+        singer_str = singer_ent.name
+    elif singer_str_wo_database_slot:
+        singer_str = singer_str_wo_database_slot
 
-    singer_str = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), singer_str) if singer_str else None
+
+    singer_talkable = re.sub(r'\(.*?\)', '', singer_str.lower()).strip() if singer_str else None
+    singer_talkable = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), singer_talkable) if singer_talkable else None
 
     ADD_NLU_FLAG('MUSIC__fav_singer_ent', singer_ent)
     ADD_NLU_FLAG('MUSIC__fav_singer_str', singer_str)
+    ADD_NLU_FLAG('MUSIC__fav_singer_talkable', singer_talkable)
 
     if singer_ent:
         if WikiEntityInterface.is_in_entity_group(singer_ent, ENTITY_GROUPS_FOR_EXPECTED_TYPE.musical_group):

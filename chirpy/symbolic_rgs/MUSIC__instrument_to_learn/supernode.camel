@@ -16,6 +16,7 @@ Prompt ask_instrument_to_learn [ ] {
 State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__InstrumentToLearn = @val(Flags.MUSIC__instr_to_learn_ent)
 State.User__InstrumentToLearnStr = @val(Flags.MUSIC__instr_to_learn_str)
+State.User__InstrumentToLearnTalkable = @val(Flags.MUSIC__instr_to_learn_talkable)
 
 <SUBNODES>
 Subnode instr_to_learn_exists_with_database [
@@ -24,10 +25,10 @@ Subnode instr_to_learn_exists_with_database [
 ] {
     - @one_of(
         {
-            - @lookup(database_name="music_instrument", key={@val(State.User__InstrumentToLearnStr | lower)}, column="comment_1")
+            - @lookup(database_name="music_instrument", key={@val(State.User__InstrumentToLearnTalkable | lower)}, column="comment_1")
         },
         {
-            - @lookup(database_name="music_instrument", key={@val(State.User__InstrumentToLearnStr | lower)}, column="comment_2")
+            - @lookup(database_name="music_instrument", key={@val(State.User__InstrumentToLearnTalkable | lower)}, column="comment_2")
         }
     )
 }

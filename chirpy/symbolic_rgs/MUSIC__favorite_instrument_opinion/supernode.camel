@@ -11,7 +11,7 @@ IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr_opinion)
 <PROMPTS>
 Prompt ask_favorite_instrument_opinion [ ] {
     - "What do you like about"
-    - @val(State.User__FavoriteInstrumentStr | lower)
+    - @val(State.User__FavoriteInstrumentTalkable | lower)
     - "?"
 }
 

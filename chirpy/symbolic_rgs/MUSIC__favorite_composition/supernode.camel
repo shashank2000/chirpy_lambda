@@ -15,7 +15,7 @@ IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr)
 <PROMPTS>
 Prompt ask_piece_music [ ] {
     - "I am now curious. What piece of music do you like to play with"
-    - @val(State.User__FavoriteInstrumentStr | lower)
+    - @val(State.User__FavoriteInstrumentTalkable | lower)
     - "?"
 }
 
@@ -23,17 +23,18 @@ Prompt ask_piece_music [ ] {
 State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteComposition = @val(Flags.MUSIC__fav_composition_ent)
 State.User__FavoriteCompositionStr = @val(Flags.MUSIC__fav_composition_str)
+State.User__FavoriteCompositionTalkable = @val(Flags.MUSIC__fav_composition_talkable)
 
 <SUBNODES>
 Subnode composition_str_with_database [
     not IS_NONE(State.User__FavoriteCompositionStr) and
-    EXISTS(database_name="music_composition_composer", key={@val(State.User__FavoriteCompositionStr | lower)})
+    EXISTS(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)})
 ] {
     - "That's so cool!"
-    - @helper.get_possessive_form(@lookup(database_name="music_composition_composer", key={@val(State.User__FavoriteCompositionStr | lower)}, column="composer"))
-    - @val(State.User__FavoriteCompositionStr)
+    - @helper.get_possessive_form(@lookup(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)}, column="composer"))
+    - @val(State.User__FavoriteCompositionTalkable)
     - "really suits the"
-    - @val(State.User__FavoriteInstrumentStr | lower)
+    - @val(State.User__FavoriteInstrumentTalkable | lower)
     - "."
 } <
     Flags.MUSIC__follow_up_on_known_fav_composition_comment = @constant(True)
@@ -41,12 +42,12 @@ Subnode composition_str_with_database [
 
 Subnode exists_composition_str_wo_database [
     not IS_NONE(State.User__FavoriteCompositionStr) and
-    not EXISTS(database_name="music_composition_composer", key={@val(State.User__FavoriteCompositionStr | lower)})
+    not EXISTS(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)})
 ] {
     - "Wow, that's so cool!"
-    - @val(State.User__FavoriteCompositionStr)
+    - @val(State.User__FavoriteCompositionTalkable)
     - "really suits the"
-    - @val(State.User__FavoriteInstrumentStr | lower)
+    - @val(State.User__FavoriteInstrumentTalkable | lower)
     - "."
 } <
     Flags.MUSIC__follow_up_on_known_fav_composition_comment = @constant(True)

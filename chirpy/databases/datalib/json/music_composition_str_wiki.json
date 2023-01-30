@@ -1,0 +1,479 @@
+{
+    "symphony no. 5": {
+        "database_key": "symphony no. 5 (mahler)"
+    },
+    "symphony no. 9": {
+        "database_key": "symphony no. 9 (dvo\u0159\u00e1k)"
+    },
+    "a midsummer night's dream": {
+        "database_key": "a midsummer night's dream (mendelssohn)"
+    },
+    "piano sonata no. 14": {
+        "database_key": "piano sonata no. 14 (beethoven)"
+    },
+    "the sorcerer's apprentice": {
+        "database_key": "the sorcerer's apprentice (dukas)"
+    },
+    "rodeo": {
+        "database_key": "rodeo (ballet)"
+    },
+    "habanera": {
+        "database_key": "habanera (aria)"
+    },
+    "piano sonata no. 2": {
+        "database_key": "piano sonata no. 2 (schumann)"
+    },
+    "piano sonata no. 11": {
+        "database_key": "piano sonata no. 11 (mozart)"
+    },
+    "string quintet in e major, op. 11, no. 5": {
+        "database_key": "string quintet in e major, op. 11, no. 5 (boccherini)"
+    },
+    "minuet woo 10, no. 2": {
+        "database_key": "minuet woo 10, no. 2 (beethoven)"
+    },
+    "cello suites": {
+        "database_key": "cello suites (bach)"
+    },
+    "trepak": {
+        "database_key": "trepak (the nutcracker)"
+    },
+    "wiegenlied": {
+        "database_key": "wiegenlied (brahms)"
+    },
+    "piano concerto no. 1": {
+        "database_key": "piano concerto no. 1 (liszt)"
+    },
+    "hungarian dances": {
+        "database_key": "hungarian dances (brahms)"
+    },
+    "piano sonata no. 16": {
+        "database_key": "piano sonata no. 16 (mozart)"
+    },
+    "romeo and juliet": {
+        "database_key": "romeo and juliet (prokofiev)"
+    },
+    "palladio": {
+        "database_key": "palladio (jenkins)"
+    },
+    "piano concerto": {
+        "database_key": "piano concerto (john ireland)"
+    },
+    "requiem": {
+        "database_key": "requiem (verdi)"
+    },
+    "les patineurs": {
+        "database_key": "les patineurs (waltz)"
+    },
+    "the four seasons": {
+        "database_key": "the four seasons (vivaldi)"
+    },
+    "symphony no. 40": {
+        "database_key": "symphony no. 40 (mozart)"
+    },
+    "the washington post": {
+        "database_key": "the washington post (march)"
+    },
+    "piano concerto no. 21": {
+        "database_key": "piano concerto no. 21 (mozart)"
+    },
+    "symphony no. 7": {
+        "database_key": "symphony no. 7 (beethoven)"
+    },
+    "sylvia": {
+        "database_key": "sylvia (ballet)"
+    },
+    "prelude in c-sharp minor": {
+        "database_key": "prelude in c-sharp minor (rachmaninoff)"
+    },
+    "the sleeping beauty": {
+        "database_key": "the sleeping beauty (ballet)"
+    },
+    "lohengrin": {
+        "database_key": "lohengrin (opera)"
+    },
+    "te deum": {
+        "database_key": "te deum (charpentier)"
+    },
+    "m\u00e9ditation": {
+        "database_key": "m\u00e9ditation (tha\u00efs)"
+    },
+    "wiener blut": {
+        "database_key": "wiener blut (waltz)"
+    },
+    "piano sonata no. 8": {
+        "database_key": "piano sonata no. 8 (beethoven)"
+    },
+    "l'arl\u00e9sienne": {
+        "database_key": "l'arl\u00e9sienne (bizet)"
+    },
+    "the liberty bell": {
+        "database_key": "the liberty bell (march)"
+    },
+    "the hebrides": {
+        "database_key": "the hebrides (overture)"
+    },
+    "humoresques": {
+        "database_key": "humoresques (dvo\u0159\u00e1k)"
+    },
+    "the lark ascending": {
+        "database_key": "the lark ascending (vaughan williams)"
+    },
+    "the comedians": {
+        "database_key": "the comedians (kabalevsky)"
+    },
+    "three marches militaires": {
+        "database_key": "three marches militaires (schubert)"
+    },
+    "symphony no. 3": {
+        "database_key": "symphony no. 3 (saint-sa\u00ebns)"
+    },
+    "nocturnes, op. 9": {
+        "database_key": "nocturnes, op. 9 (chopin)"
+    },
+    "symphony no. 94": {
+        "database_key": "symphony no. 94 (haydn)"
+    },
+    "\u00e9tude op. 10, no. 12": {
+        "database_key": "\u00e9tude op. 10, no. 12 (chopin)"
+    },
+    "danse macabre": {
+        "database_key": "danse macabre (saint-sa\u00ebns)"
+    },
+    "scheherazade": {
+        "database_key": "scheherazade (rimsky-korsakov)"
+    },
+    "symphony no. 6": {
+        "database_key": "symphony no. 6 (tchaikovsky)"
+    },
+    "ave maria": {
+        "database_key": "ave maria (schubert)"
+    },
+    "semper fidelis": {
+        "database_key": "semper fidelis (march)"
+    },
+    "peer gynt": {
+        "database_key": "peer gynt (grieg)"
+    },
+    "caprice no. 24": {
+        "database_key": "caprice no. 24 (paganini)"
+    },
+    "clarinet concerto": {
+        "database_key": "clarinet concerto (mozart)"
+    },
+    "spartacus": {
+        "database_key": "spartacus (ballet)"
+    },
+    "\u00e9tude op. 10, no. 3": {
+        "database_key": "\u00e9tude op. 10, no. 3 (chopin)"
+    },
+    "carnival overture": {
+        "database_key": "carnival overture (dvo\u0159\u00e1k)"
+    },
+    "tafelmusik": {
+        "database_key": "tafelmusik (telemann)"
+    },
+    "horn concerto no. 4": {
+        "database_key": "horn concerto no. 4 (mozart)"
+    },
+    "piano sonata no. 1": {
+        "database_key": "piano sonata no. 1 (brahms)"
+    },
+    "zwei klavierst\u00fccke": {
+        "database_key": "zwei klavierst\u00fccke (schoenberg)"
+    },
+    "carnaval": {
+        "database_key": "carnaval (schumann)"
+    },
+    "po\u00e8me": {
+        "database_key": "po\u00e8me (chausson)"
+    },
+    "rondo in b minor for violin and piano, d 895": {
+        "database_key": "rondo in b minor for violin and piano, d 895 (schubert)"
+    },
+    "la savane": {
+        "database_key": "la savane (gottschalk)"
+    },
+    "arabeske": {
+        "database_key": "arabeske (schumann)"
+    },
+    "symphonic studies": {
+        "database_key": "symphonic studies (schumann)"
+    },
+    "humoreske": {
+        "database_key": "humoreske (schumann)"
+    },
+    "septet": {
+        "database_key": "septet (beethoven)"
+    },
+    "polonaises, op. 71": {
+        "database_key": "polonaises, op. 71 (chopin)"
+    },
+    "prelude in e major, op. 11, no. 9": {
+        "database_key": "prelude in e major, op. 11, no. 9 (scriabin)"
+    },
+    "fantasia in f minor": {
+        "database_key": "fantasia in f minor (schubert)"
+    },
+    "waltzes, op. 34": {
+        "database_key": "waltzes, op. 34 (chopin)"
+    },
+    "waltz in e major": {
+        "database_key": "waltz in e major (chopin)"
+    },
+    "romance for violin and orchestra no. 1 op. 40": {
+        "database_key": "romance for violin and orchestra no. 1 op. 40 (beethoven)"
+    },
+    "russian rag": {
+        "database_key": "russian rag (composition)"
+    },
+    "mazurkas, op. 41": {
+        "database_key": "mazurkas, op. 41 (chopin)"
+    },
+    "24 preludes, op. 11": {
+        "database_key": "24 preludes, op. 11 (scriabin)"
+    },
+    "whirling udumbara ii": {
+        "database_key": "whirling udumbara ii (piano)"
+    },
+    "introduction and polonaise brillante": {
+        "database_key": "introduction and polonaise brillante (chopin)"
+    },
+    "mazurkas, op. posth.": {
+        "database_key": "mazurkas, op. posth. (chopin)"
+    },
+    "th\u00e8me et variations": {
+        "database_key": "th\u00e8me et variations (messiaen)"
+    },
+    "six moments musicaux": {
+        "database_key": "six moments musicaux (schubert)"
+    },
+    "prelude, op. 74, no. 2": {
+        "database_key": "prelude, op. 74, no. 2 (scriabin)"
+    },
+    "two concert \u00e9tudes": {
+        "database_key": "two concert \u00e9tudes (liszt)"
+    },
+    "fantasia for violin and orchestra": {
+        "database_key": "fantasia for violin and orchestra (piston)"
+    },
+    "albumbl\u00e4tter": {
+        "database_key": "albumbl\u00e4tter (schumann)"
+    },
+    "mazurkas, op. 30": {
+        "database_key": "mazurkas, op. 30 (chopin)"
+    },
+    "clarinet sonata": {
+        "database_key": "clarinet sonata (ries)"
+    },
+    "mazurkas, op. 33": {
+        "database_key": "mazurkas, op. 33 (chopin)"
+    },
+    "mazurkas, op. 63": {
+        "database_key": "mazurkas, op. 63 (chopin)"
+    },
+    "\u00e9cossaises, d 421": {
+        "database_key": "\u00e9cossaises, d 421 (schubert)"
+    },
+    "polonaises, op. 26": {
+        "database_key": "polonaises, op. 26 (chopin)"
+    },
+    "blumenst\u00fcck": {
+        "database_key": "blumenst\u00fcck (schumann)"
+    },
+    "mazurkas, op. 24": {
+        "database_key": "mazurkas, op. 24 (chopin)"
+    },
+    "valse-scherzo": {
+        "database_key": "valse-scherzo (tchaikovsky)"
+    },
+    "serenade": {
+        "database_key": "serenade (bruch)"
+    },
+    "mazurkas, op. 56": {
+        "database_key": "mazurkas, op. 56 (chopin)"
+    },
+    "mazurkas, op. 68": {
+        "database_key": "mazurkas, op. 68 (chopin)"
+    },
+    "waltz in c-sharp minor, op. 64, no. 2": {
+        "database_key": "waltz in c-sharp minor, op. 64, no. 2 (chopin)"
+    },
+    "night-thoughts": {
+        "database_key": "night-thoughts (piano piece)"
+    },
+    "le mancenillier": {
+        "database_key": "le mancenillier (gottschalk)"
+    },
+    "waltzes, op. 70": {
+        "database_key": "waltzes, op. 70 (chopin)"
+    },
+    "nocturne and tarantella": {
+        "database_key": "nocturne and tarantella (szymanowski)"
+    },
+    "valses sentimentales and valses nobles": {
+        "database_key": "valses sentimentales and valses nobles (schubert)"
+    },
+    "romance in a minor": {
+        "database_key": "romance in a minor (bruch)"
+    },
+    "piano concerto no. 2": {
+        "database_key": "piano concerto no. 2 (liszt)"
+    },
+    "mazurkas, op. 7": {
+        "database_key": "mazurkas, op. 7 (chopin)"
+    },
+    "po\u00e8me \u00e9l\u00e9giaque in d minor, op.12": {
+        "database_key": "po\u00e8me \u00e9l\u00e9giaque in d minor, op.12 (ysa\u00ffe)"
+    },
+    "waltz in e minor": {
+        "database_key": "waltz in e minor (chopin)"
+    },
+    "mazurkas, op. 50": {
+        "database_key": "mazurkas, op. 50 (chopin)"
+    },
+    "piano sonata no. 3": {
+        "database_key": "piano sonata no. 3 (brahms)"
+    },
+    "polonaise de concert, op. 4": {
+        "database_key": "polonaise de concert, op. 4 (wieniawski)"
+    },
+    "polonaise-fantaisie": {
+        "database_key": "polonaise-fantaisie (chopin)"
+    },
+    "grande valse brillante in e-flat major": {
+        "database_key": "grande valse brillante in e-flat major (chopin)"
+    },
+    "waltz in a-flat major, op. 42": {
+        "database_key": "waltz in a-flat major, op. 42 (chopin)"
+    },
+    "romance in f minor": {
+        "database_key": "romance in f minor (dvo\u0159\u00e1k)"
+    },
+    "prelude, op. 59, no. 2": {
+        "database_key": "prelude, op. 59, no. 2 (scriabin)"
+    },
+    "carmen fantasy": {
+        "database_key": "carmen fantasy (sarasate)"
+    },
+    "quintet": {
+        "database_key": "quintet (prokofiev)"
+    },
+    "toccata": {
+        "database_key": "toccata (schumann)"
+    },
+    "mazurkas, op. 17": {
+        "database_key": "mazurkas, op. 17 (chopin)"
+    },
+    "waltz in a-flat major, op. 69, no. 1": {
+        "database_key": "waltz in a-flat major, op. 69, no. 1 (chopin)"
+    },
+    "petite suite": {
+        "database_key": "petite suite (borodin)"
+    },
+    "prelude in c-sharp minor, op. 11, no. 10": {
+        "database_key": "prelude in c-sharp minor, op. 11, no. 10 (scriabin)"
+    },
+    "l\u00e9gende": {
+        "database_key": "l\u00e9gende (wieniawski)"
+    },
+    "capriccio for violin and orchestra": {
+        "database_key": "capriccio for violin and orchestra (penderecki)"
+    },
+    "road movies": {
+        "database_key": "road movies (adams)"
+    },
+    "prelude in e minor, op. 11, no. 4": {
+        "database_key": "prelude in e minor, op. 11, no. 4 (scriabin)"
+    },
+    "bamboula": {
+        "database_key": "bamboula (gottschalk)"
+    },
+    "concertino": {
+        "database_key": "concertino (jan\u00e1\u010dek)"
+    },
+    "piano concerto no. 3": {
+        "database_key": "piano concerto no. 3 (liszt)"
+    },
+    "rhapsody no. 2": {
+        "database_key": "rhapsody no. 2 (bart\u00f3k)"
+    },
+    "grande tarantelle": {
+        "database_key": "grande tarantelle (gottschalk)"
+    },
+    "mazurkas, op. 59": {
+        "database_key": "mazurkas, op. 59 (chopin)"
+    },
+    "polonaise in f-sharp minor, op. 44": {
+        "database_key": "polonaise in f-sharp minor, op. 44 (chopin)"
+    },
+    "mazurkas, op. 67": {
+        "database_key": "mazurkas, op. 67 (chopin)"
+    },
+    "narcissus": {
+        "database_key": "narcissus (music)"
+    },
+    "waltz in b minor, op. 69, no. 2": {
+        "database_key": "waltz in b minor, op. 69, no. 2 (chopin)"
+    },
+    "piano trio, op. 28": {
+        "database_key": "piano trio, op. 28 (ries)"
+    },
+    "mazurkas, op. 6": {
+        "database_key": "mazurkas, op. 6 (chopin)"
+    },
+    "romance for violin and orchestra no. 2 op. 50": {
+        "database_key": "romance for violin and orchestra no. 2 op. 50 (beethoven)"
+    },
+    "prelude  and fugue in e major, bwv 566": {
+        "database_key": "prelude (toccata) and fugue in e major, bwv 566"
+    },
+    "fuse pattern": {
+        "database_key": "fuse pattern (trio)"
+    },
+    "novelletten": {
+        "database_key": "novelletten (schumann)"
+    },
+    "prelude in a minor, op. 51, no. 2": {
+        "database_key": "prelude in a minor, op. 51, no. 2 (scriabin)"
+    },
+    "scherzos": {
+        "database_key": "scherzos (schubert)"
+    },
+    "waltz in a-flat major, op. 64, no. 3": {
+        "database_key": "waltz in a-flat major, op. 64, no. 3 (chopin)"
+    },
+    "le bananier": {
+        "database_key": "le bananier (gottschalk)"
+    },
+    "polonaises op. 40": {
+        "database_key": "polonaises op. 40 (chopin)"
+    },
+    "prelude in f major, op. 49, no. 2": {
+        "database_key": "prelude in f major, op. 49, no. 2 (scriabin)"
+    },
+    "waltz in a minor": {
+        "database_key": "waltz in a minor (chopin)"
+    },
+    "scherzo in a-flat major": {
+        "database_key": "scherzo in a-flat major (borodin)"
+    },
+    "fantasie in c": {
+        "database_key": "fantasie in c (schumann)"
+    },
+    "rhapsody no. 1": {
+        "database_key": "rhapsody no. 1 (bart\u00f3k)"
+    },
+    "carmen fantasie": {
+        "database_key": "carmen fantasie (waxman)"
+    },
+    "the banjo": {
+        "database_key": "the banjo (gottschalk)"
+    },
+    "six little preludes": {
+        "database_key": "six little preludes (bach)"
+    },
+    "fantasy for violin and piano": {
+        "database_key": "fantasy for violin and piano (schubert)"
+    }
+}
