@@ -45,7 +45,7 @@ Prompt ask_song_when_genre_ent_exists [
     -  @val(State.User__FavoriteMusicGenreTalkable | lower)
     - "is your favorite music genre."
     - "What is your favorite"
-    - @val(State.User__FavoriteMusicGenreTalkable | lower)
+    - @helper.get_adjective_form(@val(State.User__FavoriteMusicGenreTalkable | lower))
     - @val(State.User__FavoriteMusicGenreWorkDescriptor)
     - "?"
 } <
@@ -58,7 +58,7 @@ Prompt ask_song_when_genre_ent_exists_quick_follow_up [
     IS_TRUE(Prevflags.MUSIC__fav_genre_just_triggered)
 ] {
     - "What is your favorite"
-    - @val(State.User__FavoriteMusicGenreTalkable | lower)
+    - @helper.get_adjective_form(@val(State.User__FavoriteMusicGenreTalkable | lower))
     - @val(State.User__FavoriteMusicGenreWorkDescriptor)
     - "?"
 } <
