@@ -5,7 +5,8 @@ IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_TRUE(State.MUSIC__fav_singer_was_triggered) and
 not IS_NONE(State.User__FavoriteSingerStr) and IS_FALSE(State.User__NoFavoriteSinger) and
-IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_singer_comment)
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_singer_comment) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_singer_comment_extra)
 
 <PROMPTS>
 Prompt ask_if_user_has_heard [

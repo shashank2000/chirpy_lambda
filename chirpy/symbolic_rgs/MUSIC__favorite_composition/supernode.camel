@@ -10,7 +10,8 @@ not IS_NONE(State.User__FavoriteInstrumentStr)) and
 IS_NONE(State.User__FavoriteComposition) and
 IS_NONE(State.User__FavoriteCompositionStr) and
 IS_FALSE(State.User__NoFavoriteComposition) and
-IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr)
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr_extra)
 
 <PROMPTS>
 Prompt ask_piece_music [ ] {
@@ -39,6 +40,7 @@ Subnode composition_str_with_database [
     - "."
 } <
     Flags.MUSIC__follow_up_on_known_fav_composition_comment = @constant(True)
+    Flags.MUSIC__follow_up_on_known_fav_composition_comment_extra = @constant(True)
 >
 
 Subnode exists_composition_str_wo_database [
@@ -52,6 +54,7 @@ Subnode exists_composition_str_wo_database [
     - "."
 } <
     Flags.MUSIC__follow_up_on_known_fav_composition_comment = @constant(True)
+    Flags.MUSIC__follow_up_on_known_fav_composition_comment_extra = @constant(True)
 >
 
 Subnode no_fav_composition [

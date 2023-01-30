@@ -5,7 +5,8 @@ IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
 IS_TRUE(State.User__NoFavoriteInstrument) and
-IS_TRUE(Flags.MUSIC__follow_up_on_no_fav_instr)
+IS_TRUE(Flags.MUSIC__follow_up_on_no_fav_instr) and
+IS_TRUE(Flags.MUSIC__follow_up_on_no_fav_instr_extra)
 
 <PROMPTS>
 Prompt ask_instrument_to_learn [ ] {
@@ -52,6 +53,7 @@ Subnode no_instrument_to_learn [
     - "No worries. Let's talk about something else then."
 } <
     Flags.MUSIC__follow_up_on_no_fav_instr = @constant(True)
+    Flags.MUSIC__follow_up_on_no_fav_instr_extra = @constant(True)
 >
 
 Subnode catch_all [

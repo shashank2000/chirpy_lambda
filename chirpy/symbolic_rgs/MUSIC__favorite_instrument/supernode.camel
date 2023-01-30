@@ -55,6 +55,7 @@ Subnode instr_exists_with_database [
     - "is absolutely a fascinating instrument!"
 } <
     Flags.MUSIC__follow_up_on_known_fav_instr_opinion = @constant(True)
+    Flags.MUSIC__follow_up_on_known_fav_instr_opinion_extra = @constant(True)
 >
 
 Subnode instr_exists_wo_database [
@@ -66,6 +67,7 @@ Subnode instr_exists_wo_database [
     - "is a really fascinating instrument! I wish I can learn to play it one day."
 } <
     Flags.MUSIC__follow_up_on_known_fav_instr = @constant(True)
+    Flags.MUSIC__follow_up_on_known_fav_instr_extra = @constant(True)
 >
 
 Subnode no_fav_instrument [
@@ -79,6 +81,7 @@ Subnode no_fav_instrument [
 } <
     State.User__NoFavoriteInstrument = @constant(True)
     Flags.MUSIC__follow_up_on_no_fav_instr = @constant(True)
+    Flags.MUSIC__follow_up_on_no_fav_instr_extra = @constant(True)
 >
 
 Subnode catch_all [

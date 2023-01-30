@@ -9,7 +9,8 @@ IS_FALSE(State.User__NoFavoriteInstrument) and
 not IS_NONE(State.User__FavoriteInstrumentStr)) and
 not IS_NONE(State.User__FavoriteCompositionStr) and
 IS_FALSE(State.User__NoFavoriteComposition) and
-IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_composition_comment)
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_composition_comment) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_composition_comment_extra)
 
 <PROMPTS>
 Prompt ask_piece_music_opinion [ ] {

@@ -28,6 +28,7 @@ Subnode singer_exists_with_database [
     - @lookup(database_name="music_singer", key={@val(State.User__FavoriteSingerStr | lower)}, column="comment")
 } <
     Flags.MUSIC__follow_up_on_known_fav_singer_comment = @constant(True)
+    Flags.MUSIC__follow_up_on_known_fav_singer_comment_extra = @constant(True)
 >
 
 Subnode generic_comment_on_band [

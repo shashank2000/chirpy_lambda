@@ -80,7 +80,7 @@ class NameFavoriteCompositionTemplate(RegexTemplate):
         "i {frequency_adverb} go for {favorite}{ending}",
         "i {frequency_adverb} {positive_verb} {favorite}{ending}",
         "i {frequency_adverb} {play_word} {favorite}{ending}",
-        "i {frequency_adverb} {positive_verb} {listen_word} {favorite}{ending}"
+        "i {frequency_adverb} {positive_verb} {play_word} {favorite}{ending}"
     ]
 
     positive_examples = [
