@@ -1,0 +1,47 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
+(not IS_NONE(State.User__FavoriteInstrument) or not IS_NONE(State.User__FavoriteInstrumentStr)) and
+IS_FALSE(State.User__NoFavoriteInstrument) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_instr_opinion)
+
+<PROMPTS>
+Prompt ask_favorite_instrument_opinion [ ] {
+    - "What do you like about"
+    - @val(State.User__FavoriteInstrumentTalkable | lower)
+    - "?"
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
+
+<SUBNODES>
+Subnode user_pos_opinion_exists [
+    IS_FALSE(Flags.GlobalFlag__NO) and
+    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+    IS_FALSE(Flags.GlobalFlag__NOTHING)
+] {
+    - @one_of(
+        {
+            - @lookup(database_name="music_instrument", key={@val(State.User__FavoriteInstrumentStr | lower)}, column="comment_1")
+        },
+        {
+            - @lookup(database_name="music_instrument", key={@val(State.User__FavoriteInstrumentStr | lower)}, column="comment_2")
+        }
+    )
+}
+
+Subnode user_neg_opinion_exists [
+    IS_TRUE(Flags.GlobalFlag__NO) or
+    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
+    IS_TRUE(Flags.GlobalFlag__NOTHING)
+] {
+    - "No worries. I appreciate you telling me about your favorite musical instrument."
+}
+
+<SET_STATE_AFTER>
+Flags.MUSIC__follow_up_on_known_fav_instr = @constant(True)

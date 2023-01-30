@@ -76,6 +76,12 @@ Subnode make_texture_attribute_comment [
 #    - .
 # }
 
+Subnode make_texture_attribute_comment [
+   IS_TRUE(Flags.GlobalFlag__NO)
+] {
+   - "Ok! Let me know if you ever have a recommendation!"
+}
+
 Subnode default [
 ] {
   - @val(Locals.intro_statement)

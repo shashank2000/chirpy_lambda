@@ -5,15 +5,18 @@ KEYWORD_MUSIC = [
     "singing",
     "song",
     "songs",
+    "singer",
+    "instrument",
     "instruments",
     "melody",
+    "composition"
 ]
 
 FREQUENCY_ANSWERS = [
     "often",
     "sometimes",
     "always",
-    "every day",
+    "everyday",
     "a day",
     "every",
     "when",

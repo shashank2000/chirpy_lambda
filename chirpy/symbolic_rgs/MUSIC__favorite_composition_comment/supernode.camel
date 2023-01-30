@@ -1,0 +1,54 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
+IS_FALSE(State.User__NoFavoriteInstrument) and
+(not IS_NONE(State.User__FavoriteInstrument) or
+not IS_NONE(State.User__FavoriteInstrumentStr)) and
+not IS_NONE(State.User__FavoriteCompositionStr) and
+IS_FALSE(State.User__NoFavoriteComposition) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_composition_comment)
+
+<PROMPTS>
+Prompt ask_piece_music_opinion [ ] {
+    - "Why is it your favorite composition?"
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
+
+<SUBNODES>
+Subnode make_response_with_database [
+    not IS_NONE(State.User__FavoriteCompositionStr) and
+    EXISTS(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)})
+] {
+    - @lookup(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)}, column="comment")
+}
+
+Subnode generic_response  [
+    not IS_NONE(State.User__FavoriteCompositionStr) and
+    not EXISTS(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)}) and
+    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+    IS_FALSE(Flags.GlobalFlag__NOTHING)
+] {
+    - "That makes a lot of sense! You make me want to listen to"
+    - @val(State.User__FavoriteCompositionTalkable)
+    - "right now!"
+}
+
+Subnode dont_know_or_nothing [
+    IS_NONE(State.User__FavoriteCompositionStr) and
+    not EXISTS(database_name="music_composition", key={@val(State.User__FavoriteCompositionStr | lower)}) and
+    (IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
+    IS_TRUE(Flags.GlobalFlag__NOTHING))
+] {
+    - "That's alright. It is hard to describe why we like certain piece."
+}
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+   @constant(True)
+}

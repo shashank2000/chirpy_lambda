@@ -62,6 +62,39 @@ User__PreferredMovieGenre: null
 User__PreferredMovieGenreMovie: null
 User__PreferredMovieGenreMovieDesc: null
 
+# Music
+User__FavoriteInstrument: null
+User__FavoriteInstrumentStr: null
+User__FavoriteInstrumentTalkable: null
+User__NoFavoriteInstrument: false
+User__FavoriteComposition: null
+User__FavoriteCompositionStr: null
+User__FavoriteCompositionTalkable: null
+User__NoFavoriteComposition: false
+User__InstrumentToLearn: null
+User__InstrumentToLearnStr: null
+User__InstrumentToLearnTalkable: null
+User__FavoriteSinger: null
+User__FavoriteSingerStr: null
+User__FavoriteSingerTalkable: null
+User__NoFavoriteSinger: false
+User__FavoriteSong: null
+User__FavoriteSongStr: null
+User__FavoriteSongTalkable: null
+User__NoFavoriteSong: false
+User__FavoriteMusicGenre: null
+User__FavoriteMusicGenreStr: null
+User__FavoriteMusicGenreTalkable: null
+User__NoFavoriteMusicGenre: false
+User__FavoriteMusicGenreWorkDescriptor: null
+User__FavoriteSongWorkDescriptor: null
+MUSIC__exit_supernode: false
+MUSIC__intro_was_triggered: false
+MUSIC__fav_instr_was_triggered: false
+MUSIC__fav_singer_was_triggered: false
+MUSIC__fav_song_was_triggered: false
+MUSIC__fav_genre_was_triggered: false
+
 # Launch
 User__Name: null
 User__NameGivenUp: False
@@ -77,3 +110,5 @@ WIKI__currently_chosen_sections: []
 WIKI__suggested_sections: {}
 WIKI__discussed_sections: {}
 WIKI__last_discussed_section: {}
+
+

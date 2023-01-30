@@ -1,0 +1,93 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_FALSE(State.MUSIC__intro_was_triggered) and
+IS_FALSE(State.MUSIC__exit_supernode)
+
+<PROMPTS>
+Prompt user_did_not_mention_music [
+] {
+    - @one_of(
+        "Music is one of my favorite things and I was wondering if we could talk about it.",
+        "There's so much music here in the cloud and I'm curious to know what you think about it.",
+        "By the way, I've been listening to a lot of new songs lately, and I'd love to hear what you think."
+    )
+    - @one_of(
+        "Do you like music?",
+        "Do you listen to music often?"
+    )
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+
+<SUBNODES>
+Subnode listens_frequently [
+   IS_TRUE(Flags.MUSIC__user_listens_frequently) and
+   IS_FALSE(Flags.MUSIC__user_listens_everyday)
+] {
+    - "Well for me, I love listening to music everyday!"
+} <
+    Flags.MUSIC__supernode_starts_responding = @constant(True)
+>
+
+Subnode listens_everyday [
+   IS_TRUE(Flags.MUSIC__user_listens_everyday)
+] {
+    - "Well for me, I love listening to music everyday too!"
+} <
+    Flags.MUSIC__supernode_starts_responding = @constant(True)
+>
+
+Subnode does_not_listen [
+   IS_FALSE(Flags.MUSIC__user_listens_frequently) and
+   (IS_TRUE(Flags.GlobalFlag__NO) or IS_TRUE(Flags.MUSIC__user_has_negative_response)) and
+   IS_FALSE(Flags.GlobalFlag__DONT_KNOW)
+] {
+    - "No problem! Everyone has different interests and it sounds like music isn't your thing."
+} <
+    State.MUSIC__exit_supernode = @constant(True)
+>
+
+Subnode unsure_about_music [
+   IS_FALSE(Flags.MUSIC__user_listens_frequently) and
+   IS_TRUE(Flags.GlobalFlag__DONT_KNOW)
+] {
+    - "It's okay, sometimes I am not sure how I feel about music either. But in some ways, music is tremendously fascinating. It can make us calm and relax."
+} <
+    Flags.MUSIC__supernode_starts_responding = @constant(True)
+>
+
+Subnode likes_music [
+   IS_FALSE(Flags.MUSIC__user_listens_frequently) and
+   IS_FALSE(Flags.GlobalFlag__NO) and
+   IS_FALSE(Flags.MUSIC__user_has_negative_response) and
+   IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+   (IS_TRUE(Flags.GlobalFlag__YES) or IS_TRUE(Flags.MUSIC__user_has_positive_response) or IS_TRUE(Flags.MUSIC__user_response_is_about_music))
+] {
+    - "It's always nice to find another person who enjoys listening to music!"
+    - @one_of(
+        "Music makes me feel alive. When I am listening to a piece of music that I love, I'm so overwhelmed by emotions.",
+        "You know, I'm the kind of person who feels that life is incomplete without music."
+    )
+} <
+    Flags.MUSIC__supernode_starts_responding = @constant(True)
+>
+
+Subnode catch_all [
+   IS_FALSE(Flags.MUSIC__user_listens_frequently) and
+   IS_FALSE(Flags.MUSIC__user_listens_everyday) and
+   IS_FALSE(Flags.GlobalFlag__NO) and
+   IS_FALSE(Flags.MUSIC__user_has_negative_response) and
+   IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+   IS_FALSE(Flags.GlobalFlag__YES) and
+   IS_FALSE(Flags.MUSIC__user_has_positive_response) and
+   IS_FALSE(Flags.MUSIC__user_response_is_about_music)
+] {
+    - "Okay, sure!"
+} <
+    State.MUSIC__exit_supernode = @constant(True)
+>
+
+<SET_STATE_AFTER>
+State.MUSIC__intro_was_triggered = @constant(True)

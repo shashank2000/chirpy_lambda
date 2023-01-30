@@ -1,0 +1,59 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_FALSE(State.MUSIC__exit_supernode) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
+IS_TRUE(State.MUSIC__fav_singer_was_triggered) and
+not IS_NONE(State.User__FavoriteSingerStr) and IS_FALSE(State.User__NoFavoriteSinger) and
+IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_singer_comment)
+
+<PROMPTS>
+Prompt ask_if_user_has_heard [
+ ] {
+    - "What do you think of it?"
+    - @one_of(
+        "Have you ever listened to it?",
+        "Have you ever heard of it?",
+        "Have you listened to it before?",
+        "Have you listened to it yet?",
+        "Have you ever listened to it?"
+    )
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
+
+<SUBNODES>
+Subnode user_pos_opinion_exists [
+    IS_FALSE(Flags.MUSIC__user_heard_but_do_not_like) and
+    IS_FALSE(Flags.GlobalFlag__NO) and
+    IS_FALSE(Flags.GlobalFlag__DONT_KNOW) and
+    IS_FALSE(Flags.GlobalFlag__NOTHING)
+
+] {
+    - "I can listen to it all day!"
+}
+
+Subnode user_neg_opinion_exists [
+    IS_TRUE(Flags.MUSIC__user_heard_but_do_not_like)
+] {
+    - "Oh, I guess it might not be your style."
+}
+
+Subnode user_neutral_opinion_exists [
+    IS_FALSE(Flags.MUSIC__user_heard_but_do_not_like) and
+    (IS_TRUE(Flags.GlobalFlag__NO) or
+    IS_TRUE(Flags.GlobalFlag__DONT_KNOW) or
+    IS_TRUE(Flags.GlobalFlag__NOTHING))
+] {
+    - @one_of(
+        "Oh, you've got to check it out! It's one of my favorites.",
+        "Oh, you should definitely check it out! It's one of my all-time favorite songs.",
+        "Oh, you have to check it out! It's so good. I'm sure you'll love it.",
+        "Oh, you have to give it a listen then! It's so beautiful. It's definitely one of my favorites."
+    )
+}
+
+<SET_STATE_AFTER>
+Flags.MUSIC__fav_singer_comment_just_triggered = @constant(True)

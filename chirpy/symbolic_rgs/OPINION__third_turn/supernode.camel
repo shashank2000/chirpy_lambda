@@ -32,3 +32,4 @@ Subnode general_response [
 
 <SET_STATE_AFTER>
 State.CurrentTopic = @val(Utilities.cur_entity)
+

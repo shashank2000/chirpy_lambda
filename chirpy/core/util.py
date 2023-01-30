@@ -14,7 +14,7 @@ import boto3
 import logging
 import datetime
 import pytz
-from typing import List, Dict, Set, Optional, Iterable, Any, Callable
+from typing import List, Dict, Set, Optional, Iterable, Any, Callable, Tuple
 from chirpy.core.latency import measure
 import random
 from random import choices
@@ -574,3 +574,47 @@ def infl(word, is_plural):
 def get_none_replace(data, key, replace):
     '''Gets key in dictionary and replaces with replace if key doesn't exist'''
     return data.get(key, replace) or replace
+
+
+def rank_by_overlap(context, choices: List[str], n_gram_size=2, n_past_bot_utterances=10) -> List[Tuple[str, float]]:
+
+    """
+    Rank given choices by n-gram overlap with n_past_bot_utterances
+    This is a drop in replacement for random.shuffle except that it doesn't do it in place (shuffle does)
+    Args:
+        choices: List of choices to rank
+        n_gram_size: length of n-grams to compute overlap with. 2 is a good number
+        history_length: Number of past bot utterances to use, 10 seems like a good default
+
+    Returns:
+        Ranked list of the choices, ranked by increasing overlap
+
+    """
+
+    bot_utterances_to_consider = context.history[::-2][:n_past_bot_utterances]
+    if len(bot_utterances_to_consider) == 0:
+        return choices
+    # NB: If the utterance has only 1 token, then get_ngrams doesn't return anything, hence the if condition
+    bot_utterance_ngrams = [set(get_ngrams(r.lower(), n_gram_size)) if set(get_ngrams(r.lower(), n_gram_size)) else {r.lower()} for r in bot_utterances_to_consider]
+    choices_ngrams = [set(get_ngrams(c.lower(), n_gram_size)) if set(get_ngrams(c.lower(), n_gram_size)) else {c.lower()} for c in choices]
+    choice_overlap = [max(len(cn & bn)/len(cn) for bn in bot_utterance_ngrams) for cn in choices_ngrams]
+    sorted_choices = sorted(zip(choices, choice_overlap), key=lambda tup: tup[1])
+    logger.info(f"Choices sorted by {n_gram_size}-gram overlap with past {n_past_bot_utterances} bot utterances\n"+
+                    '\n'.join(f"{overlap:.2f}\t{choice}" for choice, overlap in sorted_choices))
+    return sorted_choices
+#
+def choose_least_repetitive(context, choices: List[str], n_gram_size=2, n_past_bot_utterances=10)-> str:
+    """Wrapper around rank_by_overlap
+    This is a drop in replacement for random.choice
+    """
+    try:
+        if len(choices) == 0:
+           raise IndexError("Cannot choose from an empty sequence")
+        sorted_choices = context.rank_by_overlap(choices, n_gram_size, n_past_bot_utterances)
+        sorted_choice_strings = [choice for choice, overlap in sorted_choices]
+        weights = [1-overlap for choice, overlap in sorted_choices]
+        chosen_string = random.choices(sorted_choice_strings, weights=weights, k=1)[0]
+        logger.info(f"Chose {chosen_string} based on a weighted sample of choices")
+        return chosen_string
+    except:
+        return random.choice(choices)

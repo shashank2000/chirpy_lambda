@@ -110,6 +110,7 @@ class EntityGroupsForExpectedType:
         'LeBron James', 'Ronald Reagan', 'Donald Trump'})  # problem: there are quite a few musicians in here like Taylor Swift
     musical_instrument: EntityGroup = EntityGroup({'musical instrument'}, set(), entity_blacklist={'Musical instrument'})
     musical_work: EntityGroup = EntityGroup({'song', 'musical work'}, {'genre'}, entity_blacklist={'Song', 'Album'})
+    music_genre: EntityGroup = EntityGroup({'music genre'})
     musical_group: EntityGroup = EntityGroup({'musical group'}, entity_whitelist={'BTS'}, entity_blacklist={'Musical ensemble'})
     musician: EntityGroup = EntityGroup({'musician', 'musical group', 'singer'},
                                         entity_blacklist={'Tom Hanks', 'Keanu Reeves', 'Leonardo da Vinci',
