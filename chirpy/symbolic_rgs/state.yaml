@@ -88,7 +88,6 @@ User__FavoriteMusicGenreTalkable: null
 User__NoFavoriteMusicGenre: false
 User__FavoriteMusicGenreWorkDescriptor: null
 User__FavoriteSongWorkDescriptor: null
-MUSIC__supernode_starts_responding: false
 MUSIC__exit_supernode: false
 MUSIC__intro_was_triggered: false
 MUSIC__fav_instr_was_triggered: false

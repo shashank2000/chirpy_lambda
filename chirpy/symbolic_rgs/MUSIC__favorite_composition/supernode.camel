@@ -1,7 +1,7 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
 IS_FALSE(State.User__NoFavoriteInstrument) and
@@ -24,6 +24,7 @@ State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteComposition = @val(Flags.MUSIC__fav_composition_ent)
 State.User__FavoriteCompositionStr = @val(Flags.MUSIC__fav_composition_str)
 State.User__FavoriteCompositionTalkable = @val(Flags.MUSIC__fav_composition_talkable)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
 
 <SUBNODES>
 Subnode composition_str_with_database [

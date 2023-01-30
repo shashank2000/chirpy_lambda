@@ -1,12 +1,11 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_singer_was_triggered) and
 IS_NONE(State.User__FavoriteSinger) and IS_NONE(State.User__FavoriteSingerStr) and
-IS_FALSE(State.User__NoFavoriteSinger) and
-(IS_TRUE(Flags.MUSIC__force_start) or IS_FALSE(Flags.MUSIC__force_start))
+IS_FALSE(State.User__NoFavoriteSinger)
 
 <PROMPTS>
 Prompt ask_favorite_singer [
@@ -19,6 +18,7 @@ State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteSinger = @val(Flags.MUSIC__fav_singer_ent)
 State.User__FavoriteSingerStr = @val(Flags.MUSIC__fav_singer_str)
 State.User__FavoriteSingerTalkable = @val(Flags.MUSIC__fav_singer_talkable)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
 
 <SUBNODES>
 Subnode singer_exists_with_database [
@@ -48,9 +48,7 @@ Subnode generic_comment_on_band [
             - "has some really good tunes."
         }
     )
-} <
-     Flags.MUSIC__follow_up_on_known_fav_singer_song = @constant(True)
->
+}
 
 Subnode generic_comment_on_singer [
    not IS_NONE(State.User__FavoriteSingerStr) and
@@ -70,9 +68,7 @@ Subnode generic_comment_on_singer [
             - "has some really good tunes."
         }
     )
-} <
-    Flags.MUSIC__follow_up_on_known_fav_singer_song = @constant(True)
->
+}
 
 Subnode only_know_singer_str [
    IS_NONE(State.User__FavoriteSinger) and

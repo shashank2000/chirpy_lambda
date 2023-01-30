@@ -2,7 +2,7 @@ can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
 IS_FALSE(State.MUSIC__exit_supernode) and
-IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_TRUE(State.MUSIC__fav_singer_was_triggered) and
 not IS_NONE(State.User__FavoriteSingerStr) and IS_FALSE(State.User__NoFavoriteSinger) and
 IS_TRUE(Flags.MUSIC__follow_up_on_known_fav_singer_comment)
@@ -22,6 +22,7 @@ Prompt ask_if_user_has_heard [
 
 <SET_STATE>
 State.CurrentTopic = @val(Utilities.cur_entity)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
 
 <SUBNODES>
 Subnode user_pos_opinion_exists [
@@ -55,4 +56,4 @@ Subnode user_neutral_opinion_exists [
 }
 
 <SET_STATE_AFTER>
- Flags.MUSIC__follow_up_on_known_fav_singer_song = @constant(True)
+Flags.MUSIC__fav_singer_comment_just_triggered = @constant(True)

@@ -1,7 +1,7 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_song_was_triggered) and
 not IS_NONE(State.User__FavoriteSongStr) and IS_FALSE(State.User__NoFavoriteSong) and
@@ -17,6 +17,7 @@ Prompt ask_fav_song_opinion [
 
 <SET_STATE>
 State.CurrentTopic = @val(Utilities.cur_entity)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
 
 <SUBNODES>
 

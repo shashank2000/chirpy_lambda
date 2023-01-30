@@ -31,8 +31,6 @@ def get_song_entity(context):
 
 @nlu_processing
 def get_flags(context):
-
-
     # Find entity with database
     song_str_database_slot = None
     slots_with_database = NameFavoriteSongWithDatabaseTemplate().execute(context.utterance.lower())
@@ -54,7 +52,7 @@ def get_flags(context):
             song_str = lookup("music_song_str_wiki", song_str_database_slot)['database_key']
         else:
             song_str = song_str_database_slot
-        song_wiki_doc_title = lookup("music_genre", song_str)['wiki_doc_title']
+        song_wiki_doc_title = lookup("music_song", song_str)['wiki_doc_title']
         song_ent = get_entity_by_wiki_name(song_wiki_doc_title)
     elif song_ent:
         song_str = song_ent.name

@@ -1,25 +1,36 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_song_was_triggered) and
 IS_NONE(State.User__FavoriteSong) and IS_NONE(State.User__FavoriteSongStr) and
-IS_FALSE(State.User__NoFavoriteSong) and
-(IS_NONE(State.User__FavoriteSinger) or not IS_NONE(State.User__FavoriteSinger)) and
-(IS_NONE(State.User__FavoriteMusicGenre) or not IS_NONE(State.User__FavoriteMusicGenre)) and
-(IS_TRUE(Flags.MUSIC__force_start) or IS_FALSE(Flags.MUSIC__force_start))
+IS_FALSE(State.User__NoFavoriteSong)
 
 <PROMPTS>
 Prompt ask_song_when_singer_ent_exists [
     IS_TRUE(State.MUSIC__fav_singer_was_triggered) and
-    not IS_NONE(State.User__FavoriteSinger)
+    not IS_NONE(State.User__FavoriteSinger) and
+    IS_FALSE(Prevflags.MUSIC__fav_singer_comment_just_triggered)
 ] {
     - "You mentioned that"
     - @val(State.User__FavoriteSinger | talkable)
     - "is your favorite singer."
     - "What"
     - "is your favorite"
+    - @val(State.User__FavoriteSinger | talkable)
+    - "song?"
+} <
+    State.User__FavoriteSongWorkDescriptor = "song"
+>
+
+Prompt ask_song_when_singer_ent_exists_quick_follow_up [
+    IS_TRUE(State.MUSIC__fav_singer_was_triggered) and
+    not IS_NONE(State.User__FavoriteSinger) and
+    IS_TRUE(Prevflags.MUSIC__fav_singer_comment_just_triggered)
+] {
+    - "Do you have any other"
+    - "favorite"
     - @val(State.User__FavoriteSinger | talkable)
     - "song?"
 } <
@@ -50,6 +61,7 @@ State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteSong = @val(Flags.MUSIC__fav_song_ent)
 State.User__FavoriteSongStr = @val(Flags.MUSIC__fav_song_str)
 State.User__FavoriteSongTalkable = @val(Flags.MUSIC__fav_song_talkable)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
 
 <SUBNODES>
 Subnode make_comment_with_database [

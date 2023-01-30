@@ -1,7 +1,7 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_TRUE(State.MUSIC__fav_instr_was_triggered) and
 IS_TRUE(State.User__NoFavoriteInstrument) and
@@ -17,6 +17,7 @@ State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__InstrumentToLearn = @val(Flags.MUSIC__instr_to_learn_ent)
 State.User__InstrumentToLearnStr = @val(Flags.MUSIC__instr_to_learn_str)
 State.User__InstrumentToLearnTalkable = @val(Flags.MUSIC__instr_to_learn_talkable)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
 
 <SUBNODES>
 Subnode instr_to_learn_exists_with_database [

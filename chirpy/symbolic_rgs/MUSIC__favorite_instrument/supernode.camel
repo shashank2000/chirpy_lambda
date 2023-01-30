@@ -1,12 +1,11 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_instr_was_triggered) and
 IS_NONE(State.User__FavoriteInstrument) and IS_NONE(State.User__FavoriteInstrumentStr) and
-IS_FALSE(State.User__NoFavoriteInstrument) and
-(IS_TRUE(Flags.MUSIC__force_start) or IS_FALSE(Flags.MUSIC__force_start))
+IS_FALSE(State.User__NoFavoriteInstrument)
 
 <PROMPTS>
 Prompt ask_favorite_instrument [
@@ -44,6 +43,7 @@ State.CurrentTopic = @val(Utilities.cur_entity)
 State.User__FavoriteInstrument = @val(Flags.MUSIC__fav_instr_ent)
 State.User__FavoriteInstrumentStr = @val(Flags.MUSIC__fav_instr_str)
 State.User__FavoriteInstrumentTalkable = @val(Flags.MUSIC__fav_instr_talkable)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
 
 <SUBNODES>
 Subnode instr_exists_with_database [

@@ -13,6 +13,7 @@ class NameFavoriteCompositionTemplate(RegexTemplate):
         'positive_adjective': POSITIVE_ADJECTIVES,
         'positive_verb': POSITIVE_VERBS,
         'positive_adverb': POSITIVE_ADVERBS,
+        'frequency_adverb': FREQUENCY_ANSWERS,
         'play_word': ['have been playing', 'playing', 'play' 'played', 'to play'],
         'yes_word': YES_WORDS,
         'ending': '([.!]||with .+)$'

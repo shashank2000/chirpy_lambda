@@ -1,12 +1,11 @@
 can_only_prompt_once_for = State.CurrentTopic
 
 <ENTRY_CONDITIONS>
-IS_TRUE(State.MUSIC__supernode_starts_responding) and
+IS_TRUE(Flags.MUSIC__supernode_starts_responding) and
 IS_FALSE(State.MUSIC__exit_supernode) and
 IS_FALSE(State.MUSIC__fav_genre_was_triggered) and
 IS_NONE(State.User__FavoriteMusicGenre) and IS_FALSE(State.User__NoFavoriteMusicGenre) and
-IS_NONE(State.User__FavoriteSong) and
-(IS_TRUE(Flags.MUSIC__force_start) or IS_FALSE(Flags.MUSIC__force_start))
+IS_NONE(State.User__FavoriteSong)
 
 <PROMPTS>
 Prompt favorite_genre [
@@ -20,6 +19,7 @@ State.User__FavoriteMusicGenre = @val(Flags.MUSIC__fav_genre)
 State.User__FavoriteMusicGenreStr = @val(Flags.MUSIC__fav_genre_str)
 State.User__FavoriteMusicGenreTalkable = @val(Flags.MUSIC__fav_genre_talkable)
 State.User__FavoriteMusicGenreWorkDescriptor = @val(Flags.MUSIC__fav_genre_work_descriptor)
+Flags.MUSIC__supernode_starts_responding = @constant(True)
 
 <SUBNODES>
 Subnode make_comment_with_database [

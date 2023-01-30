@@ -89,7 +89,7 @@
 - MOVIE__user_mentioned_preferred_genre
 - MOVIE__ask_for_fav_aspect
 - MOVIE__ask_for_fav_movie
-- MUSIC__force_start
+- MUSIC__supernode_starts_responding
 - MUSIC__user_listens_frequently
 - MUSIC__user_listens_everyday
 - MUSIC__user_has_positive_response
@@ -116,7 +116,7 @@
 - MUSIC__fav_singer_comment
 - MUSIC__user_heard_but_do_not_like
 - MUSIC__follow_up_on_known_fav_singer_comment
-- MUSIC__follow_up_on_known_fav_singer_song
+- MUSIC__fav_singer_comment_just_triggered
 - MUSIC__fav_song_ent
 - MUSIC__fav_song_str
 - MUSIC__fav_song_talkable
