@@ -1,4 +1,5 @@
 import os
+import random
 import re
 
 from agents.alexa.event import Event
@@ -13,6 +14,10 @@ app = Flask(__name__)
 from flask_cors import CORS
 CORS(app, origins='*')
 
+HAPPYBOT_ART_URL = "https://i.ibb.co/T0Xn1rq/Untitled-Artwork-3.jpg"
+NEUTRALBOT_ART_URL = "https://i.ibb.co/1Xrjm7D/Untitled-Artwork-2.jpg"
+BOT_ART_URLS = [HAPPYBOT_ART_URL, NEUTRALBOT_ART_URL]
+
 @app.route('/', methods=['POST'])
 def conversational_turn():
     json_args = request.get_json(force=True)
@@ -24,15 +29,23 @@ def conversational_turn():
     agent = RemoteAlexaAgent(event)
     response, deserialized_current_state = agent.process_utterance(alexa_asr_user_utterance)
 
+    BOT_ART_URL = random.choice(BOT_ART_URLS)
+
     #TODO: Consider returning the deserialized current state
     json_response = {
         "version": "1.0",
         "response": {
-            "outputSpeech": {
-                "type": "PlainText",
-                "text": response
-            }
-        }
+            "outputSpeech": {"type": "PlainText", "text": response},
+            "card": {
+                "type": "Standard",
+                "title": "To quit, try 'Alexa, exit.'",
+                "text": "Alexa Prize Socialbot Grand Challenge 5",
+                "image": {
+                    "largeImageUrl": BOT_ART_URL,
+                    "smallImageUrl": BOT_ART_URL,
+                },
+            },
+        },
     }
     return json_response
 
