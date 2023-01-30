@@ -64,3 +64,4 @@ Subnode catch_all [
 
 <SET_STATE_AFTER>
 State.MUSIC__fav_genre_was_triggered = @constant(True)
+Flags.MUSIC__fav_genre_just_triggered = @constant(True)

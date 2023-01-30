@@ -16,8 +16,7 @@ Prompt ask_song_when_singer_ent_exists [
     - "You mentioned that"
     - @val(State.User__FavoriteSinger | talkable)
     - "is your favorite singer."
-    - "What"
-    - "is your favorite"
+    - "What is your favorite"
     - @val(State.User__FavoriteSinger | talkable)
     - "song?"
 } <
@@ -39,10 +38,27 @@ Prompt ask_song_when_singer_ent_exists_quick_follow_up [
 
 Prompt ask_song_when_genre_ent_exists [
     IS_TRUE(State.MUSIC__fav_genre_was_triggered) and
-    not IS_NONE(State.User__FavoriteMusicGenre)
+    not IS_NONE(State.User__FavoriteMusicGenre) and
+    IS_FALSE(Prevflags.MUSIC__fav_genre_just_triggered)
+] {
+    - "You mentioned that"
+    -  @val(State.User__FavoriteMusicGenreTalkable | lower)
+    - "is your favorite music genre."
+    - "What is your favorite"
+    - @helper.get_adjective_form(@val(State.User__FavoriteMusicGenreTalkable | lower))
+    - @val(State.User__FavoriteMusicGenreWorkDescriptor)
+    - "?"
+} <
+    State.User__FavoriteSongWorkDescriptor = @val(State.User__FavoriteMusicGenreWorkDescriptor)
+>
+
+Prompt ask_song_when_genre_ent_exists_quick_follow_up [
+    IS_TRUE(State.MUSIC__fav_genre_was_triggered) and
+    not IS_NONE(State.User__FavoriteMusicGenre) and
+    IS_TRUE(Prevflags.MUSIC__fav_genre_just_triggered)
 ] {
     - "What is your favorite"
-    - @val(State.User__FavoriteMusicGenreStr)
+    - @helper.get_adjective_form(@val(State.User__FavoriteMusicGenreTalkable | lower))
     - @val(State.User__FavoriteMusicGenreWorkDescriptor)
     - "?"
 } <

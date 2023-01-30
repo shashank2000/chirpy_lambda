@@ -90,7 +90,7 @@ class NameFavoriteSongWithDatabaseTemplate(RegexTemplate):
     }
 
     templates = [
-        OPTIONAL_TEXT_PRE + "{database_song}[.!]?" + OPTIONAL_TEXT_POST
+        OPTIONAL_TEXT_PRE + "[\'\"]?{database_song}[.!\'\"]?" + OPTIONAL_TEXT_POST
     ]
 
     positive_examples = []

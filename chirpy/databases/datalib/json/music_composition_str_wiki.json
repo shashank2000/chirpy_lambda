@@ -2,13 +2,28 @@
     "symphony no. 5": {
         "database_key": "symphony no. 5 (mahler)"
     },
+    "mahler's fifth symphony": {
+        "database_key": "symphony no. 5 (mahler)"
+    },
+    "mahler fifth symphony": {
+        "database_key": "symphony no. 5 (mahler)"
+    },
     "symphony no. 9": {
+        "database_key": "symphony no. 9 (dvo\u0159\u00e1k)"
+    },
+    "dvořák's ninth symphony": {
+        "database_key": "symphony no. 9 (dvo\u0159\u00e1k)"
+    },
+    "dvořák ninth symphony": {
         "database_key": "symphony no. 9 (dvo\u0159\u00e1k)"
     },
     "a midsummer night's dream": {
         "database_key": "a midsummer night's dream (mendelssohn)"
     },
     "piano sonata no. 14": {
+        "database_key": "piano sonata no. 14 (beethoven)"
+    },
+    "moonlight sonata": {
         "database_key": "piano sonata no. 14 (beethoven)"
     },
     "the sorcerer's apprentice": {
@@ -29,7 +44,10 @@
     "string quintet in e major, op. 11, no. 5": {
         "database_key": "string quintet in e major, op. 11, no. 5 (boccherini)"
     },
-    "minuet woo 10, no. 2": {
+    "minuet": {
+        "database_key": "string quintet in e major, op. 11, no. 5 (boccherini)"
+    },
+    "minuet in g": {
         "database_key": "minuet woo 10, no. 2 (beethoven)"
     },
     "cello suites": {
@@ -41,10 +59,16 @@
     "wiegenlied": {
         "database_key": "wiegenlied (brahms)"
     },
+    "lullaby": {
+        "database_key": "wiegenlied (brahms)"
+    },
     "piano concerto no. 1": {
         "database_key": "piano concerto no. 1 (liszt)"
     },
     "hungarian dances": {
+        "database_key": "hungarian dances (brahms)"
+    },
+    "hungarian dance": {
         "database_key": "hungarian dances (brahms)"
     },
     "piano sonata no. 16": {
@@ -56,13 +80,22 @@
     "palladio": {
         "database_key": "palladio (jenkins)"
     },
-    "piano concerto": {
+    "ireland piano concerto": {
         "database_key": "piano concerto (john ireland)"
     },
-    "requiem": {
+    "ireland's piano concerto": {
+        "database_key": "piano concerto (john ireland)"
+    },
+    "verdi's requiem": {
+        "database_key": "requiem (verdi)"
+    },
+    "verdi requiem": {
         "database_key": "requiem (verdi)"
     },
     "les patineurs": {
+        "database_key": "les patineurs (waltz)"
+    },
+    "skaters waltz": {
         "database_key": "les patineurs (waltz)"
     },
     "the four seasons": {
@@ -80,13 +113,19 @@
     "symphony no. 7": {
         "database_key": "symphony no. 7 (beethoven)"
     },
+    "beethoven's seventh symphony": {
+        "database_key": "symphony no. 7 (beethoven)"
+    },
+    "beethoven seventh symphony": {
+        "database_key": "symphony no. 7 (beethoven)"
+    },
     "sylvia": {
         "database_key": "sylvia (ballet)"
     },
     "prelude in c-sharp minor": {
         "database_key": "prelude in c-sharp minor (rachmaninoff)"
     },
-    "the sleeping beauty": {
+    "sleeping beauty": {
         "database_key": "the sleeping beauty (ballet)"
     },
     "lohengrin": {
@@ -98,10 +137,28 @@
     "m\u00e9ditation": {
         "database_key": "m\u00e9ditation (tha\u00efs)"
     },
+    "meditation": {
+        "database_key": "m\u00e9ditation (tha\u00efs)"
+    },
     "wiener blut": {
         "database_key": "wiener blut (waltz)"
     },
+    "viennese blood": {
+        "database_key": "wiener blut (waltz)"
+    },
+    "vienna blood": {
+        "database_key": "wiener blut (waltz)"
+    },
+    "viennese spirit": {
+        "database_key": "wiener blut (waltz)"
+    },
     "piano sonata no. 8": {
+        "database_key": "piano sonata no. 8 (beethoven)"
+    },
+    "sonata pathétique": {
+        "database_key": "piano sonata no. 8 (beethoven)"
+    },
+    "sonata pathetique": {
         "database_key": "piano sonata no. 8 (beethoven)"
     },
     "l'arl\u00e9sienne": {
@@ -116,6 +173,9 @@
     "humoresques": {
         "database_key": "humoresques (dvo\u0159\u00e1k)"
     },
+    "humoresque": {
+        "database_key": "humoresques (dvo\u0159\u00e1k)"
+    },
     "the lark ascending": {
         "database_key": "the lark ascending (vaughan williams)"
     },
@@ -125,16 +185,34 @@
     "three marches militaires": {
         "database_key": "three marches militaires (schubert)"
     },
+    "march militaire": {
+        "database_key": "three marches militaires (schubert)"
+    },
     "symphony no. 3": {
         "database_key": "symphony no. 3 (saint-sa\u00ebns)"
     },
+    "saint-saëns third symphony": {
+        "database_key": "symphony no. 3 (saint-sa\u00ebns)"
+    },
     "nocturnes, op. 9": {
+        "database_key": "nocturnes, op. 9 (chopin)"
+    },
+    "chopin nocturne": {
+        "database_key": "nocturnes, op. 9 (chopin)"
+    },
+    "chopin's nocturne": {
         "database_key": "nocturnes, op. 9 (chopin)"
     },
     "symphony no. 94": {
         "database_key": "symphony no. 94 (haydn)"
     },
     "\u00e9tude op. 10, no. 12": {
+        "database_key": "\u00e9tude op. 10, no. 12 (chopin)"
+    },
+    "revolutionary étude": {
+        "database_key": "\u00e9tude op. 10, no. 12 (chopin)"
+    },
+    "revolutionary etude": {
         "database_key": "\u00e9tude op. 10, no. 12 (chopin)"
     },
     "danse macabre": {
@@ -144,6 +222,12 @@
         "database_key": "scheherazade (rimsky-korsakov)"
     },
     "symphony no. 6": {
+        "database_key": "symphony no. 6 (tchaikovsky)"
+    },
+    "tchaikovsky's sixth symphony": {
+        "database_key": "symphony no. 6 (tchaikovsky)"
+    },
+    "tchaikovsky sixth symphony": {
         "database_key": "symphony no. 6 (tchaikovsky)"
     },
     "ave maria": {
@@ -158,6 +242,9 @@
     "caprice no. 24": {
         "database_key": "caprice no. 24 (paganini)"
     },
+    "caprice 24": {
+        "database_key": "caprice no. 24 (paganini)"
+    },
     "clarinet concerto": {
         "database_key": "clarinet concerto (mozart)"
     },
@@ -165,6 +252,9 @@
         "database_key": "spartacus (ballet)"
     },
     "\u00e9tude op. 10, no. 3": {
+        "database_key": "\u00e9tude op. 10, no. 3 (chopin)"
+    },
+    "tristesse": {
         "database_key": "\u00e9tude op. 10, no. 3 (chopin)"
     },
     "carnival overture": {
@@ -182,13 +272,22 @@
     "zwei klavierst\u00fccke": {
         "database_key": "zwei klavierst\u00fccke (schoenberg)"
     },
+    "two piano pieces": {
+        "database_key": "zwei klavierst\u00fccke (schoenberg)"
+    },
     "carnaval": {
         "database_key": "carnaval (schumann)"
     },
     "po\u00e8me": {
         "database_key": "po\u00e8me (chausson)"
     },
+    "poeme": {
+        "database_key": "po\u00e8me (chausson)"
+    },
     "rondo in b minor for violin and piano, d 895": {
+        "database_key": "rondo in b minor for violin and piano, d 895 (schubert)"
+    },
+    "rondo in b minor": {
         "database_key": "rondo in b minor for violin and piano, d 895 (schubert)"
     },
     "la savane": {
@@ -209,13 +308,25 @@
     "polonaises, op. 71": {
         "database_key": "polonaises, op. 71 (chopin)"
     },
+    "polonaises by chopin": {
+        "database_key": "polonaises, op. 71 (chopin)"
+    },
+    "chopin's polonaises": {
+        "database_key": "polonaises, op. 71 (chopin)"
+    },
     "prelude in e major, op. 11, no. 9": {
+        "database_key": "prelude in e major, op. 11, no. 9 (scriabin)"
+    },
+    "prelude in e major": {
         "database_key": "prelude in e major, op. 11, no. 9 (scriabin)"
     },
     "fantasia in f minor": {
         "database_key": "fantasia in f minor (schubert)"
     },
     "waltzes, op. 34": {
+        "database_key": "waltzes, op. 34 (chopin)"
+    },
+    "grande valse brillante": {
         "database_key": "waltzes, op. 34 (chopin)"
     },
     "waltz in e major": {

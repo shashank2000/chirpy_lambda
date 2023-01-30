@@ -80,7 +80,7 @@ class NameFavoriteCompositionTemplate(RegexTemplate):
         "i {frequency_adverb} go for {favorite}{ending}",
         "i {frequency_adverb} {positive_verb} {favorite}{ending}",
         "i {frequency_adverb} {play_word} {favorite}{ending}",
-        "i {frequency_adverb} {positive_verb} {listen_word} {favorite}{ending}"
+        "i {frequency_adverb} {positive_verb} {play_word} {favorite}{ending}"
     ]
 
     positive_examples = [
@@ -95,7 +95,7 @@ class NameFavoriteCompositionWithDatabaseTemplate(RegexTemplate):
     }
 
     templates = [
-        OPTIONAL_TEXT_PRE + "{database_composition}[.!]?" + OPTIONAL_TEXT_POST
+        OPTIONAL_TEXT_PRE + "[\'\"]?{database_composition}[.!\'\"]?" + OPTIONAL_TEXT_POST
     ]
 
     positive_examples = []

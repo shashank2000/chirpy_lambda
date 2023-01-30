@@ -39,13 +39,16 @@ def get_flags(context):
 
     # Find entity with entity linker
     song_ent = get_song_entity(context)
-    song_str = None
+
 
     # Find str with slot
     song_str_wo_database_slot = None
     slots_wo_database = NameFavoriteSongTemplate().execute(context.utterance)
     if slots_wo_database is not None and 'favorite' in slots_wo_database:
         song_str_wo_database_slot = slots_wo_database['favorite']
+
+    song_str = None
+    song_talkable = None
 
     if song_str_database_slot:
         if song_str_database_slot in music_song_str_wiki:
@@ -54,18 +57,19 @@ def get_flags(context):
             song_str = song_str_database_slot
         song_wiki_doc_title = lookup("music_song", song_str)['wiki_doc_title']
         song_ent = get_entity_by_wiki_name(song_wiki_doc_title)
+        song_talkable = song_wiki_doc_title
     elif song_ent:
         song_str = song_ent.name
+        song_talkable = song_str
     elif song_str_wo_database_slot:
         song_str = song_str_wo_database_slot
+        song_talkable = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), song_str)
 
-    song_talkable = re.sub(r'\(.*?\)', '', song_str).strip() if song_str else None
-    song_talkable = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), song_talkable) if song_talkable else None
+    song_talkable = re.sub(r'\(.*?\)', '', song_talkable).strip() if song_talkable else None
 
     ADD_NLU_FLAG('MUSIC__fav_song_ent', song_ent)
     ADD_NLU_FLAG('MUSIC__fav_song_str', song_str)
     ADD_NLU_FLAG('MUSIC__fav_song_talkable', song_talkable)
-
 
 @nlu_processing
 def get_background_flags(context):
