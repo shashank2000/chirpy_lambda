@@ -95,7 +95,7 @@ class NameFavoriteCompositionWithDatabaseTemplate(RegexTemplate):
     }
 
     templates = [
-        OPTIONAL_TEXT_PRE + "{database_composition}[.!]?" + OPTIONAL_TEXT_POST
+        OPTIONAL_TEXT_PRE + "[\'\"]?{database_composition}[.!\'\"]?" + OPTIONAL_TEXT_POST
     ]
 
     positive_examples = []

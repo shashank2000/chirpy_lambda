@@ -8,7 +8,7 @@ class NameFavoriteGenreWithDatabaseTemplate(RegexTemplate):
     }
 
     templates = [
-        OPTIONAL_TEXT_PRE + "{database_genre}[.!]?" + OPTIONAL_TEXT_POST
+        OPTIONAL_TEXT_PRE + "[\'\"]?{database_genre}[.!\'\"]?" + OPTIONAL_TEXT_POST
     ]
 
     positive_examples = []
