@@ -30,13 +30,16 @@ def get_flags(context):
 
     # Find entity with entity linker
     composition_ent = get_composition_entity(context)
-    composition_str = None
+
 
     # Find str with slot
     composition_str_wo_database_slot = None
     slots_wo_database = NameFavoriteCompositionTemplate().execute(context.utterance)
     if slots_wo_database is not None and 'favorite' in slots_wo_database:
         composition_str_wo_database_slot = slots_wo_database['favorite']
+
+    composition_str = None
+    composition_talkable = None
 
     if composition_str_database_slot:
         if exists("music_composition_str_wiki", composition_str_database_slot):
@@ -45,13 +48,15 @@ def get_flags(context):
             composition_str = composition_str_database_slot
         composition_wiki_doc_title = lookup("music_composition", composition_str)['wiki_doc_title']
         composition_ent = get_entity_by_wiki_name(composition_wiki_doc_title)
+        composition_talkable = composition_wiki_doc_title
     elif composition_ent:
         composition_str = composition_ent.name
+        composition_talkable = composition_str
     elif composition_str_wo_database_slot:
         composition_str = composition_str_wo_database_slot
+        composition_talkable = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), composition_str)
 
-    composition_talkable = re.sub(r'\(.*?\)', '', composition_str.lower()).strip() if composition_str else None
-    composition_talkable = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), composition_talkable) if composition_talkable else None
+    composition_talkable = re.sub(r'\(.*?\)', '', composition_talkable).strip() if composition_talkable else None
 
     ADD_NLU_FLAG('MUSIC__fav_composition_ent', composition_ent)
     ADD_NLU_FLAG('MUSIC__fav_composition_str', composition_str)

@@ -58,7 +58,6 @@ def get_flags(context):
 
     # Find entity with entity linker
     singer_ent = get_singer_entity(context)
-    singer_str = None
 
     # Find str with slot
     singer_str_wo_database_slot = None
@@ -66,6 +65,8 @@ def get_flags(context):
     if slots_wo_database is not None and 'favorite' in slots_wo_database:
         singer_str_wo_database_slot = slots_wo_database['favorite']
 
+    singer_str = None
+    singer_talkable = None
 
     if singer_str_database_slot:
         if singer_str_database_slot in music_singer_str_wiki:
@@ -74,14 +75,16 @@ def get_flags(context):
             singer_str = singer_str_database_slot
         singer_wiki_doc_title = lookup("music_singer", singer_str)['wiki_doc_title']
         singer_ent = get_entity_by_wiki_name(singer_wiki_doc_title)
+        singer_talkable = singer_wiki_doc_title
     elif singer_ent:
         singer_str = singer_ent.name
+        singer_talkable = singer_str
     elif singer_str_wo_database_slot:
         singer_str = singer_str_wo_database_slot
+        singer_talkable = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), singer_str)
 
 
-    singer_talkable = re.sub(r'\(.*?\)', '', singer_str.lower()).strip() if singer_str else None
-    singer_talkable = re.sub('(^| |\.)(.)', lambda x: x.group().upper(), singer_talkable) if singer_talkable else None
+    singer_talkable = re.sub(r'\(.*?\)', '', singer_talkable).strip() if singer_talkable else None
 
     ADD_NLU_FLAG('MUSIC__fav_singer_ent', singer_ent)
     ADD_NLU_FLAG('MUSIC__fav_singer_str', singer_str)
