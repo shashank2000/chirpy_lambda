@@ -5,22 +5,40 @@ import re
 from agents.alexa.event import Event
 
 import jsonpickle
-from flask import Flask, request
 import uuid
 
-#from agent.agents.remote_non_persistent import RemoteNonPersistentAgent as Agent
 from agents.alexa.remote_alexa_agent import RemoteAlexaAgent
-app = Flask(__name__)
-from flask_cors import CORS
-CORS(app, origins='*')
 
 HAPPYBOT_ART_URL = "https://i.ibb.co/T0Xn1rq/Untitled-Artwork-3.jpg"
 NEUTRALBOT_ART_URL = "https://i.ibb.co/1Xrjm7D/Untitled-Artwork-2.jpg"
 BOT_ART_URLS = [HAPPYBOT_ART_URL, NEUTRALBOT_ART_URL]
 
-@app.route('/', methods=['POST'])
-def conversational_turn():
-    json_args = request.get_json(force=True)
+remote_url_config = {
+    "corenlp": {
+        "url": "http://localhost:4080"
+    },
+    "dialogact": {
+        "url": "http://localhost:4081"
+    },
+    "g2p": {
+        "url": "http://localhost:4082"
+    },
+    "question": {
+        "url": "http://localhost:4084"
+    },
+    "entitylinker": {
+        "url": "http://localhost:4086"
+    },
+    "blenderbot": {
+        "url": "http://localhost:4087"
+    },
+    "stanfordnlp": {
+        "url": "http://localhost:4089"
+    }
+}
+
+def handler(event, context):
+    
     event = Event(json_args)
 
     user_utterance = event.get(path="request.intent.slots.text.value", default_val='')
@@ -31,7 +49,7 @@ def conversational_turn():
 
     BOT_ART_URL = random.choice(BOT_ART_URLS)
 
-    # TODO: Consider returning the deserialized current state
+    # TODO(Ryan?): Consider returning the deserialized current state
     json_response = {
         "version": "1.0",
         "response": {
@@ -56,42 +74,6 @@ def convert_to_alexa_asr(sentence: str):
     alexa_asr_sentence = re.sub(r"[\s]+", " ", alexa_asr_sentence)
     alexa_asr_sentence = alexa_asr_sentence.lower().strip()
     return alexa_asr_sentence
-
-if __name__ == '__main__':
-    remote_url_config = {
-        "corenlp": {
-            "url": "http://localhost:4080"
-        },
-        "dialogact": {
-            "url": "http://localhost:4081"
-        },
-        "g2p": {
-            "url": "http://localhost:4082"
-        },
-        # "gpt2ed": {
-        #     "url": "http://localhost:4083"
-        # },
-        "question": {
-            "url": "http://localhost:4084"
-        },
-        "entitylinker": {
-            "url": "http://localhost:4086"
-        },
-        "blenderbot": {
-            "url": "http://localhost:4087"
-        },
-        # "responseranker": {
-        #     "url": "http://localhost:4088"
-        # },
-        "stanfordnlp": {
-            "url": "http://localhost:4089"
-        },
-        # "infiller": {
-        #     "url": "WILL HARDCODE THIS" # TODO (eric): REPLACE THIS WITH SOMETHING MEANINGFUL
-        # } if args.use_colbert else { # chirpy2022 project
-        #     "url": "http://localhost:4090"
-        # }
-    }
 
     # initializing environment variables for the session based off of remote config urls
     for callable, config in remote_url_config.items():

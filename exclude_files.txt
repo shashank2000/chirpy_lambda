@@ -1,8 +1,0 @@
-.git/*
-convpara/*
-doc/*
-notebooks/*
-cruft/*
-entity_linker_eval/*
-idf/*
-docker/*

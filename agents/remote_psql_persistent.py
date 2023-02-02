@@ -11,7 +11,6 @@ from agents.remote_non_persistent import RemoteNonPersistentAgent
 import psycopg2
 import psycopg2.extras
 
-import pudb
 
 def db_connect():
     return psycopg2.connect(dbname="session_store", user=os.environ['POSTGRES_USER'], password=os.environ["POSTGRES_PASSWORD"], host=os.environ["POSTGRES_HOST"])
@@ -45,7 +44,6 @@ class StateTable:
             start_time = time.time()
             timeout = 2  # second
             # while (item is None and time.time() < start_time + timeout):
-            # pudb.set_trace()
             with get_db_cursor() as curs:
                 curs.execute(f"SELECT state from {self.table_name} where session_id=%(session_id)s",
                              {'session_id':session_id})
@@ -152,7 +150,6 @@ class RemotePersistentAgent(RemoteNonPersistentAgent):
         return len(self.user_table.fetch(user_id)) == 0
 
     def process_utterance(self, user_utterance):
-        # pudb.set_trace()
         handler = self.create_handler()
         current_state = self.get_state_attributes(user_utterance)
         user_attributes = self.get_user_attributes()

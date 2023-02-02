@@ -56,3 +56,4 @@ chirpy/symbolic_rgs/PLACES__intro/worldcities.csv
 test_script.txt
 .nova/*
 .vercel
+node_modules
