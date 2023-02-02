@@ -1,0 +1,46 @@
+name: music_handle_opinion
+# define global coarse-grained treelet entry requirements here
+# (for ALL convo entering this treelet)
+requirements:
+  - entering_music_rg: True
+
+prompt_ranking: 2 # ranking relative to other supernodes' unconditional prompt
+unconditional_prompt_updates:
+  contextual_prompt:
+    prompt_type: PromptType.CONTEXTUAL
+    start_discussing_music: True
+    have_prompted: True
+
+# define the convo-path relevant state updates made by each subnode
+# each subnode MUST define a prompt_treelet
+prompt:
+  # multiple matching prompts will be returned uniformly at random 
+  - required: None
+    prompt: 'Do you like music too?'
+  - required: None
+    prompt: 'Do you listen to music often?'
+
+required_exposed_variables: None
+
+subnode_state_updates:
+  listens_frequently:
+    answer_type: 'AnswerType.QUESTION_SELFHANDLING'
+    start_discussing_music: True
+  listens_everday:
+    answer_type: 'AnswerType.QUESTION_SELFHANDLING'
+    start_discussing_music: True
+  does_not_listen:
+    answer_type: 'AnswerType.NONE'
+    exit_music_rg: True
+  unsure_about_music:
+    answer_type: 'AnswerType.QUESTION_SELFHANDLING'
+    start_discussing_music: True
+  likes_music:
+    answer_type: 'AnswerType.QUESTION_SELFHANDLING'
+    start_discussing_music: True
+  catch_all:
+    exit_music_rg: True
+
+global_post_supernode_state_updates:
+  # state updates done by all paths out of this supernode (regardless of subnode)
+  entering_music_rg: False

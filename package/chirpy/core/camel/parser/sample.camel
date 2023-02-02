@@ -1,0 +1,42 @@
+# This is an example comment
+
+<ENTRY_CONDITIONS>
+IS_NOT_NONE(State.User__FavoriteFood) and (
+    IS_NOT_NONE(State.User__FavoriteFoodFactoidYear) or 
+    IS_NOT_NONE(State.User__FavoriteFoodFactoidOrigin)
+)
+
+<PROMPTS>
+Prompt origin_year_factoid_prompt [
+    IS_NOT_NONE(State.User__FavoriteFoodFactoidYear) and
+    IS_NOT_NONE(State.User__FavoriteFoodFactoidOrigin)
+] {
+    - "Did you know that"
+    - @val(State.User__FavoriteFood
+    - @inflect(
+        inflect_token="was", 
+        inflect_entity=State.User__FavoriteFood | lower
+      )
+    - "first made in"
+    - @val(State.User__FavoriteFoodFactoidOrigin)
+    - "around"
+    - @val(State.User__FavoriteFoodFactoidYear)
+    - "?"
+    - "I can't believe people have been eating"
+    - @val(State.User__FavoriteFood)
+    - "for so long!"
+}
+
+<SUBNODES>
+Subnode open_ended_neural_fallback [ ] {
+    - @neural_generation(prefix="")
+}
+
+<SET_STATE_AFTER>
+State.User__FavoriteFood = {
+    @val(Utilities.cur_entity | lower)
+}
+
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+    @constant(True)
+}

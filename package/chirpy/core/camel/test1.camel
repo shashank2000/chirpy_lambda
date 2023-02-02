@@ -1,0 +1,115 @@
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__FavoriteFood) and IS_NONE(State.User__FavoriteFood)
+
+<ENTRY_LOCALS>
+Locals.question_intro = {
+	- @one_of(
+		{"I was wondering."},
+		{"I have a question."},
+	)
+}
+
+<PROMPTS>
+Prompt favorite_food [ ] {
+	- @val(Locals.question_intro)
+	- "What's your top food?"
+}
+
+[
+	Prompt favorite_food_a [ ] {
+		- @val(Locals.question_intro)
+		"What's your favorite food?"
+	}
+
+	Prompt favorite_food_b [ ] {
+		"What's your favorite food?"
+	}
+]
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.FOOD__user_mentioned_food)
+
+<LOCALS>
+Locals.intro_statement = {
+	- @one_of(
+		{"Ah yes"},
+		{"Oh yeah"},
+	)
+	- @val(Utilities.cur_entity_talkable_lower)
+	- @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
+	- @one_of (
+		"one of my favorite things to eat up here in the cloud.",
+		"such an amazing choice. It's one of my favorite foods up here in the cloud."
+	)
+}
+Locals.dictionary = @constant({})
+Locals.dictionary["hello"] = @constant("helloworld")
+Locals.hello = @val(Locals.dictionary["hello"])
+
+Locals.dictionary["hi"] = @constant({})
+Locals.dictionary["hi"][{
+   - "hello"
+   - "nlg"
+}] = {
+   - "hi"
+   - "world"
+}
+Locals.hi = @val(Locals.dictionary["hi"]["hello nlg"])
+
+Locals.dictionary[@val(Utilities.cur_entity)] = @val(Utilities.cur_entity | talkable | lower)
+Locals.cur = @val(Locals.dictionary[@val(Utilities.cur_entity)])
+
+<SET_STATE>
+State.User__FavoriteFood = @val(Utilities.cur_entity)
+State.User__FavoriteFoodTalkable = @val(Utilities.cur_entity_talkable_lower)
+State.User__FavoriteFoodFactoidYear = @helper.get_food_year(@val(Utilities.cur_entity_name))
+State.User__FavoriteFoodFactoidOrigin = @helper.get_food_origin(@val(Utilities.cur_entity_name))
+State.User__FavoriteFoodIngredient = @helper.get_food_ingredient(@val(Utilities.cur_entity_name))
+State.User__FavoriteFoodIngredientOf = @helper.get_food_ingredient_of(@val(Utilities.cur_entity_name))
+State.User__FavoriteFoodTexture = @helper.get_food_texture(@val(Utilities.cur_entity_name))
+
+<SUBNODES>
+Subnode make_ingredient_attribute_comment [
+	IS_NOT_NONE(State.User__FavoriteFoodIngredient)
+] {
+	- @val(Locals.intro_statement)
+	- @val(Locals.hello)
+  - @val(Locals.hi)
+  - @val(Locals.cur)
+	- "Personally, I especially like the"
+	- @val(State.User__FavoriteFoodIngredient)
+	- ,
+	- "I think it gives"
+	- @inflect(inflect_token="them", inflect_entity=Utilities.cur_entity)
+	- "a really nice flavor."
+}
+
+[
+	Subnode subnode1 [
+		IS_NOT_NONE(State.User__FavoriteFoodIngredient)
+	] {
+		- "Hello,"
+		- "World!"
+	}
+
+	Subnode subnode2 [
+		IS_NOT_NONE(State.User__FavoriteFoodIngredient)
+	] {
+		- "Hello,"
+		- "World!"
+	}
+]
+
+Subnode default [
+] {
+	- @val(Locals.intro_statement)
+	- @neural_generation(prefix={
+		- "I especially love how"
+		- @inflect(inflect_token="it's", inflect_entity=Utilities.cur_entity)
+	})
+}
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+	@constant(True)
+}

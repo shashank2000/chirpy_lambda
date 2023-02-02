@@ -1,0 +1,310 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(Flags.PERSONALISSUE__respond_to_personal_issue)
+and NOT IS_NONE(State.CurrentTopic)
+
+<PROMPTS>
+Prompt personal_issue_subsequent_turn [
+] {
+  - ""
+}
+
+<LOCALS>
+Locals.validation_statement = {
+  - @one_of(
+    "Mhm, I see.",
+    "Right, I see.",
+    "Ah, okay then.",
+    "I see.",
+    "Mm, I see.",
+    "Alright, I see.",
+    "Mhm, I hear you."
+  )
+  - @one_of(
+    "That sounds frustrating.",
+    "How awful, I'm sorry.",
+    "That's tough and really unfortunate."
+  )
+}
+
+Locals.subsequent_turn_statement = {
+  - @one_of(
+    "I'm sorry to hear that.",
+    "That sounds difficult.",
+    "That's really unfortunate.",
+    "That sounds frustrating.",
+    "How awful, I'm sorry.",
+    "That's tough and really unfortunate."
+  )
+  - @one_of(
+      @one_of(
+        "How long have you been feeling this way?",
+        "Is there anything you've been doing to help cope with this?",
+        "Do you think the situation might improve soon?",
+        "Is there anyone who might be able to help you get through this?"
+      ),
+      @one_of(
+        "I'm here to listen if you would like to tell me more.",
+        "I would be interested to hear more if you don't mind sharing.",
+        "Feel free to continue telling me more.",
+        "Please continue telling me more if you would like to.",
+        "I'm willing to hear more if you'd like to tell me about it.",
+        "I'd be willing to listen if you're willing to continue sharing."
+      )
+  )
+}
+
+Locals.partial_subsequent_turn_statement = {
+  - @one_of(
+      @one_of(
+        "How long have you been feeling this way?",
+        "Is there anything you've been doing to help cope with this?",
+        "Do you think the situation might improve soon?",
+        "Is there anyone who might be able to help you get through this?"
+      ),
+      @one_of(
+        "I'm here to listen if you would like to tell me more.",
+        "I would be interested to hear more if you don't mind sharing.",
+        "Feel free to continue telling me more.",
+        "Please continue telling me more if you would like to.",
+        "I'm willing to hear more if you'd like to tell me about it.",
+        "I'd be willing to listen if you're willing to continue sharing."
+      )
+  )
+}
+
+Locals.possible_continue_statement = {
+  - @one_of(
+    "Mhm, I see.",
+    "Right, I see.",
+    "Ah, okay then.",
+    "I see.",
+    "Mm, I see.",
+    "Alright, I see.",
+    "Mhm, I hear you."
+  )
+  - @one_of(
+    "Would you like to tell me more about this?",
+    "Is there anything else you would like to tell me about this?",
+    "Was there something else you would like to talk about regarding this?",
+    "Is there anything else you would like to bring up?",
+    "Would you like to tell me more about that?",
+    "Would you like to talk more about that?",
+    "Do you want to talk about this more?",
+    "Do you want to talk more about what happened?",
+    "Would you like to tell me more about what happened?",
+    "Are there any other things that happened that you would like me to know about?",
+    "Is there anything else you want to tell me?",
+    "Do you want to talk some more about this?"
+  )
+}
+
+Locals.possible_continue_accepted_statement = {
+  - @one_of(
+    "Okay.",
+    "Sure thing.",
+    "That's fine.",
+    "That's alright."
+  )
+  - @one_of(
+    "I'm here to listen if you would like to tell me more.",
+    "I would be interested to hear more if you don't mind sharing.",
+    "Feel free to continue telling me more.",
+    "Please continue telling me more if you would like to.",
+    "I'm willing to hear more if you'd like to tell me about it.",
+    "I'd be willing to listen if you're willing to continue sharing."
+  )
+}
+
+Locals.ending_statement = {
+  - @one_of(
+    "Thank you for talking to me about this today.",
+    "Thanks for sharing this with me."
+  )
+  - @one_of(
+    {
+      - @one_of(
+        "I'm glad that we talked about this, ",
+        "I'm happy that we got to talk about this, "
+      )
+      - "and"
+      - @one_of(
+        "I hope things will turn out alright.",
+        "I hope you'll be fine.",
+        "I hope you will be kind to yourself even when things are difficult.",
+        "As with all things, we can only take it one step at a time.",
+        "I hope that you'll be able to find a way to make the best of this situation, even if it's not what you wanted.",
+        "I hope things will turn out alright in the end, no matter how difficult they may seem now."
+      )
+    },
+    @one_of(
+      "I'm glad that we talked about this.",
+      "I'm happy that we got to talk about this."
+    ),
+    {
+      - @one_of(
+        "I hope things will turn out alright, ",
+        "I hope you'll be fine, ",
+        "I hope you will be kind to yourself even when things are difficult, ",
+        "As with all things, we can only take it one step at a time, ",
+        "I hope that you'll be able to find a way to make the best of this situation, even if it's not what you wanted, ",
+        "I hope things will turn out alright in the end, no matter how difficult they may seem now, "
+      )
+      - "and"
+      - @one_of(
+        "I'm always here to listen if you need it.",
+        "I'm always happy to listen if you'd like to talk about this again.",
+        "I'll be here with a listening ear if you'd like to talk about this again."
+      )
+    }
+  )
+  - "Let's talk about something else then."
+}
+
+Locals.can_enter_subsequent_turn = (
+  IS_TRUE(Flags.GlobalFlag__personal_sharing_negative) or
+  IS_TRUE(Flags.PERSONALISSUE__is_continued_sharing) or 
+  (IS_FALSE(Prevflags.PERSONALISSUE__user_has_personal_issue) and IS_TRUE(Flags.PERSONALISSUE__short_response)) or
+  (
+    IS_TRUE(Prevflags.PERSONALISSUE__user_has_personal_issue) and 
+    IS_FALSE(Prevflags.PERSONALISSUE__need_confirmation_for_further_discussion) and 
+    IS_FALSE(Prevflags.PERSONALISSUE__confirming_further_discussion) and 
+    IS_TRUE(Prevflags.PERSONALISSUE__responded_with_question) and
+    (IS_TRUE(Flags.GlobalFlag__YES) or IS_TRUE(Flags.GlobalFlag__NO))
+  ) or
+  (
+    IS_TRUE(Prevflags.PERSONALISSUE__user_has_personal_issue) and
+    IS_FALSE(Prevflags.PERSONALISSUE__need_confirmation_for_further_discussion) and
+    IS_FALSE(Prevflags.PERSONALISSUE__confirming_further_discussion) and
+    IS_FALSE(Prevflags.PERSONALISSUE__responded_with_question) and
+    IS_TRUE(Flags.PERSONALISSUE__short_response)
+  )
+)
+
+<SUBNODES>
+Subnode subsequent_turn_after_short_response [
+  IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(Flags.PERSONALISSUE__short_response)
+] {
+  - @one_of(
+    "Okay, I'm listening.",
+    "Go ahead, I'm listening."
+  )
+} <
+  Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+  Flags.PERSONALISSUE__user_has_personal_issue = @constant(True)
+>
+
+Subnode subsequent_turn_after_question_response [
+  IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(Prevflags.PERSONALISSUE__responded_with_question)
+] {
+  - @val(Locals.validation_statement)
+} <
+  Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+  Flags.PERSONALISSUE__user_has_personal_issue = @constant(True)
+>
+
+Subnode subsequent_turn_templated [
+  IS_TRUE(Locals.can_enter_subsequent_turn) and IS_TRUE(Prevflags.PERSONALISSUE__LastTurnUsedNeuralGeneration)
+] {
+  - @val(Locals.subsequent_turn_statement)
+} <
+  Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+  Flags.PERSONALISSUE__user_has_personal_issue = @constant(True)
+>
+
+Subnode subsequent_turn_neural [
+  IS_TRUE(Locals.can_enter_subsequent_turn) and IS_FALSE(Prevflags.PERSONALISSUE__LastTurnUsedNeuralGeneration)
+] {
+  - @neural_generation(prefix = {
+    - @one_of(
+      "That sounds frustrating.",
+      "How awful, I'm sorry.",
+      "That's tough and really unfortunate."
+    )
+    - @one_of(
+      "hopefully",
+      "I hope",
+    )
+  })
+  - @val(Locals.partial_subsequent_turn_statement)
+} <
+  Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+  Flags.PERSONALISSUE__LastTurnUsedNeuralGeneration = @constant(True)
+  Flags.PERSONALISSUE__user_has_personal_issue = @constant(True)
+>
+
+Subnode possible_continue_accepted [
+  (
+    (
+      IS_TRUE(Prevflags.PERSONALISSUE__user_has_personal_issue) and
+      IS_FALSE(Prevflags.PERSONALISSUE__need_confirmation_for_further_discussion) and
+      IS_FALSE(Prevflags.PERSONALISSUE__confirming_further_discussion) and
+      IS_FALSE(Prevflags.PERSONALISSUE__responded_with_question) and
+      IS_TRUE(Flags.GlobalFlag__YES)
+    ) or
+    (
+      IS_TRUE(Prevflags.PERSONALISSUE__user_has_personal_issue) and
+      IS_TRUE(Prevflags.PERSONALISSUE__need_confirmation_for_further_discussion) and
+      IS_FALSE(Prevflags.PERSONALISSUE__confirming_further_discussion) and
+      IS_TRUE(Flags.GlobalFlag__YES)
+    )
+  )
+] {
+  - @val(Locals.possible_continue_accepted_statement)
+} <
+  Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+  Flags.PERSONALISSUE__user_has_personal_issue = @constant(True)
+  Flags.PERSONALISSUE__confirming_further_discussion = @constant(True)
+>
+
+Subnode ending [
+  (
+    IS_TRUE(Flags.GlobalFlag__DISINTERESTED) or
+    IS_TRUE(Flags.PERSONALISSUE__gratitude) or
+    (
+      (
+        IS_FALSE(Prevflags.PERSONALISSUE__user_has_personal_issue) or
+        IS_TRUE(Prevflags.PERSONALISSUE__need_confirmation_for_further_discussion) or
+        IS_TRUE(Prevflags.PERSONALISSUE__confirming_further_discussion)
+      ) and
+      IS_TRUE(Flags.GlobalFlag__NO)
+    ) or
+    (
+      IS_TRUE(Prevflags.PERSONALISSUE__user_has_personal_issue) and
+      IS_FALSE(Prevflags.PERSONALISSUE__need_confirmation_for_further_discussion) and
+      IS_FALSE(Prevflags.PERSONALISSUE__confirming_further_discussion) and
+      IS_FALSE(Prevflags.PERSONALISSUE__responded_with_question) and
+      (IS_TRUE(Flags.PERSONALISSUE__gratitude) or IS_TRUE(Flags.GlobalFlag__NO))
+    ) or
+    (
+      IS_TRUE(Prevflags.PERSONALISSUE__user_has_personal_issue) and
+      IS_TRUE(Prevflags.PERSONALISSUE__need_confirmation_for_further_discussion) and
+      IS_FALSE(Prevflags.PERSONALISSUE__confirming_further_discussion) and
+      (IS_TRUE(Flags.PERSONALISSUE__short_response) or IS_TRUE(Flags.PERSONALISSUE__noncommittal))
+    )
+  )
+] {
+  - @val(Locals.ending_statement)
+}
+
+Subnode possible_continue [
+] {
+  - @neural_generation(prefix = {
+    - @one_of(
+      "That sounds frustrating.",
+      "How awful, I'm sorry.",
+      "That's tough and really unfortunate."
+    )
+    - @one_of(
+      "hopefully",
+      "I hope",
+    )
+  })
+  - @val(Locals.possible_continue_statement)
+} <
+  Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+  Flags.PERSONALISSUE__user_has_personal_issue = @constant(True)
+  Flags.PERSONALISSUE__need_confirmation_for_further_discussion = @constant(True)
+>
+
+<SET_STATE_AFTER>
+Flags.PERSONALISSUE__responded_with_question = @helper.response_contains_question(@val(Utilities.response_text))

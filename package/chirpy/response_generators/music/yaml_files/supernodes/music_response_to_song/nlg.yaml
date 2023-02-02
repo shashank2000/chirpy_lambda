@@ -1,0 +1,23 @@
+response:
+  - node_name: no_response
+    entry_conditions:
+      no_response: True
+    response: "I'm sorry I must have heard you wrongly. How about we discuss something else."
+  - node_name: thats
+    entry_conditions:
+      thats: True
+    response: >-
+      {thats_response(rg)} 
+      {comment_genre(rg, state.cur_song_str, state.cur_singer_str)}
+  - node_name: did_not_know
+    entry_conditions:
+      did_not_know: True
+    response: >-
+      {didnt_know_response(rg)} 
+      {comment_genre(rg, state.cur_song_str, state.cur_singer_str)}
+  - node_name: catch_all
+    entry_conditions:
+      no_response: False
+      thats: False
+      did_not_know: False
+    response: "{comment_genre(rg, state.cur_song_str, state.cur_singer_str)}"

@@ -1,0 +1,34 @@
+%import .utils (STRING, PARAM_ARG_NAME, PARAM_ARG_VALUE, SUBNODE_NAME, _OP, _CP, _OB, _CB, _EQ, _COMMA, variable)
+%import .nlg (nlg)
+%import common.ESCAPED_STRING
+
+// conditions
+
+?condition : condition AND condition
+		   | condition OR condition
+		   | _OP condition _CP
+ 		   | unary
+			 | bool
+		   
+?unary : NOT unary
+       | predicate
+
+predicate: PREDICATE _OP variable _CP
+		 | PREDICATE_TWO _OP variable _COMMA nlg _CP
+		 | PREDICATE_LIST _OP variable _COMMA _OB nlg (_COMMA nlg)* (_COMMA)? _CB _CP
+		 | PREDICATE_ENTITY _OP _OB (entity_group_condition (_COMMA entity_group_condition)* _COMMA?)? _CB _CP
+		 | EXISTS _OP "database_name" _EQ ESCAPED_STRING _COMMA "key" _EQ nlg (_COMMA nlg)* _CP
+		 
+bool: BOOL
+
+entity_group_condition: ESCAPED_STRING
+
+PREDICATE: "IS_NONE" | "IS_NOT_NONE" | "IS_TRUE" | "IS_FALSE" 
+PREDICATE_TWO : "IS_EQUAL" | "IS_GREATER_THAN" | "IS_LESS_THAN"
+PREDICATE_LIST : "IS_IN"
+PREDICATE_ENTITY : "ENTITY_GROUP_MATCHES"
+EXISTS : "EXISTS"
+AND: "and" | "AND"
+OR: "or" | "OR"
+NOT : "not" | "NOT"
+BOOL: "true" | "True" | "false" | "False"

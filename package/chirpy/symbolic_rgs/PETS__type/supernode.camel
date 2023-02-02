@@ -1,0 +1,60 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_TRUE(State.User__HasPet)
+and IS_NONE(State.User__PetType)
+
+<PROMPTS>
+Prompt pet_type_with_name [ 
+  not IS_NONE(State.User__PetName)
+] {
+    - "What kind of pet is"
+    - @val(State.User__PetName)
+    - "?"
+}
+
+Prompt pet_type_no_name [ 
+  IS_NONE(State.User__PetName)
+] {
+    "What kind of pet do you have?"
+}
+
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__PetType = @val(Utilities.cur_entity | name | lower)
+State.User__PetTypeTalkable = @val(Utilities.cur_entity | talkable | lower)
+
+<SUBNODES>
+
+Subnode valid_type [
+  EXISTS(database_name="animal_gpt", key={@val(State.User__PetType)})
+] {
+	- "That's awesome!"
+  - "I love"
+  - @val(State.User__PetTypeTalkable)
+  - "."
+  - "Here's a fun fact about "
+  - @val(State.User__PetTypeTalkable)
+  - ": "
+  -@lookup(
+        database_name="animal_gpt",
+        key={@val(State.User__PetType)},
+        column="factoid"
+   )
+}
+
+Subnode pet_unknown [
+  IS_NONE(State.User__PetType)
+] {
+  "I don't know that type of pet! What a tragedy."
+} 
+
+Subnode default [
+] {
+  - "A great choice! Animals are great. Did you know that "
+  - "Giraffes have the same number of bones in their necks as humans do in their arms."
+} 
+
+<ENTITY_GROUPS>
+["pet"]

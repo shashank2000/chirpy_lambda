@@ -1,0 +1,114 @@
+# Topics
+
+CurrentTopic: null
+
+# Nodes
+
+User__FavoriteFood: null
+User__FavoriteFoodAttribute: null
+User__FavoriteFoodFactoidOrigin: null
+User__FavoriteFoodFactoidYear: null
+User__FavoriteFoodHasFactoid: false
+User__FavoriteFoodHasOrigin: false
+User__FavoriteFoodIngredient: null
+User__FavoriteFoodIngredientOf: null
+User__FavoriteFoodTalkable: null
+User__FavoriteFoodTexture: null
+User__FavoriteSport: null
+User__FavoritePlace: null
+User__FavoritePlaceTalkable: null
+User__FavoritePlaceComment: null
+User__FavoritePlaceFoodComment: null
+User__FavoriteCelebrity: null
+User__FavoriteCelebrityName: null
+User__FavoriteCelebrityWorkType: null
+User__FavoriteCelebrityMovie: null
+User__FavoriteCelebrityTV: null
+User__FavoriteCelebritySong: null
+User__FavoriteCelebrityCharacter: null
+User__FavoriteCelebrityPronoun: null
+User__FavoriteCelebrityCurrWork: null
+CELEB__discuss_movie: False
+CELEB__discuss_tv: False
+CELEB__discuss_song: False
+CELEB__known_work: False
+CELEB__like_same_work: False
+User__HasPet: null
+User__PetName: null
+User__HypotheticalPetType: null
+User__HypotheticalPetTypeTalkable: null
+User__PetNameGivenUp: False
+User__PetAge: null
+User__PetType: null
+User__PetTypeTalkable: null
+User__PetBreedTalkable: null
+User__PetBreed: null
+User__PetFavoriteActivity: null
+User__PetFavoriteActivityTalkable: null
+User__LikeMovie: null
+User__FavoriteMovie: null
+User__FavoriteMovieTalkable: null
+User__FavoriteMovieMainActor: null
+User__FavoriteMovieDirector: null
+User__FavoriteMovieGenre: null
+User__FavoriteMovieReason: null
+
+User__PreferredMovieActor: null
+User__PreferredMovieActorCaseSensitive: null
+User__PreferredMovieActorMovie: null
+User__PreferredMovieActorMovieDesc: null
+
+User__PreferredMovieGenre: null
+User__PreferredMovieGenreMovie: null
+User__PreferredMovieGenreMovieDesc: null
+
+# Music
+User__FavoriteInstrument: null
+User__FavoriteInstrumentStr: null
+User__FavoriteInstrumentTalkable: null
+User__NoFavoriteInstrument: false
+User__FavoriteComposition: null
+User__FavoriteCompositionStr: null
+User__FavoriteCompositionTalkable: null
+User__NoFavoriteComposition: false
+User__InstrumentToLearn: null
+User__InstrumentToLearnStr: null
+User__InstrumentToLearnTalkable: null
+User__FavoriteSinger: null
+User__FavoriteSingerStr: null
+User__FavoriteSingerTalkable: null
+User__NoFavoriteSinger: false
+User__FavoriteSong: null
+User__FavoriteSongStr: null
+User__FavoriteSongTalkable: null
+User__NoFavoriteSong: false
+User__FavoriteMusicGenre: null
+User__FavoriteMusicGenreStr: null
+User__FavoriteMusicGenreTalkable: null
+User__NoFavoriteMusicGenre: false
+User__FavoriteMusicGenreWorkDescriptor: null
+User__FavoriteSongWorkDescriptor: null
+MUSIC__exit_supernode: false
+MUSIC__intro_was_triggered: false
+MUSIC__fav_instr_was_triggered: false
+MUSIC__fav_singer_was_triggered: false
+MUSIC__fav_song_was_triggered: false
+MUSIC__fav_genre_was_triggered: false
+
+# Launch
+User__Name: null
+User__NameGivenUp: False
+LAUNCH__NumTimesAskedName: 0
+User__CurrentOpinionTopic: _get_opinion
+User__OpinionYes: False
+User__OpinionNo: False
+
+WIKI__AskedWhenInterested: False
+WIKI__AskedWhatInterested: False
+WIKI__AskedWhyInterested: False
+WIKI__currently_chosen_sections: []
+WIKI__suggested_sections: {}
+WIKI__discussed_sections: {}
+WIKI__last_discussed_section: {}
+
+

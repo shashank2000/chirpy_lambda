@@ -1,0 +1,46 @@
+<ENTRY_CONDITIONS>
+(IS_NONE(State.CurrentTopic) and IS_TRUE(Flags.CELEB__have_asked_about_celeb)) 
+ or (IS_FALSE(State.CELEB__known_work) and (IS_TRUE(State.CELEB__discuss_movie) or IS_TRUE(State.CELEB__discuss_tv) or IS_TRUE(State.CELEB__discuss_song)))
+and IS_FALSE(Flags.CELEB__move_on_to_new_topic)
+
+<PROMPTS>
+Prompt unknown_celeb [
+    IS_NONE(State.User__FavoriteCelebrity)
+]
+{
+    - "Can you tell me more about this celebrity?"
+}
+
+Prompt unknown_celeb_work [
+    not IS_TRUE(State.CELEB__known_work)
+]
+{
+    - "Can you tell me more about it?"
+}
+
+
+<SUBNODES>
+Subnode make_celeb_comment [
+    IS_NONE(State.User__FavoriteCelebrity)
+] {
+    - @one_of(
+        {"I see! That is awesome!"},
+        {"Nice, I will definitely check them out!"}
+    )
+    - "Personally, my favorite celebrity is Ethan Hawke. I'm glad he is acting in more things again! I loved him in Gattica so much!"
+}
+
+Subnode make_celeb_work_comment [
+    not IS_TRUE(State.CELEB__known_work)
+] {
+    - @one_of(
+        {"Oh, that sounds like something I might be interested in then! Thank you!"},
+        {"Cool, I will probably like it too! Thanks!"}
+    )
+}
+
+<SET_STATE_AFTER>
+Flags.CELEB__move_on_to_new_topic = {@constant(True)}
+State.CELEB__discuss_movie = {@constant(False)}
+State.CELEB__discuss_tv = {@constant(False)}
+State.CELEB__discuss_song = {@constant(False)}

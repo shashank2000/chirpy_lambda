@@ -1,0 +1,60 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+(IS_TRUE(Flags.PETS__user_has_dog)
+ or IS_TRUE(Flags.PETS__user_has_cat)
+ or IS_TRUE(Flags.PETS__user_has_rabbit)) 
+and not IS_NONE(State.User__PetType)
+and IS_NONE(State.User__PetBreed)
+
+<PROMPTS>
+Prompt pet_type_with_name [ 
+  not IS_NONE(State.User__PetName)
+] {
+    - "What breed is"
+    - @val(State.User__PetName)
+    - "?"
+}
+
+Prompt pet_type_no_name [ 
+  IS_NONE(State.User__PetName)
+] {
+    "What breed is your "
+    - @val(State.User__PetType)
+    - "?"
+}
+
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__PetBreed = @val(Utilities.cur_entity | name | lower)
+# TODO: "dutch rabbit" goes to "netherlands", so need to think about what next
+State.User__PetBreedTalkable = @val(Utilities.cur_entity | talkable | lower)
+
+<SUBNODES>
+
+Subnode valid_type_and_key_exists [
+  EXISTS(database_name="animal_gpt", key={@val(State.User__PetBreed)})
+] {
+  - @lookup(
+        database_name="animal_gpt",
+        key={@val(State.User__PetBreed)},
+        column="factoid"
+  )
+}
+
+Subnode valid_type [
+  not IS_NONE(State.User__PetBreedTalkable)
+] {
+  - "That's awesome!"
+  - "Funnily enough, "
+  - @val(State.User__PetBreedTalkable)
+  - " are one of my favorite breeds!" 
+}
+
+Subnode default [
+] {
+  - "A great choice! I'd love to own a similar pet some day."
+} <
+   Flags.PETS__ask_hypothetical_breed = @constant(True)
+>

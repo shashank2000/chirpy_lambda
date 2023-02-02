@@ -1,0 +1,140 @@
+{
+    "noise": {
+        "database_key": "noise music"
+    },
+    "bubblegum": {
+        "database_key": "bubblegum music"
+    },
+    "baroque": {
+        "database_key": "baroque music"
+    },
+    "classical": {
+        "database_key": "classical music"
+    },
+    "independent": {
+        "database_key": "independent music"
+    },
+    "intelligent dance": {
+        "database_key": "intelligent dance music"
+    },
+    "calypso": {
+        "database_key": "calypso music"
+    },
+    "hip hop": {
+        "database_key": "hip hop music"
+    },
+    "chill-out": {
+        "database_key": "chill-out music"
+    },
+    "rock": {
+        "database_key": "rock music"
+    },
+    "adult contemporary": {
+        "database_key": "adult contemporary music"
+    },
+    "popular": {
+        "database_key": "popular music"
+    },
+    "surf": {
+        "database_key": "surf music"
+    },
+    "minimal": {
+        "database_key": "minimal music"
+    },
+    "electronic": {
+        "database_key": "electronic music"
+    },
+    "renaissance": {
+        "database_key": "renaissance music"
+    },
+    "country": {
+        "database_key": "country music"
+    },
+    "house": {
+        "database_key": "house music"
+    },
+    "swing": {
+        "database_key": "swing music"
+    },
+    "romantic": {
+        "database_key": "romantic music"
+    },
+    "lo-fi": {
+        "database_key": "lo-fi music"
+    },
+    "industrial": {
+        "database_key": "industrial music"
+    },
+    "electronic body": {
+        "database_key": "electronic body music"
+    },
+    "carnatic": {
+        "database_key": "carnatic music"
+    },
+    "medieval": {
+        "database_key": "medieval music"
+    },
+    "indian classical": {
+        "database_key": "indian classical music"
+    },
+    "gospel": {
+        "database_key": "gospel music"
+    },
+    "trap": {
+        "database_key": "trap music"
+    },
+    "bluegrass": {
+        "database_key": "bluegrass music"
+    },
+    "world": {
+        "database_key": "world music"
+    },
+    "psychedelic": {
+        "database_key": "psychedelic music"
+    },
+    "trance": {
+        "database_key": "trance music"
+    },
+    "video game": {
+        "database_key": "video game music"
+    },
+    "new wave": {
+        "database_key": "new wave music"
+    },
+    "soul": {
+        "database_key": "soul music"
+    },
+    "ambient": {
+        "database_key": "ambient music"
+    },
+    "jungle": {
+        "database_key": "jungle music"
+    },
+    "drill": {
+        "database_key": "drill music"
+    },
+    "folk": {
+        "database_key": "folk music"
+    },
+    "heavy metal": {
+        "database_key": "heavy metal music"
+    },
+    "new-age": {
+        "database_key": "new-age music"
+    },
+    "dub": {
+        "database_key": "dub music"
+    },
+    "hindustani classical": {
+        "database_key": "hindustani classical music"
+    },
+    "electronic dance": {
+        "database_key": "electronic dance music"
+    },
+    "avant-garde": {
+        "database_key": "avant-garde music"
+    },
+    "pop": {
+        "database_key": "pop music"
+    }
+}

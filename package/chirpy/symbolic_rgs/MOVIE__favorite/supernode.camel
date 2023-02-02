@@ -1,0 +1,84 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+(IS_TRUE(State.User__LikeMovie) or IS_TRUE(Flags.MOVIE__ask_for_fav_movie)) and
+IS_NONE(State.User__FavoriteMovie)
+
+
+<PROMPTS>
+Prompt favorite_movie [ ] {
+    "What's your favorite movie?"
+}
+
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.MOVIE__user_mentioned_movie)
+
+
+<LOCALS>
+Locals.intro_statement = {
+    - @one_of(
+        {"Ah yes"},
+        {"Oh yeah"}
+    )
+    - ,
+    - @val(Utilities.cur_entity | talkable | lower)
+    - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
+    - @one_of(
+        "one of my favorite movies to watch up here in the cloud.",
+        "such an amazing choice. It's one of my favorite movies up here in the cloud."
+    )
+}
+
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__FavoriteMovie = @val(Utilities.cur_entity)
+State.User__FavoriteMovieTalkable = @val(Utilities.cur_entity | talkable | lower)
+State.User__FavoriteMovieMainActor = @lookup(
+        database_name="movie_info",
+        key={@val(State.User__FavoriteMovie | name)},
+        column="main_actor"
+)
+State.User__FavoriteMovieDirector = @lookup(
+        database_name="movie_info",
+        key={@val(State.User__FavoriteMovie | name)},
+        column="director"
+)
+State.User__FavoriteMovieGenre = @lookup(
+        database_name="movie_info",
+        key={@val(State.User__FavoriteMovie | name)},
+        column="genre"
+)
+Flags.MOVIE__ask_for_fav_aspect = @constant(True)
+
+
+<SUBNODES>
+Subnode make_actor_comment [
+  not IS_NONE(State.User__FavoriteMovieMainActor)
+] {
+  - @val(Locals.intro_statement)
+  - "Personally, I really loved the acting of"
+  - @val(State.User__FavoriteMovieMainActor)
+  - .
+}
+
+Subnode make_director_comment [
+  not IS_NONE(State.User__FavoriteMovieMainActor)
+] {
+  - @val(Locals.intro_statement)
+  - "Personally, I really loved the unique directing style of"
+  - @val(State.User__FavoriteMovieDirector)
+  - .
+}
+
+Subnode default [
+] {
+    - @one_of(
+        {"I haven't seen that movie yet! I'll check it out."},
+        {"I haven't seen that movie yet! Thanks for telling me about it! I will check it out."}
+    )
+}
+
+<ENTITY_GROUPS>
+["film"]

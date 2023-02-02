@@ -1,0 +1,35 @@
+can_only_prompt_once_for = State.User__CurrentOpinionTopic
+
+<ENTRY_CONDITIONS>
+not IS_NONE(State.User__CurrentOpinionTopic)
+and IS_FALSE(Flags.OPINION__knows_person_likes_activity)
+
+<PROMPTS>
+Prompt do_you_like_prompt [
+] {
+    - @one_of(
+        {"Hey, so going off topic, I'm having fun getting to know you and I wanted to hear more of your opinions. "},
+        {"Anyways, um, there was actually something else I wanted to ask you. "},
+        {"Sorry to be going off topic, but I just remembered something I meant to ask you. "},
+        {"So, this is a bit random, but I thought of an unrelated question I had for you. "},
+        {"Hmm, on a different subject, there's something I've been curious about. "},
+        {"The best part of my job is getting to know new people and there's actually something kind of random I've been wanting to ask you."}
+    )
+	- "Do you like"
+	- @val(State.User__CurrentOpinionTopic | name)
+	- "?"
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(State.User__CurrentOpinionTopic | name | topseudoentity)
+
+<SUBNODES>
+Subnode opinion_intro_response [
+] {
+	- ""
+}
+
+<SET_STATE_AFTER>
+Flags.OPINION__asked_for_opinion = @constant(True)
+Flags.OPINION__YES = @val(Flags.OPINION__YES)
+Flags.OPINION__NO = @val(Flags.GlobalFlag__NO)

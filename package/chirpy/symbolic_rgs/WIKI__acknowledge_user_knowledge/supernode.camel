@@ -1,0 +1,113 @@
+<ENTRY_CONDITIONS>
+not IS_NONE(State.CurrentTopic) and IS_FALSE(Flags.WIKI__learn_more) and IS_TRUE(Flags.WIKI__understand_user_better)
+
+<PROMPTS>
+[
+	Prompt when [ ] {
+		- @one_of(
+			"When did you start having an interest in",
+			"When did you start being interested in"
+		)
+		- @val(State.CurrentTopic | talkable)
+		- "?"
+	} <
+		State.WIKI__AskedWhenInterested = @constant(True)
+	>
+
+	Prompt what [ ] {
+		- @one_of(
+			"What got you interested in",
+			"What made you interested in"
+		)
+		- @val(State.CurrentTopic | talkable)
+		- "?"
+	} <
+		State.WIKI__AskedWhatInterested = @constant(True)
+	>
+
+	Prompt why [ ] {
+		- "Why are you interested in"
+		- @val(State.CurrentTopic | talkable)
+		- "?"
+	} <
+		State.WIKI__AskedWhyInterested = @constant(True)
+	>
+]
+
+<LOCALS>
+Locals.commiseration_acknowledgement = {
+	- @one_of(
+		"Yeah, that is rather disheartening.",
+    "That does sound very unfortunate.",
+    "Mm, it is a real shame.",
+    "Yes, it is a bit disappointing."
+	)
+}
+Locals.opinion = @helper.get_opinion(@val(State.CurrentTopic), @val(Flags.GlobalFlag__NEUTRAL_SENTIMENT), @val(Flags.GlobalFlag__POS_SENTIMENT))
+
+<SET_STATE>
+
+<SUBNODES>
+Subnode dont_know:force_activation [
+	IS_TRUE(Flags.GlobalFlag__DONT_KNOW)
+] {
+	- @one_of(
+		"That's alright.",
+		"Sure, no worries."
+	)
+	- @val(Locals.opinion)
+}
+
+Subnode no:force_activation [
+	IS_TRUE(Flags.GlobalFlag__NO)
+] {
+	- @one_of(
+		"Okay, no worries.",
+		"Sure that's fine."
+	)
+	- @val(Locals.opinion)
+}
+
+Subnode positive_opinion:force_activation [
+	IS_TRUE(Flags.GlobalFlag__POS_SENTIMENT) and IS_TRUE(Flags.GlobalFlag__OPINION)
+] {
+	- @one_of(
+		"Yeah, that's cool!",
+    "Yeah, I understand what you mean.",
+    "I know, right?"
+	)
+	- @val(Locals.opinion)
+}
+
+Subnode negative_opinion:force_activation [
+	IS_TRUE(Flags.GlobalFlag__NEG_SENTIMENT) and IS_TRUE(Flags.GlobalFlag__OPINION)
+] {
+	- "That's an interesting take."
+	- @val(Locals.opinion)
+}
+
+Subnode negative_no_opinion:force_activation [
+	IS_TRUE(Flags.GlobalFlag__NEG_SENTIMENT) and IS_FALSE(Flags.GlobalFlag__OPINION)
+] {
+	- @val(Locals.commiseration_acknowledgement)
+	- @val(Locals.opinion)
+}
+
+Subnode neutral_opinion:force_activation [
+	IS_TRUE(Flags.GlobalFlag__NEG_SENTIMENT) and IS_TRUE(Flags.GlobalFlag__OPINION)
+] {
+	- @one_of(
+		"I see, thanks for sharing that!",
+    "That was interesting, thanks for sharing that!"
+	)
+	- @val(Locals.opinion)
+}
+
+Subnode default:force_activation [ ] {
+	- @neural_generation(prefix="")
+	- @val(Locals.opinion)
+}
+
+<SET_STATE_AFTER>
+Flags.WIKI__understand_user_better = @constant(False)
+Flags.WIKI__discuss_article = @constant(True)

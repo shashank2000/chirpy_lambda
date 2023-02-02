@@ -1,0 +1,173 @@
+<PROMPTS>
+
+Prompt what_to_talk_about [ ] {
+	"What do you want to talk about?"
+}
+
+<LOCALS>
+Locals.factoid = @helper.get_factoid(@val(Utilities.cur_entity), @val(Utilities.state_manager))
+
+<SUBNODES>
+
+Subnode red_question_financial:force_activation [
+	IS_TRUE(Flags.GlobalFlag__RedQuestion__Financial)
+] {
+	"Sorry, I'm unable to comment on financial matters."
+	"Let's talk about something else!"
+}
+
+Subnode red_question_legal:force_activation [
+	IS_TRUE(Flags.GlobalFlag__RedQuestion__Legal)
+] {
+	"Sorry, I'm unable to provide legal advice. I hope I haven't overreacted, but I have to be careful about that kind of thing!"
+	"On another note,"
+}
+
+Subnode red_question_medical:force_activation [
+	IS_TRUE(Flags.GlobalFlag__RedQuestion__Medical)
+] {
+	"Sorry, I'm unable to provide medical advice. I hope I haven't overreacted, but I have to be careful about that kind of thing!"
+	"On another note,"
+}
+
+Subnode whats_your_name:force_activation [
+	IS_TRUE(Flags.GlobalFlag__WhatsYourName)
+] {
+	"Sorry, I can't tell you my real name. I have to remain anonymous for the Alexa Prize competition. But you can still call me Alexa if you want."
+	"On another note,"
+}
+
+Subnode who_made_you:force_activation [
+	IS_TRUE(Flags.GlobalFlag__WhoMadeYou)
+] {
+	"I am an Alexa Prize social bot built by a university."
+	"I hope that answers your question!"
+	"On another note,"
+}
+
+Subnode where_are_you:force_activation [
+	IS_TRUE(Flags.GlobalFlag__WhereAreYou)
+] {
+	"I live in the cloud. It's quite comfortable since it's so soft."
+	"On another note,"
+}
+
+Subnode virtual_assistant_competitor:force_activation [
+	IS_TRUE(Flags.GlobalFlag__VirtualAssistantCompetitor)
+] {
+	"Sorry, I don't know much about that so I can't really comment!"
+	"On another note,"
+}
+
+Subnode are_you_recording:force_activation [
+	IS_TRUE(Flags.GlobalFlag__AreYouRecording)
+] {
+	"I'm designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed."
+	"On Echo devices, you'll always know when your request is being processed because a blue light indicator will appear or an audio tone will sound."
+	"You can learn more by visiting amazon.com/alexaprivacy."
+	"I hope that helps! On another note,"
+}
+
+Subnode personal_issue_intro:force_activation [
+	NOT IS_IN(Utilities.cur_supernode, [
+		"PERSONALISSUES__subsequent_turn", 
+		"OPINION__subsequent_turn",
+		"OPINION__third_turn",
+		"WIKI__TODO_ADD_SUPERNODE", 
+		"ALIENS__TODO_ADD_SUPERNODE",
+		"CATEGORIES__TODO_ADD_SUPERNODE"
+	]) and IS_TRUE(Flags.GlobalFlag__personal_sharing_negative)
+] {
+	- "Thank you for sharing that with me."
+  - @one_of(
+    "I'm sorry to hear that.",
+    "That sounds difficult.",
+    "That's really unfortunate."
+  )
+  - @one_of(
+    "I'm here to listen if you would like to tell me more.",
+    "I would be interested to hear more if you don't mind sharing.",
+    "Feel free to continue telling me more.",
+    "Please continue telling me more if you would like to.",
+    "I'm willing to hear more if you'd like to tell me about it.",
+    "I'd be willing to listen if you're willing to continue sharing."
+  )
+} <
+	State.CurrentTopic = @nlg_val(@constant("PERSONALISSUESTOPIC") | topseudoentity)
+	Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+>
+
+Subnode personal_issue_intro:force_activation [
+    NOT IS_IN(Utilities.cur_supernode, [
+        "PERSONALISSUES__subsequent_turn", 
+        "OPINION__subsequent_turn",
+        "OPINION__third_turn",
+        "WIKI__TODO_ADD_SUPERNODE", 
+        "ALIENS__TODO_ADD_SUPERNODE",
+        "CATEGORIES__TODO_ADD_SUPERNODE"
+    ]) and IS_TRUE(Flags.GlobalFlag__personal_sharing_negative)
+] {
+    - "Thank you for sharing that with me."
+  - @one_of(
+    "I'm sorry to hear that.",
+    "That sounds difficult.",
+    "That's really unfortunate."
+  )
+  - @one_of(
+    "I'm here to listen if you would like to tell me more.",
+    "I would be interested to hear more if you don't mind sharing.",
+    "Feel free to continue telling me more.",
+    "Please continue telling me more if you would like to.",
+    "I'm willing to hear more if you'd like to tell me about it.",
+    "I'd be willing to listen if you're willing to continue sharing."
+  )
+} <
+    State.CurrentTopic = @nlg_val(@constant("PERSONALISSUESTOPIC") | topseudoentity)
+    Flags.PERSONALISSUE__respond_to_personal_issue = @constant(True)
+>
+
+Subnode weather [ 
+	IS_TRUE(Flags.GlobalFlag__Initiative__weather)
+] {
+	"I live in the cloud so I'm not sure what the weather is like on earth!"
+	"On another note,"
+} < 
+	State.no_entity = @constant(True)
+>
+
+Subnode factoid [
+	not IS_NONE(Locals.factoid)
+] {
+	- @one_of(
+		{"Ah yes"},
+		{"Oh yeah"}
+	)
+	- "I love talking about"
+	- @val(Utilities.cur_entity)
+	- .
+	- @val(Locals.factoid)
+	- .
+} <
+	State.CurrentTopic = @val(Utilities.cur_entity)
+>
+
+Subnode confused [
+	IS_TRUE(Flags.GlobalFlag__CONFUSED)
+] {
+	"Sorry, I'm still learning how to talk to people."
+}
+
+Subnode fallback_neural [
+] {
+	- @neural_generation(prefix={
+		- "Interesting. I'm not quite sure what to make of that."
+	})
+} <
+    State.CurrentTopic = @constant(None)
+>
+
+Subnode fallback [ ] {
+	"Sorry, I don't know what you're talking about."
+} <
+    State.CurrentTopic = @constant(None)
+>

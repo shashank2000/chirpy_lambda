@@ -1,0 +1,41 @@
+response:
+  - node_name: dont_know
+    entry_conditions:
+      dont_know: True
+    response: >-
+      {dont_know_response(rg)} 
+      {about_alexa_response(rg)}
+  - node_name: back_channel
+    entry_conditions:
+      back_channeling: True
+    response: >-
+      {back_channel_response(rg)} 
+      {about_alexa_response(rg)}
+  - node_name: everything_ans
+    entry_conditions:
+      everything_ans: True
+    response: >-
+      {everything_response(rg)} 
+      {about_alexa_response(rg)}
+  - node_name: nothing_ans
+    entry_conditions:
+      nothing_ans: True
+    response: >-
+      {nothing_response(rg)} 
+      {about_alexa_response(rg)}
+  - node_name: catch_all_no_fallback
+    entry_conditions:
+      dont_know: False
+      back_channeling: False
+      everything_ans: False
+      nothing_ans: False
+      no_fallback: True
+    response: ''
+  - node_name: catch_all_with_fallback
+    entry_conditions:
+      dont_know: False
+      back_channeling: False
+      everything_ans: False
+      nothing_ans: False
+      no_fallback: False
+    response: "{get_neural_fallback(rg, use_cached_response=True)}"

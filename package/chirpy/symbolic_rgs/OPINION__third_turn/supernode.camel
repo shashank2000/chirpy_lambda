@@ -1,0 +1,35 @@
+<ENTRY_CONDITIONS>
+IS_TRUE(Flags.OPINION__responded_to_opinion) and not IS_NONE(State.CurrentTopic)
+
+<PROMPTS>
+Prompt new_topic [ ] {
+    - "What other"
+    - @helper.get_topic_type(@val(State.CurrentTopic | name))
+    - "do you like?"
+}
+
+<SET_STATE>
+Flags.OPINION__knows_person_likes_activity = @helper.opinion_exists(@val(Flags.OPINION__last_said))
+
+<SUBNODES>
+Subnode general_response [
+	IS_TRUE(Flags.OPINION__knows_person_likes_activity)
+] {
+	- "I'd like to hear more about that activity!"
+} <
+	Flags.GlobalFlag__LastBotTurnWasOpenEnded = @constant(True)
+>
+
+Subnode general_response [
+] {
+    - @one_of(
+     {"That's interesting."},
+	 {"Oh that's fascinating."},
+	 {"Gotcha."},
+	 {"I see."}
+    )
+}
+
+<SET_STATE_AFTER>
+State.CurrentTopic = @val(Utilities.cur_entity)
+

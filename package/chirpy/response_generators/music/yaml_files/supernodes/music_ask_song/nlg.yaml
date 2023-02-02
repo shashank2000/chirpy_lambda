@@ -1,0 +1,56 @@
+response:
+  - node_name: thats
+    entry_conditions:
+      thats: True
+    response: >-
+      {thats_response(rg)} 
+      {complement_fav_song(rg, state.cur_singer_str, get_cur_song_str(rg))}
+  - node_name: didnt_know
+    entry_conditions:
+      didnt_know: True
+    response: >-
+      {didnt_know_response(rg)} 
+      {complement_fav_song(rg, state.cur_singer_str, get_cur_song_str(rg))}
+  - node_name: answered_no
+    entry_conditions:
+      answered_no: True
+    response: >-
+      {no_response(rg)}
+      {complement_fav_song(rg, state.cur_singer_str, get_cur_song_str(rg))}
+  - node_name: answered_yes
+    entry_conditions:
+      answered_yes: True
+    response: >-
+      {yes_response(rg)} 
+      {complement_fav_song(rg, state.cur_singer_str, get_cur_song_str(rg))}
+  - node_name: questioned
+    entry_conditions:
+      questioned: True
+    response: >-
+      {question_response(rg)} 
+      {complement_fav_song(rg, state.cur_singer_str, get_cur_song_str(rg))}
+  - node_name: opinion
+    entry_conditions:
+      opinion: True
+    response: >-
+      {opinion_response(rg)} 
+      {complement_fav_song(rg, state.cur_singer_str, get_cur_song_str(rg))}
+  - node_name: just_used_til_only
+    entry_conditions:
+      til_only: True
+    response: >-
+      {til_only_response(rg)} 
+      {complement_fav_song(rg, state.cur_singer_str, get_cur_song_str(rg))}
+  - node_name: catch_all
+    entry_conditions:
+      thats: False
+      didnt_know: False
+      answered_no: False
+      answered_yes: False
+      questioned: False
+      opinion: False
+      only_til: False
+    response: >-
+      {rg.state_manager.current_state.choose_least_repetitive([ 'That is great!', 'Awesome!', 'Cool!'])} 
+      {complement_fav_song(rg, state.cur_singer_str, get_cur_song_str(rg))}
+

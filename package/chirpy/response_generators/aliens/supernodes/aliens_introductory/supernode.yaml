@@ -1,0 +1,23 @@
+name: aliens_introductory
+
+requirements:
+  - entering_aliens: False
+    trigger_aliens: True
+
+prompt_ranking: 1 # ranking relative to other supernodes' unconditional prompt
+unconditional_prompt_updates:
+  start_aliens:
+    prompt_type: PromptType.FORCE_START
+    entering_aliens: True
+    have_prompted: True
+  dont_start_aliens:
+    prompt_type: PromptType.NO
+
+prompt: None
+
+subnode_state_updates:
+  intro:
+    entering_aliens: True
+    trigger_aliens: False
+
+global_post_supernode_state_updates: None

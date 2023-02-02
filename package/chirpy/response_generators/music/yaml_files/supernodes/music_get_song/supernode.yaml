@@ -1,0 +1,71 @@
+name: music_get_song
+trigger_response: None
+requirements:
+  - start_discussing_music: True
+    exit_music_rg: False
+  - continue_after_instrument: True
+    exit_music_rg: False
+  - get_user_fav_song: True
+    exit_music_rg: False
+
+prompt_ranking: 3 # ranking relative to other supernodes' unconditional prompt
+unconditional_prompt_updates:
+  til_prompt:
+    prompt_type: PromptType.CURRENT_TOPIC
+    just_used_til: True
+    have_prompted: True
+    get_user_fav_song: True
+    cur_song_str: state.cur_song_str
+    cur_song_ent: state.cur_song_ent
+    cur_singer_str: state.cur_singer_str
+  metadata_prompt:
+    prompt_type: PromptType.CURRENT_TOPIC
+    just_used_til: True
+    have_prompted: True
+    get_user_fav_song: True
+    cur_song_str: state.cur_song_str
+    cur_song_ent: state.cur_song_ent
+    cur_singer_str: state.cur_singer_str
+
+prompt:
+  - required:
+      start_discussing_music: True
+    prompt: 'What is a song you love listening to?'
+  - required:
+      get_user_fav_song: True
+    prompt: 'How about a favorite song? Do you have a song you really like?'
+
+subnode_state_updates:
+  song_ent_w_til:
+    just_used_til: True
+    user_has_song_opinion: True # goes to music_response_to_song supernode 
+  song_ent_no_til_no_meta:
+    exit_music_rg: True
+  song_ent_no_til_yes_meta:
+    user_has_song_opinion: True
+
+  parse_utterance_til:
+    just_used_til: True
+    user_has_song_opinion: True
+  parse_utterance_no_til_yes_meta:
+    user_has_song_opinion: True
+
+  dont_know:
+    exit_music_rg: True
+  no_fav_song:
+    exit_music_rg: True
+  catch_all:
+    exit_music_rg: True
+
+global_post_supernode_state_updates:
+  start_discussing_music: False
+  continue_after_instrument: False
+  get_user_fav_song: False
+  cur_song_str: state.cur_song_str
+  cur_song_ent: state.cur_song_ent
+  cur_singer_str: state.cur_singer_str
+
+# prompt_treelet_options:
+#   - music_response_to_song
+#   - music_ask_singer
+#   - exit

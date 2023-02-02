@@ -1,0 +1,61 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_FALSE(State.User__LikeMovie)
+
+
+<PROMPTS>
+Prompt ask_if_user_likes_movies [ ] {
+  "By the way, do you like watching movies?"
+}
+
+
+
+<LOCALS>
+Locals.statement_agreement = {
+  - @one_of(
+    { "That's great!" },
+    { "Amazing!" }
+  )
+}
+
+Locals.statement_okay = {
+  - @one_of(
+    { "I see," },
+    { "No worries," }
+  )
+}
+
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__LikeMovie = @val(Flags.MOVIE__user_likes_movie)
+State.User__FavoriteMovie = @helper.set_favorite_movie(@val(Utilities.cur_entity))
+
+<SUBNODES>
+Subnode user_dislikes_movie [
+  not IS_NONE(State.User__FavoriteMovie)
+  and (IS_TRUE(Utilities.pos_intent) or IS_TRUE(State.User__LikeMovie))
+] {
+  - "It's great to to hear that you like"
+  - @val(State.User__FavoriteMovie | talkable)
+}
+
+Subnode user_likes_movie [
+  IS_TRUE(Flags.MOVIE__user_likes_movie)
+] {
+  - @val(Locals.statement_agreement)
+  - @one_of(
+    { "I like movies too." },
+    { "Glad I found another movie aficionado!" }
+  )
+} <
+  Flags.MOVIE__ask_for_fav_movie = @constant(True)
+>
+
+Subnode user_dislikes_movie [
+  IS_FALSE(Flags.MOVIE__user_likes_movie)
+] {
+  - @val(Locals.statement_okay)
+  - "do let me know if you happen to like movies in the future!"
+}

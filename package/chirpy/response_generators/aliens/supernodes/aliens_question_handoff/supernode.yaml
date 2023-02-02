@@ -1,0 +1,15 @@
+name: aliens_question_handoff
+
+requirements:
+  - question_handoff: True
+
+subnode_state_updates:
+  question_handoff: None
+
+prompt: None
+
+global_post_supernode_state_updates:
+  question_handoff: False
+  needs_prompt: True
+  exit_aliens: True
+  answer_type: AnswerType.ENDING

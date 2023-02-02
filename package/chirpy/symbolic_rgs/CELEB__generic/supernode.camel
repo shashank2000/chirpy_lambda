@@ -1,0 +1,52 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+not IS_NONE(State.CurrentTopic) and EXISTS(database_name="celeb_opinion", key={@val(State.CurrentTopic | name | lower)})
+and IS_FALSE(Flags.CELEB__move_on_to_new_topic)
+
+<PROMPTS>
+Prompt celeb_when []
+{
+    - "You know, I was almost in a movie once, but they picked Scarlett Johansson instead."
+    - @one_of(
+        {
+        - "When did you start following"
+        - @val(State.CurrentTopic | talkable)
+        - "?"
+        },
+        {
+        - "What do you think sets"
+        - @val(State.CurrentTopic | talkable)
+        - "away from other celebrities?"
+        },
+        {
+        - "What do you think makes"
+        - @val(State.CurrentTopic | talkable)
+        - "so successful?"
+        }
+    )
+
+}
+
+<SUBNODES>
+Subnode give_celeb_opinion [] {
+    - @one_of(
+        {"I see!"},
+        {"Gotcha!"}
+    )
+    - @lookup(
+        database_name="celeb_opinion",
+        key={@val(State.CurrentTopic | name | lower)},
+        column="opinion"
+   )
+}
+
+<SET_STATE_AFTER>
+Flags.CELEB__move_on_to_new_topic = {@constant(True)}
+
+<ENTITY_GROUPS>
+["actor", "musician"]
+
+<ENTITY_GROUPS_ADDITIONAL_CONDITIONS>
+not IS_NONE(Flags.GlobalFlag__SpecifiedEntity) 
+and EXISTS(database_name="celeb_opinion", key={@val(Flags.GlobalFlag__SpecifiedEntity | name | lower)})

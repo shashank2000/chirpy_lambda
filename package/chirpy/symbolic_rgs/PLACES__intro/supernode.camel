@@ -1,0 +1,63 @@
+can_only_prompt_once_for = State.CurrentTopic
+
+<ENTRY_CONDITIONS>
+IS_NONE(State.User__FavoritePlace)
+
+<PROMPTS>
+Prompt favorite_place [ ] {
+   - @one_of(
+      "What's your favorite city?",
+      "What city do you like visiting the most?"
+   )
+    
+}
+
+<CONTINUE_CONDITIONS>
+IS_TRUE(Flags.PLACES__user_mentioned_city)
+
+<LOCALS>
+Locals.intro_statement = {
+    - @one_of(
+        {"Oh!"},
+        {"Cool!"},
+        {"Awesome!"},
+        {"Nice!"},
+        {"No way!"},
+        {"Such an amazing choice!"}
+    )
+}
+
+<SET_STATE>
+State.CurrentTopic = @val(Utilities.cur_entity)
+State.User__FavoritePlace = @val(Utilities.cur_entity)
+State.User__FavoritePlaceTalkable = @val(Utilities.cur_entity | talkable | lower)
+State.User__FavoritePlaceComment = @helper.get_city_comment(@val(Utilities.cur_entity | name))
+State.User__FavoritePlaceFoodComment = @helper.get_city_food_comment(@val(Utilities.cur_entity | name))
+
+<SUBNODES>
+Subnode make_city_food_comment [
+   not IS_NONE(State.User__FavoritePlaceFoodComment)
+] {
+   - @val(Locals.intro_statement)
+   - "I heard"
+   - @val(State.User__FavoritePlaceTalkable)
+   - @inflect(inflect_token="is", inflect_entity=Utilities.cur_entity)
+   - "famous for"
+   - @val(State.User__FavoritePlaceFoodComment)
+}
+
+Subnode make_city_specific_comment [
+   not IS_NONE(State.User__FavoritePlaceComment)
+] {
+   - @val(Locals.intro_statement)
+   - @val(State.User__FavoritePlaceComment)
+}
+
+<SET_STATE_AFTER>
+Flags.GlobalFlag__LastBotTurnWasOpenEnded = {
+  @constant(True)
+}
+
+<ENTITY_GROUPS>
+["location_related"]
+

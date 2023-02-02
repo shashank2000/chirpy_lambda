@@ -1,0 +1,38 @@
+name: music_get_instrument
+requirements:
+  - start_discussing_music: True
+    exit_music_rg: False
+
+prompt_ranking: 7 # ranking relative to other supernodes' unconditional prompt
+unconditional_prompt_updates:
+  til_prompt:
+    prompt_type: PromptType.CURRENT_TOPIC
+    just_used_til: True
+    have_prompted: True
+    instrument_til_followup: True
+  generic_prompt:
+    prompt_type: PromptType.CURRENT_TOPIC
+    continue_after_instrument: True
+    have_prompted: True
+
+prompt:
+  - required: None
+    prompt: 'There are so many instruments in the world. What is your favorite one?'
+
+required_exposed_variables: None
+
+subnode_state_updates:
+  instr_exists_with_til:
+    just_used_til: True
+    instrument_til_followup: True
+  instr_exists_wo_til:
+    continue_after_instrument: True # goes to one of get_singer or get_song supernode
+  no_fav_instrument:
+    continue_after_instrument: True
+  catch_all:
+    continue_after_instrument: True
+
+global_post_supernode_state_updates:
+  # state updates done by all paths out of this supernode
+  start_discussing_music: False
+  cur_entity: rg.get_instrument_entity()

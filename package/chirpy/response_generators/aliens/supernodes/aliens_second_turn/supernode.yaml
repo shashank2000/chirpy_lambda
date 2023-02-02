@@ -1,0 +1,25 @@
+name: aliens_second_turn
+
+requirements:
+  - second_turn: True
+
+prompt: None
+
+subnode_state_updates:
+  user_said_yes:
+    answer_type: AnswerType.STATEMENT
+    third_turn: True
+  user_is_neutral:
+    answer_type: AnswerType.STATEMENT
+    third_turn: True
+  rejection_response:
+    priority: ResponsePriority.STRONG_CONTINUE
+    needs_prompt: True
+    exit_aliens: True
+    answer_type: AnswerType.ENDING
+  handle_question:
+    answer_type: AnswerType.STATEMENT
+    question_handoff: True
+
+global_post_supernode_state_updates:
+  second_turn: False

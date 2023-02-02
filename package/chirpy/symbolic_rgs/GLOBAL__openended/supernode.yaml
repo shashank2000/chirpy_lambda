@@ -1,0 +1,28 @@
+entry_flag_conditions:
+  - is_true: flags.GlobalFlag__LastBotTurnWasOpenEnded
+
+entry_conditions_takeover: 
+
+locals: {}
+
+prompts:
+  - prompt_name: what_say_you
+    prompt_text:
+      - one of:
+        - What do you think?
+        - What are your thoughts?
+
+subnodes:
+  # abrupt initiative
+  
+  # open-ended
+  - node_name: open_ended_thats
+    entry_conditions:
+      - is_true: flags.GlobalFlag__THATS
+    response:
+      - I know, right?
+  
+  - node_name: open_ended_neural_fallback      
+    response:
+      - neural_generation:
+          prefix: ""
